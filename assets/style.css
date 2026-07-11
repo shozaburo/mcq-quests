@@ -1,0 +1,96 @@
+/* ============================================================
+   MCQ β Google64 クエストページ共通スタイル
+   ============================================================ */
+:root{
+  --accent:#F57C00; --accent-dark:#E65100;
+  --blue:#1976D2; --blue-dark:#0D47A1; --green:#2e7d32;
+  --border:#e3e8f0; --muted:#8a94a6; --ink:#1a2233;
+  --card:#fff; --bg:#f4f6fb; --radius:16px;
+  --chara:#f57c00; /* キャラ固有色（engineが上書き） */
+}
+*{box-sizing:border-box;}
+body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+     background:linear-gradient(180deg,#2b1d0e 0%,#4a3418 45%,#f4f6fb 45.2%);
+     margin:0; color:var(--ink); line-height:1.7;
+     display:flex; flex-direction:column; align-items:center; padding:14px; min-height:100vh;}
+.app{width:100%; max-width:560px;}
+
+/* ヘッダー */
+.head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.badge{background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
+  border-radius:8px; padding:2px 11px; font-weight:800; font-size:1rem; flex-shrink:0;}
+.head h1{font-size:.92rem; font-weight:800; margin:0; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.5);}
+.stepper{display:flex; gap:6px; margin:8px 0 12px;}
+.stepper .dot{flex:1; height:6px; border-radius:99px; background:rgba(255,255,255,.25);}
+.stepper .dot.on{background:var(--accent);}
+.stepper .dot.done{background:#81c784;}
+
+/* キャラクター＋ダイアログ */
+.stage{display:flex; align-items:flex-end; gap:0; margin-bottom:-14px; position:relative; z-index:2;}
+.chara{width:132px; height:132px; border-radius:16px; object-fit:cover; object-position:top;
+  border:3px solid #fff; box-shadow:0 4px 14px rgba(0,0,0,.35); background:#3a2812; flex-shrink:0;}
+.chara-emoji{width:132px;height:132px;border-radius:16px;border:3px solid #fff;
+  display:flex;align-items:center;justify-content:center;font-size:4rem;
+  background:linear-gradient(135deg,#6d4c41,#3e2723); box-shadow:0 4px 14px rgba(0,0,0,.35); flex-shrink:0;}
+/* 名前プレート：セリフ枠内の見出しチップ（重なり防止のため枠内に配置） */
+.nameplate{display:inline-block; background:#3e2723; color:#ffe0b2;
+  border:1.5px solid var(--chara); border-radius:8px; padding:2px 12px; margin-bottom:9px;
+  font-weight:800; font-size:.82rem; line-height:1.4; box-shadow:0 1px 4px rgba(0,0,0,.35);}
+.nameplate small{font-size:.64rem; font-weight:700; color:#ffcc80; margin-left:8px;}
+.dlg{background:rgba(20,14,6,.92); border:2px solid var(--chara); border-radius:14px;
+  color:#fff7ec; padding:14px 18px 16px 18px; margin-left:14px; min-height:96px; flex:1;
+  font-weight:600; font-size:.98rem; line-height:1.75; cursor:pointer; position:relative;}
+.dlg #dlgText{display:block;}
+.dlg .cursor{display:inline-block; margin-left:4px; animation:blink 1s infinite; color:var(--chara);}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* アクションカード */
+.card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:26px 20px 22px; box-shadow:0 2px 12px rgba(0,0,0,.08); position:relative; z-index:1; margin-top:20px;}
+.fade{animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.pct{display:inline-block; border-radius:999px; padding:1px 10px; font-size:.75rem; font-weight:800; color:#fff;}
+.pct-25{background:#b0bec5;} .pct-50{background:#90a4ae;} .pct-75{background:#ffb300;} .pct-100{background:var(--accent);}
+.pct-125{background:#43a047;} .pct-150{background:#1e88e5;} .pct-200{background:#8e24aa;}
+
+.btn{display:inline-flex; justify-content:center; align-items:center; gap:6px;
+  border:none; border-radius:12px; padding:13px 20px; font-size:1.02rem; font-weight:800;
+  cursor:pointer; text-decoration:none; width:100%; margin-top:10px; font-family:inherit;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-dark)); color:#fff;}
+.btn-green{background:linear-gradient(135deg,#2e7d32,#1b5e20); color:#fff;}
+.btn-ghost{background:#fff; color:var(--muted); border:1px solid var(--border); font-weight:700;}
+.btn:active{transform:scale(.98);}
+.btn[disabled]{background:#eef1f6; color:#b6bece; cursor:default;}
+
+/* クイズ */
+.qcount{font-size:.8rem; color:var(--muted); font-weight:800; margin-bottom:8px;}
+.choice{display:flex; align-items:center; gap:10px; border:1.5px solid var(--border);
+  border-radius:12px; padding:13px 14px; margin-bottom:9px; cursor:pointer; font-weight:600;}
+.choice:hover{background:#fdf6ee;}
+.choice.correct{background:#e8f5e9; border-color:#66bb6a;}
+.choice.wrong{background:#ffebee; border-color:#ef5350;}
+.choice .mark{margin-left:auto; font-weight:800; flex-shrink:0;}
+
+/* スコア */
+.score-wrap{text-align:center; padding:6px 0 2px;}
+.score-big{font-size:2.6rem; font-weight:900; margin:0;}
+.score-pct{font-weight:800;}
+
+/* 実践ラダー・フォーム */
+.opt{display:flex; gap:12px; align-items:flex-start; border:1.5px solid var(--border);
+  border-radius:12px; padding:12px 14px; margin-bottom:9px; cursor:pointer;}
+.opt:hover{background:#fdf6ee;}
+.opt.sel{border-color:var(--accent); background:#fff7ef;}
+.opt input{margin-top:5px;}
+.opt b{display:block;}
+.opt small{color:var(--muted);}
+textarea, input[type=url], input[type=text]{width:100%; border:1.5px solid var(--border); border-radius:10px;
+  padding:10px 12px; font-size:.95rem; font-family:inherit; margin-top:6px;}
+.field-label{font-weight:700; font-size:.88rem; margin-top:12px;}
+.member-box{background:#f6f8fc; border:1px dashed var(--border); border-radius:12px; padding:12px 14px; margin-bottom:8px;}
+.member-box .field-label{margin-top:6px;}
+
+footer{text-align:center; color:var(--muted); font-size:.75rem; margin:16px 0 4px;}
+footer a{color:var(--muted);}
