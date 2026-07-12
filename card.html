@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🃏 挑戦者カード｜MANDALA QUEST 64</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --navy:#0d1330; --navy2:#141b3f; --gold:#f5c542; --gold-deep:#b8860b;
+  --ink:#eef2ff; --dim:#9aa4c8; --line:rgba(245,197,66,.25);
+  --pink:#f06292; --green:#66bb6a; --red:#ef5350; --cyan:#4dd0e1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.7;padding-bottom:60px}
+.wrap{max-width:980px;margin:0 auto;padding:18px 14px}
+a{color:var(--gold)}
+.panel{background:var(--navy2);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:18px;box-shadow:0 4px 24px rgba(0,0,0,.35)}
+.ribbon{display:inline-block;background:linear-gradient(90deg,var(--gold),#ffe082);color:#1a1a2e;font-weight:800;border-radius:999px;padding:5px 18px;font-size:15px;margin-bottom:10px}
+.ribbon.pink{background:linear-gradient(90deg,var(--pink),#ffb3cd)}
+.lead{color:var(--dim);font-size:13.5px}
+.lead b{color:var(--ink)}
+h3{color:var(--gold);font-size:15px;margin:16px 0 8px}
+.center{text-align:center}
+.mt{margin-top:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row.center{justify-content:center}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--gold),#d9a92e);color:#1a1a2e;font-weight:800;border:none;border-radius:12px;padding:11px 20px;font-size:14px;cursor:pointer;font-family:inherit}
+.btn.cyan{background:linear-gradient(180deg,var(--cyan),#26a6b8);color:#062a30}
+.btn.green{background:linear-gradient(180deg,var(--green),#43a047);color:#0b2e0d}
+.btn.ghost{background:transparent;color:var(--dim);border:1px solid var(--line)}
+.btn.sm{padding:7px 14px;font-size:12.5px}
+.btn:active{transform:translateY(1px)}
+.tag{font-size:11.5px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+/* れいか案内 */
+.guide{display:flex;gap:12px;align-items:flex-start;background:rgba(240,98,146,.08);border:1px solid rgba(240,98,146,.35);border-radius:14px;padding:12px}
+.guide img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--pink)}
+.guide .who{color:var(--pink);font-weight:800;font-size:12.5px}
+.guide p{font-size:13.5px}
+/* 3パワー */
+.powers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.power{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.power .pi{font-size:28px}
+.power b{display:block;margin-top:4px}
+.power .qtext{font-size:12px;color:var(--dim)}
+/* 質問 */
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:760px){.qgrid{grid-template-columns:repeat(2,1fr)}.powers{grid-template-columns:1fr}}
+.qcard{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:10px;position:relative}
+.qcard .qno{position:absolute;top:-8px;left:-6px;background:var(--gold);color:#1a1a2e;font-weight:800;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+.qcard .qicon{font-size:22px}
+.qcard .qtitle{font-weight:800;font-size:13px;margin:2px 0}
+.qcard .qtext{font-size:12px;color:var(--dim)}
+/* フォーム */
+label{font-size:12.5px;color:var(--dim);font-weight:700;display:block;margin:10px 0 4px}
+input[type=text],textarea{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:14px}
+textarea{min-height:56px}
+input:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.cm-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cm-range{display:flex;align-items:center;gap:10px}
+.cm-range input{flex:1}
+.cm-range b{min-width:26px;text-align:right;color:var(--gold)}
+.cardmaker{display:grid;grid-template-columns:1fr 380px;gap:20px}
+@media(max-width:860px){.cardmaker{grid-template-columns:1fr}}
+/* トレカ */
+.cm-scale{transform-origin:top left}
+.tcard{width:360px;background:linear-gradient(160deg,#1a2150,#0d1330 60%,#251c45);border:3px solid var(--gold);border-radius:18px;padding:14px;position:relative;overflow:hidden}
+.tcard::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,rgba(245,197,66,.18),transparent 55%);pointer-events:none}
+.tc-title{font-size:17px;font-weight:900;color:var(--gold)}
+.tc-title .nmq{color:var(--ink);font-size:14px;margin-left:4px}
+.tc-sub{font-size:11.5px;color:var(--dim);margin:4px 0 8px}
+.tc-art{height:210px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.tc-art img{width:100%;height:100%;object-fit:cover}
+.tc-art .ph{color:var(--dim);font-size:12px;text-align:center}
+.tc-total{position:absolute;top:8px;left:8px;background:rgba(13,19,48,.85);border:1px solid var(--gold);color:var(--gold);font-weight:800;font-size:11.5px;border-radius:999px;padding:3px 10px}
+.tc-attr{position:absolute;bottom:8px;right:8px;background:rgba(13,19,48,.85);border:1px solid var(--line);color:var(--ink);font-size:11px;border-radius:999px;padding:3px 10px}
+.tc-stats{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.tc-stat{display:grid;grid-template-columns:92px 26px 1fr;gap:8px;align-items:center;font-size:12px}
+.tc-stat .sv{text-align:right;font-weight:800;color:var(--gold)}
+.tc-stat .sbar{height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.tc-stat .sbar i{display:block;height:100%;border-radius:4px}
+.tc-stat.omoi .sbar i{background:linear-gradient(90deg,#f06292,#ff94b8)}
+.tc-stat.hira .sbar i{background:linear-gradient(90deg,#ffd54f,#ffe082)}
+.tc-stat.gui .sbar i{background:linear-gradient(90deg,#ff7043,#ff8a65)}
+.tc-skill,.tc-quest{margin-top:10px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px}
+.tc-lbl{font-size:10px;letter-spacing:.12em;color:var(--gold-deep);font-weight:800}
+.tc-skill .sn,.tc-quest .sn{font-weight:800;color:var(--gold)}
+.tc-skill .sd,.tc-quest .sd{color:var(--dim);font-size:11.5px}
+.tc-flavor{margin-top:10px;font-size:11px;color:var(--dim);font-style:italic;border-top:1px dashed var(--line);padding-top:8px;min-height:14px}
+/* プロンプト箱 */
+.promptbox{background:#080d24;border:1px solid var(--line);color:#dfe6ff;border-radius:12px;padding:12px 14px;font-size:12.5px;white-space:pre-wrap;max-height:220px;overflow:auto;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--gold);color:#1a1a2e;font-weight:800;border-radius:999px;padding:10px 22px;font-size:13.5px;box-shadow:0 6px 24px rgba(0,0,0,.4);opacity:0;transition:opacity .25s;pointer-events:none;z-index:99}
+.toast.on{opacity:1}
+.foot{margin-top:26px;text-align:center;color:var(--dim);font-size:12px}
+.backlink{display:inline-block;margin-top:6px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="panel">
+    <div class="ribbon">🃏 挑戦者カードを作ろう（最初の1回だけ）</div>
+    <div class="guide mt">
+      <img src="https://re-gi.jp/icon/reika_tujo.jpg" alt="れいか">
+      <div>
+        <div class="who">大塚れいか（案内役）</div>
+        <p>ようこそ、レジスタンスへ。まずは<b>あなたの「挑戦者カード」</b>を作るわよ。
+        AIと少し話すだけで、あなたの<b>3つのパワー</b>と<b>必殺技</b>をAIが見抜いてくれるの。
+        このカードとアバターは、この先<b>ボス討伐の映像</b>にも登場するから、ちゃんと作っておいてね。</p>
+      </div>
+    </div>
+    <div class="powers mt">
+      <div class="power"><div class="pi">💗</div><b>思いやり</b><div class="qtext">人を大切にする力</div></div>
+      <div class="power"><div class="pi">💡</div><b>ひらめき</b><div class="qtext">アイデアを生む力</div></div>
+      <div class="power"><div class="pi">🔥</div><b>ぐいぐい</b><div class="qtext">自分から進む行動力</div></div>
+    </div>
+    <p class="lead mt"><b>点数は自分で選ばない。</b>質問への答え方から、<b>AIが合計20点を自動で配点</b>します。自分で選ばないからこそ、気づかなかった強みが見える。</p>
+  </section>
+
+  <section class="panel">
+    <div class="ribbon">📝 AIに答える質問（4＋4）</div>
+    <h3>見た目が決まる4つ（サクッと）</h3>
+    <div class="qgrid">
+      <div class="qcard"><span class="qno">1</span><div class="qicon">🪪</div><div class="qtitle">なまえ</div><div class="qtext">冒険で呼ばれたい名前は？（ニックネームOK）</div></div>
+      <div class="qcard"><span class="qno">2</span><div class="qicon">💼</div><div class="qtitle">しごと</div><div class="qtext">お仕事・業種は？（例：飲食店経営／士業／営業）</div></div>
+      <div class="qcard"><span class="qno">3</span><div class="qicon">⭐</div><div class="qtitle">夢中なこと</div><div class="qtext">今がんばっていること・好きなことは？</div></div>
+      <div class="qcard"><span class="qno">4</span><div class="qicon">🚀</div><div class="qtitle">野望</div><div class="qtext">これから実現したいことは？</div></div>
+    </div>
+    <h3>パワーが決まる4つ（ここから3パワーを自動配点）</h3>
+    <div class="qgrid">
+      <div class="qcard"><span class="qno">1</span><div class="qicon">💗</div><div class="qtitle">おもいやり</div><div class="qtext">仲間やお客さんが困っていたら、どうする？</div></div>
+      <div class="qcard"><span class="qno">2</span><div class="qicon">💡</div><div class="qtitle">ひらめき</div><div class="qtext">「こうしたら面白い！」と思いついた工夫は？</div></div>
+      <div class="qcard"><span class="qno">3</span><div class="qicon">🔥</div><div class="qtitle">ぐいぐい</div><div class="qtext">自分から挑戦した・コツコツ続けていることは？</div></div>
+      <div class="qcard"><span class="qno">4</span><div class="qicon">🎭</div><div class="qtitle">やくわり</div><div class="qtext">チームでのあなたの役割は？（まとめ役／アイデア出し／ムードメーカー…）</div></div>
+    </div>
+  </section>
+
+  <section class="panel center">
+    <div class="ribbon">✨ AIでカードの文章＆アバターをつくる</div>
+    <p class="lead">ボタンを押すと<b>専用プロンプトをコピー</b>してAIが開きます。貼り付けて送信→質問スタート。</p>
+    <div class="row center mt">
+      <button class="btn" id="gemBtn">🪄 Geminiで作る（コピー→ひらく）</button>
+      <button class="btn cyan" id="gptBtn">🤖 ChatGPTで作る（コピー→ひらく）</button>
+    </div>
+    <details class="mt" style="text-align:left">
+      <summary style="cursor:pointer;color:var(--dim);font-size:12.5px">📜 プロンプトの中身を見る</summary>
+      <div class="promptbox mt" id="promptPreview"></div>
+    </details>
+  </section>
+
+  <section class="panel">
+    <div class="ribbon">🃏 カードに仕上げる</div>
+    <label>① AIが出した「カードの文章」をまるごと貼る</label>
+    <textarea id="aiText" style="min-height:90px" placeholder="🃏━━━ で始まるカードの文章をここにコピペ"></textarea>
+    <div class="row mt">
+      <button class="btn cyan" onclick="cmParseAi(document.getElementById('aiText').value)">✨ 文章からカードを作る</button>
+      <span class="tag">名前・3パワー・必殺技を自動で読み取り</span>
+    </div>
+
+    <div class="cardmaker mt">
+      <div class="cm-form">
+        <div><label>カード名（二つ名）</label><input type="text" id="f_title"></div>
+        <div class="cm-row2">
+          <div><label>名前</label><input type="text" id="f_name"></div>
+          <div><label>ローマ字</label><input type="text" id="f_romaji"></div>
+        </div>
+        <div class="cm-row2">
+          <div><label>ランク</label><input type="text" id="f_rank" placeholder="N / R / SR / SSR"></div>
+          <div><label>属性</label><input type="text" id="f_attr" placeholder="⚡雷 / 🔥炎・創造 など"></div>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px">
+          <label style="margin-top:0">パラメータ：💗＋💡＋🔥 の合計を20に <span id="cmTotal" style="margin-left:6px"></span></label>
+          <div class="row" style="margin-bottom:6px"><button type="button" class="btn sm ghost" onclick="cmNormalize()">⚖️ 合計20に自動調整</button>
+            <span class="tag">極端型 16/3/1・バランス型 6/7/7</span></div>
+          <div><label>💗 思いやり</label><div class="cm-range"><input type="range" id="f_omoi" min="0" max="20"><b></b></div></div>
+          <div><label>💡 ひらめき</label><div class="cm-range"><input type="range" id="f_hira" min="0" max="20"><b></b></div></div>
+          <div><label>🔥 ぐいぐい</label><div class="cm-range"><input type="range" id="f_gui" min="0" max="20"><b></b></div></div>
+        </div>
+        <div><label>必殺技の名前</label><input type="text" id="f_skillName"></div>
+        <div><label>必殺技の説明</label><textarea id="f_skillDesc"></textarea></div>
+        <div><label>🗺 これからのクエスト（野望）</label><textarea id="f_quest"></textarea></div>
+        <div><label>フレーバーテキスト</label><textarea id="f_flavor"></textarea></div>
+        <div><label>🖼 アバター画像をアップ（AIが描いた絵 or 写真・文字枠なし1枚）</label>
+          <input type="file" id="f_img" accept="image/*"></div>
+      </div>
+
+      <div class="cm-preview">
+        <div id="cardScale" class="cm-scale">
+          <div id="card" class="tcard">
+            <div class="tc-title"></div>
+            <div class="tc-sub"></div>
+            <div class="tc-art"><span class="ph">🖼 ここにアバターが入るよ</span><span class="tc-total"></span><span class="tc-attr"></span></div>
+            <div class="tc-stats">
+              <div class="tc-stat omoi"><span class="sl">💗 思いやり</span><span class="sv"></span><span class="sbar"><i></i></span></div>
+              <div class="tc-stat hira"><span class="sl">💡 ひらめき</span><span class="sv"></span><span class="sbar"><i></i></span></div>
+              <div class="tc-stat gui"><span class="sl">🔥 ぐいぐい</span><span class="sv"></span><span class="sbar"><i></i></span></div>
+            </div>
+            <div class="tc-skill"><span class="tc-lbl">SPECIAL MOVE</span><div class="sn"></div><div class="sd"></div></div>
+            <div class="tc-quest"><span class="tc-lbl">NEXT QUEST</span><div class="sn">これからのクエスト</div><div class="sd"></div></div>
+            <div class="tc-flavor"></div>
+          </div>
+        </div>
+        <div class="row center mt">
+          <button class="btn green" onclick="cmSaveAll()">💾 カードを保存</button>
+          <button class="btn cyan" onclick="cmExport(2)">🖼 画像で保存(PNG)</button>
+        </div>
+        <p class="lead center mt" id="saveHint">保存すると、討伐ED動画のプロンプトにこのカードが使われます</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel center">
+    <p class="lead">カードができたら、マンダラボードへ。<b>64の封印</b>があなたを待っています。</p>
+    <a class="btn" href="index.html">🗺 マンダラボードへ戻る</a>
+  </section>
+
+  <div class="foot">MANDALA QUEST 64｜挑戦者カード<br>
+    <a class="backlink" href="index.html">← ボードへ戻る</a></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="data/config.js"></script>
+<script>
+/* ============================================================
+   挑戦者カード（トレカ①ロジック移植・β大人向け）
+   ============================================================ */
+const CM_KEY   = 'mcq_card_beta';
+const AV_KEY   = 'mcq_avatar_beta';   // アバター画像dataURL（討伐ED動画で使用）
+const CM_TOTAL = 20;
+
+const cm = {
+  title:'', name:'', romaji:'', rank:'', attr:'',
+  omoi:7, hira:7, gui:6,
+  skillName:'', skillDesc:'', quest:'', flavor:'', img:''
+};
+
+/* ---- AI用プロンプト（大人・ガーグル帝国版） ---- */
+const CARD_PROMPT = `あなたは「MANDALA QUEST 64」のゲームマスターです。
+プレイヤーは仕事を持つ大人（経営者・ビジネスパーソン）。対話して、その人だけの「挑戦者カード（縦長トレカ）」を作ってください。専門用語は使わず、テンポよく。
+
+【絶対ルール】
+1. 質問は必ず1問ずつ。返事を待ってから次へ。
+2. STEP0（4問）→ STEP1（4問）の順で聞く。
+3. どんな答えも否定せず、いいところを見つけて讃える。正解はない。
+4. 短い答えは「たとえば？」と1回だけやさしく深掘りしてよい。
+5. まずは、あいさつと STEP0 の最初の1問だけを送ること。
+
+【STEP0：見た目が決まる4問（1問ずつ）】
+1. 冒険で呼ばれたい名前（ニックネームOK）
+2. お仕事・業種（例：飲食店経営／士業／営業）
+3. 今がんばっていること・夢中なこと
+4. これから実現したい野望
+
+【STEP1：パワーが決まる4問（1問ずつ）】
+1. 仲間やお客さんが困っていたら、どうする？
+2. 「こうしたら面白い！」と思いついた工夫やアイデアは？
+3. 自分から挑戦した・コツコツ続けていることは？
+4. チームでのあなたの役割は？（まとめ役／アイデア出し／ムードメーカー／コツコツ屋 など）
+
+【パワーの自動配点：★本人に選ばせない／合計は必ず20】
+STEP1の答え方（具体的さ・熱量）から、3つのパワーを整数で決める。合計はちょうど20：
+- 💗思いやり ← 質問1　- 💡ひらめき ← 質問2　- 🔥ぐいぐい ← 質問3
+- 質問4の役割で最終バランスを微調整。出力前に「足して20か？」を必ず検算。
+「自分で選ばないからこそ、気づかなかった強みが見える」と一言そえる。
+
+【STEP1のあと（必須）】
+「最後に、主人公になる“あなたの写真”か“好きなイラスト”を1枚アップしてね（なければ『なし』でOK）」と伝える。
+
+【カード出力フォーマット（毎回この形を厳守）】
+ランクは N/R/SR/SSR、属性は 炎🔥/水💧/風🌪/雷⚡/光✨/闇🌑 などから1つ。3パワーは整数で合計ちょうど20。
+
+🃏━━━━━━━━━━━━━━━
+　【二つ名】（カッコいい称号）
+━━━━━━━━━━━━━━━
+　名前：〇〇 ／ ランク：SR ／ ぞくせい：⚡雷
+───────────────
+　💗思いやり：__
+　💡ひらめき　：__
+　🔥ぐいぐい　：__
+　（↑ 3つ足してちょうど20）
+───────────────
+　🌟必殺技：「(技名)」 →(説明1〜2行。仕事や野望と結びつける)
+───────────────
+　🗺これからのクエスト：(野望に近づく次の一歩を前向きに1〜2行)
+───────────────
+　📜フレーバーテキスト：(その人の魅力を物語風に1〜2行)
+🃏━━━━━━━━━━━━━━━
+
+【アバター画像の生成】
+カードのあと、キャラクターのイラストを生成する。絵は「キャラクター1人だけ」。文字・枠・数値・ロゴは描かない（カード合成はサイト側で行う）。仕事や野望の雰囲気を反映、正方形(1:1)、顔がはっきり見える構図。アニメ調セルルック、日本のファンタジーRPG風の冒険者衣装。写真があればその雰囲気を活かす。
+
+【仕上げ】
+最後に必ず伝える：
+「世界に1枚だけの挑戦者カード完成！🎉 文章とアバター絵がそろったら、サイトの『🃏挑戦者カード』の入力欄に文章を貼って、絵をのせて保存しよう。あなたのアバターは、ボス討伐の映像にも登場するよ！」
+
+まずは、あいさつと STEP0 の最初の1問だけを送ってください。`;
+
+/* ---- 基本ユーティリティ ---- */
+const $ = id => document.getElementById(id);
+let toastTimer = null;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('on'),2600); }
+
+function cmLoad(){ try{ const s=JSON.parse(localStorage.getItem(CM_KEY)); if(s) Object.assign(cm,s); }catch(e){}
+  try{ const av=localStorage.getItem(AV_KEY); if(av) cm.img=av; }catch(e){} }
+function cmSave(){ const d=Object.assign({},cm); delete d.img;
+  localStorage.setItem(CM_KEY, JSON.stringify(d));
+  if(cm.img){ try{ localStorage.setItem(AV_KEY, cm.img); }catch(e){} } }
+function cmSum(){ return (+cm.omoi||0)+(+cm.hira||0)+(+cm.gui||0); }
+
+function cmRenderCard(){
+  const el=$('card');
+  el.querySelector('.tc-title').innerHTML =
+    '『'+esc(cm.title||'なまえのない挑戦者')+'』<span class="nmq">「'+esc(cm.name||'？？？')+'」</span>';
+  el.querySelector('.tc-sub').innerHTML =
+    'ランク：<b>'+esc(cm.rank||'N')+'</b>　／　属性：<b>'+esc(cm.attr||'？')+'</b>'+(cm.romaji?'　／　'+esc(cm.romaji):'');
+  const art=el.querySelector('.tc-art');
+  const old=art.querySelector('img'); if(old) old.remove();
+  const ph=art.querySelector('.ph');
+  if(cm.img){ const im=document.createElement('img'); im.src=cm.img; art.prepend(im); if(ph) ph.style.display='none'; }
+  else if(ph){ ph.style.display=''; }
+  el.querySelector('.tc-total').textContent='総合力 '+cmSum();
+  el.querySelector('.tc-attr').textContent='ATTR: '+(cm.attr||'？');
+  const setp=(k,v)=>{ const cell=el.querySelector('.tc-stat.'+k); const val=Math.max(0,Math.min(20,+v||0));
+    cell.querySelector('i').style.width=(val/20*100)+'%'; cell.querySelector('.sv').textContent=val; };
+  setp('omoi',cm.omoi); setp('hira',cm.hira); setp('gui',cm.gui);
+  el.querySelector('.tc-skill .sn').textContent='「'+(cm.skillName||'？')+'」';
+  el.querySelector('.tc-skill .sd').textContent=cm.skillDesc||'';
+  el.querySelector('.tc-quest .sd').textContent=cm.quest||'';
+  el.querySelector('.tc-flavor').textContent=cm.flavor?'📜 '+cm.flavor:'';
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function cmUpdateTotal(){ const t=cmSum(); const el=$('cmTotal');
+  if(el){ el.textContent='合計 '+t+' / '+CM_TOTAL; el.style.color=(t===CM_TOTAL)?'var(--green)':'var(--red)'; } }
+
+function cmSyncPowerInputs(){ ['omoi','hira','gui'].forEach(k=>{ const i=$('f_'+k); if(!i)return;
+  i.value=cm[k]; const b=i.parentElement.querySelector('b'); if(b) b.textContent=cm[k]; }); }
+
+function cmNormalize(){
+  let a=+cm.omoi||0,b=+cm.hira||0,c=+cm.gui||0; const s=a+b+c;
+  if(s===0){ a=7;b=7;c=6; }
+  else{ a=Math.round(a/s*CM_TOTAL); b=Math.round(b/s*CM_TOTAL); c=CM_TOTAL-a-b;
+        if(c<0){ if(a>=b) a+=c; else b+=c; c=0; } }
+  cm.omoi=a; cm.hira=b; cm.gui=c;
+  cmSyncPowerInputs(); cmRenderCard(); cmSave(); cmUpdateTotal();
+  toast('⚖️ 合計20に調整しました');
+}
+
+function cmBindForm(){
+  const map={f_title:'title',f_name:'name',f_romaji:'romaji',f_rank:'rank',f_attr:'attr',
+    f_omoi:'omoi',f_hira:'hira',f_gui:'gui',f_skillName:'skillName',f_skillDesc:'skillDesc',f_quest:'quest',f_flavor:'flavor'};
+  Object.entries(map).forEach(([id,key])=>{
+    const inp=$(id); if(!inp) return;
+    inp.value=cm[key];
+    inp.addEventListener('input',()=>{
+      cm[key]=(inp.type==='range')?(+inp.value):inp.value;
+      if(inp.type==='range'){ const b=inp.parentElement.querySelector('b'); if(b) b.textContent=inp.value; }
+      cmRenderCard(); cmSave(); cmUpdateTotal();
+    });
+    if(inp.type==='range'){ const b=inp.parentElement.querySelector('b'); if(b) b.textContent=inp.value; }
+  });
+  $('f_img').addEventListener('change',e=>{
+    const file=e.target.files[0]; if(!file) return;
+    cmResizeImg(file,640,dataUrl=>{
+      cm.img=dataUrl; cmRenderCard();
+      try{ cmSave(); toast('🖼 アバターをセットしました！'); }
+      catch(err){ toast('⚠ 画像が大きすぎて保存できませんでした。小さめの画像で試してください'); }
+    });
+  });
+  cmUpdateTotal();
+}
+
+function cmResizeImg(file,max,cb){
+  const r=new FileReader();
+  r.onload=()=>{ const img=new Image();
+    img.onload=()=>{ let w=img.width,h=img.height; const s=Math.min(1,max/Math.max(w,h));
+      const c=document.createElement('canvas'); c.width=Math.round(w*s); c.height=Math.round(h*s);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.82)); };
+    img.onerror=()=>toast('⚠ この画像は読み込めませんでした');
+    img.src=r.result; };
+  r.onerror=()=>toast('⚠ ファイルを読み込めませんでした');
+  r.readAsDataURL(file);
+}
+
+function cmFillInputs(){
+  const map={f_title:'title',f_name:'name',f_romaji:'romaji',f_rank:'rank',f_attr:'attr',
+    f_omoi:'omoi',f_hira:'hira',f_gui:'gui',f_skillName:'skillName',f_skillDesc:'skillDesc',f_quest:'quest',f_flavor:'flavor'};
+  Object.entries(map).forEach(([id,key])=>{ const i=$(id); if(!i)return;
+    i.value=cm[key]; if(i.type==='range'){ const b=i.parentElement.querySelector('b'); if(b) b.textContent=cm[key]; } });
+}
+
+/* ---- AIの文章をまるごと貼って自動入力（トレカ①パーサ移植） ---- */
+function cmParseAi(text){
+  if(!text||!text.trim()){ toast('AIが出した「カードの文章」を貼ってください'); return; }
+  const lines=text.split(/\r?\n/).map(s=>s.trim());
+  const grab=(labels)=>{
+    for(let i=0;i<lines.length;i++){
+      for(const lb of labels){ const idx=lines[i].indexOf(lb);
+        if(idx>=0){ let rest=lines[i].slice(idx+lb.length).replace(/^[：:　\s]+/,'');
+          if(rest) return rest;
+          for(let j=i+1;j<lines.length;j++){ if(lines[j] && !/^[─━🃏]/.test(lines[j])) return lines[j]; } } }
+    } return null;
+  };
+  const num=(labels)=>{ const v=grab(labels); if(v==null)return null; const m=String(v).match(/\d+/); return m?+m[0]:null; };
+  const clip=(s)=> s ? s.replace(/[／\/].*$/,'').trim() : s;
+
+  const two=(text.match(/[【『]([^】』]{1,30})[』】]/)||[])[1]; if(two) cm.title=two;
+  let v;
+  if((v=grab(['名前'])))            cm.name=clip(v);
+  if((v=grab(['ランク'])))          cm.rank=clip(v);
+  if((v=grab(['ぞくせい','属性']))) cm.attr=clip(v);
+  const o=num(['思いやり','おもいやり']),h=num(['ひらめき']),g=num(['ぐいぐい','グイグイ']);
+  if(o!=null)cm.omoi=o; if(h!=null)cm.hira=h; if(g!=null)cm.gui=g;
+  const sk=text.match(/必殺技[：:]?\s*[「『]([^」』]+)[」』]/); if(sk) cm.skillName=sk[1];
+  const skd=text.match(/[」』]\s*[→➡\-—]+\s*([^\n]+)/);        if(skd) cm.skillDesc=skd[1].trim();
+  if((v=grab(['これからのクエスト','クエスト'])))   cm.quest=v;
+  if((v=grab(['フレーバーテキスト','フレーバー']))) cm.flavor=v;
+
+  cmFillInputs(); cmRenderCard(); cmSave(); cmUpdateTotal();
+  toast('✨ 読み取り完了！数字や言葉は手で直せます');
+}
+
+/* ---- 保存（ローカル＋GAS API任意） ---- */
+function cmSaveAll(){
+  if(cmSum()!==CM_TOTAL){ toast('⚠ 3パワーの合計を20にしてください（自動調整ボタンでOK）'); return; }
+  cmSave();
+  // GAS API（設定済みなら送信・fire and forget）
+  try{
+    const cfg=(window.MCQ_CONFIG||{});
+    const api=cfg.questApiUrl||cfg.logApiUrl||'';
+    const token=localStorage.getItem('mcq_member_token')||'';
+    if(api && token){
+      const d=Object.assign({},cm); delete d.img;
+      const body=new URLSearchParams({action:'saveCard',token:token,card:JSON.stringify(d)});
+      fetch(api,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
+      toast('💾 保存しました！（クラウドにも送信）');
+    } else {
+      toast('💾 この端末に保存しました！');
+    }
+  }catch(e){ toast('💾 この端末に保存しました！'); }
+}
+
+function cmExport(scale=2){
+  const card=$('card');
+  if(typeof html2canvas==='undefined'){ toast('画像化の準備中…少し待ってもう一度'); return; }
+  html2canvas(card,{backgroundColor:null,scale,useCORS:true}).then(canvas=>{
+    const a=document.createElement('a');
+    a.download=(cm.name||'card')+'_挑戦者カード.png';
+    a.href=canvas.toDataURL('image/png'); a.click();
+    toast('🖼 カードを画像で保存しました！');
+  });
+}
+
+function cmResponsiveScale(){
+  const wrap=$('cardScale'); if(!wrap) return;
+  const avail=wrap.parentElement.clientWidth;
+  const s=(avail>0)?Math.min(1,avail/380):1;
+  wrap.style.transform='scale('+s+')';
+}
+window.addEventListener('resize',cmResponsiveScale);
+
+/* ---- プロンプトコピー→AIを開く ---- */
+async function copyPromptOpen(url){
+  try{ await navigator.clipboard.writeText(CARD_PROMPT);
+    toast('📋 コピーしました！開いた画面に貼り付けて送信してください'); }
+  catch(e){ toast('コピーできませんでした。下の「プロンプトの中身を見る」から手動でコピーしてください'); return; }
+  setTimeout(()=>window.open(url,'_blank'),600);
+}
+$('gemBtn').onclick=()=>copyPromptOpen('https://gemini.google.com/');
+$('gptBtn').onclick=()=>copyPromptOpen('https://chatgpt.com/');
+$('promptPreview').textContent=CARD_PROMPT;
+
+/* ---- 初期化 ---- */
+cmLoad(); cmBindForm(); cmRenderCard(); cmUpdateTotal(); cmResponsiveScale();
+</script>
+</body>
+</html>

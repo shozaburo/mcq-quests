@@ -13,9 +13,12 @@ window.MCQ_CONFIG = {
     threshold: 400       // 1マス開放の累積%閾値（progress.js側の値が優先）
   },
 
-  // ★報告の蓄積先：クエスト活動ログ専用スプレッドシートのGAS Web App URL
-  //   gas_quest_log をデプロイして得た「ウェブアプリ URL（.../exec）」をここに貼る。
-  //   ここが埋まっていれば新シートへ1行=1件で記録される（GAS編集は初回のみ）。
+  // ★★ v3: 本体GAS quest_api のWeb App URL（MCQ110_quest_api.gs をデプロイして貼る）
+  //   これが埋まると：トークンログイン／EXP・ご褒美・称号連動／ボスHP（チーム進捗）／
+  //   サンクスUP!／アバター進化 がすべて本体スプレッドシートと繋がる。
+  questApiUrl: "",
+
+  // （旧）クエスト活動ログ専用スプレッドシートのGAS Web App URL（questApiUrl未設定時の予備）
   logApiUrl: "",
 
   // （予備）既存の活動報告Googleフォームに送りたい場合のみ設定。通常は未使用。

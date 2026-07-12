@@ -1,9 +1,10 @@
 /* ============================================================
-   MCQ β Google64 クエストゲームエンジン v2
+   MCQ β Google64 クエストゲームエンジン v3
    前提: window.PAGE({questId}) / MCQ_CONFIG / MCQ_CHARS / MCQ_QUESTS
-        （任意）MCQ_URLS[qid]={related, archive, check}
+        （任意）MCQ_URLS[qid]={related, archive, check} / MCQ_MISSIONS
    達成%: 動画25 / アーカイブ50 / クイズ(半分以上75・全問100) / 実践125-200
-   ステップ1から順でなくてOK（実践優先）。実践125%以上は証拠URL必須（不正抑止）。
+   v3: トークン認証（本体GAS連携）・討伐演出（EXP/ご褒美/称号）・
+       討伐ムービー生成プロンプト（自分のアバター×ボス×実践内容）
    ============================================================ */
 (function(){
   'use strict';
@@ -17,26 +18,60 @@
   var CH    = (window.MCQ_CHARS  || {})[AREA];
   var QUEST = (window.MCQ_QUESTS || {})[QID];
   var URLS  = (window.MCQ_URLS   || {})[QID] || {};
+  var API   = CFG.questApiUrl || '';
 
   /* URL解決：クエスト定義優先→シート由来(urls.js)で補完 */
   var videoUrl   = (QUEST && QUEST.videoUrl)   || URLS.related || '';
   var archiveUrl = (QUEST && QUEST.archiveUrl) || URLS.archive || '';
 
-  /* ── メンバーID・名前 ── */
+  /* ── 討伐ムービー用：エリアの舞台と共通スタイル ── */
+  var AREA_SCENE = {
+    A:'北の雪原。フキの葉と雪の結晶が舞う静寂の野', B:'猛吹雪の秋田の山小屋。囲炉裏の火と和太鼓',
+    C:'仙台の杜。木漏れ日と浮遊する枝豆の莢',       D:'高崎のだるま工房。無数のだるまと炎の家紋',
+    E:'月夜の鎌倉、古刹の屋根。光る帳簿と数字の羽根', F:'夜の銀座、ネオンの海。光の魚群と音符',
+    G:'甲斐の霊峰、山頂の陣。風林火山の軍旗',       H:'福井の恐竜渓谷。地層に光る化石と星空'
+  };
+  var STYLE_SUFFIX = 'アニメ調セルルック、シネマティック照明、被写界深度、金色×夜紺の配色、日本のファンタジーRPG風、文字や透かしは入れない';
+
+  /* ── メンバー（v3: トークン優先／旧ID・名前も互換） ── */
   function getMember(){
-    var m = { id:'', name:'' };
+    var m = { id:'', name:'', token:'', avatarUrl:'' };
     try{
       var p = new URLSearchParams(location.search);
-      if(p.get('member')) m.id   = p.get('member').trim();
-      if(p.get('name'))   m.name = p.get('name').trim();
+      if(p.get('token'))  m.token = p.get('token').trim();
+      if(p.get('member')) m.id    = p.get('member').trim();
+      if(p.get('name'))   m.name  = p.get('name').trim();
+      m.token = m.token || localStorage.getItem('mcq_member_token') || '';
+      if(m.token) localStorage.setItem('mcq_member_token', m.token);
       var saved = JSON.parse(localStorage.getItem('mcq_member') || '{}');
       m.id   = m.id   || saved.id   || '';
       m.name = m.name || saved.name || '';
-      if(m.id || m.name) localStorage.setItem('mcq_member', JSON.stringify(m));
+      m.avatarUrl = saved.avatarUrl || '';
+      if(m.id || m.name) localStorage.setItem('mcq_member', JSON.stringify({id:m.id,name:m.name,avatarUrl:m.avatarUrl}));
     }catch(e){}
     return m;
   }
   var MEMBER = getMember();
+
+  /* トークンがあれば本体GASから本人情報を取得（非同期・失敗しても続行） */
+  function syncMe(){
+    if(!API || !MEMBER.token) return;
+    try{
+      fetch(API + '?action=me&token=' + encodeURIComponent(MEMBER.token))
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          if(!j || !j.ok || !j.member) return;
+          MEMBER.id = j.member.memberId || MEMBER.id;
+          MEMBER.name = j.member.nick || MEMBER.name;
+          MEMBER.avatarUrl = j.member.avatarUrl || '';
+          try{
+            localStorage.setItem('mcq_member', JSON.stringify({id:MEMBER.id,name:MEMBER.name,avatarUrl:MEMBER.avatarUrl}));
+            localStorage.setItem('mcq_me_cache', JSON.stringify(j));
+          }catch(e){}
+        }).catch(function(){});
+    }catch(e){}
+  }
+  syncMe();
 
   /* ── DOM骨組み ── */
   var root = $('app');
@@ -110,18 +145,44 @@
   var achieved = 0;
   function bump(p){ if(p > achieved) achieved = p; }
 
-  /* ── 報告送信 ── */
+  /* ── 報告送信（v3: quest_api優先／旧logApiUrl互換） ── */
   var STEP_OF_AREA = ('ABCDEFGH'.indexOf(AREA) + 1) || '';
+  function kindOf(pct){ pct=Number(pct);
+    return pct>=125 ? 'practice' : pct>=75 ? 'quiz' : pct>=50 ? 'archive' : 'video'; }
+
+  // 戻り値: Promise<serverResult|null>（quest_api時のみ結果が返る）
   function postReport(pct, practice, evidence, kind, score){
-    var data = {
-      memberId: MEMBER.id, memberName: MEMBER.name, goalId: CFG.goalId || '',
-      area: AREA, step: String(STEP_OF_AREA), questId: QID, questName: QUEST.name,
-      kind: kind || '', pct: String(pct), score: score || '',
-      practice: practice || '', evidence: evidence || '',
-      ua: (navigator && navigator.userAgent) ? navigator.userAgent.slice(0,120) : ''
-    };
-    // ① 新シート：GAS Web API（推奨）
+    // ① 本体GAS quest_api（トークン必須・討伐結果が返る）
+    if(API && MEMBER.token){
+      var body = new URLSearchParams({
+        action:'report', token: MEMBER.token, goalId: CFG.goalId || 'β',
+        qid: QID, pct: String(pct), step: kind || kindOf(pct),
+        note: (practice || '') + (score ? '（クイズ' + score + '）' : ''),
+        evidenceUrl: evidence || ''
+      });
+      return fetch(API, {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+        body: body.toString()
+      }).then(function(r){ return r.json(); }).catch(function(){
+        // CORSで読めなくても送信自体は成功していることが多い
+        try{
+          fetch(API, { method:'POST', mode:'no-cors',
+            headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+            body: body.toString() });
+        }catch(e){}
+        return null;
+      });
+    }
+    // ② 旧：専用ログGAS（fire-and-forget）
     if(CFG.logApiUrl){
+      var data = {
+        memberId: MEMBER.id, memberName: MEMBER.name, goalId: CFG.goalId || '',
+        area: AREA, step: String(STEP_OF_AREA), questId: QID, questName: QUEST.name,
+        kind: kind || '', pct: String(pct), score: score || '',
+        practice: practice || '', evidence: evidence || '',
+        ua: (navigator && navigator.userAgent) ? navigator.userAgent.slice(0,120) : ''
+      };
       var params = Object.keys(data).map(function(k){
         return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
       }).join('&');
@@ -131,31 +192,17 @@
           headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
           body: params
         });
-        return true;
       }catch(e){}
     }
-    // ② 予備：既存Googleフォーム（logApiUrl未設定かつform設定時のみ）
-    var F = CFG.form || {};
-    if(F.actionUrl && F.entry && F.entry.pct){
-      var f = $('gform'); f.action = F.actionUrl; f.innerHTML = '';
-      var E = F.entry;
-      function add(id, val){ if(!id) return; var i = document.createElement('input');
-        i.type = 'hidden'; i.name = 'entry.' + id; i.value = val; f.appendChild(i); }
-      add(E.memberId, MEMBER.id); add(E.memberName, MEMBER.name);
-      add(E.goalId, CFG.goalId || ''); add(E.questId, QID); add(E.questName, QUEST.name);
-      add(E.pct, String(pct)); add(E.practice, practice || ''); add(E.evidence, evidence || '');
-      f.submit(); return true;
-    }
-    return false;
+    return Promise.resolve(null);
   }
-  function kindOf(pct){ pct=Number(pct);
-    return pct>=125 ? 'practice' : pct>=75 ? 'quiz' : pct>=50 ? 'archive' : 'video'; }
 
-  /* ── メンバー入力欄（未登録時のみ） ── */
+  /* ── メンバー入力欄（トークンも旧IDも無い時のみ） ── */
   function memberFieldsHtml(){
-    if(MEMBER.id && MEMBER.name) return '';
+    if(MEMBER.token || (MEMBER.id && MEMBER.name)) return '';
     return '<div class="member-box">'
       + '<div style="font-weight:800;font-size:.9rem">🙋 はじめに名乗ってください（初回のみ）</div>'
+      + '<div style="font-size:.78rem;color:var(--muted)">マイページのリンクから入ると自動でログインされます</div>'
       + '<div class="field-label">メンバーID</div>'
       + '<input type="text" id="mId" value="' + esc(MEMBER.id) + '" placeholder="例：M0123">'
       + '<div class="field-label">ニックネーム</div>'
@@ -163,6 +210,7 @@
       + '</div>';
   }
   function captureMember(){
+    if(MEMBER.token) return true;
     var idEl = $('mId'), nameEl = $('mName');
     if(idEl)   MEMBER.id   = idEl.value.trim();
     if(nameEl) MEMBER.name = nameEl.value.trim();
@@ -175,6 +223,26 @@
     return true;
   }
 
+  /* ── 討伐ムービー生成プロンプト（自分のアバター×ボス×実践内容） ── */
+  function battlePrompt(pct, practice, rewardName){
+    var card = {};
+    try{ card = JSON.parse(localStorage.getItem('mcq_card_beta') || '{}'); }catch(e){}
+    var heroName  = card.name || MEMBER.name || '挑戦者';
+    var heroTitle = card.title ? '『' + card.title + '』' : '';
+    var skill     = card.skillName || '学びの一撃';
+    var scene     = AREA_SCENE[AREA] || '幻想的な戦いの舞台';
+    var deed      = practice ? '挑戦者が実際に成し遂げたこと：「' + practice + '」。この偉業のイメージが光のエフェクトとなって技に宿る。' : '';
+    var gift      = rewardName ? '最後に' + CH.name + 'が「' + rewardName + '」を手渡し、二人が笑い合う。' : '最後に二人が拳を合わせ、笑い合う。';
+    return '【討伐ムービー】（8秒・参照画像2枚を添付：①自分のアバター画像 ②' + CH.name + 'の画像）\n\n'
+      + scene + '。挑戦者' + heroTitle + '「' + heroName + '」（参照画像①準拠）が必殺技『' + skill + '』を放つ。'
+      + CH.name + '（参照画像②準拠）は正面から受け止め、ニヤリと笑って敗北を認める。'
+      + deed
+      + '砕けた封印のタイルが金色の光の粒になって夜空に舞い上がる。'
+      + gift
+      + '\n\n' + STYLE_SUFFIX;
+  }
+  function bossImgUrl(){ return CH.img || ''; }
+
   /* ───────── シーン ───────── */
 
   // 登場（＋2つの入口：順にやる or 実践から報告）
@@ -182,7 +250,7 @@
     setStep(1);
     say(L.intro);
     var op = CH.openingVideo
-      ? '<a class="btn btn-ghost" href="' + esc(CH.openingVideo) + '" target="_blank" rel="noopener">🎬 オープニングムービー</a>' : '';
+      ? '<a class="btn btn-ghost" href="' + esc(CH.openingVideo) + '" target="_blank" rel="noopener">🎬 サイドストーリー（見なくてもOK）</a>' : '';
     render('<button class="btn btn-primary" id="go">📖 順番に学ぶ（動画から）</button>'
       + '<button class="btn btn-ghost" id="skip">⚡ もう実践した → 報告だけする</button>'
       + op);
@@ -215,14 +283,14 @@
     $('aSkip').onclick = function(){ bump(50); sceneReport(false); };
   }
 
-  // STEP3 クイズ（1問ずつ）
+  // STEP3 クイズ（1問ずつ）＝ボスへの「こうげき」
   var answered = 0, quizPct = 0;
   var KANJI = '一二三四五六七八九十';
   function sceneQuiz(qi){
     setStep(3);
     var item = QUEST.quiz[qi];
     say('第' + (KANJI.charAt(qi) || (qi+1)) + '問！ ' + item.q);
-    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '</div>';
+    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '　⚔️ 正解＝こうげき！</div>';
     item.choices.forEach(function(c, ci){
       html += '<div class="choice" data-ci="' + ci + '">' + esc(c) + '<span class="mark"></span></div>';
     });
@@ -288,7 +356,6 @@
       else                     levels.push({pct:25,  cls:'pct-25',  t:'動画を見た', d:'第一歩！'});
     }
     // 実践ラダー（常に選べる。125%以上は証拠必須）
-    //   このマス固有の実践ミッションが定義されていればそれを表示（data/missions/*.js）
     var MIS = (window.MCQ_MISSIONS || {})[QID];
     levels.push({
       pct:125, cls:'pct-125',
@@ -312,7 +379,7 @@
     });
     if(MIS && MIS.social){
       html += '<div style="font-size:.82rem;background:#fff8e1;border:1px dashed #f0c36d;border-radius:10px;padding:8px 12px;margin:2px 0 6px">'
-            + '🍙 <b>二人旅の試練</b>：このミッションは仲間を巻き込むと完了。困っている仲間がいたら、おにぎり（応援）を届けよう。</div>';
+            + '🍙 <b>サンクスUP!の試練</b>：このミッションは仲間を巻き込むと完了。助けてくれた仲間には、ボードの「🍙サンクスUP!」で感謝を送ろう（相手に+3Pt・あなたに+8EXP）。</div>';
     }
     html += '<div class="field-label">実践したこと・感想（チャットにも共有されます）</div>'
           + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
@@ -321,7 +388,7 @@
       html += '<div style="font-size:.8rem;color:var(--muted);margin-top:2px">📎 証拠の例：' + esc(MIS.evidence) + '</div>';
     }
     html += '<input type="url" id="rE" placeholder="https://...（実践報告は必須）">'
-          + '<button class="btn btn-green" id="submit">⚔️ この内容で報告する</button>';
+          + '<button class="btn btn-green" id="submit">⚔️ この内容で報告する（こうげき！）</button>';
     render(html);
 
     function refreshEvReq(){
@@ -339,7 +406,7 @@
     refreshEvReq();
 
     $('submit').onclick = function(){
-      if(!(MEMBER.id && MEMBER.name) && !captureMember()) return;
+      if(!captureMember()) return;
       var sel = root.querySelector('.opt.sel');
       var need = sel && sel.getAttribute('data-need') === '1';
       var lv = root.querySelector('input[name="lv"]:checked');
@@ -354,23 +421,71 @@
         return;
       }
       var score = (quizPct > 0) ? (answered + '/' + QUEST.quiz.length) : '';
-      postReport(pct, practice, evidence, kindOf(pct), score);
-      sceneDone(pct);
+      var btn = $('submit'); btn.disabled = true; btn.textContent = '⚔️ 送信中…';
+      postReport(pct, practice, evidence, kindOf(pct), score).then(function(res){
+        sceneDone(pct, practice, res);
+      });
     };
   }
 
-  function sceneDone(pct){
+  // v3: 討伐演出（EXP・ご褒美・称号・討伐ムービープロンプト）
+  function sceneDone(pct, practice, res){
     setStep(4);
     say(L.done.replace('{pct}', pct));
+    var html = '<div style="text-align:center;font-size:3rem">🎊</div>'
+      + '<div style="text-align:center;font-weight:900;font-size:1.3rem;margin:4px 0">' + pct + '% で報告完了！</div>';
+
+    // 本体GAS連携時の戦果表示
+    if(res && res.ok){
+      if(res.promoted && res.expGained){
+        html += '<div style="text-align:center;font-weight:900;color:#2e7d32;font-size:1.1rem;margin:4px 0">'
+              + '⚔️ 討伐成功！ +' + res.expGained + ' EXP 獲得！</div>';
+      }
+      if(res.rewards && res.rewards.length){
+        res.rewards.forEach(function(rw){
+          html += '<div style="display:flex;gap:10px;align-items:center;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:12px;padding:10px 12px;margin:6px 0">'
+            + (rw.imageUrl ? '<img src="' + esc(rw.imageUrl) + '" style="width:56px;height:56px;object-fit:cover;border-radius:8px" alt="">' : '<span style="font-size:2rem">🎁</span>')
+            + '<div><b>お土産を解放！『' + esc(rw.rewardName) + '』</b>'
+            + (rw.prefecture ? '<br><small>' + esc(rw.prefecture) + 'の銘品</small>' : '')
+            + '</div></div>';
+        });
+      }
+      if(res.title){
+        html += '<div style="text-align:center;font-weight:900;color:#b8860b;margin:6px 0">'
+              + '👑 称号獲得！『' + esc(res.title) + '』</div>';
+      }
+    } else {
+      html += '<div style="text-align:center;color:var(--muted);font-size:.9rem">'
+        + esc(MEMBER.name ? MEMBER.name + ' さんの活動として記録されました' : 'あなたの活動が記録に加わりました') + '</div>';
+    }
+
+    // 討伐ムービー生成（実践100%以上で解放）
+    if(Number(pct) >= 100){
+      var rewardName = (res && res.rewards && res.rewards[0]) ? res.rewards[0].rewardName : '';
+      var bp = battlePrompt(pct, practice, rewardName);
+      html += '<div style="background:#0f1740;color:#eef4ff;border-radius:12px;padding:11px 13px;margin-top:12px">'
+        + '<div style="font-weight:900;margin-bottom:6px">🎬 討伐ムービーを作ろう（あなたが主役！）</div>'
+        + '<div style="font-size:.8rem;opacity:.85;margin-bottom:8px">呪文をコピーして動画AIに貼り、<b>①自分のアバター画像</b>（🃏挑戦者カードで作ったもの）と<b>②ボスの画像</b>を添付するだけ。</div>'
+        + '<pre id="bpText" style="white-space:pre-wrap;font-size:.78rem;line-height:1.6;background:#080d24;border-radius:8px;padding:10px;max-height:180px;overflow:auto">' + esc(bp) + '</pre>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
+        + '<button class="btn btn-primary" id="cpBp" style="font-size:.85rem">📋 呪文をコピー</button>'
+        + '<a class="btn btn-blue" href="https://gemini.google.com/" target="_blank" rel="noopener" style="font-size:.85rem">🪄 Geminiで生成</a>'
+        + '<a class="btn btn-ghost" href="' + esc(bossImgUrl()) + '" target="_blank" rel="noopener" style="font-size:.85rem">🖼 ボス画像を開く</a>'
+        + '</div></div>';
+    }
+
     var ed = CH.endingVideo
-      ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener">🎬 クリアムービーを見る</a>' : '';
-    render('<div style="text-align:center;font-size:3rem">🎊</div>'
-      + '<div style="text-align:center;font-weight:900;font-size:1.3rem;margin:4px 0">' + pct + '% で報告完了！</div>'
-      + '<div style="text-align:center;color:var(--muted);font-size:.9rem">'
-      + esc(MEMBER.name ? MEMBER.name + ' さんの活動として記録されました' : 'あなたの活動が記録に加わりました') + '</div>'
-      + ed
+      ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener" style="margin-top:10px">🎬 サイドストーリー（討伐後）</a>' : '';
+    html += ed
       + '<a class="btn btn-primary" href="../index.html" style="margin-top:14px">🗺️ マンダラボードへ戻る</a>'
-      + '<button class="btn btn-ghost" id="again">このクエストを最初から</button>');
+      + '<button class="btn btn-ghost" id="again">このクエストを最初から</button>';
+    render(html);
+    if($('cpBp')) $('cpBp').onclick = function(){
+      var t = $('bpText').textContent;
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){
+        $('cpBp').textContent = '✅ コピーしました！';
+      }).catch(function(){ $('cpBp').textContent = '⚠ 手動で選択してコピーしてください'; });
+    };
     $('again').onclick = function(){ answered = 0; quizPct = 0; achieved = 0; sceneIntro(); };
   }
 
