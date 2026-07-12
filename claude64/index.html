@@ -3,37 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>β Google64 マンダラチャートクエスト | みんなのAI実践塾</title>
+<title>γ Claude64 マンダラチャートクエスト（第2部 西日本編）| みんなのAI実践塾</title>
 <style>
   :root{--gold:#FFD700; --muted:#9aa3b5; --ink:#1a2233;}
   *{box-sizing:border-box;}
   body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
-    background:#14101c; margin:0; color:#f2f0ea; line-height:1.6;
+    background:#120e1c; margin:0; color:#f2f0ea; line-height:1.6;
     padding:18px 10px 60px; display:flex; flex-direction:column; align-items:center;}
   .wrap{width:100%; max-width:1020px;}
 
   header{text-align:center; margin-bottom:14px;}
   header .goal{display:inline-block; background:rgba(255,215,0,.12); border:1px solid rgba(255,215,0,.4);
-    color:var(--gold); border-radius:999px; padding:2px 16px; font-weight:800; letter-spacing:.12em; font-size:.8rem;}
+    color:var(--gold); border-radius:999px; padding:2px 16px; font-weight:800; letter-spacing:.1em; font-size:.78rem;}
   header h1{margin:8px 0 2px; font-size:1.45rem; font-weight:900; text-shadow:0 2px 8px rgba(0,0,0,.6);}
   header p{margin:0; font-size:.83rem; color:var(--muted);}
+  .xlink{display:inline-block; margin-top:8px; font-size:.76rem; color:#b39ddb; text-decoration:none;
+    border:1px solid rgba(179,157,219,.4); border-radius:999px; padding:2px 12px;}
+  .xlink:hover{background:rgba(179,157,219,.12);}
 
-  /* 全体進捗バー */
   .overall{max-width:760px; margin:10px auto 14px; display:flex; align-items:center; gap:10px; padding:0 6px;}
   .overall .lbl{font-size:.75rem; color:var(--muted); flex-shrink:0;}
   .overall .bar{flex:1; height:9px; background:rgba(255,255,255,.08); border-radius:5px; overflow:hidden;}
-  .overall .bar i{display:block; height:100%; background:linear-gradient(90deg,#f57c00,var(--gold)); transition:width .6s;}
+  .overall .bar i{display:block; height:100%; background:linear-gradient(90deg,#7e57c2,var(--gold)); transition:width .6s;}
   .overall .val{font-size:.82rem; color:var(--gold); font-weight:800; flex-shrink:0;}
 
-  /* ===== 9×9 マンダラ ===== */
   .board-scroll{overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch;}
   .grid{display:grid; grid-template-columns:repeat(9,1fr); gap:4px;
     min-width:720px; max-width:1000px; margin:0 auto; padding:10px;
     border-radius:18px; position:relative;
-    background-color:#221833;
+    background-color:#1e1530;
     background-size:cover; background-position:center;
-    box-shadow:0 0 40px rgba(255,215,0,.18), inset 0 0 60px rgba(0,0,0,.5);}
-  /* エリア境界をはっきり空ける（8つの塊に見せる） */
+    box-shadow:0 0 40px rgba(126,87,194,.25), inset 0 0 60px rgba(0,0,0,.5);}
   .grid > *:nth-child(9n+4), .grid > *:nth-child(9n+7){margin-left:9px;}
   .grid > *:nth-child(n+28):nth-child(-n+36),
   .grid > *:nth-child(n+55):nth-child(-n+63){margin-top:9px;}
@@ -41,7 +41,6 @@
   .cell{aspect-ratio:1; border-radius:9px; position:relative; overflow:hidden;
     display:flex; flex-direction:column; justify-content:flex-start;}
 
-  /* クエストセル（暗タイル。進捗で透けて下の絵が見える） */
   a.qcell{color:#fff; text-decoration:none; padding:5px 6px; font-size:.6rem; line-height:1.35;
     border:1px solid rgba(255,255,255,.14); transition:border .15s, transform .1s;}
   a.qcell:hover{border-color:var(--gold); transform:scale(1.03); z-index:2;}
@@ -52,12 +51,11 @@
     color:rgba(255,255,255,.75); background:rgba(0,0,0,.4); border-radius:99px;
     width:15px; height:15px; display:flex; align-items:center; justify-content:center;}
   a.qcell .pctb{position:absolute; left:0; right:0; bottom:0; height:3px; background:rgba(0,0,0,.35);}
-  a.qcell .pctb i{display:block; height:100%; background:linear-gradient(90deg,#f57c00,var(--gold));}
+  a.qcell .pctb i{display:block; height:100%; background:linear-gradient(90deg,#7e57c2,var(--gold));}
   a.qcell.full{border-color:rgba(255,215,0,.75); box-shadow:inset 0 0 14px rgba(255,215,0,.35);}
-  a.qcell.full .nm,{opacity:.85;}
+  a.qcell.full .nm{opacity:.85;}
   a.qcell.full::after{content:"✨"; position:absolute; right:4px; bottom:4px; font-size:.75rem;}
 
-  /* エリア中心（ガイドキャラ＋学習タイトル） */
   .gate{background:rgba(10,6,18,.78); border:1.5px solid rgba(255,215,0,.4);
     align-items:center; justify-content:center; text-align:center; padding:4px; gap:2px;}
   .gate img{width:44%; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:top;
@@ -67,7 +65,6 @@
   .gate .astamp{position:absolute; left:5px; top:3px; font-size:1.4rem; font-weight:900;
     color:rgba(255,255,255,.35); line-height:1;}
 
-  /* 中央3×3（エリアラベル＋キャッチ） */
   .alabel{background:rgba(20,12,34,.82); border:1px solid rgba(255,255,255,.18);
     align-items:center; justify-content:center; text-align:center; padding:4px; gap:1px;
     color:#fff; text-decoration:none;}
@@ -75,19 +72,18 @@
   .alabel .stp{font-size:.55rem; font-weight:900; color:var(--gold);}
   .alabel .a{font-size:1rem; font-weight:900;}
   .alabel .t{font-size:.55rem; font-weight:700; line-height:1.25; color:#e8e2d5;}
-  .center{background:radial-gradient(circle at 50% 35%, rgba(255,215,0,.28), rgba(20,10,40,.9) 70%);
+  .center{background:radial-gradient(circle at 50% 35%, rgba(126,87,194,.4), rgba(20,10,40,.9) 70%);
     border:2px solid var(--gold); align-items:center; justify-content:center; text-align:center; padding:6px; gap:3px;
-    box-shadow:0 0 24px rgba(255,215,0,.35);}
-  .center .c1{font-size:.78rem; font-weight:900; color:var(--gold); line-height:1.3; text-shadow:0 1px 4px #000;}
-  .center .c2{font-size:.53rem; color:#f4ecd8; line-height:1.3;}
+    box-shadow:0 0 24px rgba(126,87,194,.45);}
+  .center .c1{font-size:.74rem; font-weight:900; color:var(--gold); line-height:1.3; text-shadow:0 1px 4px #000;}
+  .center .c2{font-size:.52rem; color:#f4ecd8; line-height:1.3;}
 
-  /* 凡例 */
   .legend{max-width:760px; margin:16px auto 0; display:flex; gap:14px; flex-wrap:wrap;
     justify-content:center; align-items:center; font-size:.75rem; color:var(--muted);}
   .legend .mini{display:grid; grid-template-columns:repeat(3,20px); gap:2px;}
   .legend .mini span{width:20px; height:20px; border-radius:4px; background:rgba(255,255,255,.09);
     display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:800; color:#ffd54f;}
-  .legend .mini span.c{background:rgba(255,215,0,.25);}
+  .legend .mini span.c{background:rgba(126,87,194,.4);}
   .legend .item{display:flex; align-items:center; gap:7px;}
   .legend .sw{width:16px; height:16px; border-radius:4px; flex-shrink:0;}
 
@@ -97,11 +93,11 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="goal">β GOAL ─ GOOGLE 64</span>
-    <h1 id="centerCatch">Google賢者になろう</h1>
-    <p>動画で学び、クイズで試し、実践で位を上げる。みんなの力でタイルを開放し、隠された絵を完成させよ！</p>
+    <span class="goal">γ GOAL ─ CLAUDE 64 ・ 第2部 西日本編</span>
+    <h1 id="centerCatch">クロードマスターになろう</h1>
+    <p>ガーグル帝国、西方戦線。黒党の8体が待ち受ける。動画で学び、クイズで試し、実践で位を上げよ！</p>
     <!-- CROSS-LINK: 別サイトに分離するときはこの1行を消す -->
-    <a href="claude64/index.html" style="display:inline-block;margin-top:8px;font-size:.76rem;color:#b39ddb;text-decoration:none;border:1px solid rgba(179,157,219,.4);border-radius:999px;padding:2px 12px">⚔️ 第2部・西日本編（Claude64）へ →</a>
+    <a class="xlink" href="../index.html">← 第1部・東日本編（Google64）へ</a>
   </header>
 
   <div class="overall">
@@ -121,8 +117,8 @@
       </div>
       <div>マンダラの型<br>（①→⑧の順で進む）</div>
     </div>
-    <div class="item"><span class="sw" style="background:rgba(34,24,51,.95);border:1px solid rgba(255,255,255,.2)"></span>未開放（暗いタイル）</div>
-    <div class="item"><span class="sw" style="background:linear-gradient(135deg,rgba(255,215,0,.5),rgba(34,24,51,.3));border:1px solid #ffd700"></span>チーム累積<b id="thLabel">400</b>%で開放✨</div>
+    <div class="item"><span class="sw" style="background:rgba(30,21,48,.95);border:1px solid rgba(255,255,255,.2)"></span>未開放（暗いタイル）</div>
+    <div class="item"><span class="sw" style="background:linear-gradient(135deg,rgba(126,87,194,.6),rgba(30,21,48,.3));border:1px solid #ffd700"></span>チーム累積<b id="thLabel">400</b>%で開放✨</div>
   </div>
 
   <footer>みんなのAI実践塾 ｜ マンダラチャートクエスト</footer>
@@ -147,7 +143,7 @@
   var CFG    = window.MCQ_CONFIG || {};
   var CHARS  = window.MCQ_CHARS || {};
   var AREAS  = window.MCQ_AREAS || {};
-  var CENTER = window.MCQ_CENTER || {catch:"Google賢者になろう", sub:""};
+  var CENTER = window.MCQ_CENTER || {catch:"クロードマスターになろう", sub:""};
   var QUESTS = window.MCQ_QUESTS || {};
   var PROG   = window.MCQ_PROGRESS || {threshold:400, cumPct:{}};
   var TH     = PROG.threshold || (CFG.board && CFG.board.threshold) || 400;
@@ -156,22 +152,18 @@
   document.getElementById('centerCatch').textContent = CENTER.catch;
   document.getElementById('thLabel').textContent = TH;
 
-  /* 既存GAS(members_page)と同じ配置定義 */
   var AREA_POS  = {F:[0,0], C:[0,1], G:[0,2], B:[1,0], D:[1,2], E:[2,0], A:[2,1], H:[2,2]};
   var QUEST_POS = {6:[0,0], 3:[0,1], 7:[0,2], 2:[1,0], 4:[1,2], 5:[2,0], 1:[2,1], 8:[2,2]};
   var CENTER_GRID = [['F','C','G'],['B','*','D'],['E','A','H']];
 
-  /* 背景イラスト */
   var grid = document.getElementById('grid');
   if(CFG.board && CFG.board.imageUrl){
     grid.style.backgroundImage = "url('" + CFG.board.imageUrl.replace(/'/g,"%27") + "')";
   }
 
-  /* fill比率 → タイルの透け具合（既存GASと同式: alpha 0.95 → 0.05） */
   function fillRatio(qid){ return Math.min(1, (CUM[qid]||0)/TH); }
-  function tileBg(ratio){ var a=(0.95 - ratio*0.90).toFixed(3); return 'rgba(22,14,36,'+a+')'; }
+  function tileBg(ratio){ var a=(0.95 - ratio*0.90).toFixed(3); return 'rgba(24,16,40,'+a+')'; }
 
-  /* エリア平均・全体 */
   var areaAvg = {};
   Object.keys(AREA_POS).forEach(function(a){
     var s=0; for(var n=1;n<=8;n++) s+=fillRatio(a+n);
@@ -181,15 +173,10 @@
   document.getElementById('overallBar').style.width = Math.round(overall*100)+'%';
   document.getElementById('overallVal').textContent = Math.round(overall*100)+'%';
 
-  /* 9×9セルを組む */
   var cells=[]; for(var r=0;r<9;r++) cells.push(new Array(9).fill(null));
-
   Object.keys(AREA_POS).forEach(function(area){
     var ap=AREA_POS[area];
-    for(var n=1;n<=8;n++){
-      var ip=QUEST_POS[n];
-      cells[ap[0]*3+ip[0]][ap[1]*3+ip[1]] = {t:'q', qid:area+n, n:n};
-    }
+    for(var n=1;n<=8;n++){ var ip=QUEST_POS[n]; cells[ap[0]*3+ip[0]][ap[1]*3+ip[1]] = {t:'q', qid:area+n, n:n}; }
     cells[ap[0]*3+1][ap[1]*3+1] = {t:'gate', area:area};
   });
   for(var rr=0;rr<3;rr++) for(var cc=0;cc<3;cc++){
@@ -201,7 +188,6 @@
   for(var r2=0;r2<9;r2++) for(var c2=0;c2<9;c2++){
     var cell=cells[r2][c2];
     if(!cell){ html+='<div class="cell"></div>'; continue; }
-
     if(cell.t==='q'){
       var q=QUESTS[cell.qid]||{};
       var ac=(CHARS[cell.qid.charAt(0)]||{}).color||'#888';
@@ -233,7 +219,7 @@
           +'<span class="t">'+esc(ar2.title||'')+'</span>'
           +'</a>';
     }
-    else { /* center */
+    else {
       html+='<div class="cell center">'
           +'<span class="c1">'+esc(CENTER.catch)+'</span>'
           +'<span class="c2">'+esc(CENTER.sub)+'</span>'
@@ -242,7 +228,6 @@
   }
   grid.innerHTML=html;
 
-  /* 中央のエリアラベル→該当エリアの中心セルへ軽くスクロール＆光らせる */
   window.scrollToArea=function(a){
     var ap=AREA_POS[a]; if(!ap) return;
     var idx=(ap[0]*3+1)*9 + (ap[1]*3+1);
