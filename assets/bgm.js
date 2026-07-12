@@ -62,20 +62,16 @@
       if(ctx.state === 'suspended') ctx.resume();
       var t = ctx.currentTime;
       var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+      // ドラクエの喋り音＝毎回まったく同じ・固定音程の短い「ピッ」
       o.type = 'square';
-      // 低め（180〜230Hz）＋わずかに下降させて「ポッ」と丸く落とす
-      var f = 185 + Math.random()*45;
-      o.frequency.setValueAtTime(f * 1.15, t);
-      o.frequency.exponentialRampToValueAtTime(f, t + 0.05);
-      // ローパスで矩形波の耳障りな高調波を削る＝カラカラ感を消す
+      o.frequency.value = 440;          // 固定（ランダムも下降もしない）
+      // 高調波を少しだけ丸める（消しすぎない＝ファミコンらしさは残す）
       lp.type = 'lowpass';
-      lp.frequency.value = 900;
-      lp.Q.value = 0.6;
-      g.gain.setValueAtTime(0.001, t);
-      g.gain.exponentialRampToValueAtTime(0.09 * (ST.vol/0.35), t + 0.008);  // 軽くアタック
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.085);                // 少し長めに減衰
+      lp.frequency.value = 2600;
+      g.gain.setValueAtTime(0.08 * (ST.vol/0.35), t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);  // 短くスパッと
       o.connect(lp); lp.connect(g); g.connect(ctx.destination);
-      o.start(t); o.stop(t + 0.1);
+      o.start(t); o.stop(t + 0.055);
     }catch(e){}
   }
   /* 決定音・正解音など（種類指定） */
