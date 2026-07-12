@@ -50,23 +50,32 @@
   }
   function stop(){ if(audio){ audio.pause(); } }
 
-  /* ---- ドラクエ風ブリップ（矩形波の短いピッ） ---- */
+  /* ---- ドラクエ風ブリップ（低めの「ポッ」・高域を削って柔らかく） ---- */
   var ctx = null, lastBlip = 0;
   function blip(){
     if(!ST.seOn) return;
     var now = Date.now();
-    if(now - lastBlip < 45) return;   // 鳴らしすぎ防止
+    if(now - lastBlip < 38) return;   // 鳴らしすぎ防止
     lastBlip = now;
     try{
       if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)();
       if(ctx.state === 'suspended') ctx.resume();
-      var o = ctx.createOscillator(), g = ctx.createGain();
+      var t = ctx.currentTime;
+      var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
       o.type = 'square';
-      o.frequency.value = 880 + Math.random()*120;   // 少し揺らす
-      g.gain.setValueAtTime(0.045 * (ST.vol/0.35), ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.055);
-      o.connect(g); g.connect(ctx.destination);
-      o.start(); o.stop(ctx.currentTime + 0.06);
+      // 低め（180〜230Hz）＋わずかに下降させて「ポッ」と丸く落とす
+      var f = 185 + Math.random()*45;
+      o.frequency.setValueAtTime(f * 1.15, t);
+      o.frequency.exponentialRampToValueAtTime(f, t + 0.05);
+      // ローパスで矩形波の耳障りな高調波を削る＝カラカラ感を消す
+      lp.type = 'lowpass';
+      lp.frequency.value = 900;
+      lp.Q.value = 0.6;
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.exponentialRampToValueAtTime(0.09 * (ST.vol/0.35), t + 0.008);  // 軽くアタック
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.085);                // 少し長めに減衰
+      o.connect(lp); lp.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.1);
     }catch(e){}
   }
   /* 決定音・正解音など（種類指定） */
