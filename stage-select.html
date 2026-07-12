@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🗾 ステージ選択｜MANDALA QUEST</title>
+<style>
+:root{--gold:#FFD700;--gold-deep:#b8860b;--ink:#f2f0ea;--dim:#9aa3b5;--pink:#f06292;--purple:#7e57c2;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.6;
+  min-height:100dvh;padding:20px 12px 70px;
+  background-image:radial-gradient(900px 400px at 50% -5%,rgba(255,215,0,.1),transparent 70%);}
+.wrap{max-width:820px;margin:0 auto}
+a{color:var(--gold)}
+.head{text-align:center;margin-bottom:14px}
+.head .goal{display:inline-block;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.4);color:var(--gold);
+  border-radius:999px;padding:2px 16px;font-weight:800;letter-spacing:.1em;font-size:.78rem}
+.head h1{margin:8px 0 2px;font-size:1.4rem;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+/* 麗夏の案内 */
+.guide{display:flex;gap:12px;align-items:flex-start;background:rgba(240,98,146,.1);border:1px solid rgba(240,98,146,.35);
+  border-radius:14px;padding:12px;max-width:640px;margin:10px auto 4px;text-align:left}
+.guide img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--pink);flex-shrink:0}
+.guide .who{color:var(--pink);font-weight:800;font-size:12.5px}
+.guide p{font-size:13.5px}
+/* ステージカード */
+.smap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:560px){.smap{grid-template-columns:1fr}}
+.scard{position:relative;border:2px solid rgba(255,255,255,.14);border-radius:16px;overflow:hidden;text-decoration:none;color:#fff;
+  min-height:118px;display:flex;flex-direction:column;justify-content:flex-end;padding:12px 14px;
+  background:linear-gradient(150deg,#3a4160,#20263f);box-shadow:0 5px 18px rgba(0,0,0,.35)}
+.scard:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.scard .sbg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.9}
+.scard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,20,.05) 30%,rgba(10,8,20,.78) 100%)}
+.scard>*{position:relative;z-index:1}
+.scard .sk{font-size:11px;font-weight:900;color:#ffd54f;letter-spacing:.08em}
+.scard .sr{font-weight:900;font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.scard .sb{font-size:11.5px;opacity:.92;text-shadow:0 1px 3px rgba(0,0,0,.7);margin-top:2px}
+.foot{text-align:center;margin-top:18px;font-size:12.5px}
+.foot a{margin:0 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <span class="goal">β GOAL ─ GOOGLE 64</span>
+    <h1>🗾 ステージ選択 — 8つの封印の地</h1>
+  </div>
+  <div class="guide">
+    <img src="https://re-gi.jp/icon/reika_tujo.jpg" alt="大塚麗夏">
+    <div>
+      <div class="who">大塚麗夏</div>
+      <p>日本列島に散らばる<b>8つの封印の地</b>。どこから挑んでもいいわ。好きな土地を選んで。（あとから自由に行き来できるから安心して）</p>
+    </div>
+  </div>
+  <div class="smap" id="smap"></div>
+  <div class="foot">
+    <a href="index.html">🗺 マンダラボードを直接見る</a>
+    <a href="claude64/index.html">🌑 第2部・西日本編（Claude64）へ</a>
+  </div>
+</div>
+
+<script src="assets/bgm.js"></script>
+<script src="data/stages.js"></script>
+<script>
+(function(){
+  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  var STAGES=window.MCQ_STAGES||[];
+  document.getElementById('smap').innerHTML=STAGES.map(function(st){
+    return '<a class="scard" href="index.html?area='+st.key+'">'
+      +'<span class="sbg" style="background-image:url(\'assets/stages/'+st.key+'.png\')"></span>'
+      +'<span class="sk">STAGE '+st.key+'</span>'
+      +'<span class="sr">'+st.emoji+' '+esc(st.region)+'</span>'
+      +'<span class="sb">主：'+esc(st.boss)+'｜'+esc(st.title)+'</span></a>';
+  }).join('');
+})();
+</script>
+</body>
+</html>
