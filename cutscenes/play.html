@@ -159,6 +159,11 @@
   var dbox=$('#dbox'), who=dbox.querySelector('.who'), tx=dbox.querySelector('.tx'), cue=dbox.querySelector('.cue');
   var idx=-1, typing=null, typingText='', done=false;
 
+  // オーディオ基盤ロード（BGM＋喋り音・エリアBGMはassets/bgm/{area}.mp3）
+  (function(){ var t=document.createElement('script'); t.src='../assets/bgm.js';
+    t.onload=function(){ if(window.MCQBgm && area) MCQBgm.play(area); };
+    document.head.appendChild(t); })();
+
   function typeLine(text, isNar, isReika, cb){
     text = text.replace(/\{name\}/g, name);
     tx.className = 'tx' + (isNar?' nar':'');
@@ -168,6 +173,7 @@
     chara.classList.toggle('talk', !isNar && !isReika);
     typing=setInterval(function(){
       i++; tx.textContent=text.slice(0,i);
+      if(window.MCQBgm && i%2===0) MCQBgm.blip();   // ドラクエ風の喋り音
       if(i>=text.length){ clearInterval(typing); typing=null; cue.style.display='block'; chara.classList.remove('talk'); if(cb)cb(); }
     }, 34);
   }

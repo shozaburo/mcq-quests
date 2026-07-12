@@ -212,6 +212,7 @@
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="assets/bgm.js"></script>
 <script src="data/config.js"></script>
 <script src="data/characters.js"></script>
 <script src="data/areas.js"></script>
@@ -458,6 +459,13 @@
     el.scrollIntoView({behavior:'smooth', block:'center'});
     el.style.boxShadow='0 0 22px #FFD700'; setTimeout(function(){el.style.boxShadow='';},1200);
   };
+
+  /* ステージ選択（?area=X）から来たら該当エリアへスクロール＆BGM */
+  var areaParam=(new URLSearchParams(location.search).get('area')||'').toUpperCase();
+  if(areaParam && AREA_POS[areaParam]){
+    setTimeout(function(){ scrollToArea(areaParam); },400);
+    if(window.MCQBgm) MCQBgm.play(areaParam);
+  }
 })();
 </script>
 </body>

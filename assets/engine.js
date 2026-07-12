@@ -53,6 +53,17 @@
   }
   var MEMBER = getMember();
 
+  /* ── オーディオ基盤（bgm.js）を動的ロード → エリアBGM再生 ── */
+  (function loadAudio(){
+    if(window.MCQBgm){ MCQBgm.play(AREA); return; }
+    var self = document.querySelector('script[src*="engine.js"]');
+    var base = self ? self.getAttribute('src').replace(/engine\.js.*$/, '') : 'assets/';
+    var t = document.createElement('script');
+    t.src = base + 'bgm.js';
+    t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA); };
+    document.head.appendChild(t);
+  })();
+
   /* トークンがあれば本体GASから本人情報を取得（非同期・失敗しても続行） */
   function syncMe(){
     if(!API || !MEMBER.token) return;
@@ -127,6 +138,7 @@
     var i = 0;
     typing = setInterval(function(){
       i++; el.textContent = text.slice(0, i);
+      if(window.MCQBgm && i % 2 === 0) MCQBgm.blip();   // ドラクエ風の喋り音
       if(i >= text.length){ clearInterval(typing); typing = null; cur.style.display = 'inline-block'; if(cb) cb(); }
     }, 22);
     $('dlg').onclick = function(){
