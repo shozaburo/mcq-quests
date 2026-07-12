@@ -13,12 +13,12 @@
   'use strict';
   if(window.MCQBgm) return;
 
-  // BGMはデフォルト自動再生しない（聴きたい人が🎵ボタンで再生）。効果音は既定オン。
-  var ST = { bgmOn:false, seOn:true, vol:0.18 };
+  // BGMは低音量で自動再生（最初のタップ後に開始）。うるさければ🔇でオフ。
+  var ST = { bgmOn:true, seOn:true, vol:0.18 };
   try{ Object.assign(ST, JSON.parse(localStorage.getItem('mcq_audio')||'{}')); }catch(e){}
   function save(){ try{ localStorage.setItem('mcq_audio', JSON.stringify(ST)); }catch(e){} }
-  // 一度きりの移行：以前オートBGMをオンで保存していた端末も自動再生を止める
-  if(!ST.__noauto){ ST.bgmOn = false; ST.__noauto = true; save(); }
+  // 一度きりの移行：前回オフにした端末もBGMを再有効化（音量は控えめ）
+  if(!ST.__a3){ ST.bgmOn = true; ST.__a3 = true; delete ST.__noauto; save(); }
 
   /* ---- パス解決（quests/ や cutscenes/ 配下からも使えるように） ---- */
   function basePath(){
