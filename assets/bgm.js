@@ -13,7 +13,7 @@
   'use strict';
   if(window.MCQBgm) return;
 
-  var ST = { bgmOn:true, seOn:true, vol:0.35 };
+  var ST = { bgmOn:true, seOn:true, vol:0.18 };
   try{ Object.assign(ST, JSON.parse(localStorage.getItem('mcq_audio')||'{}')); }catch(e){}
   function save(){ try{ localStorage.setItem('mcq_audio', JSON.stringify(ST)); }catch(e){} }
 
@@ -68,8 +68,8 @@
       // 高調波を少しだけ丸める（消しすぎない＝ファミコンらしさは残す）
       lp.type = 'lowpass';
       lp.frequency.value = 2600;
-      g.gain.setValueAtTime(0.08 * (ST.vol/0.35), t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);  // 短くスパッと
+      g.gain.setValueAtTime(0.045 * (ST.vol/0.35), t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);  // 短くスパッと（控えめ）
       o.connect(lp); lp.connect(g); g.connect(ctx.destination);
       o.start(t); o.stop(t + 0.055);
     }catch(e){}
@@ -88,7 +88,7 @@
       seq.forEach(function(nd){
         var o=ctx.createOscillator(), g=ctx.createGain();
         o.type='square'; o.frequency.value=nd[0];
-        g.gain.setValueAtTime(0.06*(ST.vol/0.35), t);
+        g.gain.setValueAtTime(0.04*(ST.vol/0.35), t);
         g.gain.exponentialRampToValueAtTime(0.0001, t+nd[1]);
         o.connect(g); g.connect(ctx.destination);
         o.start(t); o.stop(t+nd[1]);

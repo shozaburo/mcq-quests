@@ -53,13 +53,44 @@
   }
   var MEMBER = getMember();
 
+  /* ── アセットのベースパス（quests/ から見た assets/） ── */
+  var ASSET_BASE = (function(){
+    var self = document.querySelector('script[src*="engine.js"]');
+    return self ? self.getAttribute('src').replace(/engine\.js.*$/, '') : 'assets/';
+  })();
+
+  /* ── エリア背景画像を敷く（assets/stages/{AREA}.png） ── */
+  (function setStageBg(){
+    var img = new Image();
+    img.onload = function(){
+      document.body.style.backgroundImage =
+        "linear-gradient(180deg, rgba(20,14,6,.30) 0%, rgba(20,14,6,.55) 26%, rgba(244,246,251,.0) 40%, var(--bg) 46%), "
+        + "url('" + ASSET_BASE + "stages/" + AREA + ".png')";
+      document.body.style.backgroundSize = "cover, cover";
+      document.body.style.backgroundPosition = "center top, center top";
+      document.body.style.backgroundRepeat = "no-repeat, no-repeat";
+      document.body.style.backgroundAttachment = "scroll, fixed";
+    };
+    img.src = ASSET_BASE + "stages/" + AREA + ".png";  // 無ければ既存グラデのまま
+  })();
+
+  /* ── いつでもトップへ戻れる固定ボタン ── */
+  (function homeBtn(){
+    if(document.getElementById('mcqHome')) return;
+    var a = document.createElement('a');
+    a.id = 'mcqHome'; a.href = '../index.html'; a.title = 'トップ（ボードへ）';
+    a.textContent = '🏠 トップ';
+    a.style.cssText = 'position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.92);'
+      + 'color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;'
+      + 'padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.25);border:1px solid rgba(184,134,11,.4);';
+    document.body.appendChild(a);
+  })();
+
   /* ── オーディオ基盤（bgm.js）を動的ロード → エリアBGM再生 ── */
   (function loadAudio(){
     if(window.MCQBgm){ MCQBgm.play(AREA); return; }
-    var self = document.querySelector('script[src*="engine.js"]');
-    var base = self ? self.getAttribute('src').replace(/engine\.js.*$/, '') : 'assets/';
     var t = document.createElement('script');
-    t.src = base + 'bgm.js';
+    t.src = ASSET_BASE + 'bgm.js';
     t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA); };
     document.head.appendChild(t);
   })();
