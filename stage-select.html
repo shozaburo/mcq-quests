@@ -54,7 +54,7 @@ a{color:var(--gold)}
   </div>
   <div class="smap" id="smap"></div>
   <div class="foot">
-    <a href="index.html">🗺 マンダラボードを直接見る</a>
+    <a href="board.html">🗺 マンダラボードを直接見る</a>
     <a href="claude64/index.html">🌑 第2部・西日本編（Claude64）へ</a>
   </div>
 </div>
@@ -67,7 +67,7 @@ a{color:var(--gold)}
   function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   var STAGES=window.MCQ_STAGES||[];
   document.getElementById('smap').innerHTML=STAGES.map(function(st){
-    return '<a class="scard" href="index.html?area='+st.key+'">'
+    return '<a class="scard" href="board.html?area='+st.key+'">'
       +'<span class="sbg" style="background-image:url(\'assets/stages/'+st.key+'.png\')"></span>'
       +'<span class="sk">STAGE '+st.key+'</span>'
       +'<span class="sr">'+st.emoji+' '+esc(st.region)+'</span>'

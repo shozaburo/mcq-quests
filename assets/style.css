@@ -9,44 +9,63 @@
   --chara:#f57c00; /* キャラ固有色（engineが上書き） */
 }
 *{box-sizing:border-box;}
+html,body{height:100%;}
 body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
      background:linear-gradient(180deg,#2b1d0e 0%,#4a3418 45%,#f4f6fb 45.2%);
      margin:0; color:var(--ink); line-height:1.7;
-     display:flex; flex-direction:column; align-items:center; padding:14px; min-height:100vh;}
-.app{width:100%; max-width:560px;}
+     display:flex; flex-direction:column; align-items:center; padding:10px 12px;
+     height:100dvh; overflow:hidden;}
+/* ===== 1画面レイアウト：上部（ヘッダ＋キャラ）は固定、白カード内だけスクロール ===== */
+#app{width:100%; max-width:560px; flex:1; min-height:0; display:flex; flex-direction:column;}
+.app{width:100%; flex:1; min-height:0; display:flex; flex-direction:column;}
 
 /* ヘッダー */
-.head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.head{display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-shrink:0;}
 .badge{background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
-  border-radius:8px; padding:2px 11px; font-weight:800; font-size:1rem; flex-shrink:0;}
-.head h1{font-size:.92rem; font-weight:800; margin:0; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.5);}
-.stepper{display:flex; gap:6px; margin:8px 0 12px;}
+  border-radius:8px; padding:2px 11px; font-weight:800; font-size:.95rem; flex-shrink:0;}
+.head h1{font-size:.88rem; font-weight:800; margin:0; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.5);
+  overflow:hidden; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical;}
+.stepper{display:flex; gap:6px; margin:4px 0 10px; flex-shrink:0;}
 .stepper .dot{flex:1; height:6px; border-radius:99px; background:rgba(255,255,255,.25);}
 .stepper .dot.on{background:var(--accent);}
 .stepper .dot.done{background:#81c784;}
 
 /* キャラクター＋ダイアログ */
-.stage{display:flex; align-items:flex-end; gap:0; margin-bottom:-14px; position:relative; z-index:2;}
-.chara{width:132px; height:132px; border-radius:16px; object-fit:cover; object-position:top;
+.stage{display:flex; align-items:flex-end; gap:0; margin-bottom:-12px; position:relative; z-index:2; flex-shrink:0;}
+.chara{width:104px; height:104px; border-radius:14px; object-fit:cover; object-position:top;
   border:3px solid #fff; box-shadow:0 4px 14px rgba(0,0,0,.35); background:#3a2812; flex-shrink:0;}
-.chara-emoji{width:132px;height:132px;border-radius:16px;border:3px solid #fff;
-  display:flex;align-items:center;justify-content:center;font-size:4rem;
+.chara-emoji{width:104px;height:104px;border-radius:14px;border:3px solid #fff;
+  display:flex;align-items:center;justify-content:center;font-size:3.2rem;
   background:linear-gradient(135deg,#6d4c41,#3e2723); box-shadow:0 4px 14px rgba(0,0,0,.35); flex-shrink:0;}
 /* 名前プレート：セリフ枠内の見出しチップ（重なり防止のため枠内に配置） */
 .nameplate{display:inline-block; background:#3e2723; color:#ffe0b2;
-  border:1.5px solid var(--chara); border-radius:8px; padding:2px 12px; margin-bottom:9px;
-  font-weight:800; font-size:.82rem; line-height:1.4; box-shadow:0 1px 4px rgba(0,0,0,.35);}
-.nameplate small{font-size:.64rem; font-weight:700; color:#ffcc80; margin-left:8px;}
+  border:1.5px solid var(--chara); border-radius:8px; padding:1px 10px; margin-bottom:7px;
+  font-weight:800; font-size:.78rem; line-height:1.4; box-shadow:0 1px 4px rgba(0,0,0,.35);}
+.nameplate small{font-size:.62rem; font-weight:700; color:#ffcc80; margin-left:8px;}
 .dlg{background:rgba(20,14,6,.92); border:2px solid var(--chara); border-radius:14px;
-  color:#fff7ec; padding:14px 18px 16px 18px; margin-left:14px; min-height:96px; flex:1;
-  font-weight:600; font-size:.98rem; line-height:1.75; cursor:pointer; position:relative;}
+  color:#fff7ec; padding:11px 15px 12px; margin-left:12px; min-height:78px; max-height:132px; overflow-y:auto; flex:1;
+  font-weight:600; font-size:.92rem; line-height:1.65; cursor:pointer; position:relative;}
 .dlg #dlgText{display:block;}
 .dlg .cursor{display:inline-block; margin-left:4px; animation:blink 1s infinite; color:var(--chara);}
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
-/* アクションカード */
+/* アクションカード：残り高さ全部＝この中だけスクロール */
 .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
-  padding:26px 20px 22px; box-shadow:0 2px 12px rgba(0,0,0,.08); position:relative; z-index:1; margin-top:20px;}
+  padding:22px 18px 18px; box-shadow:0 2px 12px rgba(0,0,0,.08); position:relative; z-index:1; margin-top:16px;
+  flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+
+/* ===== スマホ（〜560px）：さらにコンパクトに ===== */
+@media(max-width:560px), (max-height:700px){
+  body{padding:8px 8px;}
+  .chara,.chara-emoji{width:82px;height:82px;}
+  .chara-emoji{font-size:2.5rem;}
+  .dlg{font-size:.86rem; line-height:1.6; min-height:66px; max-height:110px; padding:9px 12px 10px; margin-left:9px;}
+  .nameplate{font-size:.72rem;}
+  .nameplate small{display:none;}
+  .head h1{font-size:.8rem;}
+  .card{padding:16px 13px 14px; margin-top:12px;}
+  .btn{padding:11px 14px; font-size:.95rem;}
+}
 .fade{animation:fadeIn .3s;}
 @keyframes fadeIn{from{opacity:0; transform:translateY(8px);}to{opacity:1;transform:none;}}
 
@@ -92,5 +111,5 @@ textarea, input[type=url], input[type=text]{width:100%; border:1.5px solid var(-
 .member-box{background:#f6f8fc; border:1px dashed var(--border); border-radius:12px; padding:12px 14px; margin-bottom:8px;}
 .member-box .field-label{margin-top:6px;}
 
-footer{text-align:center; color:var(--muted); font-size:.75rem; margin:16px 0 4px;}
+footer{text-align:center; color:var(--muted); font-size:.72rem; margin:8px 0 2px; flex-shrink:0;}
 footer a{color:var(--muted);}

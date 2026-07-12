@@ -78,7 +78,7 @@
   (function homeBtn(){
     if(document.getElementById('mcqHome')) return;
     var a = document.createElement('a');
-    a.id = 'mcqHome'; a.href = '../index.html'; a.title = 'トップ（ボードへ）';
+    a.id = 'mcqHome'; a.href = '../index.html?start=1'; a.title = 'トップへ';
     a.textContent = '🏠 トップ';
     a.style.cssText = 'position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.92);'
       + 'color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;'
@@ -131,7 +131,7 @@
     +   '<div class="dlg" id="dlg"><div class="nameplate" id="charaName"></div><span id="dlgText"></span><span class="cursor" id="dlgCur">▼</span></div>'
     + '</div>'
     + '<div class="card"><div id="action"></div></div>'
-    + '<footer><a href="../index.html">🗺️ マンダラボードへ戻る</a></footer>'
+    + '<footer><a href="../board.html">🗺️ マンダラボードへ戻る</a></footer>'
     + '</div>';
 
   if(!CH || !QUEST){
@@ -139,7 +139,7 @@
     $('qName').textContent  = 'クエスト準備中';
     $('dlgText').textContent = 'このクエストはただいま準備中です。しばらくお待ちください。';
     $('dlgCur').style.display = 'none';
-    $('action').innerHTML = '<a class="btn btn-ghost" href="../index.html">🗺️ マンダラボードへ戻る</a>';
+    $('action').innerHTML = '<a class="btn btn-ghost" href="../board.html">🗺️ マンダラボードへ戻る</a>';
     return;
   }
 
@@ -520,7 +520,7 @@
     var ed = CH.endingVideo
       ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener" style="margin-top:10px">🎬 サイドストーリー（討伐後）</a>' : '';
     html += ed
-      + '<a class="btn btn-primary" href="../index.html" style="margin-top:14px">🗺️ マンダラボードへ戻る</a>'
+      + '<a class="btn btn-primary" href="../board.html" style="margin-top:14px">🗺️ マンダラボードへ戻る</a>'
       + '<button class="btn btn-ghost" id="again">このクエストを最初から</button>';
     render(html);
     if($('cpBp')) $('cpBp').onclick = function(){
