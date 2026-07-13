@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>カットシーン | みんなのAI実践塾</title>
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:#000; overflow:hidden;
+    font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;}
+  #stage{position:fixed; inset:0; overflow:hidden;}
+
+  /* 背景（賢者イラスト・暗く沈める） */
+  #bg{position:absolute; inset:0; background-size:cover; background-position:center;
+    filter:brightness(.35) saturate(.8); transform:scale(1.08);
+    transition:filter 1.6s, transform 12s linear;}
+  #bg.reveal{filter:brightness(.95) saturate(1.05); transform:scale(1.0);}
+  #vignette{position:absolute; inset:0; box-shadow:inset 0 0 200px rgba(0,0,0,.9);
+    background:radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);}
+
+  /* 開放タイル（エンディング演出） */
+  #tiles{position:absolute; inset:0; display:grid; grid-template-columns:repeat(6,1fr);
+    grid-template-rows:repeat(4,1fr); gap:2px; pointer-events:none;}
+  #tiles .tl{background:rgba(14,10,22,.96); border:1px solid rgba(255,255,255,.05);
+    transition:opacity 1s, transform 1s;}
+  #tiles .tl.gone{opacity:0; transform:scale(.6) rotate(8deg);}
+
+  /* 雪 */
+  .snow{position:absolute; top:-10px; color:#fff; opacity:.85; pointer-events:none;
+    animation:fall linear infinite; text-shadow:0 0 6px rgba(255,255,255,.6);}
+  @keyframes fall{ to{ transform:translateY(110vh) translateX(30px) rotate(180deg);} }
+
+  /* レターボックス（映画風） */
+  .bar{position:absolute; left:0; right:0; height:9vh; background:#000; z-index:8;}
+  .bar.top{top:0;} .bar.bottom{bottom:0;}
+
+  /* タイトルカード */
+  #title{position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; z-index:9; text-align:center;
+    opacity:0; transition:opacity 1s; pointer-events:none;}
+  #title.show{opacity:1;}
+  #title .main{color:#ffe08a; font-size:clamp(1.4rem,5vw,2.6rem); font-weight:900;
+    text-shadow:0 2px 18px rgba(0,0,0,.9),0 0 30px rgba(255,200,80,.35); letter-spacing:.04em;}
+  #title .sub{color:#e9e2d2; font-size:clamp(.75rem,2.5vw,1rem); margin-top:12px; letter-spacing:.14em;}
+
+  /* キャラクター */
+  #chara{position:absolute; left:50%; bottom:20vh; transform:translate(-50%,40px);
+    width:min(46vw,240px); opacity:0; transition:opacity .9s, transform .9s; z-index:6;}
+  #chara.in{opacity:1; transform:translate(-50%,0);}
+  #chara img, #chara .emoji{width:100%; aspect-ratio:1; object-fit:cover; object-position:top;
+    border-radius:20px; border:3px solid #fff; box-shadow:0 10px 40px rgba(0,0,0,.6);}
+  #chara .emoji{display:flex; align-items:center; justify-content:center; font-size:5rem; background:#2c3e46;}
+  #chara.talk{animation:bob 1.1s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-8px)}}
+
+  /* セリフボックス */
+  #dbox{position:absolute; left:50%; transform:translateX(-50%); bottom:11vh;
+    width:min(92vw,720px); z-index:9; background:rgba(10,8,4,.86);
+    border:2px solid var(--c,#4db6ac); border-radius:16px; padding:16px 20px 18px;
+    color:#fff7ec; opacity:0; transition:opacity .4s;}
+  #dbox.show{opacity:1;}
+  #dbox .who{display:inline-block; font-weight:900; font-size:.8rem; color:#0b0f0e;
+    background:var(--c,#4db6ac); border-radius:8px; padding:2px 12px; margin-bottom:8px;}
+  #dbox .who.nar{background:transparent; color:#b9c2b0; font-style:italic; padding-left:0;}
+  #dbox .who.reika{background:#f06292; color:#fff;}
+  #dbox .tx{font-size:clamp(1rem,3.4vw,1.18rem); line-height:1.8; font-weight:600; min-height:2.6em;}
+  #dbox .tx.nar{font-style:italic; color:#e7ecdf; font-weight:500;}
+  #dbox .cue{position:absolute; right:16px; bottom:10px; color:var(--c,#4db6ac);
+    animation:blink 1s infinite; font-size:.9rem;}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+  /* 終了カード */
+  #endcard{position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:14px; z-index:11; background:rgba(0,0,0,.5);
+    opacity:0; pointer-events:none; transition:opacity .8s;}
+  #endcard.show{opacity:1; pointer-events:auto;}
+  .btn{border:none; border-radius:12px; padding:13px 26px; font-size:1.05rem; font-weight:800;
+    cursor:pointer; text-decoration:none; color:#fff; font-family:inherit;
+    background:linear-gradient(135deg,var(--c,#4db6ac),#1b5e4f); box-shadow:0 6px 20px rgba(0,0,0,.4);}
+  .btn.ghost{background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.35);}
+
+  /* 操作 */
+  #controls{position:absolute; top:calc(9vh + 10px); right:14px; z-index:12; display:flex; gap:8px;}
+  #controls button{background:rgba(0,0,0,.5); color:#fff; border:1px solid rgba(255,255,255,.3);
+    border-radius:20px; padding:5px 14px; font-size:.8rem; cursor:pointer; font-family:inherit;}
+  #tapHint{position:absolute; left:50%; bottom:3vh; transform:translateX(-50%); z-index:9;
+    color:rgba(255,255,255,.5); font-size:.72rem; letter-spacing:.1em;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <div id="tiles"></div>
+  <div id="vignette"></div>
+  <div class="bar top"></div>
+  <div class="bar bottom"></div>
+
+  <div id="title"><div class="main"></div><div class="sub"></div></div>
+  <div id="chara"></div>
+
+  <div id="dbox">
+    <span class="who"></span>
+    <div class="tx"></div>
+    <span class="cue">▼</span>
+  </div>
+
+  <div id="endcard"></div>
+
+  <div id="controls">
+    <button id="skipBtn">スキップ ⏭</button>
+    <button id="replayBtn" style="display:none">もう一度 ↺</button>
+  </div>
+  <div id="tapHint">タップで次へ</div>
+</div>
+<a href="../../index.html" title="トップ（ボードへ）" style="position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.9);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:'Yu Gothic',sans-serif">🏠 トップ</a>
+
+<script src="data/scenes.js"></script>
+<script>
+(function(){
+  function $(s){ return document.querySelector(s); }
+  function qp(k){ return new URLSearchParams(location.search).get(k); }
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var AREA = (qp('area')||'A').toUpperCase();
+  var SCENE = (qp('scene')||'op').toLowerCase();
+  var data = (window.CUTSCENES||{})[AREA];
+  if(!data){ document.body.innerHTML='<p style="color:#fff;padding:40px">シーンが見つかりません</p>'; return; }
+  var beats = data[SCENE] || data.op;
+  var CH = data.char;
+
+  // 挑戦者名
+  var name = '挑戦者';
+  try{ var m=JSON.parse(localStorage.getItem('mcq_member')||'{}'); if(m.name) name=m.name; }catch(e){}
+  var qn = qp('name'); if(qn) name=qn;
+
+  document.documentElement.style.setProperty('--c', CH.color||'#4db6ac');
+
+  // 背景・キャラ・雪
+  $('#bg').style.backgroundImage = "url('"+(data.bg||'')+"')";
+  var chara=$('#chara');
+  chara.innerHTML = CH.img
+    ? '<img src="'+CH.img+'" alt="'+esc(CH.name)+'" onerror="this.outerHTML=\'<div class=&quot;emoji&quot;>'+(CH.emoji||'✨')+'</div>\'">'
+    : '<div class="emoji">'+(CH.emoji||'✨')+'</div>';
+  (function snow(){
+    var s=$('#stage');
+    var pc=data.particle||'❄';
+    for(var i=0;i<44;i++){
+      var f=document.createElement('div'); f.className='snow';
+      f.textContent=pc;
+      f.style.left=(Math.random()*100)+'vw';
+      f.style.fontSize=(8+Math.random()*14)+'px';
+      f.style.animationDuration=(6+Math.random()*8)+'s';
+      f.style.animationDelay=(-Math.random()*10)+'s';
+      s.appendChild(f);
+    }
+  })();
+  // タイル（ED reveal用）
+  (function(){ var t=$('#tiles'); for(var i=0;i<24;i++){ var d=document.createElement('div'); d.className='tl'; t.appendChild(d);} })();
+
+  var dbox=$('#dbox'), who=dbox.querySelector('.who'), tx=dbox.querySelector('.tx'), cue=dbox.querySelector('.cue');
+  var idx=-1, typing=null, typingText='', done=false;
+
+  // オーディオ基盤ロード（BGM＋喋り音・エリアBGMはassets/bgm/{area}.mp3）
+  (function(){ var t=document.createElement('script'); t.src='../../assets/bgm.js';
+    t.onload=function(){ if(window.MCQBgm && area) MCQBgm.play(area, 'bgm/'); };
+    document.head.appendChild(t); })();
+
+  function typeLine(text, isNar, isReika, cb){
+    text = text.replace(/\{name\}/g, name);
+    tx.className = 'tx' + (isNar?' nar':'');
+    tx.textContent=''; cue.style.display='none'; typingText=text;
+    var i=0;
+    if(typing) clearInterval(typing);
+    chara.classList.toggle('talk', !isNar && !isReika);
+    typing=setInterval(function(){
+      i++; tx.textContent=text.slice(0,i);
+      if(window.MCQBgm && i%2===0) MCQBgm.blip();   // ドラクエ風の喋り音
+      if(i>=text.length){ clearInterval(typing); typing=null; cue.style.display='block'; chara.classList.remove('talk'); if(cb)cb(); }
+    }, 34);
+  }
+  function finishTyping(){ if(typing){ clearInterval(typing); typing=null; tx.textContent=typingText; cue.style.display='block'; chara.classList.remove('talk'); return true;} return false; }
+
+  function showTitle(b, after){
+    var t=$('#title'); t.querySelector('.main').textContent=b.main||'';
+    t.querySelector('.sub').textContent=b.sub||'';
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); setTimeout(after, 900); }, 2600);
+  }
+  function reveal(after){
+    $('#bg').classList.add('reveal');
+    var tl=document.querySelectorAll('#tiles .tl');
+    // シャッフルして順に剥がす
+    var order=Array.prototype.slice.call(tl).sort(function(){return Math.random()-.5;});
+    order.forEach(function(el,i){ setTimeout(function(){ el.classList.add('gone'); }, i*90); });
+    setTimeout(after, order.length*90 + 700);
+  }
+  function endCard(b){
+    done=true;
+    var e=$('#endcard');
+    e.innerHTML='<a class="btn" href="'+esc(b.href||'#')+'">'+esc(b.label||'つづける')+'</a>';
+    e.classList.add('show');
+    $('#tapHint').style.display='none';
+    $('#replayBtn').style.display='inline-block';
+    dbox.classList.remove('show');
+  }
+
+  function next(){
+    if(done) return;
+    idx++;
+    if(idx>=beats.length){ return; }
+    var b=beats[idx];
+    if(b.t==='title'){ dbox.classList.remove('show'); showTitle(b, next); }
+    else if(b.t==='say'){
+      dbox.classList.add('show');
+      var isReika = (b.who === 'reika');
+      who.className = 'who' + (isReika ? ' reika' : ''); who.style.display='inline-block';
+      who.textContent = isReika ? '大塚麗夏' : (b.tag ? CH.name+'（'+b.tag+'）' : CH.name);
+      typeLine(b.text, false, isReika);
+    }
+    else if(b.t==='nar'){
+      dbox.classList.add('show');
+      who.className='who nar'; who.textContent='';  who.style.display='none';
+      typeLine(b.text, true);
+    }
+    else if(b.t==='fx' && b.fx==='reveal'){ dbox.classList.remove('show'); reveal(next); }
+    else if(b.t==='end'){ endCard(b); }
+    else next();
+  }
+
+  // 進行：タップ or クリックで「タイプ完了 → 次へ」
+  function advance(){
+    if(done) return;
+    var b=beats[idx];
+    if(b && (b.t==='say'||b.t==='nar')){ if(finishTyping()) return; }
+    next();
+  }
+  $('#stage').addEventListener('click', function(e){
+    if(e.target.closest('#controls')||e.target.closest('#endcard')) return;
+    advance();
+  });
+
+  $('#skipBtn').addEventListener('click', function(){
+    // 最後の end beat まで飛ばす
+    if(typing){ clearInterval(typing); typing=null; }
+    var last=beats[beats.length-1];
+    $('#bg').classList.add('reveal');
+    document.querySelectorAll('#tiles .tl').forEach(function(el){el.classList.add('gone');});
+    idx=beats.length-1;
+    if(last && last.t==='end') endCard(last);
+    else { done=true; $('#endcard').innerHTML='<a class="btn" href="../../index.html">🗺️ ボードへ</a>'; $('#endcard').classList.add('show'); }
+  });
+  $('#replayBtn').addEventListener('click', function(){ location.reload(); });
+
+  // キャラ登場 → 開始
+  setTimeout(function(){ chara.classList.add('in'); }, 400);
+  setTimeout(next, 700);
+})();
+</script>
+</body>
+</html>

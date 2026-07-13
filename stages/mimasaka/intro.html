@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>はじめに | みんなのAI実践塾</title>
+<style>
+:root{--gold:#f5c542;--pink:#e0568a;--ink:#f2f0ea;--dim:#b9b2a6;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.75;overflow:hidden}
+.stage{height:100dvh;max-width:720px;margin:0 auto;display:flex;flex-direction:column;position:relative;
+  background:#1a1426 center top/cover no-repeat;}
+.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.35),rgba(10,8,18,.82) 70%);pointer-events:none}
+.inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+.chip{position:absolute;top:12px;left:14px;background:rgba(255,255,255,.92);color:#7a5a08;font-weight:900;
+  font-size:13px;border-radius:999px;padding:5px 16px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.skip{position:absolute;top:12px;right:14px;background:rgba(0,0,0,.5);color:#ddd;border:1px solid rgba(255,255,255,.35);
+  border-radius:999px;padding:5px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+/* 話者 */
+.face{display:flex;align-items:flex-end;gap:10px;margin-bottom:-12px;position:relative;z-index:2;padding-left:4px}
+.face img{width:92px;height:92px;border-radius:14px;object-fit:cover;object-position:top;border:3px solid #fff;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);background:#241a33}
+/* 透過の等身大立ち絵：大きく・枠なし・下端でセリフ枠に寄り添う */
+.face img.tachie{width:auto;height:min(46vh,340px);border:none;border-radius:0;object-fit:contain;object-position:bottom;
+  background:none;box-shadow:none;filter:drop-shadow(2px 4px 8px rgba(0,0,0,.5))}
+/* セリフ枠 */
+.dlg{background:rgba(15,10,24,.93);border:2px solid var(--pink);border-radius:14px;padding:16px 18px 40px;min-height:130px;
+  cursor:pointer;position:relative}
+.dlg .who{display:inline-block;background:#2a1f3d;color:#ffd6e5;border:1.5px solid var(--pink);border-radius:8px;
+  padding:2px 12px;font-weight:800;font-size:12.5px;margin-bottom:8px}
+.dlg .tx{font-size:15px}
+.dlg .tx b{color:var(--gold)}
+.dlg .cue{position:absolute;right:14px;bottom:10px;color:var(--pink);animation:bl 1s infinite;font-weight:900}
+@keyframes bl{50%{opacity:0}}
+.dots{display:flex;gap:5px;justify-content:center;margin:10px 0 4px}
+.dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}
+.dots span.on{background:var(--gold)}
+/* 終了ボタン */
+.fin{display:none;flex-direction:column;gap:10px;padding:0 4px 8px}
+.fin.show{display:flex}
+.btn{display:block;text-align:center;background:linear-gradient(180deg,#ffe082,#c9992e);color:#1a1a2e;font-weight:900;
+  border:none;border-radius:12px;padding:14px;font-size:15px;cursor:pointer;text-decoration:none;font-family:inherit;
+  box-shadow:0 4px 16px rgba(245,197,66,.3)}
+.btn.ghost{background:rgba(255,255,255,.08);color:#ddd;border:1px solid rgba(255,255,255,.3);box-shadow:none}
+</style>
+</head>
+<body>
+<div class="stage" id="bgstage">
+  <div class="chip" id="chip">📖 はじめに</div>
+  <button class="skip" id="skip">スキップ ⏭</button>
+  <div class="inner">
+    <div class="face"><img id="faceImg" src="" alt=""></div>
+    <div class="dlg" id="dlg">
+      <span class="who" id="who"></span>
+      <div class="tx" id="tx"></div>
+      <span class="cue" id="cue" style="display:none">▼ タップで次へ</span>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="fin" id="fin"></div>
+  </div>
+</div>
+
+<script src="../../assets/bgm.js"></script>
+<script src="data/intro.js"></script>
+<script>
+(function(){
+  var I = window.MCQ_INTRO || {steps:[]};
+  // 案内役＝デイジー（三和電子公式キャラ・このステージ固定）
+  var NAV = {name:'デイジー', icon:'chara/daisy.png', color:'#f5b731', tachie:'daisy.png', point:'daisy.png', joy:'daisy.png'};
+  var REIKA = {name:NAV.name, img:NAV.icon, color:NAV.color};
+  var stageKey = 'mimasaka';
+  var $ = function(id){ return document.getElementById(id); };
+
+  // 表示順（新形式=script / 旧形式=steps を両対応）
+  var STEPS = I.script || I.steps || [];
+  // 言語（将来 localStorage 'mcq_lang' で切替。既定は intro.js の lang → 'ja'）
+  var LANG = (function(){ try{ return localStorage.getItem('mcq_lang') || I.lang || 'ja'; }catch(e){ return I.lang || 'ja'; } })();
+  var NAVKEY = 'daisy';
+  // セリフ解決：キャラ別×言語別のテキストリストから引く（旧 b.text はそのまま使う）
+  function resolveText(b){
+    if(b.text) return b.text;                              // 旧形式フォールバック
+    if(b.who==='boss'){
+      var bl = (I.bossLines && (I.bossLines[LANG] || I.bossLines.ja)) || {};
+      return bl[b.id] || '';
+    }
+    var nl = (I.navLines && (I.navLines[LANG] || I.navLines.ja)) || {};
+    var byChar = nl[NAVKEY] || nl.daisy || {};
+    return byChar[b.id] || '';
+  }
+
+  $('chip').textContent = '📖 はじめに — ' + (I.stage||'');
+  // 背景=このステージのAエリア背景
+  $('bgstage').style.backgroundImage = "url('bg/A.png')";
+  if(window.MCQTrack) MCQTrack('intro_view', stageKey);
+  if(window.MCQBgm) MCQBgm.play('A', 'bgm/');
+
+  var i = -1, typing = null, cur = '';
+  function speaker(w){ return w==='boss' ? I.boss : REIKA; }
+  // 立ち絵候補（あれば大きく透過表示・無ければ丸アイコンにフォールバック）
+  var bo1='ABCDEFGH'.indexOf((I.boss&&I.boss.name)?'A':'A'); // Aエリアの教官
+  function setFace(b, sp){
+    var el = $('faceImg');
+    var tachie = (b.who==='boss') ? 'chara/A.png'
+               : ('chara/' + (b.pose==='joy' ? NAV.joy
+                  : b.pose==='point' ? NAV.point
+                  : NAV.tachie));
+    var probe = new Image();
+    probe.onload = function(){ el.src = tachie; el.classList.add('tachie'); };
+    probe.onerror = function(){ el.src = sp.img; el.classList.remove('tachie'); };
+    probe.src = tachie;
+  }
+  function show(n){
+    i = n;
+    var b = STEPS[i]; if(!b){ finish(); return; }
+    var sp = speaker(b.who);
+    setFace(b, sp);
+    $('who').textContent = sp.name + (b.who==='boss' && I.boss.title ? '｜'+I.boss.title : '');
+    $('who').style.borderColor = sp.color;
+    $('dlg').style.borderColor = sp.color;
+    // ドット
+    var h=''; for(var k=0;k<STEPS.length;k++) h+='<span class="'+(k<=i?'on':'')+'"></span>';
+    $('dots').innerHTML = h;
+    // タイプライター
+    var src = resolveText(b), out='', p=0;
+    $('cue').style.display='none';
+    if(typing) clearInterval(typing);
+    cur = src;
+    $('tx').innerHTML='';
+    typing = setInterval(function(){
+      if(src[p]==='<'){ var j=src.indexOf('>',p); out+=src.slice(p,j+1); p=j+1; }
+      else{ out+=src[p]; p++; if(window.MCQBgm && p%2===0) MCQBgm.blip(); }
+      $('tx').innerHTML = out;
+      if(p>=src.length){ clearInterval(typing); typing=null; $('cue').style.display='block'; }
+    }, 28);
+  }
+  function next(){
+    if(typing){ clearInterval(typing); typing=null; $('tx').innerHTML=cur; $('cue').style.display='block'; return; }
+    if(i+1 < STEPS.length) show(i+1); else finish();
+  }
+  function finish(){
+    try{ localStorage.setItem('mcq_intro_'+stageKey, '1'); }catch(e){}
+    if(window.MCQTrack) MCQTrack('intro_done', stageKey);
+    if(typing){ clearInterval(typing); typing=null; }
+    $('dlg').style.display='none'; $('dots').style.display='none'; $('skip').style.display='none';
+    var f=$('fin');
+    f.innerHTML = '<a class="btn" href="'+(I.startHref||'quest.html?id=A1')+'">'+(I.startLabel||'⚔️ 最初のクエストへ')+'</a>'
+      + '<a class="btn ghost" href="index.html?skipintro=1">'+(I.boardLabel||'🗺 ボードを見る')+'</a>';
+    f.classList.add('show');
+    if(window.MCQBgm) MCQBgm.se('fanfare');
+  }
+  $('dlg').addEventListener('click', next);
+  $('skip').addEventListener('click', function(){ if(window.MCQTrack) MCQTrack('intro_skip', stageKey+':'+(i+1)); finish(); });
+  show(0);
+})();
+</script>
+</body>
+</html>

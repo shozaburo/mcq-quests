@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>クエスト | 美作クエスト</title>
+<style>
+/* λ専用：動画・クイズなし、行動チェックだけのシンプル構成 */
+:root{--gold:#f5b731;--ink:#f2f0ea;--dim:#b9b2a6;--panel:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#1c1428,#241a33 40%,#2c2140);color:var(--ink);
+  font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.75;min-height:100dvh}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px 40px}
+/* トップバー */
+.top{display:flex;align-items:center;gap:10px;padding:12px 0;flex-wrap:wrap}
+.top .home{background:rgba(255,255,255,.92);color:#8a6d1a;font-weight:800;font-size:.8rem;
+  text-decoration:none;border-radius:999px;padding:6px 14px;border:1px solid rgba(245,183,49,.5)}
+.top .qid{background:var(--bosscolor,#c62828);color:#fff;font-weight:900;border-radius:8px;padding:4px 12px;font-size:1rem}
+.top .qname{font-weight:800;font-size:.95rem;flex:1;min-width:180px}
+.top .exp{background:rgba(255,255,255,.1);border:1px solid var(--gold);color:var(--gold);
+  font-weight:900;border-radius:999px;padding:4px 12px;font-size:.85rem}
+/* ボス＆ダイアログ */
+.scene{display:flex;align-items:flex-end;gap:0;margin-top:6px}
+.boss{width:150px;flex-shrink:0;margin-bottom:-10px;position:relative;z-index:2}
+.boss img{width:100%;height:auto;max-height:240px;object-fit:contain;object-position:bottom;
+  filter:drop-shadow(2px 4px 8px rgba(0,0,0,.5))}
+.dlg{flex:1;background:rgba(15,10,24,.93);border:2px solid var(--bosscolor,#c62828);border-radius:14px;
+  padding:14px 16px 34px;min-height:110px;cursor:pointer;position:relative}
+.dlg .who{display:inline-block;background:#2a1f3d;border:1.5px solid var(--bosscolor,#c62828);border-radius:8px;
+  padding:2px 12px;font-weight:800;font-size:12px;margin-bottom:8px;color:#ffe3b3}
+.dlg .tx{font-size:14.5px}
+.dlg .tx b{color:var(--gold)}
+.dlg .cue{position:absolute;right:14px;bottom:8px;color:var(--gold);animation:bl 1s infinite;font-weight:900;font-size:12px}
+@keyframes bl{50%{opacity:0}}
+@media(max-width:560px){.boss{width:110px}.boss img{max-height:180px}}
+/* パネル */
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(245,183,49,.35);border-radius:14px;
+  padding:16px 18px;margin-top:16px}
+.card h3{color:var(--gold);font-size:.95rem;margin-bottom:8px}
+.card p{font-size:.92rem;color:#e8e2d5}
+.btn{display:block;width:100%;text-align:center;background:linear-gradient(180deg,#ffd98a,#e8a92c);
+  color:#241a33;font-weight:900;border:none;border-radius:12px;padding:15px;font-size:1rem;cursor:pointer;
+  text-decoration:none;font-family:inherit;margin-top:14px;box-shadow:0 4px 16px rgba(245,183,49,.3)}
+.btn.ghost{background:rgba(255,255,255,.08);color:#ddd;border:1px solid rgba(255,255,255,.3);box-shadow:none}
+.btn.big{font-size:1.15rem;padding:18px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:active{transform:translateY(1px)}
+textarea{width:100%;padding:11px 13px;border-radius:10px;border:1.5px solid rgba(245,183,49,.4);
+  background:rgba(255,255,255,.94);color:#2b3046;font-family:inherit;font-size:14px;margin-top:8px}
+textarea:focus{outline:none;border-color:var(--gold)}
+.note{font-size:.78rem;color:var(--dim);margin-top:8px}
+.done-fx{font-size:3rem;text-align:center;margin:6px 0}
+.toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);background:var(--gold);color:#241a33;
+  font-weight:800;border-radius:999px;padding:10px 22px;font-size:13.5px;box-shadow:0 6px 24px rgba(0,0,0,.4);
+  opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999}
+.toast.on{opacity:1}
+.fade{animation:fd .35s ease}
+@keyframes fd{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="home" href="index.html">🗺 ボード</a>
+    <span class="qid" id="tQid">--</span>
+    <span class="qname" id="tName"></span>
+    <span class="exp" id="tExp"></span>
+  </div>
+  <div class="scene">
+    <div class="boss"><img id="bossImg" src="" alt=""></div>
+    <div class="dlg" id="dlg">
+      <span class="who" id="who"></span>
+      <div class="tx" id="tx"></div>
+      <span class="cue" id="cue" style="display:none">▼ タップ</span>
+    </div>
+  </div>
+  <div id="action"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/bgm.js?v=3"></script>
+<script src="data/config.js"></script>
+<script src="data/characters.js"></script>
+<script src="data/areas.js"></script>
+<script src="data/quests.js"></script>
+<script>
+(function(){
+  /* ============================================================
+     λ美作クエスト：動画・アーカイブ・クイズなし。
+     親方の話 → クエスト詳細 → 「やった！」チェック → 報告(100%)
+     ============================================================ */
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+  var toastTimer=null;
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');
+    clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('on');},2800);}
+
+  var CFG   = window.MCQ_CONFIG || {};
+  var CHARS = window.MCQ_CHARS || {};
+  var QUESTS= window.MCQ_QUESTS || {};
+  var API   = CFG.questApiUrl || '';
+
+  var QID = ((new URLSearchParams(location.search)).get('id')||'A1').toUpperCase();
+  var AREA = QID.charAt(0);
+  var CH = CHARS[AREA] || {name:'親方',color:'#c62828',lines:{}};
+  var QUEST = QUESTS[QID] || {name:'準備中', exp:0, detail:''};
+  var L = CH.lines || {};
+  var T0 = Date.now();
+
+  /* トークン（マイページリンク経由でログイン） */
+  var TOKEN='';
+  try{
+    var p=new URLSearchParams(location.search);
+    TOKEN=(p.get('token')||'').trim()||localStorage.getItem('mcq_member_token')||'';
+    if(TOKEN) localStorage.setItem('mcq_member_token',TOKEN);
+  }catch(e){}
+  var MEMBER={name:''};
+  try{ var m=JSON.parse(localStorage.getItem('mcq_member')||'null'); if(m) MEMBER.name=m.name||''; }catch(e){}
+  function memberLabel(){ return MEMBER.name || 'あなた'; }
+
+  /* 見た目セット */
+  document.title = QID + ' ' + QUEST.name + ' | 美作クエスト';
+  document.documentElement.style.setProperty('--bosscolor', CH.color || '#c62828');
+  $('tQid').textContent = QID;
+  $('tName').textContent = QUEST.name;
+  $('tExp').textContent = '⭐ ' + (QUEST.exp||0) + ' EXP';
+  $('bossImg').src = 'chara/' + AREA + '.png';
+  $('bossImg').onerror = function(){ this.style.display='none'; };
+  $('who').textContent = CH.name + '｜' + (CH.title||'');
+
+  if(window.MCQBgm) MCQBgm.play(AREA, 'bgm/');
+  if(window.MCQTrack) MCQTrack('quest_view', 'λ:' + QID);
+
+  /* セリフ（タイプライター＋DQ音） */
+  var typing=null, curText='', afterType=null;
+  function say(text, cb){
+    text = String(text||'').replace(/\{memberName\}/g, memberLabel()).replace(/\{pct\}/g,'100');
+    curText=text; afterType=cb||null;
+    var el=$('tx'); el.innerHTML=''; $('cue').style.display='none';
+    if(typing) clearInterval(typing);
+    var src=text, out='', i=0;
+    typing=setInterval(function(){
+      if(src[i]==='<'){ var j=src.indexOf('>',i); out+=src.slice(i,j+1); i=j+1; }
+      else{ out+=src[i]; i++; if(window.MCQBgm && i%2===0) MCQBgm.blip(); }
+      el.innerHTML=out;
+      if(i>=src.length){ clearInterval(typing); typing=null; $('cue').style.display='block'; if(afterType)afterType(); }
+    },24);
+  }
+  $('dlg').onclick=function(){
+    if(typing){ clearInterval(typing); typing=null; $('tx').innerHTML=curText; $('cue').style.display='block'; if(afterType)afterType(); }
+  };
+  function render(html){ $('action').innerHTML='<div class="fade">'+html+'</div>'; }
+
+  /* 報告送信（quest_api：goalId=λ・行動チェック100%） */
+  function postReport(note){
+    if(!(API && TOKEN)) return Promise.resolve(null);
+    var body=new URLSearchParams({
+      action:'report', token:TOKEN, goalId: CFG.goalId||'λ',
+      qid: QID, pct:'100', step:'action',
+      note: note||'行動チェックで達成', evidenceUrl:'',
+      miss:'0', timeSec:String(Math.round((Date.now()-T0)/1000))
+    });
+    return fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()})
+      .then(function(r){return r.json();})
+      .catch(function(){
+        try{ fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()}); }catch(e){}
+        return null;
+      });
+  }
+
+  /* ローカル達成メモ（ボードに戻った時の表示・再訪時の続き） */
+  function localDone(){ try{ return localStorage.getItem('mcq_l_done_'+QID)==='1'; }catch(e){ return false; } }
+  function setLocalDone(){ try{ localStorage.setItem('mcq_l_done_'+QID,'1'); }catch(e){} }
+
+  /* ── シーン1：親方登場 ── */
+  function sceneIntro(){
+    say(L.intro || 'よう来たな。');
+    render('<button class="btn" id="next1">クエストの内容を聞く →</button>'
+      + (localDone() ? '<p class="note" style="text-align:center">✅ このクエストは達成済み。もう一度報告もできます。</p>' : ''));
+    $('next1').onclick=sceneMission;
+  }
+
+  /* ── シーン2：クエスト詳細＋行動を促す ── */
+  function sceneMission(){
+    say(L.mission || 'さあ、やってみせい！');
+    render(
+      '<div class="card"><h3>📜 ' + esc(QID) + '：' + esc(QUEST.name) + '</h3>'
+      + '<p>' + esc(QUEST.detail||'') + '</p></div>'
+      + '<button class="btn big" id="didIt">💪 やった！（行動チェック）</button>'
+      + '<a class="btn ghost" href="index.html">まだ。ボードに戻る</a>'
+      + '<p class="note">実際に行動してから「やった！」を押してください。あとで何をしたか一言だけ聞きます。</p>');
+    $('didIt').onclick=sceneCheck;
+    if(window.MCQTrack) MCQTrack('quiz_start', 'λ:' + QID);  /* ファネル互換イベント */
+  }
+
+  /* ── シーン3：一言メモ→報告 ── */
+  function sceneCheck(){
+    say(L.ask || 'やったか？正直に申告せい。');
+    render(
+      '<div class="card"><h3>✍ 何をした？（一言でOK）</h3>'
+      + '<textarea id="memo" rows="2" placeholder="例：ガイドラインを読んで、入れてはいけない情報を3つメモした"></textarea>'
+      + '<p class="note">空欄でも報告できます。書くと親方の帳面（活動記録）に残ります。</p></div>'
+      + '<button class="btn big" id="send">📣 親方に報告する（達成100%）</button>');
+    $('send').onclick=function(){
+      var btn=$('send'); btn.disabled=true; btn.textContent='報告中…';
+      var note=$('memo').value.trim();
+      postReport(note).then(function(j){ sceneDone(j); });
+    };
+  }
+
+  /* ── シーン4：完了 ── */
+  function sceneDone(j){
+    setLocalDone();
+    if(window.MCQBgm) MCQBgm.se('fanfare');
+    if(window.MCQTrack) MCQTrack('report_sent', 'λ:' + QID);
+    say(L.done || '見事だ！');
+    var extra='';
+    if(j && j.ok){
+      extra='<p class="note" style="text-align:center">⭐ +' + (j.expGained!=null?j.expGained:QUEST.exp) + ' EXP を獲得！'
+        + (j.bossDefeated ? '　🎉 エリアボス討伐！' : '') + '</p>';
+    }else if(!TOKEN){
+      extra='<p class="note" style="text-align:center">※マイページのリンクから入り直すと、EXP・チーム進捗にも記録されます。</p>';
+    }
+    var nextQ = (function(){
+      var n=Number(QID.charAt(1));
+      if(n<8) return AREA + (n+1);
+      var ai='ABCDEFGH'.indexOf(AREA);
+      return ai<7 ? 'ABCDEFGH'.charAt(ai+1)+'1' : '';
+    })();
+    render('<div class="done-fx">🎉</div>' + extra
+      + (nextQ ? '<a class="btn big" href="quest.html?id='+nextQ+'">⚔️ 次のクエスト（'+nextQ+'）へ</a>' : '<div class="card"><h3>🏆 全64クエスト制覇！</h3><p>あなたは「AIで進化した実装屋」です！</p></div>')
+      + '<a class="btn ghost" href="index.html">🗺 ボードに戻る</a>');
+  }
+
+  sceneIntro();
+})();
+</script>
+</body>
+</html>

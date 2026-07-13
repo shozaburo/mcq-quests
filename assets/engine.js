@@ -59,26 +59,68 @@
     return self ? self.getAttribute('src').replace(/engine\.js.*$/, '') : 'assets/';
   })();
 
-  /* ── エリア背景画像を敷く（assets/stages/{AREA}.png） ── */
+  /* ── エリア背景画像を敷く（このステージ内 bg/{AREA}.png を優先） ── */
   (function setStageBg(){
+    var url = "bg/" + AREA + ".png";   // ページ（stages/xxx/）からの相対＝ステージ専用背景
     var img = new Image();
     img.onload = function(){
       document.body.style.backgroundImage =
         "linear-gradient(180deg, rgba(20,14,6,.30) 0%, rgba(20,14,6,.55) 26%, rgba(244,246,251,.0) 40%, var(--bg) 46%), "
-        + "url('" + ASSET_BASE + "stages/" + AREA + ".png')";
+        + "url('" + url + "')";
       document.body.style.backgroundSize = "cover, cover";
       document.body.style.backgroundPosition = "center top, center top";
       document.body.style.backgroundRepeat = "no-repeat, no-repeat";
       document.body.style.backgroundAttachment = "scroll, fixed";
     };
-    img.src = ASSET_BASE + "stages/" + AREA + ".png";  // 無ければ既存グラデのまま
+    img.src = url;  // 無ければ既存グラデのまま
   })();
+
+  /* ── 🏅 スコアHUD（上部固定：アバター/EXP/スコア/順位） ── */
+  var QUEST_T0 = Date.now();      // タイム計測開始（ページを開いた瞬間）
+  var QUIZ_MISS = 0;              // クイズのミス回数（1ミス=+10分ペナルティ）
+  function localScore(){ try{ return Number(localStorage.getItem('mcq_score_'+(CFG.goalId||'x')))||0; }catch(e){ return 0; } }
+  function addLocalScore(pt){ try{ localStorage.setItem('mcq_score_'+(CFG.goalId||'x'), String(localScore()+pt)); }catch(e){} }
+  function buildHud(){
+    if(document.getElementById('mcqScoreHud')) return;
+    var me = null; try{ me = JSON.parse(localStorage.getItem('mcq_me_cache')||'null'); }catch(e){}
+    var av = (me && me.member && me.member.avatarUrl) || '';
+    try{ if(!av) av = localStorage.getItem('mcq_avatar_beta') || ''; }catch(e){}
+    var exp = (me && me.member && me.member.exp) || 0;
+    var d = document.createElement('div');
+    d.id = 'mcqScoreHud';
+    d.style.cssText = 'position:fixed;top:8px;right:10px;z-index:9997;display:flex;gap:8px;align-items:center;'
+      +'background:rgba(20,14,6,.85);border:1px solid rgba(245,197,66,.5);border-radius:999px;'
+      +'padding:4px 12px 4px 5px;color:#ffe9c0;font-size:.74rem;font-weight:800;backdrop-filter:blur(3px);';
+    d.innerHTML =
+      (av ? '<img src="'+esc(av)+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #f5c542" alt="">'
+          : '<span style="font-size:1.1rem;margin-left:4px">🧑</span>')
+      + '<span>⭐<span id="hudExp">'+exp+'</span></span>'
+      + '<span>🏆<span id="hudScore">'+localScore()+'</span>pt</span>'
+      + '<span id="hudRank" style="color:#ffd54f"></span>';
+    document.body.appendChild(d);
+    // 本番ランキングから自分の順位・スコアを取得（token時のみ）
+    if(API && MEMBER.token){
+      try{
+        fetch(API + '?action=ranking&goalId=' + encodeURIComponent(CFG.goalId||'β') + '&token=' + encodeURIComponent(MEMBER.token))
+          .then(function(r){ return r.json(); })
+          .then(function(j){
+            if(j && j.ok && j.me){
+              var sEl = document.getElementById('hudScore'), rEl = document.getElementById('hudRank');
+              if(sEl && j.me.score) sEl.textContent = j.me.score;
+              if(rEl && j.me.rank) rEl.textContent = '#' + j.me.rank + '位';
+              try{ localStorage.setItem('mcq_score_'+(CFG.goalId||'x'), String(j.me.score||0)); }catch(e){}
+            }
+          }).catch(function(){});
+      }catch(e){}
+    }
+  }
+  buildHud();
 
   /* ── いつでもトップへ戻れる固定ボタン ── */
   (function homeBtn(){
     if(document.getElementById('mcqHome')) return;
     var a = document.createElement('a');
-    a.id = 'mcqHome'; a.href = '../index.html?start=1'; a.title = 'トップへ';
+    a.id = 'mcqHome'; a.href = '../../index.html?start=1'; a.title = 'トップへ';
     a.textContent = '🏠 トップ';
     a.style.cssText = 'position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.92);'
       + 'color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;'
@@ -88,10 +130,10 @@
 
   /* ── オーディオ基盤（bgm.js）を動的ロード → エリアBGM再生 ── */
   (function loadAudio(){
-    if(window.MCQBgm){ MCQBgm.play(AREA); return; }
+    if(window.MCQBgm){ MCQBgm.play(AREA, 'bgm/'); return; }
     var t = document.createElement('script');
-    t.src = ASSET_BASE + 'bgm.js';
-    t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA); };
+    t.src = ASSET_BASE + 'bgm.js?v=3';
+    t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA, 'bgm/'); };
     document.head.appendChild(t);
   })();
 
@@ -131,7 +173,7 @@
     +   '<div class="dlg" id="dlg"><div class="nameplate" id="charaName"></div><span id="dlgText"></span><span class="cursor" id="dlgCur">▼</span></div>'
     + '</div>'
     + '<div class="card"><div id="action"></div></div>'
-    + '<footer><a href="../board.html">🗺️ マンダラボードへ戻る</a></footer>'
+    + '<footer><a href="index.html">🗺️ マンダラボードへ戻る</a></footer>'
     + '</div>';
 
   if(!CH || !QUEST){
@@ -139,7 +181,7 @@
     $('qName').textContent  = 'クエスト準備中';
     $('dlgText').textContent = 'このクエストはただいま準備中です。しばらくお待ちください。';
     $('dlgCur').style.display = 'none';
-    $('action').innerHTML = '<a class="btn btn-ghost" href="../board.html">🗺️ マンダラボードへ戻る</a>';
+    $('action').innerHTML = '<a class="btn btn-ghost" href="index.html">🗺️ マンダラボードへ戻る</a>';
     return;
   }
 
@@ -153,11 +195,19 @@
   $('charaName').innerHTML = esc(CH.name) + '<small>' + esc(CH.title) + '</small>';
 
   var img = $('charaImg');
-  img.src = CH.img; img.alt = CH.name;
-  img.onerror = function(){
-    var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '👾';
-    img.replaceWith(d);
+  // 等身大立ち絵（chara/{AREA}.png）があれば優先、無ければ丸アイコン→絵文字
+  img.alt = CH.name;
+  var tachie = 'chara/' + AREA + '.png';
+  var probe = new Image();
+  probe.onload = function(){ img.src = tachie; img.classList.add('tachie'); };
+  probe.onerror = function(){
+    img.src = CH.img;
+    img.onerror = function(){
+      var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '👾';
+      img.replaceWith(d);
+    };
   };
+  probe.src = tachie;
 
   /* ── セリフ ── */
   var typing = null;
@@ -201,7 +251,9 @@
         action:'report', token: MEMBER.token, goalId: CFG.goalId || 'β',
         qid: QID, pct: String(pct), step: kind || kindOf(pct),
         note: (practice || '') + (score ? '（クイズ' + score + '）' : ''),
-        evidenceUrl: evidence || ''
+        evidenceUrl: evidence || '',
+        miss: String(QUIZ_MISS),
+        timeSec: String(Math.round((Date.now() - QUEST_T0) / 1000))
       });
       return fetch(API, {
         method:'POST',
@@ -294,22 +346,76 @@
     say(L.intro);
     var op = CH.openingVideo
       ? '<a class="btn btn-ghost" href="' + esc(CH.openingVideo) + '" target="_blank" rel="noopener">🎬 サイドストーリー（見なくてもOK）</a>' : '';
-    render('<button class="btn btn-primary" id="go">📖 順番に学ぶ（動画から）</button>'
+    render('<div id="senpai"></div>'
+      + '<button class="btn btn-primary" id="go">📖 順番に学ぶ（動画から）</button>'
       + '<button class="btn btn-ghost" id="skip">⚡ もう実践した → 報告だけする</button>'
       + op);
     $('go').onclick = sceneVideo;
     $('skip').onclick = function(){ sceneReport(true); };
+    loadSenpai();
+  }
+
+  /* 🎖 先輩コメント（このマスを100%以上で報告した人の実践） */
+  var senpaiCache = null;
+  function loadSenpai(){
+    var box = $('senpai');
+    if(!box || !API) return;
+    function draw(list){
+      if(!list || !list.length) return;
+      var h = '<div style="background:#fdf9ef;border:1.5px solid #e8d9b0;border-radius:12px;padding:10px 13px;margin-bottom:12px">'
+        + '<div style="font-weight:900;font-size:.82rem;color:#9c6f08;margin-bottom:6px">🎖 このクエストの先輩たち</div>';
+      list.forEach(function(c){
+        h += '<div style="font-size:.82rem;margin-top:4px;line-height:1.6">'
+          + '<span class="pct pct-' + (c.pct>=200?'200':c.pct>=150?'150':c.pct>=125?'125':'100') + '">' + c.pct + '%</span> '
+          + '<b>' + esc(c.nick) + '</b>' + (c.date ? '<small style="color:var(--muted)">（' + esc(c.date) + '）</small>' : '')
+          + '<br><span style="color:#5a5245">「' + esc(c.note) + '」</span></div>';
+      });
+      h += '</div>';
+      var el = $('senpai'); if(el) el.innerHTML = h;
+    }
+    if(senpaiCache){ draw(senpaiCache); return; }
+    try{
+      fetch(API + '?action=comments&goalId=' + encodeURIComponent(CFG.goalId||'β') + '&qid=' + QID)
+        .then(function(r){ return r.json(); })
+        .then(function(j){ if(j && j.ok){ senpaiCache = j.comments || []; draw(senpaiCache); } })
+        .catch(function(){});
+    }catch(e){}
   }
 
   // STEP1 動画 25%
+  //   ステージ内 video/{QID}.mp4 があればページ内で直接再生（探す手間ゼロ）。
+  //   無ければ従来どおり外部リンク（NotebookLM等）ボタン。
   function sceneVideo(){
     setStep(1);
     say(L.video);
     var vBtn = videoUrl
-      ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">▶ 解説動画を見る</a>'
-      : '<button class="btn btn-blue" disabled>▶ 解説動画（準備中）</button>';
-    render(vBtn + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
+      ? '<a class="btn btn-blue" id="extVideo" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">▶ 解説動画を見る</a>'
+      : '<button class="btn btn-blue" id="extVideo" disabled>▶ 解説動画（準備中）</button>';
+    render(
+      '<video id="qVideo" controls playsinline preload="metadata" '
+      +   'style="display:none;width:100%;max-height:320px;border-radius:12px;background:#000;margin-bottom:4px"></video>'
+      + vBtn
+      + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
     $('watched').onclick = function(){ bump(25); sceneArchive(); };
+
+    // ローカル動画があれば埋め込み再生に切り替え
+    var v = $('qVideo');
+    v.addEventListener('loadedmetadata', function(){
+      v.style.display = 'block';
+      var ext = $('extVideo');
+      if(ext){ ext.textContent = '🔗 元ページ（NotebookLM）も開く'; ext.classList.remove('btn-blue'); ext.classList.add('btn-ghost'); }
+      if(window.MCQTrack) MCQTrack('video_inline', (CFG.goalId||'?') + ':' + QID);
+    });
+    v.addEventListener('error', function(){ v.remove(); });   // 無ければ従来表示のまま
+    // 動画再生中はBGM・喋り音を止める（音が重なってうるさいのを防ぐ）
+    v.addEventListener('play', function(){
+      if(window.MCQBgm) MCQBgm.duck();
+      if(typing){ clearInterval(typing); typing = null; }   // 喋りアニメも止める
+      if(window.MCQTrack) MCQTrack('video_play', (CFG.goalId||'?') + ':' + QID);
+    });
+    v.addEventListener('pause', function(){ if(window.MCQBgm) MCQBgm.unduck(); });   // 元に戻す
+    v.addEventListener('ended', function(){ if(window.MCQBgm){ MCQBgm.unduck(); MCQBgm.se('ok'); } bump(25); });
+    v.src = 'video/' + QID + '.mp4';
   }
 
   // STEP2 アーカイブ 50%
@@ -331,6 +437,7 @@
   var KANJI = '一二三四五六七八九十';
   function sceneQuiz(qi){
     setStep(3);
+    if(qi===0 && window.MCQTrack) MCQTrack('quiz_start', (CFG.goalId||'?') + ':' + QID);
     var item = QUEST.quiz[qi];
     say('第' + (KANJI.charAt(qi) || (qi+1)) + '問！ ' + item.q);
     var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '　⚔️ 正解＝こうげき！</div>';
@@ -351,8 +458,8 @@
           if(ci === ans){ c.classList.add('correct'); c.querySelector('.mark').textContent = '◯'; }
           else if(ci === picked){ c.classList.add('wrong'); c.querySelector('.mark').textContent = '✕'; }
         });
-        if(ok){ answered++; say(L.correct[qi % L.correct.length] + ' ' + item.explain); }
-        else  { say(L.wrong + item.explain); }
+        if(ok){ answered++; say(L.correct[qi % L.correct.length] + ' ' + item.explain); if(window.MCQBgm) MCQBgm.se('ok'); }
+        else  { QUIZ_MISS++; say(L.wrong + item.explain); if(window.MCQBgm) MCQBgm.se('ng'); }
         var nb = $('nextQ'); nb.removeAttribute('disabled');
         nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : '審判を受ける →';
         nb.onclick = function(){ (qi+1 < QUEST.quiz.length) ? sceneQuiz(qi+1) : sceneScore(); };
@@ -365,6 +472,7 @@
     var total = QUEST.quiz.length, c = answered;
     // 合格ライン：半分以上=75%、全問=100%
     quizPct = (c === total) ? 100 : (c >= Math.ceil(total/2) ? 75 : 0);
+    if(window.MCQTrack) MCQTrack('quiz_score', (CFG.goalId||'?') + ':' + QID + ':' + quizPct);
     if(quizPct === 100) say(L.score100);
     else if(quizPct === 75) say(L.score75);
     else say(L.scoreFail);
@@ -465,18 +573,41 @@
       }
       var score = (quizPct > 0) ? (answered + '/' + QUEST.quiz.length) : '';
       var btn = $('submit'); btn.disabled = true; btn.textContent = '⚔️ 送信中…';
+      if(window.MCQTrack) MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
       postReport(pct, practice, evidence, kindOf(pct), score).then(function(res){
         sceneDone(pct, practice, res);
       });
     };
   }
 
-  // v3: 討伐演出（EXP・ご褒美・称号・討伐ムービープロンプト）
+  // v3: 討伐演出（EXP・ご褒美・称号・討伐ムービープロンプト・記録タイム）
   function sceneDone(pct, practice, res){
     setStep(4);
     say(L.done.replace('{pct}', pct));
+
+    // 🏅 スコア＆記録タイム計算
+    var quizDone = (quizPct > 0);
+    var noMiss = quizDone && QUIZ_MISS === 0;
+    var pt = (function(n){ n=Number(n)||0;
+      if(n>=200)return 300; if(n>=150)return 250; if(n>=125)return 225;
+      if(n>=100)return 100; if(n>=75)return 75; return 0; })(pct) + (noMiss ? 50 : 0);
+    addLocalScore(pt);
+    var hudS = document.getElementById('hudScore'); if(hudS) hudS.textContent = localScore();
+    var elapsed = Math.round((Date.now() - QUEST_T0) / 1000);
+    var rec = elapsed + QUIZ_MISS * 600;
+    function fmt(s){ return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+
     var html = '<div style="text-align:center;font-size:3rem">🎊</div>'
-      + '<div style="text-align:center;font-weight:900;font-size:1.3rem;margin:4px 0">' + pct + '% で報告完了！</div>';
+      + '<div style="text-align:center;font-weight:900;font-size:1.3rem;margin:4px 0">' + pct + '% で報告完了！</div>'
+      + '<div style="text-align:center;margin:6px 0">'
+      +   '<span style="display:inline-block;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:999px;padding:4px 16px;font-weight:900;color:#9c6f08">🏆 +' + pt + 'pt</span>'
+      +   (noMiss ? ' <span style="display:inline-block;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:999px;padding:4px 16px;font-weight:900;color:#2e7d32">⭐ ノーミス討伐！ +50pt込</span>' : '')
+      + '</div>'
+      + (quizDone
+        ? '<div style="text-align:center;font-size:.85rem;color:var(--muted)">⏱ 記録タイム <b>' + fmt(rec) + '</b>'
+          + (QUIZ_MISS > 0 ? '（実測 ' + fmt(elapsed) + ' ＋ ミス' + QUIZ_MISS + '回 ×10分）' : '（ノーミス・実測どおり！）')
+          + '</div>'
+        : '');
 
     // 本体GAS連携時の戦果表示
     if(res && res.ok){
@@ -517,12 +648,32 @@
         + '</div></div>';
     }
 
+    // 🖼 アバターを本体に登録（ランキング・Chatにも反映）
+    var hasLocalAvatar = false;
+    try{ hasLocalAvatar = !!localStorage.getItem('mcq_avatar_beta'); }catch(e){}
+    if(hasLocalAvatar && API && MEMBER.token){
+      html += '<button class="btn btn-ghost" id="setAvatar" style="margin-top:10px">🖼 このアバターをランキング・Chatにも登録する</button>';
+    }
+
     var ed = CH.endingVideo
       ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener" style="margin-top:10px">🎬 サイドストーリー（討伐後）</a>' : '';
     html += ed
-      + '<a class="btn btn-primary" href="../board.html" style="margin-top:14px">🗺️ マンダラボードへ戻る</a>'
+      + '<a class="btn btn-primary" href="index.html" style="margin-top:14px">🗺️ マンダラボードへ戻る</a>'
       + '<button class="btn btn-ghost" id="again">このクエストを最初から</button>';
     render(html);
+
+    var setAv = $('setAvatar');
+    if(setAv) setAv.onclick = function(){
+      setAv.disabled = true; setAv.textContent = '🖼 登録中…';
+      var b64 = '';
+      try{ b64 = localStorage.getItem('mcq_avatar_beta') || ''; }catch(e){}
+      var body = new URLSearchParams({ action:'saveAvatar', token: MEMBER.token, imageBase64: b64 });
+      fetch(API, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString() })
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          setAv.textContent = (j && j.ok) ? '✅ 登録しました！ランキングにも反映されます' : '⚠ ' + ((j && j.error) || '登録失敗');
+        }).catch(function(){ setAv.textContent = '⚠ 通信エラー'; });
+    };
     if($('cpBp')) $('cpBp').onclick = function(){
       var t = $('bpText').textContent;
       (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){
@@ -533,4 +684,5 @@
   }
 
   sceneIntro();
+  if(window.MCQTrack) MCQTrack('quest_view', (CFG.goalId||'?') + ':' + QID);
 })();

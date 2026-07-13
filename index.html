@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -47,6 +47,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 .world .wtag{position:absolute;top:10px;right:10px;font-size:.62rem;font-weight:900;border-radius:999px;padding:2px 10px}
 .world.beta{border-color:rgba(255,215,0,.55)} .world.beta .wtag{background:var(--gold);color:#1a1a2e}
 .world.gamma{border-color:rgba(126,87,194,.65)} .world.gamma .wtag{background:var(--purple);color:#fff}
+.world.lambda{border-color:rgba(245,183,49,.6)} .world.lambda .wtag{background:#f5b731;color:#1a1a2e}
 .world.soon{opacity:.55;pointer-events:none} .world.soon .wtag{background:#555;color:#ddd}
 .subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
 .sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:var(--ink);border-radius:999px;
@@ -67,28 +68,36 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
     <div class="tt-foot">みんなのAI実践塾 ｜ MANDALA CHART QUEST</div>
   </div>
 
+  <!-- ナビ選択 -->
+  <div id="navpick" style="display:none;width:100%">
+    <div class="sel-h">🧭 案内役を選ぼう</div>
+    <div class="sel-c">冒険をサポートしてくれる相棒です。あとで変えられます。</div>
+    <div class="worlds" id="navCards" style="grid-template-columns:1fr 1fr"></div>
+    <button class="back" id="navBack">← タイトルへ戻る</button>
+  </div>
+
   <!-- コンテンツ選択 -->
   <div id="select">
     <div class="sel-h">🗺 ワールドを選ぼう</div>
     <div class="sel-c">ステージは今後も増えていきます。好きなワールドから冒険を始めよう。</div>
     <div class="worlds">
-      <a class="world beta" href="board.html">
+      <a class="world beta" href="stages/google64/index.html">
         <span class="wtag">第1部</span>
         <div class="we">⚔️</div>
         <div class="wt">東日本編：Google64</div>
         <div class="wd">ガーグル帝国に挑み、Googleの道具を使いこなす64の封印を解く。まずはここから。</div>
       </a>
-      <a class="world gamma" href="claude64/index.html">
+      <a class="world gamma" href="stages/claude64/index.html">
         <span class="wtag">第2部</span>
         <div class="we">🌑</div>
         <div class="wt">西日本編：Claude64</div>
         <div class="wd">AIの相棒Claudeとともに、西の地に眠る64の封印に挑む。</div>
       </a>
-      <a class="world soon" href="#">
-        <span class="wtag">COMING SOON</span>
-        <div class="we">🌸</div>
-        <div class="wt">？？？編</div>
-        <div class="wd">新たなステージを準備中……。</div>
+      <a class="world lambda" href="stages/mimasaka/index.html">
+        <span class="wtag">企業編</span>
+        <div class="we">🏭</div>
+        <div class="wt">美作クエスト：三和電子64</div>
+        <div class="wd">津山・美作の親方衆とともに、AIで進化する実装屋を目指す64の行動クエスト。案内役はデイジー。</div>
       </a>
       <a class="world soon" href="#">
         <span class="wtag">COMING SOON</span>
@@ -98,9 +107,10 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
       </a>
     </div>
     <div class="subrow">
-      <a class="sub" href="nyumon/index.html">🏫 パソコン初心者教室（大塚麗夏がサポート）</a>
+      <a class="sub" href="nyumon.html">🏫 パソコン初心者教室（大塚麗夏がサポート）</a>
       <a class="sub" href="card.html">🃏 挑戦者カードを作る</a>
-      <a class="sub" href="stage-select.html">🗾 ステージ選択（Google64）</a>
+      <a class="sub" href="stages/google64/index.html">🗾 ステージ選択（Google64）</a>
+      <button class="sub" id="changeNav" style="cursor:pointer;font-family:inherit">🧭 案内役を変える</button>
     </div>
     <button class="back" id="backBtn">← タイトルへ戻る</button>
   </div>
@@ -108,20 +118,98 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 </div>
 
 <script src="assets/bgm.js"></script>
+<script src="assets/navs.js"></script>
 <script>
 (function(){
   var t=document.getElementById('title'), s=document.getElementById('select');
+  var np=document.getElementById('navpick');
+
+  /* 🧭 ナビ選択（案内役＝麗夏 or サトル） */
+  function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function renderNavCards(){
+    var NAVS=window.MCQ_NAVS||{};
+    var cur=window.MCQ_navKey?window.MCQ_navKey():'reika';
+    var h='';
+    Object.keys(NAVS).forEach(function(k){
+      var n=NAVS[k];
+      var img='assets/chara/'+n.tachie;
+      h+='<a class="world" data-nav="'+k+'" href="#" style="border-color:'+(cur===k?'var(--gold)':'rgba(255,255,255,.15)')+';display:flex;gap:12px;align-items:center;min-height:120px">'
+        +'<img src="'+esc(img)+'" alt="'+esc(n.name)+'" style="height:110px;width:auto;object-fit:contain;object-position:bottom;filter:drop-shadow(1px 2px 4px rgba(0,0,0,.4))">'
+        +'<div><div class="wt">'+esc(n.name)+'</div><div class="wd">'+esc(n.intro)+'</div></div></a>';
+    });
+    document.getElementById('navCards').innerHTML=h;
+    document.querySelectorAll('#navCards [data-nav]').forEach(function(a){
+      a.addEventListener('click',function(e){
+        e.preventDefault();
+        try{ localStorage.setItem('mcq_nav', a.getAttribute('data-nav')); }catch(err){}
+        if(window.MCQBgm)MCQBgm.se('ok');
+        if(window.MCQTrack) MCQTrack('nav_pick', a.getAttribute('data-nav'));
+        np.style.display='none'; s.classList.add('show');
+      });
+    });
+  }
+  document.getElementById('navBack').onclick=function(){ np.style.display='none'; t.classList.remove('hide'); };
+
+  /* マイページ/メールの ?token= を保存（engine.js と同じキー）。
+     同一オリジンなので各ステージ・カード・入門ページへ自動で引き継がれ、
+     本人ログイン状態（EXP・称号・ご褒美・サンクスUP）で遊べる。 */
+  try {
+    var _tk = new URLSearchParams(location.search).get('token');
+    if (_tk) localStorage.setItem('mcq_member_token', _tk);
+  } catch(e){}
+
+  if(window.MCQTrack) MCQTrack('title_view');
+
+  /* ワールドマップ背景（assets/worldmap.png を置くと自動表示） */
+  (function(){
+    var wm=new Image();
+    wm.onload=function(){
+      document.body.style.backgroundImage =
+        "linear-gradient(180deg, rgba(12,9,22,.62), rgba(12,9,22,.86)), url('assets/worldmap.png')";
+      document.body.style.backgroundSize = "cover, cover";
+      document.body.style.backgroundPosition = "center, center";
+    };
+    wm.src='assets/worldmap.png';
+  })();
+
   document.getElementById('startBtn').onclick=function(){
     if(window.MCQBgm)MCQBgm.se('fanfare');
-    t.classList.add('hide'); s.classList.add('show');
+    if(window.MCQTrack) MCQTrack('game_start');
+    t.classList.add('hide');
+    // 初回はナビ選択→以降はワールド選択へ直行
+    var chosen=false; try{ chosen=!!localStorage.getItem('mcq_nav'); }catch(e){}
+    if(chosen){ s.classList.add('show'); }
+    else { renderNavCards(); np.style.display='block'; }
   };
   document.getElementById('backBtn').onclick=function(){
     s.classList.remove('show'); t.classList.remove('hide');
   };
+  document.getElementById('changeNav').onclick=function(){
+    s.classList.remove('show'); renderNavCards(); np.style.display='block';
+  };
+  /* ワールド選択の計測 */
+  document.querySelectorAll('.world, .sub').forEach(function(a){
+    a.addEventListener('click', function(){
+      if(window.MCQTrack) MCQTrack('world_click', (a.getAttribute('href')||'').split('/').slice(-2).join('/'));
+    });
+  });
   // ?start=1 で選択画面から開始（他ページの「トップ」から戻った時に便利）
   if(new URLSearchParams(location.search).get('start')==='1'){
     t.classList.add('hide'); s.classList.add('show');
   }
+
+  /* 🛠 開発者モード：下部ロゴを素早く5回タップでON/OFF（URL不要・永続） */
+  (function(){
+    var foot=document.querySelector('.tt-foot');
+    if(!foot) return;
+    var taps=0, timer=null;
+    foot.style.cursor='default';
+    foot.addEventListener('click', function(){
+      taps++;
+      clearTimeout(timer); timer=setTimeout(function(){ taps=0; }, 1600);
+      if(taps>=5){ taps=0; if(window.MCQDevToggle) MCQDevToggle(); }
+    });
+  })();
 })();
 </script>
 </body>

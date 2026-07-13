@@ -31,8 +31,10 @@
   })();
 
   /* ---- BGM ---- */
+  //   play(key)          … 共通 assets/bgm/{key}.mp3
+  //   play(key,'bgm/')   … ステージ内 bgm/{key}.mp3（ページからの相対パス）
   var audio = null, curKey = '';
-  function play(key){
+  function play(key, dir){
     if(!key) return;
     curKey = String(key);
     if(!audio){
@@ -40,7 +42,7 @@
       audio.loop = true;
       audio.addEventListener('error', function(){ /* ファイル未配置なら黙ってスキップ */ });
     }
-    audio.src = BASE + 'bgm/' + curKey + '.mp3';
+    audio.src = (dir || (BASE + 'bgm/')) + curKey + '.mp3';
     audio.volume = actualVol();
     if(ST.on){
       var p = audio.play();
@@ -54,11 +56,18 @@
   }
   function stop(){ if(audio){ audio.pause(); } }
 
+  /* ---- 動画再生中の一時消音（ダッキング）----
+     動画の音声とBGM／喋り音が重なってうるさいのを防ぐ。
+     duck()で止め、unduck()で（🔇でなければ）元に戻す。 */
+  var ducked = false;
+  function duck(){ ducked = true; if(audio){ audio.pause(); } }
+  function unduck(){ ducked = false; if(audio && ST.on){ audio.play().catch(function(){}); } }
+
   /* ---- ドラクエ風ブリップ（毎回同じ固定音・控えめ） ---- */
   var ctx = null, lastBlip = 0;
   function seGain(base){ return base * (Math.min(1, ST.vol) / 0.35); }  // スライダーに追従
   function blip(){
-    if(!ST.on) return;                         // 🔇なら鳴らさない
+    if(!ST.on || ducked) return;               // 🔇 or 動画再生中は鳴らさない
     var now = Date.now();
     if(now - lastBlip < 38) return;
     lastBlip = now;
@@ -111,7 +120,7 @@
     document.body.appendChild(d);
     document.getElementById('mcqMute').onclick = function(){
       ST.on = !ST.on; save();
-      if(audio){ ST.on ? audio.play().catch(function(){}) : audio.pause(); }
+      if(audio){ (ST.on && !ducked) ? audio.play().catch(function(){}) : audio.pause(); }
       sync();
     };
     document.getElementById('mcqVol').oninput = function(){
@@ -128,5 +137,102 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildUI);
   else buildUI();
 
-  window.MCQBgm = { play:play, stop:stop, blip:blip, se:se, state:ST };
+  window.MCQBgm = { play:play, stop:stop, blip:blip, se:se, duck:duck, unduck:unduck, state:ST };
+
+  /* ============================================================
+     📊 MCQTrack — 離脱率計測（全ページ共通）
+     - どのページも MCQTrack('イベント名','詳細') を呼ぶだけ
+     - ローカル: localStorage "mcq_funnel" にイベント別カウントを常時集計
+       （GAS未接続でも開発者モードのファネル表示で離脱箇所が見える）
+     - サーバー: questApiUrl 設定時は GAS へ no-cors 送信（サイトイベントに蓄積）
+     ============================================================ */
+  var ROOT = BASE.replace(/assets\/$/,'');           // サイトルート相対
+  function sid(){
+    try{
+      var s = localStorage.getItem('mcq_sid');
+      if(!s){ s = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+        localStorage.setItem('mcq_sid', s); }
+      return s;
+    }catch(e){ return 'anon'; }
+  }
+  window.MCQTrack = function(ev, detail){
+    ev = String(ev||''); detail = String(detail==null?'':detail);
+    if(!ev) return;
+    // ① ローカル集計（常時）
+    try{
+      var f = JSON.parse(localStorage.getItem('mcq_funnel')||'{}');
+      var k = ev + (detail ? ':'+detail : '');
+      f[k] = (f[k]||0) + 1;
+      localStorage.setItem('mcq_funnel', JSON.stringify(f));
+    }catch(e){}
+    // ② サーバー送信（questApiUrl 設定時のみ）
+    try{
+      var api = (window.MCQ_CONFIG||{}).questApiUrl || localStorage.getItem('mcq_api') || '';
+      if(api){
+        var body = 'action=track&sid='+encodeURIComponent(sid())
+          +'&ev='+encodeURIComponent(ev)+'&detail='+encodeURIComponent(detail)
+          +'&page='+encodeURIComponent(location.pathname.split('/').slice(-2).join('/'))
+          +'&ua='+encodeURIComponent((navigator.userAgent||'').slice(0,80));
+        fetch(api, {method:'POST', mode:'no-cors',
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body:body});
+      }
+    }catch(e){}
+  };
+
+  /* ============================================================
+     🛠 開発者モード（URL不要・永続）
+     - タイトル画面の下部ロゴを素早く5回タップで ON/OFF
+     - ON中は全ページ左下に DEV バー（ジャンプ・リセット・ファネル表示）
+     ============================================================ */
+  function devOn(){ try{ return localStorage.getItem('mcq_dev')==='1'; }catch(e){ return false; } }
+  window.MCQDevToggle = function(){
+    var on = !devOn();
+    try{ localStorage.setItem('mcq_dev', on?'1':'0'); }catch(e){}
+    location.reload();
+  };
+  function buildDev(){
+    if(!devOn() || document.getElementById('mcqDevBar')) return;
+    var d = document.createElement('div');
+    d.id = 'mcqDevBar';
+    d.style.cssText = 'position:fixed;left:10px;bottom:10px;z-index:9999;background:rgba(15,25,15,.93);'
+      +'color:#9fe8a5;border:1px solid #4b9e57;border-radius:12px;padding:7px 10px;'
+      +'font:11px Consolas,monospace;display:flex;flex-direction:column;gap:5px;max-width:260px;';
+    function btn(t){ return '<button style="background:#22304a;color:#cfe8ff;border:1px solid #556;border-radius:6px;padding:2px 8px;font:11px Consolas,monospace;cursor:pointer" data-dev="'+t+'">'+t+'</button>'; }
+    d.innerHTML = '<b>🛠 DEV MODE</b>'
+      +'<div style="display:flex;gap:4px;flex-wrap:wrap">'
+      + btn('トップ')+btn('β盤')+btn('γ盤')+btn('λ盤')+btn('β導入')+btn('γ導入')+btn('λ導入')+btn('教室')+btn('カード')+'</div>'
+      +'<div style="display:flex;gap:4px;flex-wrap:wrap">'
+      + btn('ファネル')+btn('進捗リセット')+btn('DEV解除')+'</div>'
+      +'<div id="mcqDevOut" style="max-height:150px;overflow:auto;white-space:pre-wrap"></div>';
+    document.body.appendChild(d);
+    d.addEventListener('click', function(e){
+      var t = e.target.getAttribute && e.target.getAttribute('data-dev');
+      if(!t) return;
+      var R = ROOT;
+      if(t==='トップ') location.href = R+'index.html?start=1';
+      else if(t==='β盤') location.href = R+'stages/google64/index.html?skipintro=1';
+      else if(t==='γ盤') location.href = R+'stages/claude64/index.html?skipintro=1';
+      else if(t==='β導入') location.href = R+'stages/google64/intro.html';
+      else if(t==='γ導入') location.href = R+'stages/claude64/intro.html';
+      else if(t==='λ盤') location.href = R+'stages/mimasaka/index.html?skipintro=1';
+      else if(t==='λ導入') location.href = R+'stages/mimasaka/intro.html';
+      else if(t==='教室') location.href = R+'nyumon.html';
+      else if(t==='カード') location.href = R+'card.html';
+      else if(t==='ファネル'){
+        var f = {}; try{ f = JSON.parse(localStorage.getItem('mcq_funnel')||'{}'); }catch(e2){}
+        var keys = Object.keys(f).sort();
+        document.getElementById('mcqDevOut').textContent =
+          keys.length ? keys.map(function(k){ return f[k]+'× '+k; }).join('\n') : '（まだイベントなし）';
+      }
+      else if(t==='進捗リセット'){
+        try{ Object.keys(localStorage).forEach(function(k){
+          if(/^mcq_(tutorial|nyumon|intro|funnel|me_cache|member$|card_beta|avatar_beta)/.test(k)) localStorage.removeItem(k); });
+        }catch(e3){}
+        document.getElementById('mcqDevOut').textContent = '進捗・ファネルをリセットしました';
+      }
+      else if(t==='DEV解除'){ MCQDevToggle(); }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildDev);
+  else buildDev();
 })();

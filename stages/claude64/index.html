@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>β Google64 マンダラチャートクエスト | みんなのAI実践塾</title>
+<style>
+  :root{--gold:#FFD700; --muted:#9aa3b5; --ink:#1a2233; --pink:#f06292; --green:#66bb6a;}
+  *{box-sizing:border-box;}
+  body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:#14101c; margin:0; color:#f2f0ea; line-height:1.6;
+    padding:18px 10px 60px; display:flex; flex-direction:column; align-items:center;}
+  .wrap{width:100%; max-width:1020px;}
+
+  header{text-align:center; margin-bottom:10px;}
+  header .goal{display:inline-block; background:rgba(255,215,0,.12); border:1px solid rgba(255,215,0,.4);
+    color:var(--gold); border-radius:999px; padding:2px 16px; font-weight:800; letter-spacing:.12em; font-size:.8rem;}
+  header h1{margin:8px 0 2px; font-size:1.45rem; font-weight:900; text-shadow:0 2px 8px rgba(0,0,0,.6);}
+  header p{margin:0; font-size:.83rem; color:var(--muted);}
+
+  /* ===== HUD（v3：挑戦者バー） ===== */
+  .hud{max-width:860px; margin:10px auto; display:flex; gap:8px; flex-wrap:wrap;
+    align-items:center; justify-content:center; background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,215,0,.25); border-radius:14px; padding:8px 12px;}
+  .hud .me{display:flex; align-items:center; gap:8px; margin-right:6px;}
+  .hud .me img{width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid var(--gold);}
+  .hud .me .nm{font-weight:900; font-size:.85rem;}
+  .hud .me .st{font-size:.7rem; color:var(--muted);}
+  .hud .hbtn{background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#f2f0ea;
+    border-radius:999px; padding:5px 13px; font-size:.76rem; font-weight:800; cursor:pointer;
+    text-decoration:none; font-family:inherit;}
+  .hud .hbtn:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* パネル（お土産・サンクス・案内） */
+  .panel{max-width:860px; margin:10px auto; background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.15); border-radius:14px; padding:14px 16px; display:none;}
+  .panel.on{display:block;}
+  .panel h2{margin:0 0 8px; font-size:1rem; color:var(--gold);}
+  .panel .sub{font-size:.78rem; color:var(--muted); margin-bottom:10px;}
+  .rgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px;}
+  .ritem{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14); border-radius:12px;
+    padding:8px; text-align:center; font-size:.68rem; line-height:1.35;}
+  .ritem img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; margin-bottom:4px;}
+  .ritem.lock{opacity:.4;}
+  .ritem.lock .ph{width:100%; aspect-ratio:1; border-radius:8px; background:rgba(255,255,255,.06);
+    display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:4px;}
+  .panel input,.panel textarea{width:100%; padding:9px 11px; border-radius:10px;
+    border:1.5px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06); color:#f2f0ea;
+    font-family:inherit; font-size:.9rem; margin:4px 0 10px;}
+  .panel .pbtn{background:linear-gradient(180deg,var(--gold),#d9a92e); color:#1a1a2e; font-weight:800;
+    border:none; border-radius:10px; padding:10px 20px; font-size:.9rem; cursor:pointer; font-family:inherit;}
+  .panel .pbtn:disabled{opacity:.5;}
+  .glist{display:grid; gap:8px;}
+  .gitem{display:flex; gap:10px; align-items:baseline; font-size:.85rem;
+    background:rgba(255,255,255,.04); border-radius:10px; padding:8px 12px;}
+  .gitem b{color:var(--gold); flex-shrink:0;}
+  .gitem small{color:var(--muted);}
+
+  /* 全体進捗バー */
+  .overall{max-width:760px; margin:10px auto 14px; display:flex; align-items:center; gap:10px; padding:0 6px;}
+  .overall .lbl{font-size:.75rem; color:var(--muted); flex-shrink:0;}
+  .overall .bar{flex:1; height:9px; background:rgba(255,255,255,.08); border-radius:5px; overflow:hidden;}
+  .overall .bar i{display:block; height:100%; background:linear-gradient(90deg,#f57c00,var(--gold)); transition:width .6s;}
+  .overall .val{font-size:.82rem; color:var(--gold); font-weight:800; flex-shrink:0;}
+
+  /* ===== 9×9 マンダラ ===== */
+  .board-scroll{overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch;}
+  .grid{display:grid; grid-template-columns:repeat(9,1fr); gap:4px;
+    min-width:720px; max-width:1000px; margin:0 auto; padding:10px;
+    border-radius:18px; position:relative;
+    background-color:#221833;
+    background-size:cover; background-position:center;
+    box-shadow:0 0 40px rgba(255,215,0,.18), inset 0 0 60px rgba(0,0,0,.5);}
+  .grid > *:nth-child(9n+4), .grid > *:nth-child(9n+7){margin-left:9px;}
+  .grid > *:nth-child(n+28):nth-child(-n+36),
+  .grid > *:nth-child(n+55):nth-child(-n+63){margin-top:9px;}
+
+  .cell{aspect-ratio:1; border-radius:9px; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; justify-content:flex-start;}
+
+  a.qcell{color:#fff; text-decoration:none; padding:5px 6px; font-size:.6rem; line-height:1.35;
+    border:1px solid rgba(255,255,255,.14); transition:border .15s, transform .1s;}
+  a.qcell:hover{border-color:var(--gold); transform:scale(1.03); z-index:2;}
+  a.qcell .qid{font-weight:900; font-size:.72rem; color:#ffd54f; text-shadow:0 1px 2px rgba(0,0,0,.8);}
+  a.qcell .nm{font-weight:700; text-shadow:0 1px 3px rgba(0,0,0,.9); overflow:hidden;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;}
+  a.qcell .step{position:absolute; right:4px; top:3px; font-size:.58rem; font-weight:900;
+    color:rgba(255,255,255,.75); background:rgba(0,0,0,.4); border-radius:99px;
+    width:15px; height:15px; display:flex; align-items:center; justify-content:center;}
+  a.qcell .pctb{position:absolute; left:0; right:0; bottom:0; height:3px; background:rgba(0,0,0,.35);}
+  a.qcell .pctb i{display:block; height:100%; background:linear-gradient(90deg,#f57c00,var(--gold));}
+  a.qcell.full{border-color:rgba(255,215,0,.75); box-shadow:inset 0 0 14px rgba(255,215,0,.35);}
+  a.qcell.full::after{content:"✨"; position:absolute; right:4px; bottom:4px; font-size:.75rem;}
+
+  /* エリア中心（ボス＝HPバー付き） */
+  .gate{background:rgba(10,6,18,.78); border:1.5px solid rgba(255,215,0,.4);
+    align-items:center; justify-content:center; text-align:center; padding:4px; gap:2px;}
+  .gate img{width:40%; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:top;
+    border:2px solid rgba(255,215,0,.6);}
+  .gate .stp{font-size:.55rem; font-weight:900; color:#fff; letter-spacing:.06em; text-shadow:0 1px 2px #000;}
+  .gate .ttl{font-size:.6rem; font-weight:900; line-height:1.2; text-shadow:0 1px 3px #000; color:#fff;}
+  .gate .astamp{position:absolute; left:5px; top:3px; font-size:1.4rem; font-weight:900;
+    color:rgba(255,255,255,.35); line-height:1;}
+  .gate .hpbar{width:86%; height:6px; border-radius:3px; background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.25); overflow:hidden; margin-top:2px;}
+  .gate .hpbar i{display:block; height:100%; background:linear-gradient(90deg,#ff3d6e,#ff6f86); transition:width .6s;}
+  .gate .hptx{font-size:.5rem; font-weight:900; color:#ff9eb3; text-shadow:0 1px 2px #000;}
+  .gate.defeated{border-color:var(--gold); box-shadow:0 0 18px rgba(255,215,0,.4);}
+  .gate.defeated .hpbar i{background:var(--gold);}
+  .gate.defeated .hptx{color:var(--gold);}
+
+  .alabel{background:rgba(20,12,34,.82); border:1px solid rgba(255,255,255,.18);
+    align-items:center; justify-content:center; text-align:center; padding:4px; gap:1px;
+    color:#fff; text-decoration:none;}
+  .alabel:hover{border-color:var(--gold);}
+  .alabel .stp{font-size:.55rem; font-weight:900; color:var(--gold);}
+  .alabel .a{font-size:1rem; font-weight:900;}
+  .alabel .t{font-size:.55rem; font-weight:700; line-height:1.25; color:#e8e2d5;}
+  .center{background:radial-gradient(circle at 50% 35%, rgba(255,215,0,.28), rgba(20,10,40,.9) 70%);
+    border:2px solid var(--gold); align-items:center; justify-content:center; text-align:center; padding:6px; gap:3px;
+    box-shadow:0 0 24px rgba(255,215,0,.35);}
+  .center .c1{font-size:.78rem; font-weight:900; color:var(--gold); line-height:1.3; text-shadow:0 1px 4px #000;}
+  .center .c2{font-size:.53rem; color:#f4ecd8; line-height:1.3;}
+
+  .legend{max-width:760px; margin:16px auto 0; display:flex; gap:14px; flex-wrap:wrap;
+    justify-content:center; align-items:center; font-size:.75rem; color:var(--muted);}
+  .legend .mini{display:grid; grid-template-columns:repeat(3,20px); gap:2px;}
+  .legend .mini span{width:20px; height:20px; border-radius:4px; background:rgba(255,255,255,.09);
+    display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:800; color:#ffd54f;}
+  .legend .mini span.c{background:rgba(255,215,0,.25);}
+  .legend .item{display:flex; align-items:center; gap:7px;}
+  .legend .sw{width:16px; height:16px; border-radius:4px; flex-shrink:0;}
+
+  footer{text-align:center; color:var(--muted); font-size:.74rem; margin-top:22px;}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--gold);color:#1a1a2e;
+    font-weight:800;border-radius:999px;padding:10px 22px;font-size:.85rem;box-shadow:0 6px 24px rgba(0,0,0,.4);
+    opacity:0;transition:opacity .25s;pointer-events:none;z-index:99;}
+  .toast.on{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="goal">β GOAL ─ GOOGLE 64</span>
+    <h1 id="centerCatch">Google賢者になろう</h1>
+    <p>動画で学び、クイズで試し、実践で「こうげき」。みんなの力でボスのHPを削り、64の封印を解け！</p>
+    <!-- CROSS-LINK: 別サイトに分離するときはこの1行を消す -->
+    <a href="../../index.html?start=1" title="トップへ" style="position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.9);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.35)">🏠 トップ</a>
+    <a href="../google64/index.html" style="display:inline-block;margin-top:8px;font-size:.76rem;color:#b39ddb;text-decoration:none;border:1px solid rgba(179,157,219,.4);border-radius:999px;padding:2px 12px">⚔️ 第1部・東日本編（Google64）へ →</a>
+  </header>
+
+  <!-- ===== HUD ===== -->
+  <div class="hud" id="hud">
+    <div class="me" id="hudMe">
+      <div class="st">マイページのリンクから入るとログインされます</div>
+    </div>
+    <a class="hbtn" href="intro.html">📖 はじめに</a>
+    <button class="hbtn" data-panel="panelRanking">🏆 ランキング</button>
+    <a class="hbtn" href="../../nyumon.html">🏫 パソコン教室</a>
+    <a class="hbtn" href="../../card.html">🃏 挑戦者カード</a>
+    <button class="hbtn" data-panel="panelRewards">🎁 お土産</button>
+    <button class="hbtn" data-panel="panelThanks">🍙 サンクスUP!</button>
+    <button class="hbtn" id="evolveBtn">🧬 アバター進化</button>
+    <button class="hbtn" data-panel="panelGuide">📖 コース案内</button>
+  </div>
+
+  <!-- ===== パネル：コース案内（素の説明・物語なし） ===== -->
+  <div class="panel" id="panelGuide">
+    <h2>📖 コース案内（ふつうの説明）</h2>
+    <div class="sub">ここは物語なしのシンプル案内です。順番どおりでなくてもOK。各エリア8個のクエスト（動画→アーカイブ→クイズ→実践）で進みます。</div>
+    <div class="glist" id="guideList"></div>
+  </div>
+
+  <!-- ===== パネル：お土産コレクション ===== -->
+  <div class="panel" id="panelRewards">
+    <h2>🎁 お土産コレクション</h2>
+    <div class="sub">エリアのクエストを達成するたびに、ご当地の銘品が届きます。<b>集めたお土産は「🧬アバター進化」の素材</b>になります。</div>
+    <div class="rgrid" id="rewardGrid"><div class="ritem lock"><div class="ph">❓</div>ログインすると表示されます</div></div>
+    <div class="row" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="pbtn" id="evoPrompt">🎨 進化プロンプトを作る（討伐ボス＋お土産＋風格を反映）</button>
+      <small class="sub" style="margin:0">コピーして画像生成AIへ。自分のアバター画像を添付して生成→カードページで差し替え</small>
+    </div>
+    <pre id="evoBox" style="display:none;white-space:pre-wrap;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:10px 12px;font-size:.78rem;line-height:1.6;max-height:220px;overflow:auto"></pre>
+  </div>
+
+  <!-- ===== パネル：サンクスUP! ===== -->
+  <div class="panel" id="panelThanks">
+    <h2>🍙 サンクスUP!（感謝の狼煙）</h2>
+    <div class="sub">助けてくれた仲間・一緒に学んだ仲間に感謝を送ろう。<b>送ったあなたに+8EXP、受け取った仲間に+3Pt</b>。チャットにも狼煙が上がります。</div>
+    <label style="font-size:.78rem;color:var(--muted)">だれに（ニックネーム or メンバーID）</label>
+    <input type="text" id="thTo" placeholder="例：たろう">
+    <label style="font-size:.78rem;color:var(--muted)">メッセージ</label>
+    <textarea id="thMsg" rows="2" placeholder="例：G3のNotebookLM設定、教えてくれてありがとう！"></textarea>
+    <button class="pbtn" id="thSend">🍙 サンクスを送る</button>
+  </div>
+
+  <!-- ===== パネル：ランキング ===== -->
+  <div class="panel" id="panelRanking">
+    <h2>🏆 討伐スコアランキング</h2>
+    <div class="sub">クイズ・実践の得点＋ノーミスボーナスの累計。マスごとの最速討伐者は「その土地の覇者」としてマスに刻まれます。</div>
+    <div id="rankList" class="glist"><div class="gitem">サーバー接続時に表示されます</div></div>
+  </div>
+
+  <div class="overall">
+    <span class="lbl">全体開放</span>
+    <div class="bar"><i id="overallBar" style="width:0%"></i></div>
+    <span class="val" id="overallVal">0%</span>
+  </div>
+
+  <div class="board-scroll"><div class="grid" id="grid"></div></div>
+
+  <div class="legend">
+    <div class="item">
+      <div class="mini">
+        <span>6</span><span>3</span><span>7</span>
+        <span>2</span><span class="c">★</span><span>4</span>
+        <span>5</span><span>1</span><span>8</span>
+      </div>
+      <div>マンダラの型<br>（①→⑧の順で進む）</div>
+    </div>
+    <div class="item"><span class="sw" style="background:rgba(34,24,51,.95);border:1px solid rgba(255,255,255,.2)"></span>未開放（暗いタイル）</div>
+    <div class="item"><span class="sw" style="background:linear-gradient(135deg,rgba(255,215,0,.5),rgba(34,24,51,.3));border:1px solid #ffd700"></span>チーム累積<b id="thLabel">400</b>%で開放✨</div>
+    <div class="item"><span class="sw" style="background:linear-gradient(90deg,#ff3d6e,#ff6f86)"></span>ボスHP（8マス合計で討伐）</div>
+  </div>
+
+  <footer>みんなのAI実践塾 ｜ マンダラチャートクエスト</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/bgm.js"></script>
+<script>
+/* 初回はワールド導入（麗夏の解説→教官挨拶）へ */
+(function(){
+  var key='mcq_intro_claude64';
+  var p=new URLSearchParams(location.search);
+  if(!localStorage.getItem(key) && p.get('skipintro')!=='1' && !p.get('area')){
+    location.replace('intro.html');
+  }
+})();
+</script>
+<script src="data/config.js"></script>
+<script src="data/characters.js"></script>
+<script src="data/areas.js"></script>
+<script src="data/progress.js"></script>
+<script src="data/quests/A.js"></script>
+<script src="data/quests/B.js"></script>
+<script src="data/quests/C.js"></script>
+<script src="data/quests/D.js"></script>
+<script src="data/quests/E.js"></script>
+<script src="data/quests/F.js"></script>
+<script src="data/quests/G.js"></script>
+<script src="data/quests/H.js"></script>
+<script>
+(function(){
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function $(id){return document.getElementById(id);}
+  var toastTimer=null;
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');
+    clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('on');},2800);}
+
+  var CFG    = window.MCQ_CONFIG || {};
+  var CHARS  = window.MCQ_CHARS || {};
+  var AREAS  = window.MCQ_AREAS || {};
+  var CENTER = window.MCQ_CENTER || {catch:"Google賢者になろう", sub:""};
+  var QUESTS = window.MCQ_QUESTS || {};
+  var PROG   = window.MCQ_PROGRESS || {threshold:400, cumPct:{}};
+  var TH     = PROG.threshold || (CFG.board && CFG.board.threshold) || 400;
+  var CUM    = PROG.cumPct || {};
+  var API    = CFG.questApiUrl || '';
+
+  document.getElementById('centerCatch').textContent = CENTER.catch;
+  document.getElementById('thLabel').textContent = TH;
+  /* ステージごとのテーマ色（config.board.color）でボード全体を配色 */
+  if(CFG.board && CFG.board.color){ document.documentElement.style.setProperty('--gold', CFG.board.color); }
+  /* 見出し・タイトルもconfigから（ステージ共通テンプレを使うため） */
+  if(CFG.goalName){
+    document.title = CFG.goalName + ' マンダラチャートクエスト | みんなのAI実践塾';
+    var _gl=document.querySelector('.goal');
+    if(_gl) _gl.textContent = (CFG.goalId||'') + ' GOAL ─ ' + String(CFG.goalName).toUpperCase();
+  }
+
+  /* ── v3: トークン取得（マイページリンク経由） ── */
+  var TOKEN='';
+  try{
+    var p=new URLSearchParams(location.search);
+    TOKEN=(p.get('token')||'').trim()||localStorage.getItem('mcq_member_token')||'';
+    if(TOKEN) localStorage.setItem('mcq_member_token',TOKEN);
+  }catch(e){}
+
+  /* ── HUD・パネル ── */
+  document.querySelectorAll('.hbtn[data-panel]').forEach(function(b){
+    b.onclick=function(){
+      var id=b.getAttribute('data-panel');
+      document.querySelectorAll('.panel').forEach(function(pn){
+        pn.classList.toggle('on', pn.id===id && !pn.classList.contains('on'));
+      });
+    };
+  });
+
+  /* コース案内（素の説明） */
+  var gl='';
+  'ABCDEFGH'.split('').forEach(function(a){
+    var ar=AREAS[a]||{};
+    gl+='<div class="gitem"><b>STEP'+(ar.step||'?')+'｜'+a+'</b><div>'+esc(ar.title||'')+'<br><small>'+esc(ar.sub||'')+'</small></div></div>';
+  });
+  $('guideList').innerHTML=gl;
+
+  /* me取得 → HUD・お土産 */
+  var ME=null;
+  function renderMe(j){
+    if(!j||!j.ok||!j.member) return;
+    ME=j;
+    var m=j.member;
+    $('hudMe').innerHTML=(m.avatarUrl?'<img src="'+esc(m.avatarUrl)+'" alt="">':'<span style="font-size:1.6rem">🧑</span>')
+      +'<div><div class="nm">'+esc(m.nick||'挑戦者')+'</div>'
+      +'<div class="st">⭐'+(m.exp||0)+' EXP　🍙'+(m.thanksPt||0)+' Pt'
+      +(j.titles&&j.titles.length?'　👑'+j.titles.length:'')+'</div></div>';
+    // お土産グリッド
+    var rewards=j.rewards||[];
+    var have={};
+    rewards.forEach(function(r){ have[r.area+'_'+r.rewardNo]=r; });
+    var html='';
+    'ABCDEFGH'.split('').forEach(function(a){
+      for(var n=1;n<=8;n++){
+        var r=have[a+'_'+n];
+        if(r){
+          html+='<div class="ritem">'+(r.imageUrl?'<img src="'+esc(r.imageUrl)+'" alt="">':'<div class="ph">🎁</div>')
+            +'<b>'+esc(r.rewardName)+'</b><br><small>'+esc(r.prefecture||'')+'</small></div>';
+        }else{
+          html+='<div class="ritem lock"><div class="ph">❓</div>'+a+n+'<br><small>未解放</small></div>';
+        }
+      }
+    });
+    $('rewardGrid').innerHTML=html;
+  }
+  // キャッシュ表示→API更新
+  try{ renderMe(JSON.parse(localStorage.getItem('mcq_me_cache')||'null')); }catch(e){}
+  if(API&&TOKEN){
+    fetch(API+'?action=me&token='+encodeURIComponent(TOKEN))
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(j&&j.ok){
+          renderMe(j);
+          try{
+            localStorage.setItem('mcq_me_cache',JSON.stringify(j));
+            localStorage.setItem('mcq_member',JSON.stringify({id:j.member.memberId,name:j.member.nick,avatarUrl:j.member.avatarUrl}));
+          }catch(e){}
+        }
+      }).catch(function(){});
+  }
+
+  /* サンクスUP! */
+  $('thSend').onclick=function(){
+    var to=$('thTo').value.trim(), msg=$('thMsg').value.trim();
+    if(!to||!msg){ toast('相手とメッセージを入れてください'); return; }
+    if(!API){ toast('⚠ サーバー未接続（questApiUrl未設定）'); return; }
+    if(!TOKEN){ toast('⚠ マイページのリンクから入るとログインされます'); return; }
+    var btn=$('thSend'); btn.disabled=true; btn.textContent='送信中…';
+    var body=new URLSearchParams({action:'thanks',token:TOKEN,toNick:to,message:msg});
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        btn.disabled=false; btn.textContent='🍙 サンクスを送る';
+        if(j&&j.ok){ toast('🍙 '+j.toNick+'さんへ狼煙を上げました！（あなたに+'+j.expGained+'EXP）'); $('thMsg').value=''; }
+        else toast('⚠ '+((j&&j.error)||'送信に失敗しました'));
+      }).catch(function(){ btn.disabled=false; btn.textContent='🍙 サンクスを送る'; toast('⚠ 通信エラー'); });
+  };
+
+  /* アバター進化 */
+  $('evolveBtn').onclick=function(){
+    if(!API){ toast('⚠ サーバー未接続（questApiUrl未設定）'); return; }
+    if(!TOKEN){ toast('⚠ マイページのリンクから入るとログインされます'); return; }
+    if(!confirm('集めたお土産を素材に、アバターを進化させます。\n（1日3回まで／生成に20秒ほどかかります）')) return;
+    toast('🧬 進化の儀式中…（20秒ほどお待ちください）');
+    var body=new URLSearchParams({action:'evolve',token:TOKEN});
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(j&&j.ok){ toast('🎨 '+(j.message||'アバターが進化しました！'));
+          setTimeout(function(){location.reload();},1800); }
+        else toast('⚠ '+((j&&j.message)||(j&&j.error)||'進化に失敗しました'));
+      }).catch(function(){ toast('⚠ 通信エラー'); });
+  };
+
+
+  /* 🎨 進化プロンプト生成（討伐ボスの紋章＋お土産装備＋スコア風格） */
+  var __evoStage = '西日本編Claude64';
+  $('evoPrompt').onclick=function(){
+    var box=$('evoBox');
+    var slain=[];
+    'ABCDEFGH'.split('').forEach(function(a){
+      try{ if(bossHp(a).defeated && CHARS[a]) slain.push(CHARS[a].name); }catch(e){}
+    });
+    var items=(ME&&ME.rewards)?ME.rewards.map(function(r){return r.rewardName;}).slice(0,10):[];
+    var sc=0; try{ sc=Number(localStorage.getItem('mcq_score_'+(CFG.goalId||'x')))||0; }catch(e){}
+    var rank= sc>=3000?'覇者級（黄金の装飾と輝くマント、圧倒的な貫禄）'
+            : sc>=1500?'歴戦（風格ある鎧と勲章、頼れる佇まい）'
+            : sc>=500 ?'一人前（整った冒険装備、自信のある表情）'
+            :          '見習い（軽装だが目に強い意志）';
+    var p='【アバター進化プロンプト】（画像生成AIに貼り、①今の自分のアバター画像を添付）\n\n'
+      +'添付したキャラクターを「進化後の姿」に描き直してください。顔立ち・髪型・体型は添付画像を維持。\n'
+      +'・風格レベル: '+rank+'（討伐スコア'+sc+'pt）\n'
+      +(slain.length?'・討伐した主たちの紋章を衣装にあしらう: '+slain.join('、')+' の意匠\n':'')
+      +(items.length?'・旅で集めた土産を小物として身につける: '+items.join('、')+'\n':'')
+      +'・全身立ち絵、背景は無地の白一色（透過用）、キャラ1体のみ、文字や枠は描かない\n'
+      +'・アニメ調セルルック、'+__evoStage+'の世界観に馴染む光';
+    box.textContent=p; box.style.display='block';
+    (navigator.clipboard?navigator.clipboard.writeText(p):Promise.reject())
+      .then(function(){ toast('🎨 進化プロンプトをコピーしました！'); })
+      .catch(function(){ toast('表示したプロンプトを手動でコピーしてください'); });
+  };
+
+  /* 既存GAS(members_page)と同じ配置定義 */
+  var AREA_POS  = {F:[0,0], C:[0,1], G:[0,2], B:[1,0], D:[1,2], E:[2,0], A:[2,1], H:[2,2]};
+  var QUEST_POS = {6:[0,0], 3:[0,1], 7:[0,2], 2:[1,0], 4:[1,2], 5:[2,0], 1:[2,1], 8:[2,2]};
+  var CENTER_GRID = [['F','C','G'],['B','*','D'],['E','A','H']];
+
+  var grid = document.getElementById('grid');
+  if(CFG.board && CFG.board.imageUrl){
+    grid.style.backgroundImage = "url('" + CFG.board.imageUrl.replace(/'/g,"%27") + "')";
+  }
+
+  function fillRatio(qid){ return Math.min(1, (CUM[qid]||0)/TH); }
+  function tileBg(ratio){ var a=(0.95 - ratio*0.90).toFixed(3); return 'rgba(22,14,36,'+a+')'; }
+
+  /* ボスHP：エリア8マス合計。maxHP=8×TH。ダメージ=各マスmin(cum,TH)の合計 */
+  function bossHp(area){
+    var max=8*TH, dmg=0;
+    for(var n=1;n<=8;n++) dmg+=Math.min(CUM[area+n]||0, TH);
+    return { hp:Math.max(0,max-dmg), max:max, defeated:dmg>=max };
+  }
+
+  function renderBoard(){
+    var areaAvg = {};
+    Object.keys(AREA_POS).forEach(function(a){
+      var s=0; for(var n=1;n<=8;n++) s+=fillRatio(a+n);
+      areaAvg[a]=s/8;
+    });
+    var overall = Object.keys(areaAvg).reduce(function(s,a){return s+areaAvg[a];},0)/8;
+    document.getElementById('overallBar').style.width = Math.round(overall*100)+'%';
+    document.getElementById('overallVal').textContent = Math.round(overall*100)+'%';
+
+    var cells=[]; for(var r=0;r<9;r++) cells.push(new Array(9).fill(null));
+    Object.keys(AREA_POS).forEach(function(area){
+      var ap=AREA_POS[area];
+      for(var n=1;n<=8;n++){
+        var ip=QUEST_POS[n];
+        cells[ap[0]*3+ip[0]][ap[1]*3+ip[1]] = {t:'q', qid:area+n, n:n};
+      }
+      cells[ap[0]*3+1][ap[1]*3+1] = {t:'gate', area:area};
+    });
+    for(var rr=0;rr<3;rr++) for(var cc=0;cc<3;cc++){
+      var v=CENTER_GRID[rr][cc];
+      cells[3+rr][3+cc] = (v==='*') ? {t:'center'} : {t:'alabel', area:v};
+    }
+
+    var html='';
+    for(var r2=0;r2<9;r2++) for(var c2=0;c2<9;c2++){
+      var cell=cells[r2][c2];
+      if(!cell){ html+='<div class="cell"></div>'; continue; }
+
+      if(cell.t==='q'){
+        var q=QUESTS[cell.qid]||{};
+        var ac=(CHARS[cell.qid.charAt(0)]||{}).color||'#888';
+        var ratio=fillRatio(cell.qid);
+        var full=ratio>=1;
+        html+='<a class="cell qcell'+(full?' full':'')+'" href="quest.html?id='+cell.qid+'" '
+            +'style="background:'+tileBg(ratio)+';border-color:'+ac+'66" title="'+esc(q.name||'')+'（累積'+(CUM[cell.qid]||0)+'% / '+TH+'%）">'
+            +'<span class="qid" style="color:'+ac+'">'+cell.qid+'</span>'
+            +'<span class="nm">'+esc(q.name||'準備中')+'</span>'
+            +'<span class="step">'+cell.n+'</span>'
+            +'<span class="pctb"><i style="width:'+Math.round(ratio*100)+'%;background:'+ac+'"></i></span>'
+            +'</a>';
+      }
+      else if(cell.t==='gate'){
+        var ch=CHARS[cell.area]||{}, ar=AREAS[cell.area]||{};
+        var gc=ch.color||'#607d8b';
+        var bh=bossHp(cell.area);
+        var hpPct=Math.round(bh.hp/bh.max*100);
+        html+='<div class="cell gate'+(bh.defeated?' defeated':'')+'" style="background:linear-gradient(155deg,'+gc+'cc,rgba(10,6,18,.9));border-color:'+gc+'" title="エリア'+cell.area+' ボス：'+esc(ch.name||'')+'（HP '+bh.hp+'/'+bh.max+'）">'
+            +'<span class="astamp">'+cell.area+'</span>'
+            +(ch.img?'<img src="'+esc(ch.img)+'" alt="'+esc(ch.name||'')+'" style="border-color:'+gc+'">':'<div style="font-size:1.6rem">'+(ch.emoji||'👾')+'</div>')
+            +'<span class="ttl">'+esc(ar.title||cell.area)+'</span>'
+            +'<span class="hpbar"><i style="width:'+hpPct+'%"></i></span>'
+            +'<span class="hptx">'+(bh.defeated?'🎉 討伐完了！':'HP '+hpPct+'%')+'</span>'
+            +'</div>';
+      }
+      else if(cell.t==='alabel'){
+        var ar2=AREAS[cell.area]||{};
+        html+='<a class="cell alabel" href="#" onclick="scrollToArea(\''+cell.area+'\');return false" title="'+esc(ar2.title||'')+'">'
+            +'<span class="stp">STEP '+(ar2.step||'?')+'</span>'
+            +'<span class="a">'+cell.area+'</span>'
+            +'<span class="t">'+esc(ar2.title||'')+'</span>'
+            +'</a>';
+      }
+      else {
+        html+='<div class="cell center">'
+            +'<span class="c1">'+esc(CENTER.catch)+'</span>'
+            +'<span class="c2">'+esc(CENTER.sub)+'</span>'
+            +'</div>';
+      }
+    }
+    grid.innerHTML=html;
+  }
+  renderBoard();
+  if(window.MCQTrack) MCQTrack('board_view', (CFG.goalId||'?'));
+
+  /* v3: 本体GASからチーム進捗を取得してボード更新（demo値を上書き） */
+  if(API){
+    fetch(API+'?action=board&goalId='+encodeURIComponent(CFG.goalId||'β'))
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; renderBoard(); }
+      }).catch(function(){});
+  }
+
+  /* 🏆 ランキング＆マス覇者（サーバー接続時のみ） */
+  var FASTEST = {};
+  if(API){
+    var rkUrl = API+'?action=ranking&goalId='+encodeURIComponent(CFG.goalId||'β')+(TOKEN?('&token='+encodeURIComponent(TOKEN)):'');
+    fetch(rkUrl).then(function(r){return r.json();}).then(function(j){
+      if(!j||!j.ok) return;
+      // TOP10リスト
+      var el=document.getElementById('rankList');
+      if(el){
+        var h='';
+        (j.top||[]).forEach(function(t){
+          var medal = t.rank===1?'🥇':t.rank===2?'🥈':t.rank===3?'🥉':('#'+t.rank);
+          h+='<div class="gitem"><b style="min-width:34px">'+medal+'</b>'
+            +(t.avatarUrl?'<img src="'+esc(t.avatarUrl)+'" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--gold)" alt="">':'')
+            +'<div style="flex:1">'+esc(t.nick)+(t.noMiss?' <small style="color:#81c784">⭐ノーミス×'+t.noMiss+'</small>':'')+'</div>'
+            +'<b>'+t.score+'pt</b></div>';
+        });
+        if(j.me && j.me.rank) h+='<div class="gitem" style="border:1.5px solid var(--gold)"><b>あなた</b><div style="flex:1">#'+j.me.rank+'位</div><b>'+j.me.score+'pt</b></div>';
+        el.innerHTML = h || '<div class="gitem">まだ記録がありません。最初の覇者になろう！</div>';
+      }
+      // HUDにスコア/順位
+      if(j.me){
+        var meEl=document.getElementById('hudMe');
+        if(meEl && j.me.rank){
+          var st=meEl.querySelector('.st');
+          if(st && st.textContent.indexOf('🏆')<0) st.textContent += '　🏆'+j.me.score+'pt（#'+j.me.rank+'位）';
+        }
+      }
+      // マス覇者をツールチップに刻む
+      FASTEST = j.fastest||{};
+      document.querySelectorAll('a.qcell').forEach(function(cellEl){
+        var qid=(cellEl.querySelector('.qid')||{}).textContent||'';
+        var f=FASTEST[qid];
+        if(f){ cellEl.title = cellEl.title + '\n👑 覇者: '+f.nick+'（'+f.timeStr+'）'; }
+      });
+    }).catch(function(){});
+  }
+  window.scrollToArea=function(a){
+    var ap=AREA_POS[a]; if(!ap) return;
+    var idx=(ap[0]*3+1)*9 + (ap[1]*3+1);
+    var el=grid.children[idx]; if(!el) return;
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.style.boxShadow='0 0 22px #FFD700'; setTimeout(function(){el.style.boxShadow='';},1200);
+  };
+
+  /* ステージ選択（?area=X）から来たら該当エリアへスクロール＆BGM */
+  var areaParam=(new URLSearchParams(location.search).get('area')||'').toUpperCase();
+  if(areaParam && AREA_POS[areaParam]){
+    setTimeout(function(){ scrollToArea(areaParam); },400);
+    if(window.MCQBgm) MCQBgm.play(areaParam, 'bgm/');
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>クエスト | みんなのAI実践塾</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div id="app"></div>
+<form id="gform" method="POST" target="_blank" style="display:none"></form>
+<!-- ?id=A1 で表示するクエストを指定（64マス共通の1ファイル） -->
+<script>window.PAGE={questId:(new URLSearchParams(location.search).get('id')||'A1').toUpperCase()};</script>
+<script src="data/config.js"></script>
+<script src="data/characters.js"></script>
+<script src="data/urls.js"></script>
+<script src="data/quests/A.js"></script>
+<script src="data/quests/B.js"></script>
+<script src="data/quests/C.js"></script>
+<script src="data/quests/D.js"></script>
+<script src="data/quests/E.js"></script>
+<script src="data/quests/F.js"></script>
+<script src="data/quests/G.js"></script>
+<script src="data/quests/H.js"></script>
+<script src="data/missions/A.js"></script>
+<script src="data/missions/B.js"></script>
+<script src="data/missions/C.js"></script>
+<script src="data/missions/D.js"></script>
+<script src="data/missions/E.js"></script>
+<script src="data/missions/F.js"></script>
+<script src="data/missions/G.js"></script>
+<script src="data/missions/H.js"></script>
+<script src="../../assets/engine.js?v=3"></script>
+</body>
+</html>

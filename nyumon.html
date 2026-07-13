@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>パソコン初心者教室｜みんなのAI実践塾</title>
+<style>
+:root{
+  --bg:#f3efe6; --panel:#ffffff; --gold:#b8860b; --gold-soft:#caa53d; --gold-deep:#9c6f08;
+  --ink:#2b3046; --dim:#767c93; --line:rgba(184,134,11,.28); --line2:#e7e1d3;
+  --pink:#e0568a; --green:#4b9e57; --red:#d64c48; --cyan:#2f9fb2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.65;overflow:hidden}
+a{color:var(--gold-deep)}
+.stage{height:100dvh;display:flex;flex-direction:column;max-width:720px;margin:0 auto;
+  background:var(--panel);box-shadow:0 0 40px rgba(43,48,70,.12)}
+.banner{position:relative;height:34vh;min-height:190px;flex-shrink:0;
+  background:url('assets/venue-kominka.png') center 38%/cover no-repeat;}
+@media(max-height:760px),(max-width:560px){.banner{height:24vh;min-height:150px}}
+.banner::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(20,15,8,.28) 0%,transparent 34%,transparent 55%,rgba(255,255,255,.06) 78%,var(--panel) 100%)}
+.bchip{position:absolute;top:12px;left:14px;z-index:2;background:rgba(255,255,255,.92);color:var(--gold-deep);
+  font-weight:900;font-size:14px;border-radius:999px;padding:5px 16px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.bdots{position:absolute;top:13px;right:14px;z-index:2;display:flex;gap:5px}
+.bdots span{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.8);
+  display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:var(--gold-deep)}
+.bdots span.d{background:var(--green);border-color:#fff;color:#fff}
+.bdots span.cur{outline:2px solid var(--gold);outline-offset:1px}
+.reika{position:absolute;left:12px;bottom:0;z-index:2;display:flex;align-items:flex-end;gap:8px}
+/* 等身大立ち絵：バナー下端に接地。round-iconはフォールバック時のみ */
+.reika img.tachie{width:auto;height:30vh;max-height:230px;min-height:150px;object-fit:contain;object-position:bottom;
+  border:none;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(1px 3px 5px rgba(0,0,0,.35))}
+.reika img.icon{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.28)}
+@media(max-height:760px),(max-width:560px){.reika img.tachie{height:22vh;min-height:120px}}
+.reika .rn{background:rgba(255,255,255,.92);border-radius:8px;padding:3px 10px;font-weight:800;font-size:12px;color:var(--pink);margin-bottom:10px;align-self:flex-end}
+.content{flex:1;overflow-y:auto;padding:14px 18px 6px;-webkit-overflow-scrolling:touch}
+.speech{background:#fdf3f7;border:1px solid rgba(224,86,138,.3);border-radius:14px 14px 14px 4px;
+  padding:11px 14px;font-size:14px;position:relative;margin-bottom:12px;cursor:pointer;min-height:44px}
+.speech b{color:var(--ink)}
+.speech .cur{display:inline-block;animation:blink 1s infinite;color:var(--pink);font-weight:900}
+@keyframes blink{50%{opacity:0}}
+.stitle{font-weight:900;font-size:17px;color:var(--gold-deep);margin:2px 0 6px;display:flex;align-items:center;gap:8px}
+.stitle .em{font-size:22px}
+.lead{color:var(--dim);font-size:13px}
+.lead b{color:var(--ink)}
+.mt{margin-top:10px}
+.center{text-align:center}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:#fff;font-weight:800;
+  border:none;border-radius:12px;padding:11px 20px;font-size:14px;cursor:pointer;font-family:inherit;text-decoration:none;
+  box-shadow:0 3px 10px rgba(184,134,11,.28)}
+.btn.green{background:linear-gradient(180deg,#5cb267,var(--green))}
+.btn.ghost{background:#fff;color:var(--gold-deep);border:1px solid var(--line);box-shadow:none}
+.btn.sm{padding:8px 15px;font-size:12.5px}
+.btn.big{width:100%;padding:14px;font-size:15px;margin-top:8px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:active{transform:translateY(1px)}
+.osrow{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.osbtn{flex:1;min-width:130px;background:#faf8f2;border:2px solid var(--line2);border-radius:14px;padding:16px;text-align:center;
+  cursor:pointer;font-weight:800;font-size:16px;color:var(--ink)}
+.osbtn.sel{border-color:var(--gold);background:#fcf6e6}
+.choice{background:#faf8f2;border:1.5px solid var(--line2);border-radius:10px;padding:12px 14px;margin-top:8px;cursor:pointer;
+  font-size:14px;display:flex;justify-content:space-between;gap:8px}
+.choice:hover{border-color:var(--gold)}
+.choice.correct{border-color:var(--green);background:#eef7ef}
+.choice.wrong{border-color:var(--red);background:#fceceb}
+.qexp{font-size:13px;color:var(--ink);background:#fcf6e6;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px}
+.qcount{font-size:12px;color:var(--dim);font-weight:800}
+.pracbox{background:#faf8f2;border:1px solid var(--line2);border-radius:10px;padding:11px 13px;margin-top:10px;font-size:13.5px}
+.klabel{display:inline-block;background:#fff;border:1px solid #cfd3e0;border-bottom-width:2px;border-radius:6px;padding:1px 8px;
+  font-family:Consolas,monospace;font-size:12.5px;color:#3a3f57;margin:0 2px;box-shadow:0 1px 0 rgba(0,0,0,.05)}
+textarea,input[type=text]{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line2);background:#fff;
+  color:var(--ink);font-family:inherit;font-size:14px;margin-top:6px}
+textarea:focus,input:focus{outline:none;border-color:var(--gold)}
+.okmark{color:var(--green);font-weight:800;font-size:13px}
+.pastezone{border:2px dashed var(--line);border-radius:12px;min-height:130px;display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:13px;margin-top:8px;padding:10px;text-align:center;outline:none;background:#faf8f2}
+.pastezone:focus{border-color:var(--gold);background:#fcf6e6}
+.pastezone img{max-width:100%;max-height:220px;border-radius:8px}
+.chk{display:flex;gap:10px;align-items:flex-start;background:#faf8f2;border:1px solid var(--line2);border-radius:10px;
+  padding:10px 13px;margin-top:8px;cursor:pointer;font-size:13.5px}
+.chk input{width:auto;margin-top:3px;flex-shrink:0}
+.nav{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--line2);background:#fbf9f4}
+.nav .lbl{flex:1;text-align:center;font-size:12px;color:var(--dim);font-weight:800}
+.nav .btn{min-width:96px;text-align:center}
+.debug{position:fixed;left:10px;top:10px;z-index:9999;background:rgba(20,20,30,.92);color:#9fe8a5;border:1px solid #4b9e57;
+  border-radius:10px;padding:8px 10px;font-size:11px;font-family:Consolas,monospace;display:flex;flex-direction:column;gap:5px;max-width:210px}
+.debug button{background:#2b3046;color:#cfe8ff;border:1px solid #556;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:inherit}
+.debug select{font-size:11px;border-radius:6px;padding:2px}
+.toast{position:fixed;left:50%;bottom:74px;transform:translateX(-50%);background:var(--gold);color:#fff;font-weight:800;
+  border-radius:999px;padding:10px 22px;font-size:13.5px;box-shadow:0 6px 24px rgba(43,48,70,.25);opacity:0;
+  transition:opacity .25s;pointer-events:none;z-index:9999}
+.toast.on{opacity:1}
+.confetti{font-size:2.4rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="banner">
+    <div class="bchip">🏫 パソコン初心者教室</div>
+    <div class="bdots" id="bdots"></div>
+    <div class="reika">
+      <img id="navImg" src="" alt="先生">
+      <div class="rn" id="navName"></div>
+    </div>
+  </div>
+  <div class="content" id="content"></div>
+  <div class="nav">
+    <button class="btn ghost sm" id="navBack">← 戻る</button>
+    <div class="lbl" id="navLbl"></div>
+    <button class="btn sm" id="navNext">次へ →</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<a href="index.html" title="トップへ" style="position:fixed;right:10px;top:10px;z-index:9998;background:rgba(255,255,255,.92);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.2);border:1px solid rgba(184,134,11,.4)">🏠 トップ</a>
+
+<script src="assets/bgm.js"></script>
+<script src="assets/navs.js?v=2"></script>
+<script src="assets/nyumon-lines.js?v=2"></script>
+<script>
+/* ============================================================
+   🏫 パソコン初心者教室（帝国・物語なし・大塚麗夏がサポート）
+   デバッグ: ?debug=1
+   ============================================================ */
+const $=id=>document.getElementById(id);
+let toastTimer=null;
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('on'),2600);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+const PKEY='mcq_nyumon';   // 教室専用の保存キー（ゲームとは別）
+let P={}; try{P=JSON.parse(localStorage.getItem(PKEY)||'{}');}catch(e){}
+function saveP(){localStorage.setItem(PKEY,JSON.stringify(P));}
+let OS=P.os||'win';
+const K=(win,mac)=>OS==='win'?win:mac;
+const MOD=()=>K('Ctrl','⌘ Cmd');
+
+/* 案内役＝タイトル画面で選んだナビ（麗夏 or 池坊サトル） */
+const NAVKEY=(window.MCQ_navKey?window.MCQ_navKey():'reika');
+const NAV=(window.MCQ_nav?window.MCQ_nav():null)||{name:'大塚麗夏',icon:'https://re-gi.jp/icon/reika_tujo.jpg',color:'#e0568a',tachie:'reika.png'};
+const T={name:NAV.name,img:NAV.icon,color:NAV.color,tachie:'assets/chara/'+NAV.tachie};
+const LINES=window.NYUMON_LINES||{};
+function line(key,vars){let t=LINES[key]||'';t=t.replace(/\{teacher\}/g,T.name);if(vars)Object.keys(vars).forEach(k=>{t=t.replace(new RegExp('\\{'+k+'\\}','g'),vars[k]);});return t;}
+function applyNav(){
+  const im=$('navImg');
+  // 等身大立ち絵を優先。読み込めなければ丸アイコンにフォールバック
+  im.className='tachie';im.src=T.tachie;
+  im.onerror=function(){im.onerror=null;im.className='icon';im.src=T.img;};
+  $('navName').textContent=T.name;$('navName').style.color=T.color;
+}
+
+/* タイプライター＋喋り音 */
+let typing=null;
+function typeSpeech(el,html,done){
+  if(typing){clearInterval(typing);typing=null;}
+  const src=html;let i=0,out='';el.innerHTML='';
+  const step=()=>{
+    if(src[i]==='<'){const j=src.indexOf('>',i);out+=src.slice(i,j+1);i=j+1;}
+    else{out+=src[i];i++;if(window.MCQBgm&&i%2===0)MCQBgm.blip();}
+    el.innerHTML=out+'<span class="cur">▼</span>';
+    if(i>=src.length){clearInterval(typing);typing=null;el.innerHTML=out;if(done)done();}
+  };
+  typing=setInterval(step,26);
+  el.onclick=()=>{if(typing){clearInterval(typing);typing=null;el.innerHTML=src;if(done)done();}};
+}
+
+function isDone(id){return !!P['m'+id];}
+function setDone(id){if(isDone(id))return;P['m'+id]=true;saveP();if(window.MCQBgm)MCQBgm.se('ok');toast('✅ できました！');}
+
+/* パソコン基礎クイズ（OS分岐） */
+function quiz2(){return [
+  {q:'パソコンの画面全体、いろんなものを置ける「机の上」にあたる場所は？',
+   c:['デスクトップ','スクリーンセーバー','ゴミ箱','壁紙ストア'],a:0,
+   e:'電源を入れて最初に見える画面がデスクトップ。机の上と同じで、散らかすと探し物が増えます。'},
+  {q:'インターネットのページを見るためのソフトはどれ？',
+   c:[K('Chrome（クローム）','Safari や Chrome'),'Excel（エクセル）','メモ帳','電卓'],a:0,
+   e:'ページを見るソフトを「ブラウザ」と呼びます。'+K('WindowsならChromeやEdge。','MacならSafari、Chromeも使えます。')},
+  {q:'たくさんの書類（ファイル）を整理してまとめて入れる「箱」の名前は？',
+   c:['フォルダ','クッキー','タブ','アイコン'],a:0,
+   e:'ファイル＝1枚の書類、フォルダ＝書類を入れる箱。箱に名前を付けて仕分けるのが整理の第一歩です。'},
+  {q:'インターネットから受け取ったファイルが、最初に入る場所はどこが多い？',
+   c:['「ダウンロード」フォルダ','ゴミ箱','デスクトップの裏','USBメモリ'],a:0,
+   e:'「あのファイルどこ？」の答えは大体ここ。'+K('エクスプローラー','Finder')+'の「ダウンロード」を見る癖をつけましょう。'},
+  {q:K('画面の下にある、開いているアプリが並ぶ帯の名前は？','画面の下にある、アプリのアイコンが並ぶ帯の名前は？'),
+   c:[K('タスクバー','Dock（ドック）'),'ツールベルト','アプリ棚','ステータスバー'],a:0,
+   e:K('タスクバーには今開いているアプリが並びます。右端の小さいアイコン群は「タスクトレイ」。','Dockにはよく使うアプリを並べられます。')}
+];}
+
+/* ステップ（帝国・カード・ストーリー・ステージ選択なし） */
+const STEPS=[
+  {k:'welcome'},{k:'os'},{k:'m2intro'},
+  {k:'m2q',qi:0},{k:'m2q',qi:1},{k:'m2q',qi:2},{k:'m2q',qi:3},{k:'m2q',qi:4},
+  {k:'m2result'},{k:'m3'},{k:'m4'},{k:'grad'},
+  {k:'m5'},{k:'m6'},{k:'m7'},{k:'m8'},{k:'done'}
+];
+let idx=0;
+let q2=[0,0,0,0,0].map(()=>({picked:null,order:null}));
+let m3={copy:false,paste:false,cut:false};
+
+function screen(){
+  const s=STEPS[idx];const C=$('content');
+  let reika='',title='',body='',canNext=true,nextLbl='次へ →',backOK=idx>0;
+  switch(s.k){
+    case 'welcome':
+      reika=line('welcome');
+      title='<span class="em">🏫</span>ようこそ';
+      body='<p class="lead">古民家をリノベした、落ち着けるお教室です。あわてず、1画面ずつ進めば大丈夫。<br><br>所要時間：基本4つで<b>約10分</b>。</p>';
+      nextLbl='はじめる →';backOK=false;break;
+    case 'os':
+      reika=line('os');
+      title='<span class="em">💻</span>あなたのパソコンは？';
+      body='<div class="osrow"><div class="osbtn'+(OS==='win'?' sel':'')+'" data-os="win">🪟<br>Windows</div>'
+        +'<div class="osbtn'+(OS==='mac'?' sel':'')+'" data-os="mac">🍎<br>Mac</div></div>'
+        +'<p class="lead mt">迷ったら…画面の左下に「田」のようなマークがあれば Windows、上に🍎マークがあれば Mac です。</p>';break;
+    case 'm2intro':
+      reika=line('m2intro');title='<span class="em">🧠</span>パソコンの言葉クイズ（全5問）';
+      body='<p class="lead">1問ずつ出します。答えを選んだら「次へ」で進んでください。3問以上で合格です。</p>';nextLbl='第1問へ →';break;
+    case 'm2q':{
+      const Q=quiz2(),item=Q[s.qi],st=q2[s.qi];if(!st.order)st.order=shuffle(item.c.length);
+      reika=line('m2q',{q:s.qi+1});title='<span class="em">🧠</span>クイズ '+(s.qi+1)+' / 5';
+      body='<div class="qcount">Q'+(s.qi+1)+'</div><p style="font-weight:800;font-size:15px;margin:4px 0 4px">'+esc(item.q)+'</p>';
+      st.order.forEach(ci=>{const cls=st.picked!=null?(ci===item.a?' correct':(ci===st.picked?' wrong':'')):'';
+        const mk=st.picked!=null?(ci===item.a?'◯':(ci===st.picked?'✕':'')):'';
+        body+='<div class="choice'+cls+'" data-ci="'+ci+'">'+esc(item.c[ci])+'<span>'+mk+'</span></div>';});
+      if(st.picked!=null)body+='<div class="qexp">💬 '+esc(T.name)+'：'+esc(item.e)+'</div>';
+      canNext=st.picked!=null;nextLbl=(s.qi<4?'次の問題 →':'結果を見る →');break;}
+    case 'm2result':{
+      const Q=quiz2();const ok=q2.reduce((n,st,i)=>n+((st.picked===Q[i].a)?1:0),0);const pass=ok>=3;
+      reika=pass?line('m2pass'):line('m2fail');title='<span class="em">'+(pass?'🎉':'💪')+'</span>クイズ結果';
+      body='<div class="confetti">'+(pass?'🎉':'📚')+'</div><p class="center" style="font-size:20px;font-weight:900">'+ok+' / 5 問 正解！</p>'
+        +'<p class="lead center">'+(pass?'合格です！':'3問以上で合格。もう一度挑戦しましょう。')+'</p>'
+        +(pass?'':'<button class="btn ghost big" id="q2retry">🔁 もう一度挑戦する</button>');
+      if(pass&&!isDone(2)){setDone(2);if(window.MCQBgm)MCQBgm.se('fanfare');}
+      canNext=pass;nextLbl='次へ →';break;}
+    case 'm3':
+      reika=line('m3');title='<span class="em">⌨️</span>ショートカットをやってみる';
+      body='<div class="pracbox">① 下の文を <span class="klabel">'+MOD()+' + A</span> で全選択 → <span class="klabel">'+MOD()+' + C</span> でコピー'
+        +'<textarea id="m3src" rows="1" readonly style="cursor:text">これはコピーの練習用の文です。</textarea>'
+        +'<div id="m3s1">'+(m3.copy?'<span class="okmark">✅ コピーできました！</span>':'<span class="lead">待っています…</span>')+'</div></div>'
+        +'<div class="pracbox">② ここに <span class="klabel">'+MOD()+' + V</span> で貼り付け'
+        +'<textarea id="m3dst" rows="1" placeholder="ここをクリックして貼り付け"></textarea>'
+        +'<div id="m3s2">'+(m3.paste?'<span class="okmark">✅ 貼り付けできました！</span>':'')+'</div></div>'
+        +'<div class="pracbox">③ 下の文を全選択して <span class="klabel">'+MOD()+' + X</span>（消えたら成功）'
+        +'<textarea id="m3cut" rows="1">この文を切り取ってみましょう</textarea>'
+        +'<div id="m3s3">'+(m3.cut?'<span class="okmark">✅ 切り取りできました！</span>':'')+'</div></div>'
+        +(isDone(3)?'':'<p class="lead mt center">うまくいかない時は <button class="btn ghost sm" id="m3manual">できたので次へ</button></p>');
+      canNext=isDone(3);break;
+    case 'm4':
+      reika=line('m4');title='<span class="em">📸</span>スクリーンショットを貼る';
+      body='<div class="pracbox">① '+K('<span class="klabel">Win + Shift + S</span> を押して範囲をドラッグ','<span class="klabel">⌘ + Shift + Ctrl + 4</span> を押して範囲をドラッグ')+'</div>'
+        +'<p class="lead mt">② 下の枠をクリックして <span class="klabel">'+MOD()+' + V</span> で貼り付け！</p>'
+        +'<div class="pastezone" id="pz" tabindex="0">ここをクリックして '+MOD()+'+V で貼り付け</div>'
+        +'<div class="center mt"><label class="btn ghost sm">📁 ファイルから選ぶ<input type="file" id="pzFile" accept="image/*" hidden></label></div>';
+      canNext=isDone(4);nextLbl='修了 🎓';break;
+    case 'grad':
+      reika=line('grad');title='<span class="em">🎓</span>基本、修了！';
+      body='<div class="confetti">🎓✨</div><p class="lead center">お疲れさまでした。基本4つ、クリアです。</p>'
+        +'<button class="btn big" id="goBonus">🧩 便利わざ4つも見る（おすすめ）</button>'
+        +'<button class="btn ghost big" id="goDone">これで終わりにする</button>';
+      canNext=false;break;
+    case 'm5':
+      reika=line('m5');title='<span class="em">🎤</span>便利わざ① 音声入力';
+      body='<p class="lead">'+K('文字を入れたい所をクリック → <span class="klabel">Win + H</span> でマイク起動。しゃべると文字になります。','文字を入れたい所をクリック →「編集」→「音声入力を開始」（または <span class="klabel">fn</span> を2回）。')+'</p>'
+        +'<div class="pracbox">下の枠に、<b>声で1文</b>入れてみましょう（例：「今日はいい天気です」）'
+        +'<textarea id="m5t" rows="2" placeholder="ここに音声で入力"></textarea><div id="m5s"></div></div>';
+      nextLbl='次へ →';break;
+    case 'm6':
+      reika=line('m6');title='<span class="em">📌</span>便利わざ② ピン留め';
+      body=checklist(6,OS==='win'?[
+        'よく使うアプリを<b>タスクバーにピン留め</b>（アイコンを右クリック →「タスクバーにピン留めする」）',
+        'よく使うフォルダを<b>クイックアクセスにピン留め</b>（フォルダを右クリック →「クイック アクセスにピン留め」）',
+        '<b>タスクトレイ（右下の小さいアイコン群）</b>を開いて中身を確認（△をクリック）'
+      ]:[
+        'よく使うアプリを<b>Dockに追加</b>（起動中アイコンを右クリック →「オプション」→「Dockに追加」）',
+        'よく使うフォルダを<b>Finderサイドバーに追加</b>（フォルダをサイドバーへドラッグ）',
+        '<b>メニューバー（右上）</b>のアイコンを確認（Wi-Fi・電池・常駐アプリ）'
+      ]);nextLbl='次へ →';break;
+    case 'm7':
+      reika=line('m7');title='<span class="em">📹</span>便利わざ③ ビデオ会議';
+      body='<p class="lead"><a href="https://meet.google.com/" target="_blank" rel="noopener">Google Meet</a> で会議を作って3つ試してみましょう。</p>'
+        +checklist(7,['<b>マイクのオン／オフ</b>（🎤ボタン。<span class="klabel">'+K('Ctrl+D','⌘+D')+'</span>）',
+          '<b>画面共有</b>（「画面を共有」→ <b>タブ</b>か<b>ウィンドウ</b>を選ぶ）',
+          '<b>音声つき共有</b>（「タブ」を選ぶと「タブの音声も共有」が出ます）']);nextLbl='次へ →';break;
+    case 'm8':
+      reika=line('m8');title='<span class="em">📦</span>便利わざ④ 安全なインストール';
+      body='<p class="lead"><b>3か条</b>：①必ず<b>公式サイト</b>から　②URLをよく見る　③途中の「許可しますか？」は読んでから</p>'
+        +checklist(8,['入れるソフトを1つ決めた（例：<a href="https://www.google.com/intl/ja/chrome/" target="_blank" rel="noopener">Chrome</a> など）',
+          '<b>公式サイトから</b>ダウンロードした（URLを確認）','インストールして起動できた']);nextLbl='修了へ →';break;
+    case 'done':
+      reika=line('done');title='<span class="em">🌸</span>教室修了';
+      body='<div class="confetti">🌸🎓</div><p class="lead center">全部おつかれさまでした！</p>'
+        +'<a class="btn big" href="index.html?start=1">🗺 学んだことを実際に使ってみる</a>'
+        +'<a class="btn ghost big" href="index.html">トップへ戻る</a>';
+      canNext=false;backOK=true;break;
+  }
+  C.innerHTML='<div class="speech" id="speech"></div>'+(title?'<div class="stitle">'+title+'</div>':'')+body;
+  if(window.MCQTrack) MCQTrack('nyumon_step', s.k+(s.qi!=null?'-'+s.qi:''));
+  C.scrollTop=0;applyNav();
+  const sp=$('speech');if(sp)typeSpeech(sp,'💬 '+reika);
+  $('navBack').style.visibility=backOK?'visible':'hidden';
+  const nb=$('navNext');nb.style.display=(s.k==='grad'||s.k==='done')?'none':'';nb.textContent=nextLbl;nb.disabled=!canNext;
+  $('navLbl').textContent=labelFor(s);renderDots();bindScreen(s);
+}
+function labelFor(s){
+  if(s.k==='welcome')return 'ようこそ';if(s.k==='os')return '準備';
+  if(s.k.startsWith('m2'))return 'パソコンの言葉';
+  if(s.k==='m3')return 'ショートカット';if(s.k==='m4')return 'スクショ';
+  if(s.k==='grad')return '基本 修了';if(s.k==='done')return '教室 修了';
+  if(/^m[5678]$/.test(s.k))return '便利わざ';return '';
+}
+function renderDots(){
+  // 4つの必修（言葉/ショートカット/スクショ）＋便利わざの進捗（簡易）
+  const map=[2,3,4,5,6,7,8];let h='';
+  map.forEach((id,i)=>{const cur=(STEPS[idx].k==='m'+id)||(id===2&&STEPS[idx].k.startsWith('m2'));
+    h+='<span class="'+(isDone(id)?'d ':'')+(cur?'cur':'')+'">'+(isDone(id)?'✓':(i+1))+'</span>';});
+  $('bdots').innerHTML=h;
+}
+function bindScreen(s){
+  if(s.k==='os')document.querySelectorAll('[data-os]').forEach(b=>b.onclick=()=>{OS=b.dataset.os;P.os=OS;saveP();screen();});
+  if(s.k==='m2q'){const st=q2[s.qi];if(st.picked==null)document.querySelectorAll('.choice').forEach(ch=>ch.onclick=()=>{
+    st.picked=+ch.dataset.ci;if(window.MCQBgm)MCQBgm.se(st.picked===quiz2()[s.qi].a?'ok':'ng');screen();});}
+  if(s.k==='m2result'){const r=$('q2retry');if(r)r.onclick=()=>{q2=q2.map(()=>({picked:null,order:null}));goTo(STEPS.findIndex(x=>x.k==='m2q'&&x.qi===0));};}
+  if(s.k==='m3'){const src=$('m3src'),dst=$('m3dst'),cut=$('m3cut');
+    if(src){src.addEventListener('copy',()=>{m3.copy=true;$('m3s1').innerHTML='<span class="okmark">✅ コピーできました！</span>';chk3();});
+      dst.addEventListener('paste',()=>setTimeout(()=>{m3.paste=true;$('m3s2').innerHTML='<span class="okmark">✅ 貼り付けできました！</span>';chk3();},50));
+      cut.addEventListener('cut',()=>setTimeout(()=>{m3.cut=true;$('m3s3').innerHTML='<span class="okmark">✅ 切り取りできました！</span>';chk3();},50));}
+    const man=$('m3manual');if(man)man.onclick=()=>{setDone(3);screen();};}
+  if(s.k==='m4'){const pz=$('pz');if(pz){const ok=src=>{pz.innerHTML='<img src="'+src+'" alt="">';if(!isDone(4))setDone(4);screen();};
+    pz.addEventListener('paste',e=>{const items=(e.clipboardData||{}).items||[];
+      for(const it of items){if(it.type&&it.type.indexOf('image')===0){const f=it.getAsFile();const r=new FileReader();r.onload=()=>ok(r.result);r.readAsDataURL(f);e.preventDefault();return;}}
+      toast('画像が入っていないようです。もう一度スクショを撮ってください');});
+    pz.addEventListener('click',()=>pz.focus());
+    $('pzFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>ok(r.result);r.readAsDataURL(f);});}}
+  if(s.k==='m5'){const t=$('m5t');if(t)t.addEventListener('input',()=>{if(t.value.trim().length>=5){$('m5s').innerHTML='<span class="okmark">✅ 入力できました！</span>';if(!isDone(5))setDone(5);}});}
+  if(/^m[678]$/.test(s.k)){const id=+s.k.slice(1);document.querySelectorAll('input[data-cid="'+id+'"]').forEach(cb=>cb.addEventListener('change',()=>{
+    const st=P['c'+id]||{};st[cb.dataset.ci]=cb.checked;P['c'+id]=st;saveP();if(Object.keys(st).filter(k=>st[k]).length>=3&&!isDone(id))setDone(id);}));}
+  if(s.k==='grad'){$('goBonus').onclick=()=>goTo(STEPS.findIndex(x=>x.k==='m5'));$('goDone').onclick=()=>goTo(STEPS.findIndex(x=>x.k==='done'));}
+}
+function chk3(){if(m3.copy&&m3.paste&&m3.cut){if(!isDone(3))setDone(3);screen();}}
+function checklist(id,items){const st=P['c'+id]||{};return items.map((it,i)=>'<label class="chk"><input type="checkbox" data-cid="'+id+'" data-ci="'+i+'" '+(st[i]?'checked':'')+'><span>'+it+'</span></label>').join('');}
+function shuffle(n){const a=[...Array(n).keys()];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function goTo(i){idx=Math.max(0,Math.min(STEPS.length-1,i));screen();}
+$('navNext').onclick=()=>goTo(idx+1);
+$('navBack').onclick=()=>goTo(idx-1);
+
+/* デバッグ */
+function buildDebug(){
+  const d=document.createElement('div');d.className='debug';
+  d.innerHTML='<b>🛠 DEBUG</b><div><button id="dbAll">全クリア</button> <button id="dbReset">リセット</button></div>'
+    +'<div>ジャンプ: <select id="dbJump"></select></div><div id="dbInfo"></div>';
+  document.body.appendChild(d);
+  const sel=d.querySelector('#dbJump');STEPS.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=i+': '+s.k+(s.qi!=null?'-'+s.qi:'');sel.appendChild(o);});
+  sel.onchange=()=>goTo(+sel.value);
+  d.querySelector('#dbAll').onclick=()=>{[2,3,4,5,6,7,8].forEach(i=>P['m'+i]=true);saveP();screen();toast('DEBUG: 全クリア');};
+  d.querySelector('#dbReset').onclick=()=>{localStorage.removeItem(PKEY);P={};OS='win';q2=q2.map(()=>({picked:null,order:null}));m3={copy:false,paste:false,cut:false};idx=0;screen();toast('DEBUG: リセット');};
+  setInterval(()=>{const i=d.querySelector('#dbInfo');if(i)i.textContent='step:'+idx+' os:'+OS+' done:'+[2,3,4,5,6,7,8].filter(isDone).join(',');},600);
+}
+
+/* 初期化 */
+(function(){
+  idx=0;screen();
+  if(window.MCQBgm)MCQBgm.play('tutorial');
+  if(new URLSearchParams(location.search).get('debug')==='1' || localStorage.getItem('mcq_dev')==='1')buildDebug();
+})();
+</script>
+</body>
+</html>
