@@ -16,17 +16,18 @@
   var VOL_CAP = 0.30;  // 実際の最大音量（スライダー100%でもこの値まで＝うるさくなりすぎない）
 
   // on=マスターのオン/オフ（🔇で全部停止）。vol=スライダー(0〜1)。
-  var ST = { on:true, vol:0.30 };
+  // ★既定はオフ＝自動再生しない。🔊ボタンを押した人だけ鳴る（うるさくない）
+  var ST = { on:false, vol:0.30 };
   try{ Object.assign(ST, JSON.parse(localStorage.getItem('mcq_audio')||'{}')); }catch(e){}
   function save(){ try{ localStorage.setItem('mcq_audio', JSON.stringify(ST)); }catch(e){} }
-  // 移行：以前のうるさい設定（bgmOn/seOn/大きいvol）を一度だけ静かな既定にリセット
-  if(!ST.__a6){ ST = { on:true, vol:0.30, __a6:true }; save(); }
+  // 移行：以前オンだった人も一度だけ静かな既定（オフ）にリセット
+  if(!ST.__a7){ ST = { on:false, vol:0.30, __a7:true }; save(); }
 
   function actualVol(){ return Math.min(1, ST.vol) * VOL_CAP; }  // 例: vol0.35 → 0.14
 
   /* ---- パス解決（quests/ や cutscenes/ 配下からも動く） ---- */
   var BASE = (function(){
-    var s = document.querySelector('script[src*="bgm.js"]');
+    var s = document.querySelector('script[src*="bgm.js?v=5"]');
     return s ? s.getAttribute('src').replace(/bgm\.js.*$/, '') : 'assets/';
   })();
 

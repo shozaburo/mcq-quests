@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -146,7 +146,7 @@
     <p>動画で学び、クイズで試し、実践で「こうげき」。みんなの力でボスのHPを削り、64の封印を解け！</p>
     <!-- CROSS-LINK: 別サイトに分離するときはこの1行を消す -->
     <a href="../../index.html?start=1" title="トップへ" style="position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.9);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.35)">🏠 トップ</a>
-    <a href="../google64/index.html" style="display:inline-block;margin-top:8px;font-size:.76rem;color:#b39ddb;text-decoration:none;border:1px solid rgba(179,157,219,.4);border-radius:999px;padding:2px 12px">⚔️ 第1部・東日本編（Google64）へ →</a>
+    <a href="../claude64/index.html" style="display:inline-block;margin-top:8px;font-size:.76rem;color:#b39ddb;text-decoration:none;border:1px solid rgba(179,157,219,.4);border-radius:999px;padding:2px 12px">⚔️ 第2部・西日本編（Claude64）へ →</a>
   </header>
 
   <!-- ===== HUD ===== -->
@@ -154,8 +154,6 @@
     <div class="me" id="hudMe">
       <div class="st">マイページのリンクから入るとログインされます</div>
     </div>
-    <a class="hbtn" href="intro.html">📖 はじめに</a>
-    <button class="hbtn" data-panel="panelRanking">🏆 ランキング</button>
     <a class="hbtn" href="../../nyumon.html">🏫 パソコン教室</a>
     <a class="hbtn" href="../../card.html">🃏 挑戦者カード</a>
     <button class="hbtn" data-panel="panelRewards">🎁 お土産</button>
@@ -176,11 +174,6 @@
     <h2>🎁 お土産コレクション</h2>
     <div class="sub">エリアのクエストを達成するたびに、ご当地の銘品が届きます。<b>集めたお土産は「🧬アバター進化」の素材</b>になります。</div>
     <div class="rgrid" id="rewardGrid"><div class="ritem lock"><div class="ph">❓</div>ログインすると表示されます</div></div>
-    <div class="row" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="pbtn" id="evoPrompt">🎨 進化プロンプトを作る（討伐ボス＋お土産＋風格を反映）</button>
-      <small class="sub" style="margin:0">コピーして画像生成AIへ。自分のアバター画像を添付して生成→カードページで差し替え</small>
-    </div>
-    <pre id="evoBox" style="display:none;white-space:pre-wrap;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:10px 12px;font-size:.78rem;line-height:1.6;max-height:220px;overflow:auto"></pre>
   </div>
 
   <!-- ===== パネル：サンクスUP! ===== -->
@@ -192,13 +185,6 @@
     <label style="font-size:.78rem;color:var(--muted)">メッセージ</label>
     <textarea id="thMsg" rows="2" placeholder="例：G3のNotebookLM設定、教えてくれてありがとう！"></textarea>
     <button class="pbtn" id="thSend">🍙 サンクスを送る</button>
-  </div>
-
-  <!-- ===== パネル：ランキング ===== -->
-  <div class="panel" id="panelRanking">
-    <h2>🏆 討伐スコアランキング</h2>
-    <div class="sub">クイズ・実践の得点＋ノーミスボーナスの累計。マスごとの最速討伐者は「その土地の覇者」としてマスに刻まれます。</div>
-    <div id="rankList" class="glist"><div class="gitem">サーバー接続時に表示されます</div></div>
   </div>
 
   <div class="overall">
@@ -228,16 +214,6 @@
 <div class="toast" id="toast"></div>
 
 <script src="../../assets/bgm.js?v=5"></script>
-<script>
-/* 初回はワールド導入（麗夏の解説→教官挨拶）へ */
-(function(){
-  var key='mcq_intro_claude64';
-  var p=new URLSearchParams(location.search);
-  if(!localStorage.getItem(key) && p.get('skipintro')!=='1' && !p.get('area')){
-    location.replace('intro.html');
-  }
-})();
-</script>
 <script src="data/config.js"></script>
 <script src="data/characters.js"></script>
 <script src="data/areas.js"></script>
@@ -382,34 +358,6 @@
       }).catch(function(){ toast('⚠ 通信エラー'); });
   };
 
-
-  /* 🎨 進化プロンプト生成（討伐ボスの紋章＋お土産装備＋スコア風格） */
-  var __evoStage = '西日本編Claude64';
-  $('evoPrompt').onclick=function(){
-    var box=$('evoBox');
-    var slain=[];
-    'ABCDEFGH'.split('').forEach(function(a){
-      try{ if(bossHp(a).defeated && CHARS[a]) slain.push(CHARS[a].name); }catch(e){}
-    });
-    var items=(ME&&ME.rewards)?ME.rewards.map(function(r){return r.rewardName;}).slice(0,10):[];
-    var sc=0; try{ sc=Number(localStorage.getItem('mcq_score_'+(CFG.goalId||'x')))||0; }catch(e){}
-    var rank= sc>=3000?'覇者級（黄金の装飾と輝くマント、圧倒的な貫禄）'
-            : sc>=1500?'歴戦（風格ある鎧と勲章、頼れる佇まい）'
-            : sc>=500 ?'一人前（整った冒険装備、自信のある表情）'
-            :          '見習い（軽装だが目に強い意志）';
-    var p='【アバター進化プロンプト】（画像生成AIに貼り、①今の自分のアバター画像を添付）\n\n'
-      +'添付したキャラクターを「進化後の姿」に描き直してください。顔立ち・髪型・体型は添付画像を維持。\n'
-      +'・風格レベル: '+rank+'（討伐スコア'+sc+'pt）\n'
-      +(slain.length?'・討伐した主たちの紋章を衣装にあしらう: '+slain.join('、')+' の意匠\n':'')
-      +(items.length?'・旅で集めた土産を小物として身につける: '+items.join('、')+'\n':'')
-      +'・全身立ち絵、背景は無地の白一色（透過用）、キャラ1体のみ、文字や枠は描かない\n'
-      +'・アニメ調セルルック、'+__evoStage+'の世界観に馴染む光';
-    box.textContent=p; box.style.display='block';
-    (navigator.clipboard?navigator.clipboard.writeText(p):Promise.reject())
-      .then(function(){ toast('🎨 進化プロンプトをコピーしました！'); })
-      .catch(function(){ toast('表示したプロンプトを手動でコピーしてください'); });
-  };
-
   /* 既存GAS(members_page)と同じ配置定義 */
   var AREA_POS  = {F:[0,0], C:[0,1], G:[0,2], B:[1,0], D:[1,2], E:[2,0], A:[2,1], H:[2,2]};
   var QUEST_POS = {6:[0,0], 3:[0,1], 7:[0,2], 2:[1,0], 4:[1,2], 5:[2,0], 1:[2,1], 8:[2,2]};
@@ -503,7 +451,6 @@
     grid.innerHTML=html;
   }
   renderBoard();
-  if(window.MCQTrack) MCQTrack('board_view', (CFG.goalId||'?'));
 
   /* v3: 本体GASからチーム進捗を取得してボード更新（demo値を上書き） */
   if(API){
@@ -514,43 +461,6 @@
       }).catch(function(){});
   }
 
-  /* 🏆 ランキング＆マス覇者（サーバー接続時のみ） */
-  var FASTEST = {};
-  if(API){
-    var rkUrl = API+'?action=ranking&goalId='+encodeURIComponent(CFG.goalId||'β')+(TOKEN?('&token='+encodeURIComponent(TOKEN)):'');
-    fetch(rkUrl).then(function(r){return r.json();}).then(function(j){
-      if(!j||!j.ok) return;
-      // TOP10リスト
-      var el=document.getElementById('rankList');
-      if(el){
-        var h='';
-        (j.top||[]).forEach(function(t){
-          var medal = t.rank===1?'🥇':t.rank===2?'🥈':t.rank===3?'🥉':('#'+t.rank);
-          h+='<div class="gitem"><b style="min-width:34px">'+medal+'</b>'
-            +(t.avatarUrl?'<img src="'+esc(t.avatarUrl)+'" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--gold)" alt="">':'')
-            +'<div style="flex:1">'+esc(t.nick)+(t.noMiss?' <small style="color:#81c784">⭐ノーミス×'+t.noMiss+'</small>':'')+'</div>'
-            +'<b>'+t.score+'pt</b></div>';
-        });
-        if(j.me && j.me.rank) h+='<div class="gitem" style="border:1.5px solid var(--gold)"><b>あなた</b><div style="flex:1">#'+j.me.rank+'位</div><b>'+j.me.score+'pt</b></div>';
-        el.innerHTML = h || '<div class="gitem">まだ記録がありません。最初の覇者になろう！</div>';
-      }
-      // HUDにスコア/順位
-      if(j.me){
-        var meEl=document.getElementById('hudMe');
-        if(meEl && j.me.rank){
-          var st=meEl.querySelector('.st');
-          if(st && st.textContent.indexOf('🏆')<0) st.textContent += '　🏆'+j.me.score+'pt（#'+j.me.rank+'位）';
-        }
-      }
-      // マス覇者をツールチップに刻む
-      FASTEST = j.fastest||{};
-      document.querySelectorAll('a.qcell').forEach(function(cellEl){
-        var qid=(cellEl.querySelector('.qid')||{}).textContent||'';
-        var f=FASTEST[qid];
-        if(f){ cellEl.title = cellEl.title + '\n👑 覇者: '+f.nick+'（'+f.timeStr+'）'; }
-      });
-    }).catch(function(){});
-  }
   window.scrollToArea=function(a){
     var ap=AREA_POS[a]; if(!ap) return;
     var idx=(ap[0]*3+1)*9 + (ap[1]*3+1);

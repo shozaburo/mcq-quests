@@ -62,33 +62,13 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 </div>
 
 <script src="../../assets/bgm.js?v=5"></script>
-<script src="../../assets/navs.js?v=2"></script>
-<script src="data/intro.js?v=2"></script>
+<script src="data/intro.js"></script>
 <script>
 (function(){
   var I = window.MCQ_INTRO || {steps:[]};
-  // 案内役＝タイトルで選んだナビ（麗夏 or 池坊サトル）
-  var NAV = (window.MCQ_nav ? window.MCQ_nav() : null) || {name:'大塚麗夏', icon:'https://re-gi.jp/icon/reika_tujo.jpg', color:'#e0568a', tachie:'reika.png', point:'reika_point.png', joy:'reika_joy.png'};
-  var REIKA = {name:NAV.name, img:NAV.icon, color:NAV.color};
+  var REIKA = {name:'大塚麗夏', img:'https://re-gi.jp/icon/reika_tujo.jpg', color:'#e0568a'};
   var stageKey = location.pathname.indexOf('claude64')>=0 ? 'claude64' : 'google64';
   var $ = function(id){ return document.getElementById(id); };
-
-  // 表示順（新形式=script / 旧形式=steps を両対応）
-  var STEPS = I.script || I.steps || [];
-  // 言語（将来 localStorage 'mcq_lang' で切替。既定は intro.js の lang → 'ja'）
-  var LANG = (function(){ try{ return localStorage.getItem('mcq_lang') || I.lang || 'ja'; }catch(e){ return I.lang || 'ja'; } })();
-  var NAVKEY = (window.MCQ_navKey ? window.MCQ_navKey() : 'reika');
-  // セリフ解決：キャラ別×言語別のテキストリストから引く（旧 b.text はそのまま使う）
-  function resolveText(b){
-    if(b.text) return b.text;                              // 旧形式フォールバック
-    if(b.who==='boss'){
-      var bl = (I.bossLines && (I.bossLines[LANG] || I.bossLines.ja)) || {};
-      return bl[b.id] || '';
-    }
-    var nl = (I.navLines && (I.navLines[LANG] || I.navLines.ja)) || {};
-    var byChar = nl[NAVKEY] || nl.reika || {};
-    return byChar[b.id] || '';
-  }
 
   $('chip').textContent = '📖 はじめに — ' + (I.stage||'');
   // 背景=このステージのAエリア背景
@@ -103,9 +83,9 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   function setFace(b, sp){
     var el = $('faceImg');
     var tachie = (b.who==='boss') ? 'chara/A.png'
-               : ('../../assets/chara/' + (b.pose==='joy' ? NAV.joy
-                  : b.pose==='point' ? NAV.point
-                  : NAV.tachie));
+               : (b.pose==='joy' ? '../../assets/chara/reika_joy.png'
+                  : b.pose==='point' ? '../../assets/chara/reika_point.png'
+                  : '../../assets/chara/reika.png');
     var probe = new Image();
     probe.onload = function(){ el.src = tachie; el.classList.add('tachie'); };
     probe.onerror = function(){ el.src = sp.img; el.classList.remove('tachie'); };
@@ -113,17 +93,17 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   }
   function show(n){
     i = n;
-    var b = STEPS[i]; if(!b){ finish(); return; }
+    var b = I.steps[i]; if(!b){ finish(); return; }
     var sp = speaker(b.who);
     setFace(b, sp);
     $('who').textContent = sp.name + (b.who==='boss' && I.boss.title ? '｜'+I.boss.title : '');
     $('who').style.borderColor = sp.color;
     $('dlg').style.borderColor = sp.color;
     // ドット
-    var h=''; for(var k=0;k<STEPS.length;k++) h+='<span class="'+(k<=i?'on':'')+'"></span>';
+    var h=''; for(var k=0;k<I.steps.length;k++) h+='<span class="'+(k<=i?'on':'')+'"></span>';
     $('dots').innerHTML = h;
     // タイプライター
-    var src = resolveText(b), out='', p=0;
+    var src = b.text, out='', p=0;
     $('cue').style.display='none';
     if(typing) clearInterval(typing);
     cur = src;
@@ -137,7 +117,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   }
   function next(){
     if(typing){ clearInterval(typing); typing=null; $('tx').innerHTML=cur; $('cue').style.display='block'; return; }
-    if(i+1 < STEPS.length) show(i+1); else finish();
+    if(i+1 < I.steps.length) show(i+1); else finish();
   }
   function finish(){
     try{ localStorage.setItem('mcq_intro_'+stageKey, '1'); }catch(e){}
