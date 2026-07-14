@@ -383,30 +383,51 @@
   }
 
   // STEP1 動画 25%
-  //   ステージ内 video/{QID}.mp4 があればページ内で直接再生（探す手間ゼロ）。
-  //   無ければ従来どおり外部リンク（NotebookLM等）ボタン。
+  //   優先順位：①ステージ内 video/{QID}.mp4 をページ内再生
+  //             ②本番サーバー(re-gi.jp)の同mp4（テスト環境用フォールバック）
+  //             ③アーカイブ動画へ直リンク（動画に直で行ける）
+  //             ④最後の手段：NotebookLMページ（ラベルで明示）
+  //   ※「動画を押したらNotebookLMが開いて迷う」問題への対策。
+  //     mp4が再生できる時は外部ボタンを一切出さない。
+  var REMOTE_VIDEO_BASE = (function(){
+    try{
+      if(location.hostname === 're-gi.jp') return '';   // 本番上ではローカル=本番
+      var m = location.pathname.match(/\/stages\/([^\/]+)\//);
+      return m ? 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/video/' : '';
+    }catch(e){ return ''; }
+  })();
   function sceneVideo(){
     setStep(1);
     say(L.video);
-    var vBtn = videoUrl
-      ? '<a class="btn btn-blue" id="extVideo" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">▶ 解説動画を見る</a>'
-      : '<button class="btn btn-blue" id="extVideo" disabled>▶ 解説動画（準備中）</button>';
+    // mp4が無い時の外部ボタン：アーカイブ動画（直で見られる）を最優先
+    var extHtml = archiveUrl
+      ? '<a class="btn btn-blue" href="' + esc(archiveUrl) + '" target="_blank" rel="noopener">▶ 解説動画（アーカイブ）を見る</a>'
+      : (videoUrl
+        ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔗 解説ページを開く（NotebookLM）</a>'
+        : '<button class="btn btn-blue" disabled>▶ 解説動画（準備中）</button>');
     render(
       '<video id="qVideo" controls playsinline preload="metadata" '
       +   'style="display:none;width:100%;max-height:320px;border-radius:12px;background:#000;margin-bottom:4px"></video>'
-      + vBtn
+      + '<div id="extWrap">' + extHtml + '</div>'
       + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
     $('watched').onclick = function(){ bump(25); sceneArchive(); };
 
-    // ローカル動画があれば埋め込み再生に切り替え
+    // mp4があれば埋め込み再生に切り替え（外部ボタンは隠して迷いをなくす）
     var v = $('qVideo');
+    var triedRemote = false;
     v.addEventListener('loadedmetadata', function(){
       v.style.display = 'block';
-      var ext = $('extVideo');
-      if(ext){ ext.textContent = '🔗 元ページ（NotebookLM）も開く'; ext.classList.remove('btn-blue'); ext.classList.add('btn-ghost'); }
+      var w = $('extWrap'); if(w) w.style.display = 'none';
       if(window.MCQTrack) MCQTrack('video_inline', (CFG.goalId||'?') + ':' + QID);
     });
-    v.addEventListener('error', function(){ v.remove(); });   // 無ければ従来表示のまま
+    v.addEventListener('error', function(){
+      if(!triedRemote && REMOTE_VIDEO_BASE){
+        triedRemote = true;
+        v.src = REMOTE_VIDEO_BASE + QID + '.mp4';   // 本番サーバーの動画を試す
+        return;
+      }
+      v.remove();   // mp4が無ければ外部ボタン（アーカイブ/NotebookLM）のまま
+    });
     // 動画再生中はBGM・喋り音を止める（音が重なってうるさいのを防ぐ）
     v.addEventListener('play', function(){
       if(window.MCQBgm) MCQBgm.duck();
