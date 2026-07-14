@@ -426,7 +426,21 @@
         v.src = REMOTE_VIDEO_BASE + QID + '.mp4';   // 本番サーバーの動画を試す
         return;
       }
-      v.remove();   // mp4が無ければ外部ボタン（アーカイブ/NotebookLM）のまま
+      // mp4がどこにも無い → Google Driveの動画をページ内に埋め込む
+      //（NotebookLMからDL済みの動画。リンク共有=全員閲覧可を確認済み）
+      var driveId = URLS.drive || '';
+      if(driveId){
+        var ifr = document.createElement('iframe');
+        ifr.src = 'https://drive.google.com/file/d/' + driveId + '/preview';
+        ifr.setAttribute('allow', 'autoplay; fullscreen');
+        ifr.setAttribute('allowfullscreen', '');
+        ifr.style.cssText = 'width:100%;height:320px;border:none;border-radius:12px;background:#000;margin-bottom:4px;display:block';
+        v.replaceWith(ifr);
+        var w2 = $('extWrap'); if(w2) w2.style.display = 'none';
+        if(window.MCQTrack) MCQTrack('video_drive', (CFG.goalId||'?') + ':' + QID);
+        return;
+      }
+      v.remove();   // Drive動画も無ければ外部ボタン（アーカイブ）のまま
     });
     // 動画再生中はBGM・喋り音を止める（音が重なってうるさいのを防ぐ）
     v.addEventListener('play', function(){
