@@ -411,8 +411,19 @@
       : (videoUrl
         ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔗 解説ページを開く（NotebookLM）</a>'
         : '<button class="btn btn-blue" disabled>▶ 解説動画（準備中）</button>');
+    // 📊 要点インフォグラフィック（Driveの画像を全体表示・タップで拡大）
+    var infoId = URLS.info || '';
+    var infoHtml = infoId
+      ? '<a href="https://drive.google.com/file/d/' + esc(infoId) + '/view" target="_blank" rel="noopener" '
+        +   'style="display:block;text-decoration:none;margin-bottom:12px" title="タップで拡大">'
+        + '<img src="https://drive.google.com/thumbnail?id=' + esc(infoId) + '&sz=w1600" alt="要点インフォグラフィック" '
+        +   'style="width:100%;border-radius:12px;display:block;border:1px solid rgba(255,255,255,.18)" '
+        +   'onerror="this.parentNode.style.display=\'none\'">'
+        + '<div style="text-align:center;font-size:.75rem;color:#9aa;margin-top:4px">📊 このクエストの要点（タップで拡大）</div></a>'
+      : '';
     render(
-      '<video id="qVideo" controls playsinline preload="metadata" '
+      infoHtml
+      + '<video id="qVideo" controls playsinline preload="metadata" '
       +   'style="display:none;width:100%;max-height:320px;border-radius:12px;background:#000;margin-bottom:4px"></video>'
       + '<div id="extWrap">' + extHtml + '</div>'
       + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
