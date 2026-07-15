@@ -24,7 +24,7 @@ window.MCQ_URLS = {
   "C7": { related:"https://notebooklm.google.com/notebook/de46e1e6-8d14-4908-82a6-91e42c846282", archive:"https://drive.google.com/drive/folders/1CuR9yalnyTwOe1j-yp2koAZ9p--_3gW3", check:"" , drive:"1yP_w5ACQ9pBv9EnBDYpfAkXfmBQV2LVM" },
   "C8": { related:"https://notebooklm.google.com/notebook/066e0ca5-be70-49eb-905c-ca2da9b96b25", archive:"https://drive.google.com/drive/folders/1QSz3t216X660CqEHQBpQH9jFsO5QNPkU", check:"" , drive:"1VGSQS3dZCwLLWar_iqb-wNv8oYge5Qhj" },
   "D1": { related:"https://notebooklm.google.com/notebook/3b7556b5-538c-41de-806f-4ed001778e8d", archive:"https://drive.google.com/drive/folders/1E13HADsbgpwkON8rJ-bKVWPjCjPVPW2t", check:"" , drive:"1tZSOXPySdBhdyn1JmIzOXeTeUWlGOkOR" },
-  "D2": { related:"", archive:"https://drive.google.com/drive/folders/1rwjZmdLR0__L0e2nkjRKhPRgg3ZLfTqn", check:"" },
+  "D2": { related:"", archive:"https://drive.google.com/drive/folders/1rwjZmdLR0__L0e2nkjRKhPRgg3ZLfTqn", check:"" , drive:"1oJfx1JBX8tjzRjYI8BR7JEXm1J4E9IJi" },
   "D3": { related:"", archive:"https://drive.google.com/drive/folders/1NyBKoBwNhoZUu1F-Uq33bAhHsZdZjNl-", check:"" },
   "D4": { related:"https://notebooklm.google.com/notebook/18335231-3ea3-4873-8e07-a23b12d7e69d", archive:"https://drive.google.com/drive/folders/1J8kBDIuNckPFaLRoP4PFsvfXGU8mv0yU", check:"" , drive:"1oB28Zp8Xek1V0qzT1RowsQI0QSTwXDZ0" },
   "D5": { related:"", archive:"https://drive.google.com/drive/folders/1J8kBDIuNckPFaLRoP4PFsvfXGU8mv0yU", check:"" },
