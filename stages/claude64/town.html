@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>街 | みんなのAI実践塾</title>
+<style>
+/* 街ページ（?a=A〜H）：街の説明＋教官紹介＋クエスト1〜8（β/γ共通テンプレ） */
+:root{--gold:#f5c542;--ac:#8d6e63;--ink:#f2f0ea;--dim:#b9b2a6;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#14101c,#1d1530 45%,#241a33);color:var(--ink);
+  font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.75;min-height:100dvh}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 60px}
+/* ヒーロー（街の風景） */
+.hero{position:relative;margin:0 -14px;height:34vh;min-height:200px;max-height:300px;
+  background:#241a33 center 40%/cover no-repeat}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.30),transparent 40%,rgba(20,16,28,.94) 92%,#14101c)}
+.hero .chips{position:absolute;top:12px;left:14px;display:flex;gap:8px;z-index:2}
+.chip{background:rgba(0,0,0,.55);border:1px solid var(--gold);color:var(--gold);border-radius:999px;
+  padding:2px 12px;font-size:.7rem;font-weight:900}
+.hero .back{position:absolute;top:12px;right:14px;z-index:2;background:rgba(255,255,255,.92);color:#7a5a08;
+  font-weight:800;font-size:.75rem;text-decoration:none;border-radius:999px;padding:5px 14px}
+.hero .tname{position:absolute;left:0;right:0;bottom:14px;text-align:center;z-index:2}
+.hero .tname h1{font-size:1.7rem;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+.hero .tname p{color:#ffe9b3;font-weight:800;font-size:.85rem}
+/* 街の説明 */
+.desc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:14px;
+  padding:15px 17px;margin-top:16px;font-size:.92rem;color:#e8e2d5}
+.gain{margin-top:10px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.4);border-radius:12px;
+  padding:11px 14px;font-size:.86rem}
+.gain b{color:var(--gold)}
+/* 教官カード */
+.sensei{display:flex;gap:14px;align-items:flex-end;margin-top:18px;background:rgba(255,255,255,.05);
+  border:1.5px solid var(--ac);border-radius:14px;padding:14px 16px;overflow:hidden}
+.sensei .face{width:96px;flex-shrink:0;text-align:center}
+.sensei .face img{width:auto;max-width:96px;max-height:150px;object-fit:contain;object-position:bottom;
+  filter:drop-shadow(1px 3px 5px rgba(0,0,0,.5));margin-bottom:-14px}
+.sensei .face .emoji{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:2.1rem;background:var(--ac);border:3px solid rgba(255,255,255,.6);margin:0 auto}
+.sensei .txt{flex:1;min-width:0}
+.sensei .who{font-weight:900;font-size:1.05rem;color:#fff}
+.sensei .role{display:inline-block;background:rgba(0,0,0,.4);border:1px solid var(--ac);border-radius:8px;
+  padding:1px 10px;font-size:.7rem;font-weight:800;color:#ffe9b3;margin:4px 0 6px}
+.sensei .greet{font-size:.83rem;color:#d8d2c4}
+/* クエスト一覧 */
+h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
+.qlist{display:flex;flex-direction:column;gap:8px}
+.q{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);transition:border-color .15s,transform .12s}
+.q:hover{border-color:var(--ac);transform:translateX(3px)}
+.q .no{width:34px;height:34px;border-radius:10px;background:var(--ac);color:#fff;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem}
+.q .nm{flex:1;font-size:.86rem;font-weight:700;min-width:0}
+.q .pb{width:70px;flex-shrink:0}
+.q .pb .bar{height:6px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden}
+.q .pb .bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:99px}
+.q .pb small{display:block;text-align:right;font-size:.62rem;color:var(--dim);margin-top:2px}
+.q .go{flex-shrink:0;color:var(--gold);font-weight:900}
+.q.full{border-color:rgba(245,197,66,.55)}
+.q.full .no{background:linear-gradient(150deg,#ffe082,#c9992e);color:#241a33}
+/* フッター */
+.subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.sub{display:inline-block;background:rgba(255,255,255,.07);color:#ddd;border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;padding:9px 18px;font-size:.82rem;font-weight:700;text-decoration:none}
+.sub:hover{border-color:var(--gold);color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="hero" id="hero">
+  <span class="shade"></span>
+  <div class="chips"><span class="chip" id="cStep">STEP ?</span><span class="chip" id="cGoal"></span></div>
+  <a class="back" href="map.html">🗾 マップへ</a>
+  <div class="tname"><h1 id="tName">…</h1><p id="tTitle"></p></div>
+</div>
+<div class="wrap">
+  <div class="desc" id="tDesc"></div>
+  <div class="gain" id="tGain"></div>
+
+  <div class="sensei" id="sensei">
+    <div class="face" id="sFace"></div>
+    <div class="txt">
+      <div class="who" id="sName"></div><br>
+      <span class="role" id="sRole"></span>
+      <div class="greet" id="sGreet"></div>
+    </div>
+  </div>
+
+  <h2 class="qh">⚔️ この街のクエスト（1〜8）</h2>
+  <div class="qlist" id="qlist"></div>
+
+  <div class="subrow">
+    <a class="sub" href="map.html">🗾 エリアマップへ</a>
+    <a class="sub" href="index.html?skipintro=1">🧩 全体マップ</a>
+    <a class="sub" href="../../index.html?start=1">🏠 トップへ</a>
+  </div>
+</div>
+
+<script src="../../assets/bgm.js?v=5"></script>
+<script src="data/config.js?v=4"></script>
+<script src="data/areas.js?v=4"></script>
+<script src="data/characters.js?v=4"></script>
+<script src="data/quests/A.js"></script>
+<script src="data/quests/B.js"></script>
+<script src="data/quests/C.js"></script>
+<script src="data/quests/D.js"></script>
+<script src="data/quests/E.js"></script>
+<script src="data/quests/F.js"></script>
+<script src="data/quests/G.js"></script>
+<script src="data/quests/H.js"></script>
+<script>
+(function(){
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var CFG=window.MCQ_CONFIG||{}, AREAS=window.MCQ_AREAS||{}, CHARS=window.MCQ_CHARS||{}, QUESTS=window.MCQ_QUESTS||{};
+  var TH=(CFG.board&&CFG.board.threshold)||400;
+  var API=CFG.questApiUrl||'';
+
+  var A=((new URLSearchParams(location.search)).get('a')||'A').toUpperCase();
+  if('ABCDEFGH'.indexOf(A)<0) A='A';
+  var ar=AREAS[A]||{}, ch=CHARS[A]||{};
+  var ac=ch.color||'#8d6e63';
+  document.documentElement.style.setProperty('--ac', ac);
+  if(CFG.board&&CFG.board.color) document.documentElement.style.setProperty('--gold', CFG.board.color);
+
+  document.title=(ar.town||('エリア'+A))+' | '+(CFG.goalName||'')+' みんなのAI実践塾';
+  document.getElementById('hero').style.backgroundImage="url('bg/"+A+".png')";
+  document.getElementById('cStep').textContent='STEP '+(ar.step||'?');
+  document.getElementById('cGoal').textContent=(CFG.goalId||'')+' '+(CFG.goalName||'');
+  document.getElementById('tName').textContent=(ar.emoji||'')+' '+(ar.town||('エリア'+A));
+  document.getElementById('tTitle').textContent=ar.title||'';
+  document.getElementById('tDesc').textContent=ar.desc||'';
+  document.getElementById('tGain').innerHTML='<b>🎁 この街を出るとき：</b>'+esc(ar.gain||'');
+
+  /* 教官（立ち絵があれば表示・なければ絵文字） */
+  var face=document.getElementById('sFace');
+  var probe=new Image();
+  probe.onload=function(){ face.innerHTML='<img src="chara/'+A+'.png" alt="">'; };
+  probe.onerror=function(){
+    if(ch.img){ face.innerHTML='<img src="'+esc(ch.img)+'" alt="" style="width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid '+ac+'">'; }
+    else{ face.innerHTML='<div class="emoji">'+(ch.emoji||'🧑‍🏫')+'</div>'; }
+  };
+  probe.src='chara/'+A+'.png';
+  document.getElementById('sName').textContent=ch.name||'教官';
+  document.getElementById('sRole').textContent=ch.title||'';
+  var greet=String((ch.lines&&ch.lines.intro)||'').replace(/\{memberName\}/g,'あなた');
+  document.getElementById('sGreet').textContent=greet;
+
+  /* クエスト一覧 */
+  var CUM={};
+  function render(){
+    var html='';
+    for(var n=1;n<=8;n++){
+      var qid=A+n, q=QUESTS[qid]||{};
+      var ratio=Math.min(1,(CUM[qid]||0)/TH);
+      var pct=Math.round(ratio*100);
+      html+='<a class="q'+(ratio>=1?' full':'')+'" href="quest.html?id='+qid+'">'
+        +'<span class="no">'+(ratio>=1?'✓':qid)+'</span>'
+        +'<span class="nm">'+esc(q.name||'準備中')+'</span>'
+        +'<span class="pb"><span class="bar"><i style="width:'+pct+'%"></i></span><small>'+pct+'%</small></span>'
+        +'<span class="go">▶</span></a>';
+    }
+    document.getElementById('qlist').innerHTML=html;
+  }
+  render();
+  if(API){
+    fetch(API+'?action=board&goalId='+encodeURIComponent(CFG.goalId||'β'))
+      .then(function(r){return r.json();})
+      .then(function(j){ if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; render(); } }).catch(function(){});
+  }
+  if(window.MCQTrack) MCQTrack('town_view', (CFG.goalId||'?')+':'+A);
+  if(window.MCQBgm) MCQBgm.play(A,'bgm/');
+})();
+</script>
+</body>
+</html>

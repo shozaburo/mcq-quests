@@ -173,7 +173,7 @@
     +   '<div class="dlg" id="dlg"><div class="nameplate" id="charaName"></div><span id="dlgText"></span><span class="cursor" id="dlgCur">▼</span></div>'
     + '</div>'
     + '<div class="card"><div id="action"></div></div>'
-    + '<footer><a href="index.html">🗺️ マンダラボードへ戻る</a></footer>'
+    + '<footer><a href="town.html?a=' + AREA + '">🏘 街にもどる</a>　<a href="map.html">🗾 エリアマップ</a></footer>'
     + '</div>';
 
   if(!CH || !QUEST){
@@ -181,7 +181,7 @@
     $('qName').textContent  = 'クエスト準備中';
     $('dlgText').textContent = 'このクエストはただいま準備中です。しばらくお待ちください。';
     $('dlgCur').style.display = 'none';
-    $('action').innerHTML = '<a class="btn btn-ghost" href="index.html">🗺️ マンダラボードへ戻る</a>';
+    $('action').innerHTML = '<a class="btn btn-ghost" href="town.html?a=' + AREA + '">🏘 街にもどる</a>';
     return;
   }
 
@@ -201,11 +201,17 @@
   var probe = new Image();
   probe.onload = function(){ img.src = tachie; img.classList.add('tachie'); };
   probe.onerror = function(){
-    img.src = CH.img;
-    img.onerror = function(){
-      var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '👾';
+    if(CH.img){
+      img.src = CH.img;
+      img.onerror = function(){
+        var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '👾';
+        img.replaceWith(d);
+      };
+    } else {
+      // 画像未配置の教官は絵文字で表示（立ち絵を chara/{AREA}.png に置けば自動で切替わる）
+      var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '🧑‍🏫';
       img.replaceWith(d);
-    };
+    }
   };
   probe.src = tachie;
 
@@ -693,7 +699,8 @@
     var ed = CH.endingVideo
       ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener" style="margin-top:10px">🎬 サイドストーリー（討伐後）</a>' : '';
     html += ed
-      + '<a class="btn btn-primary" href="index.html" style="margin-top:14px">🗺️ マンダラボードへ戻る</a>'
+      + '<a class="btn btn-primary" href="town.html?a=' + AREA + '" style="margin-top:14px">🏘 街にもどる（次のクエストへ）</a>'
+      + '<a class="btn btn-ghost" href="index.html">🧩 全体マップ（マンダラ盤面）</a>'
       + '<button class="btn btn-ghost" id="again">このクエストを最初から</button>';
     render(html);
 

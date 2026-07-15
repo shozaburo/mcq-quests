@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>エリアマップ | みんなのAI実践塾</title>
+<style>
+/* 8つの街を巡るエリアマップ（β/γ共通テンプレ・データ駆動） */
+:root{--gold:#f5c542;--ink:#f2f0ea;--dim:#b9b2a6;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#14101c,#1d1530 45%,#241a33);color:var(--ink);
+  font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.7;min-height:100dvh}
+.wrap{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+header{text-align:center;padding:16px 0 6px}
+header .goal{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:999px;
+  padding:3px 16px;font-size:.72rem;font-weight:900;letter-spacing:.14em}
+header h1{font-size:1.5rem;font-weight:900;margin-top:10px;color:#fff}
+header h1 .em{color:var(--gold)}
+header p{color:var(--dim);font-size:.85rem;margin-top:4px}
+/* 全体進捗 */
+.overall{max-width:460px;margin:14px auto 4px;display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--dim)}
+.overall .bar{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.overall .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffe082,var(--gold));border-radius:99px;transition:width .8s}
+/* 街カード */
+.towns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+@media(max-width:640px){.towns{grid-template-columns:1fr}}
+.town{position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;color:#fff;
+  border:2px solid rgba(255,255,255,.14);min-height:150px;background:#241a33 center/cover no-repeat;
+  transition:transform .15s,border-color .15s}
+.town:hover{transform:translateY(-3px);border-color:var(--gold)}
+.town .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.25),rgba(10,8,18,.86) 78%)}
+.town .in{position:relative;z-index:1;padding:12px 14px;display:flex;flex-direction:column;height:100%;min-height:150px}
+.town .step{align-self:flex-start;background:rgba(0,0,0,.55);border:1px solid var(--gold);color:var(--gold);
+  border-radius:999px;padding:1px 10px;font-size:.66rem;font-weight:900}
+.town .nm{font-size:1.15rem;font-weight:900;margin-top:auto;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.town .tt{font-size:.78rem;color:#ffe9b3;font-weight:700}
+.town .tc{font-size:.7rem;color:#cfc7b8;margin-top:2px}
+.town .pbar{height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;margin-top:7px}
+.town .pbar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s}
+.town .done{position:absolute;top:10px;right:12px;z-index:1;font-size:1.2rem;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+/* フッター */
+.subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.sub{display:inline-block;background:rgba(255,255,255,.07);color:#ddd;border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;padding:9px 18px;font-size:.82rem;font-weight:700;text-decoration:none}
+.sub:hover{border-color:var(--gold);color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="goal" id="hGoal">AREA MAP</span>
+    <h1><span class="em">🗾</span> <span id="hTitle">8つの街</span>をめぐる旅</h1>
+    <p id="hSub">好きな街から入ってOK。おすすめは STEP 1 の街から。</p>
+    <div class="overall"><span>全体の解放</span><div class="bar"><i id="ovBar"></i></div><b id="ovVal" style="color:var(--gold)">0%</b></div>
+  </header>
+
+  <div class="towns" id="towns"></div>
+
+  <div class="subrow">
+    <a class="sub" href="index.html?skipintro=1">🧩 全体マップ（マンダラ盤面）</a>
+    <a class="sub" href="intro.html">📖 はじめに（もう一度見る）</a>
+    <a class="sub" href="../../index.html?start=1">🏠 トップへ</a>
+  </div>
+</div>
+
+<script>
+/* 初回はこのステージの導入シーンへ */
+(function(){
+  try{
+    var stageKey = location.pathname.indexOf('claude64')>=0 ? 'claude64'
+                 : location.pathname.indexOf('mimasaka')>=0 ? 'mimasaka' : 'google64';
+    window.__stageKey = stageKey;
+    var p = new URLSearchParams(location.search);
+    if(!localStorage.getItem('mcq_intro_'+stageKey) && p.get('skipintro')!=='1'){
+      location.replace('intro.html'); return;
+    }
+  }catch(e){}
+})();
+</script>
+<script src="../../assets/bgm.js?v=5"></script>
+<script src="data/config.js?v=4"></script>
+<script src="data/areas.js?v=4"></script>
+<script src="data/characters.js?v=4"></script>
+<script>
+(function(){
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var CFG=window.MCQ_CONFIG||{}, AREAS=window.MCQ_AREAS||{}, CHARS=window.MCQ_CHARS||{};
+  var TH=(CFG.board&&CFG.board.threshold)||400;
+  var API=CFG.questApiUrl||'';
+
+  document.title=(CFG.goalName||'')+' エリアマップ | みんなのAI実践塾';
+  document.getElementById('hGoal').textContent=(CFG.goalId||'')+' '+(CFG.goalName||'').toUpperCase()+' — AREA MAP';
+  if(CFG.board&&CFG.board.color) document.documentElement.style.setProperty('--gold', CFG.board.color);
+  if(window.MCQTrack) MCQTrack('map_view', CFG.goalId||'?');
+
+  var CUM={};
+  function render(){
+    var keys='ABCDEFGH'.split('').sort(function(a,b){return (AREAS[a]||{}).step-(AREAS[b]||{}).step;});
+    var html=''; var total=0;
+    keys.forEach(function(a){
+      var ar=AREAS[a]||{}, ch=CHARS[a]||{};
+      var sum=0; for(var n=1;n<=8;n++) sum+=Math.min(1,(CUM[a+n]||0)/TH);
+      var pct=Math.round(sum/8*100); total+=pct;
+      var full=pct>=100;
+      html+='<a class="town" href="town.html?a='+a+'" style="background-image:url(\'bg/'+a+'.png\')">'
+        +'<span class="shade"></span>'
+        +(full?'<span class="done">🏅</span>':'')
+        +'<span class="in">'
+        +'<span class="step">STEP '+(ar.step||'?')+'</span>'
+        +'<span class="nm">'+esc(ar.emoji||'')+' '+esc(ar.town||('エリア'+a))+'</span>'
+        +'<span class="tt">'+esc(ar.title||'')+'</span>'
+        +'<span class="tc">教官：'+esc(ch.name||'?')+'　'+esc(ar.sub||'')+'</span>'
+        +'<span class="pbar"><i style="width:'+pct+'%;background:'+(ch.color||'#f5c542')+'"></i></span>'
+        +'</span></a>';
+    });
+    document.getElementById('towns').innerHTML=html;
+    var ov=Math.round(total/8);
+    document.getElementById('ovBar').style.width=ov+'%';
+    document.getElementById('ovVal').textContent=ov+'%';
+  }
+  render();
+  if(API){
+    fetch(API+'?action=board&goalId='+encodeURIComponent(CFG.goalId||'β'))
+      .then(function(r){return r.json();})
+      .then(function(j){ if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; render(); } }).catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>

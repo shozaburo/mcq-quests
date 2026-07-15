@@ -63,7 +63,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 
 <script src="../../assets/bgm.js?v=5"></script>
 <script src="../../assets/navs.js?v=2"></script>
-<script src="data/intro.js?v=2"></script>
+<script src="data/intro.js?v=4"></script>
 <script>
 (function(){
   var I = window.MCQ_INTRO || {steps:[]};
@@ -107,8 +107,11 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
                   : b.pose==='point' ? NAV.point
                   : NAV.tachie));
     var probe = new Image();
-    probe.onload = function(){ el.src = tachie; el.classList.add('tachie'); };
-    probe.onerror = function(){ el.src = sp.img; el.classList.remove('tachie'); };
+    probe.onload = function(){ el.style.display=''; el.src = tachie; el.classList.add('tachie'); };
+    probe.onerror = function(){
+      if(sp.img){ el.style.display=''; el.src = sp.img; el.classList.remove('tachie'); }
+      else { el.style.display='none'; }   // 画像未配置の教官は顔を出さない（セリフだけで進行）
+    };
     probe.src = tachie;
   }
   function show(n){
@@ -146,7 +149,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
     $('dlg').style.display='none'; $('dots').style.display='none'; $('skip').style.display='none';
     var f=$('fin');
     f.innerHTML = '<a class="btn" href="'+(I.startHref||'quest.html?id=A1')+'">'+(I.startLabel||'⚔️ 最初のクエストへ')+'</a>'
-      + '<a class="btn ghost" href="index.html?skipintro=1">'+(I.boardLabel||'🗺 ボードを見る')+'</a>';
+      + '<a class="btn ghost" href="map.html">'+(I.boardLabel||'🗺 街のマップを見る')+'</a>';
     f.classList.add('show');
     if(window.MCQBgm) MCQBgm.se('fanfare');
   }
