@@ -13,7 +13,7 @@ window.MCQ_CHARS = {
 
   A: {
     name: "門脇 錠一郎", title: "カギノ門の管理人｜土台科 教官",
-    img: "", emoji: "🗝️", color: "#8d6e63",
+    img: "chara/A_icon.png", emoji: "🗝️", color: "#8d6e63",
     lines: {
       intro: "ようこそカギノ門へ、{memberName}さん。管理人の門脇錠一郎です。旅の前に、まずは自分の「家」——Googleアカウントの戸締まりから。地味ですが、ここを疎かにした旅人は必ず後で泣くのです。",
       video: "まずは解説の映像をどうぞ。門の開け方は、見て覚えるのが一番早い。",
@@ -32,7 +32,7 @@ window.MCQ_CHARS = {
 
   B: {
     name: "双葉 慧", title: "プロンプト横丁の案内人｜対話科 教官",
-    img: "", emoji: "🪄", color: "#7e57c2",
+    img: "chara/B_icon.png", emoji: "🪄", color: "#7e57c2",
     lines: {
       intro: "いらっしゃい、プロンプト横丁へ！案内人の双葉慧です。ここはAIとの「話し方」を覚える商店街。{memberName}さん、Geminiは頼み方ひとつで別人みたいに賢くなるんですよ。",
       video: "まずは解説動画から。AIへの頼み方のコツ、先に頭に入れておくと後がラクです。",
@@ -51,7 +51,7 @@ window.MCQ_CHARS = {
 
   C: {
     name: "刻田 治", title: "トキノ台の時計守｜段取り科 教官",
-    img: "", emoji: "⏰", color: "#f9a825",
+    img: "chara/C_icon.png", emoji: "⏰", color: "#f9a825",
     lines: {
       intro: "トキノ台へようこそ。時計守の刻田治です。{memberName}さん、時間は増やせません。しかし、奪われない工夫はできます。カレンダーと会議の術、お教えしましょう。",
       video: "まず解説映像を。段取りは、始める前の3分で決まります。",
@@ -70,7 +70,7 @@ window.MCQ_CHARS = {
 
   D: {
     name: "文月 綴", title: "フミノ辻の代書屋｜文章科 教官",
-    img: "", emoji: "✒️", color: "#5c6bc0",
+    img: "chara/D_icon.png", emoji: "✒️", color: "#5c6bc0",
     lines: {
       intro: "フミノ辻へようこそ。代書屋の文月綴と申します。{memberName}さん、書く仕事は、もう一人で抱える時代ではありません。AIと一緒に書く——その心地よさをお教えします。",
       video: "まずは解説の映像を。「AIに下書きさせて、人が仕上げる」流れを見てください。",
@@ -89,7 +89,7 @@ window.MCQ_CHARS = {
 
   E: {
     name: "算道 圭吾", title: "カズノ蔵の蔵守｜数字科 教官",
-    img: "", emoji: "📊", color: "#26a69a",
+    img: "chara/E_icon.png", emoji: "📊", color: "#26a69a",
     lines: {
       intro: "カズノ蔵へようこそ。蔵守の算道圭吾です。{memberName}さん、数字は嘘をつきません。ただし、整えられていない数字は何も語らない。スプレッドシートで数字を味方にしましょう。",
       video: "まず解説映像を。関数を暗記する必要はありません。「AIに聞けば書ける」を体感してください。",
@@ -108,7 +108,7 @@ window.MCQ_CHARS = {
 
   F: {
     name: "舞原 ルカ", title: "ミセル座の座長｜表現科 教官",
-    img: "", emoji: "🎭", color: "#ec407a",
+    img: "chara/F_icon.png", emoji: "🎭", color: "#ec407a",
     lines: {
       intro: "ようこそミセル座へ！座長の舞原ルカです。{memberName}さん、資料は「書くもの」じゃなく「魅せるもの」。スライドという舞台で、あなたの考えに脚光を当てましょう。",
       video: "まずは解説動画を。舞台の名演出は、種明かしを聞くのが一番の勉強です。",
@@ -127,7 +127,7 @@ window.MCQ_CHARS = {
 
   G: {
     name: "白樺 栞", title: "シオリの森の大司書｜知恵科 教官",
-    img: "", emoji: "📚", color: "#66bb6a",
+    img: "chara/G_icon.png", emoji: "📚", color: "#66bb6a",
     lines: {
       intro: "……ようこそ、シオリの森へ。大司書の白樺栞です。{memberName}さん、この森の書庫——NotebookLMは、読んだ資料とだけ対話する誠実な司書。使い方を覚えれば、一生の相棒になります。",
       video: "まず解説の映像を。静かに、じっくりご覧ください。",
@@ -146,7 +146,7 @@ window.MCQ_CHARS = {
 
   H: {
     name: "大鳥 匠海", title: "タカラノ峰の学長｜継承科 教官",
-    img: "", emoji: "🦉", color: "#546e7a",
+    img: "chara/H_icon.png", emoji: "🦉", color: "#546e7a",
     lines: {
       intro: "よく登ってきましたね、タカラノ峰へ。学長の大鳥匠海です。{memberName}さん、最後の学びは「自分が賢くなること」ではありません。知恵をチームの資産に変え、次の人に手渡すことです。",
       video: "まずは解説の映像を。知識が「みんなのもの」になる仕組みをご覧なさい。",
