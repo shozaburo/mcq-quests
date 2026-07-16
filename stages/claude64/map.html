@@ -33,6 +33,7 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
 .town .step{align-self:flex-start;background:rgba(0,0,0,.55);border:1px solid var(--gold);color:var(--gold);
   border-radius:999px;padding:1px 10px;font-size:.66rem;font-weight:900}
 .town .nm{font-size:1.15rem;font-weight:900;margin-top:auto;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.town .loc{display:inline-block;font-size:.6rem;font-weight:700;color:#ffd98a;opacity:.9;margin-left:4px;vertical-align:middle}
 .town .tt{font-size:.78rem;color:#ffe9b3;font-weight:700}
 .town .tc{font-size:.7rem;color:#cfc7b8;margin-top:2px}
 .town .pbar{height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;margin-top:7px}
@@ -79,8 +80,8 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
 </script>
 <script src="../../assets/bgm.js?v=5"></script>
 <script src="data/config.js?v=4"></script>
-<script src="data/areas.js?v=4"></script>
-<script src="data/characters.js?v=5"></script>
+<script src="data/areas.js?v=5"></script>
+<script src="data/characters.js?v=4"></script>
 <script>
 (function(){
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
@@ -107,7 +108,8 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
         +(full?'<span class="done">🏅</span>':'')
         +'<span class="in">'
         +'<span class="step">STEP '+(ar.step||'?')+'</span>'
-        +'<span class="nm">'+esc(ar.emoji||'')+' '+esc(ar.town||('エリア'+a))+'</span>'
+        +'<span class="nm">'+esc(ar.emoji||'')+' '+esc(ar.town||('エリア'+a))
+          +(ar.loc?'<span class="loc">🗺 ロケ地：'+esc(ar.loc)+'</span>':'')+'</span>'
         +'<span class="tt">'+esc(ar.title||'')+'</span>'
         +'<span class="tc">教官：'+esc(ch.name||'?')+'　'+esc(ar.sub||'')+'</span>'
         +'<span class="pbar"><i style="width:'+pct+'%;background:'+(ch.color||'#f5c542')+'"></i></span>'

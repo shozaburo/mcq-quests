@@ -70,7 +70,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   <span class="shade"></span>
   <div class="chips"><span class="chip" id="cStep">STEP ?</span><span class="chip" id="cGoal"></span></div>
   <a class="back" href="map.html">🗾 マップへ</a>
-  <div class="tname"><h1 id="tName">…</h1><p id="tTitle"></p></div>
+  <div class="tname"><h1 id="tName">…</h1><p id="tTitle"></p><p id="tLoc" style="font-size:.72rem;color:#ffd98a;opacity:.9;margin-top:2px"></p></div>
 </div>
 <div class="wrap">
   <div class="desc" id="tDesc"></div>
@@ -97,8 +97,8 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 
 <script src="../../assets/bgm.js?v=5"></script>
 <script src="data/config.js?v=4"></script>
-<script src="data/areas.js?v=4"></script>
-<script src="data/characters.js?v=5"></script>
+<script src="data/areas.js?v=5"></script>
+<script src="data/characters.js?v=4"></script>
 <script src="data/quests/A.js"></script>
 <script src="data/quests/B.js"></script>
 <script src="data/quests/C.js"></script>
@@ -127,6 +127,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   document.getElementById('cGoal').textContent=(CFG.goalId||'')+' '+(CFG.goalName||'');
   document.getElementById('tName').textContent=(ar.emoji||'')+' '+(ar.town||('エリア'+A));
   document.getElementById('tTitle').textContent=ar.title||'';
+  document.getElementById('tLoc').textContent=ar.loc?('🗺 ロケ地：'+ar.loc):'';
   document.getElementById('tDesc').textContent=ar.desc||'';
   document.getElementById('tGain').innerHTML='<b>🎁 この街を出るとき：</b>'+esc(ar.gain||'');
 
