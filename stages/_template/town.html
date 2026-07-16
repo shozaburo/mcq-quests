@@ -88,6 +88,10 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   <h2 class="qh">⚔️ この街のクエスト（1〜8）</h2>
   <div class="qlist" id="qlist"></div>
 
+  <!-- 🎬 物語はおまけ（読まなくても学習は進む）。街を解放するとEDと風刺ムービーが解禁 -->
+  <div id="storyRow" style="margin-top:18px;display:flex;flex-direction:column;gap:8px"></div>
+  <div id="edPromptBox" style="display:none;margin-top:8px;background:rgba(0,0,0,.35);border:1px dashed var(--gold);border-radius:12px;padding:12px 14px;font-size:.72rem;white-space:pre-wrap;color:#e8e2d5"></div>
+
   <div class="subrow">
     <a class="sub" href="map.html">🗾 エリアマップへ</a>
     <a class="sub" href="index.html?skipintro=1">🧩 全体マップ</a>
@@ -95,10 +99,10 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   </div>
 </div>
 
-<script src="../../assets/bgm.js?v=5"></script>
+<script src="../../assets/bgm.js?v=6"></script>
 <script src="data/config.js?v=4"></script>
-<script src="data/areas.js?v=5"></script>
-<script src="data/characters.js?v=4"></script>
+<script src="data/areas.js?v=7"></script>
+<script src="data/characters.js?v=7"></script>
 <script src="data/quests/A.js"></script>
 <script src="data/quests/B.js"></script>
 <script src="data/quests/C.js"></script>
@@ -148,10 +152,11 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   /* クエスト一覧 */
   var CUM={};
   function render(){
-    var html='';
+    var html=''; var fullCnt=0;
     for(var n=1;n<=8;n++){
       var qid=A+n, q=QUESTS[qid]||{};
       var ratio=Math.min(1,(CUM[qid]||0)/TH);
+      if(ratio>=1) fullCnt++;
       var pct=Math.round(ratio*100);
       html+='<a class="q'+(ratio>=1?' full':'')+'" href="quest.html?id='+qid+'">'
         +'<span class="no">'+(ratio>=1?'✓':qid)+'</span>'
@@ -160,6 +165,38 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
         +'<span class="go">▶</span></a>';
     }
     document.getElementById('qlist').innerHTML=html;
+    renderStory(fullCnt>=8);
+  }
+
+  /* ── 🎬 物語（おまけ）とエンディング ──
+     読まなくても学習は進む。街を全マス解放するとED＋風刺ムービー生成が解禁 */
+  function renderStory(freed){
+    var row=document.getElementById('storyRow');
+    var h='<a class="sub" style="text-align:center" href="cutscene.html?area='+A+'&scene=op">🎬 この街の物語（見なくてもOK）</a>';
+    if(freed){
+      h+='<a class="sub" style="text-align:center;border-color:var(--gold);color:var(--gold)" href="cutscene.html?area='+A+'&scene=ed">🏅 解放エンディングを見る</a>'
+       +'<button class="sub" id="edPromptBtn" style="cursor:pointer;font-family:inherit">🎥 風刺EDムービーの生成プロンプト（Veo用）</button>';
+    }else{
+      h+='<div style="text-align:center;font-size:.7rem;color:var(--dim)">🔒 この街の全クエストをみんなで解放すると、エンディングと風刺ムービーが解禁</div>';
+    }
+    row.innerHTML=h;
+    var btn=document.getElementById('edPromptBtn');
+    if(btn) btn.onclick=function(){
+      var p='【風刺EDムービー生成プロンプト】（動画生成AI（Veo等）に貼り、①自分のアバター画像 ②'+(ch.name||'街の主')+'の画像 を添付）\n\n'
+        +'水彩絵本調のアニメーション、8秒。舞台は'+(ar.loc||'')+'を思わせる「'+(ar.town||'')+'」。\n'
+        +'1. 街の主「'+(ch.name||'')+'」（添付②の姿）の腕に巻かれた《帝国公認》の腕章が、するりとほどけて風に舞う。\n'
+        +'2. 空から降ってきた「買収契約書」が金色の光に包まれ、紙吹雪になって散る。\n'
+        +'3. 主と挑戦者（添付①のアバター）が笑顔で拳を合わせ、背後で街に本来の色と光が戻っていく。\n'
+        +'4. ラストは、街の門から下ろされる無機質な帝国旗と、代わりに揚がる手作りの街の旗。\n'
+        +'・全体に温かい風刺のトーン（巨大企業の看板が外れて、土地の暮らしが戻る比喩）。\n'
+        +'・文字・ロゴ・実在ブランドは一切描かない。暴力表現なし、明るくユーモラスに。';
+      var box=document.getElementById('edPromptBox');
+      box.textContent=p; box.style.display='block';
+      (navigator.clipboard?navigator.clipboard.writeText(p):Promise.reject())
+        .then(function(){ btn.textContent='✅ コピーしました！動画生成AIに貼ってください'; })
+        .catch(function(){});
+      if(window.MCQTrack) MCQTrack('ed_prompt', (CFG.goalId||'?')+':'+A);
+    };
   }
   render();
   if(API){

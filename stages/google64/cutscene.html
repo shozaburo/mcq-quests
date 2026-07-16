@@ -114,7 +114,7 @@
 </div>
 <a href="../../index.html" title="トップ（ボードへ）" style="position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.9);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:'Yu Gothic',sans-serif">🏠 トップ</a>
 
-<script src="data/scenes.js"></script>
+<script src="data/scenes.js?v=2"></script>
 <script>
 (function(){
   function $(s){ return document.querySelector(s); }
@@ -161,7 +161,7 @@
   var idx=-1, typing=null, typingText='', done=false;
 
   // オーディオ基盤ロード（BGM＋喋り音・エリアBGMはassets/bgm/{area}.mp3）
-  (function(){ var t=document.createElement('script'); t.src='../../assets/bgm.js?v=5';
+  (function(){ var t=document.createElement('script'); t.src='../../assets/bgm.js?v=6';
     t.onload=function(){ if(window.MCQBgm && area) MCQBgm.play(area, 'bgm/'); };
     document.head.appendChild(t); })();
 

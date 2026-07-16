@@ -13,7 +13,7 @@
   'use strict';
   if(window.MCQBgm) return;
 
-  var VOL_CAP = 0.30;  // 実際の最大音量（スライダー100%でもこの値まで＝うるさくなりすぎない）
+  var VOL_CAP = 0.20;  // 実際の最大音量（スライダー100%でもこの値まで＝うるさくなりすぎない）
 
   // on=マスターのオン/オフ（🔇で全部停止）。vol=スライダー(0〜1)。
   // ★既定はオフ＝自動再生しない。🔊ボタンを押した人だけ鳴る（うるさくない）
@@ -27,7 +27,7 @@
 
   /* ---- パス解決（quests/ や cutscenes/ 配下からも動く） ---- */
   var BASE = (function(){
-    var s = document.querySelector('script[src*="bgm.js?v=5"]');
+    var s = document.querySelector('script[src*="bgm.js"]');
     return s ? s.getAttribute('src').replace(/bgm\.js.*$/, '') : 'assets/';
   })();
 
@@ -79,7 +79,7 @@
       var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
       o.type = 'square'; o.frequency.value = 440;
       lp.type = 'lowpass'; lp.frequency.value = 2600;
-      g.gain.setValueAtTime(seGain(0.04), t);
+      g.gain.setValueAtTime(seGain(0.022), t);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
       o.connect(lp); lp.connect(g); g.connect(ctx.destination);
       o.start(t); o.stop(t + 0.055);
@@ -98,7 +98,7 @@
       seq.forEach(function(nd){
         var o=ctx.createOscillator(), g=ctx.createGain();
         o.type='square'; o.frequency.value=nd[0];
-        g.gain.setValueAtTime(seGain(0.035), t);
+        g.gain.setValueAtTime(seGain(0.02), t);
         g.gain.exponentialRampToValueAtTime(0.0001, t+nd[1]);
         o.connect(g); g.connect(ctx.destination);
         o.start(t); o.stop(t+nd[1]);

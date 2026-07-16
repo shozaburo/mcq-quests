@@ -61,8 +61,8 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   </div>
 </div>
 
-<script src="../../assets/bgm.js?v=5"></script>
-<script src="data/intro.js?v=4"></script>
+<script src="../../assets/bgm.js?v=6"></script>
+<script src="data/intro.js?v=6"></script>
 <script>
 (function(){
   var I = window.MCQ_INTRO || {steps:[]};
@@ -113,7 +113,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
       else{ out+=src[p]; p++; if(window.MCQBgm && p%2===0) MCQBgm.blip(); }
       $('tx').innerHTML = out;
       if(p>=src.length){ clearInterval(typing); typing=null; $('cue').style.display='block'; }
-    }, 28);
+    }, 13);
   }
   function next(){
     if(typing){ clearInterval(typing); typing=null; $('tx').innerHTML=cur; $('cue').style.display='block'; return; }

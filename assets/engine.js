@@ -223,7 +223,7 @@
       i++; el.textContent = text.slice(0, i);
       if(window.MCQBgm && i % 2 === 0) MCQBgm.blip();   // ドラクエ風の喋り音
       if(i >= text.length){ clearInterval(typing); typing = null; cur.style.display = 'inline-block'; if(cb) cb(); }
-    }, 22);
+    }, 10);
     $('dlg').onclick = function(){
       if(typing){ clearInterval(typing); typing = null; el.textContent = text; cur.style.display = 'inline-block'; if(cb) cb(); }
     };
