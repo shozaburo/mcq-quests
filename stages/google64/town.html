@@ -102,7 +102,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 <script src="../../assets/bgm.js?v=6"></script>
 <script src="data/config.js?v=4"></script>
 <script src="data/areas.js?v=7"></script>
-<script src="data/characters.js?v=7"></script>
+<script src="data/characters.js?v=8"></script>
 <script src="data/quests/A.js"></script>
 <script src="data/quests/B.js"></script>
 <script src="data/quests/C.js"></script>
@@ -137,16 +137,12 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 
   /* 教官（立ち絵があれば表示・なければ絵文字） */
   var face=document.getElementById('sFace');
-  var probe=new Image();
-  probe.onload=function(){ face.innerHTML='<img src="chara/'+A+'.png" alt="">'; };
-  probe.onerror=function(){
-    if(ch.img){ face.innerHTML='<img src="'+esc(ch.img)+'" alt="" style="width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid '+ac+'">'; }
-    else{ face.innerHTML='<div class="emoji">'+(ch.emoji||'🧑‍🏫')+'</div>'; }
-  };
-  probe.src='chara/'+A+'.png';
+  // 正方形アイコン表示（旧立ち絵は透過が粗いため。新絵柄が来たら立ち絵に戻せる）
+  if(ch.img){ face.innerHTML='<img src="'+esc(ch.img)+'" alt="" style="width:92px;height:92px;border-radius:16px;object-fit:cover;object-position:top;border:3px solid '+ac+';box-shadow:0 4px 12px rgba(0,0,0,.4)">'; }
+  else{ face.innerHTML='<div class="emoji">'+(ch.emoji||'🧑‍🏫')+'</div>'; }
   document.getElementById('sName').textContent=ch.name||'教官';
   document.getElementById('sRole').textContent=ch.title||'';
-  var greet=String((ch.lines&&ch.lines.intro)||'').replace(/\{memberName\}/g,'あなた');
+  var greet=String((ch.lines&&ch.lines.intro)||'').replace(/\{memberName\}/g,'あなた').replace(/<[^>]+>/g,'');
   document.getElementById('sGreet').textContent=greet;
 
   /* クエスト一覧 */

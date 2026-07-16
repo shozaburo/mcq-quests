@@ -63,7 +63,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 
 <script src="../../assets/bgm.js?v=6"></script>
 <script src="../../assets/navs.js?v=2"></script>
-<script src="data/intro.js?v=6"></script>
+<script src="data/intro.js?v=7"></script>
 <script>
 (function(){
   var I = window.MCQ_INTRO || {steps:[]};
@@ -102,8 +102,13 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   var bo1='ABCDEFGH'.indexOf((I.boss&&I.boss.name)?'A':'A'); // Aエリアの教官
   function setFace(b, sp){
     var el = $('faceImg');
-    var tachie = (b.who==='boss') ? 'chara/A.png'
-               : ('../../assets/chara/' + (b.pose==='joy' ? NAV.joy
+    // ボスは正方形アイコン表示（旧立ち絵は透過が粗いため。新絵柄が来たら戻せる）
+    if(b.who==='boss'){
+      if(sp.img){ el.style.display=''; el.src = sp.img; el.classList.remove('tachie'); }
+      else { el.style.display='none'; }
+      return;
+    }
+    var tachie = ('../../assets/chara/' + (b.pose==='joy' ? NAV.joy
                   : b.pose==='point' ? NAV.point
                   : NAV.tachie));
     var probe = new Image();
