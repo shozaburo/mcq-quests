@@ -195,25 +195,21 @@
   $('charaName').innerHTML = esc(CH.name) + '<small>' + esc(CH.title) + '</small>';
 
   var img = $('charaImg');
-  // 等身大立ち絵（chara/{AREA}.png）があれば優先、無ければ丸アイコン→絵文字
+  // クエスト画面はセリフ枠と並ぶので「顔アイコン（バストアップ）」で表示。
+  //   全身立ち絵は縦に間延びしてバランスが悪いため、ここでは使わない。
+  //   優先: CH.img（顔アイコン chara/{AREA}_icon.png）→ 無ければ絵文字。
   img.alt = CH.name;
-  var tachie = 'chara/' + AREA + '.png';
-  var probe = new Image();
-  probe.onload = function(){ img.src = tachie; img.classList.add('tachie'); };
-  probe.onerror = function(){
-    if(CH.img){
-      img.src = CH.img;
-      img.onerror = function(){
-        var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '👾';
-        img.replaceWith(d);
-      };
-    } else {
-      // 画像未配置の教官は絵文字で表示（立ち絵を chara/{AREA}.png に置けば自動で切替わる）
-      var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '🧑‍🏫';
-      img.replaceWith(d);
-    }
-  };
-  probe.src = tachie;
+  function toEmoji(){
+    var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '🧑‍🏫';
+    if(img.parentNode) img.replaceWith(d);
+  }
+  if(CH.img){
+    img.classList.remove('tachie');   // バスト表示（104x104角丸・object-fit:cover）
+    img.onerror = toEmoji;
+    img.src = CH.img;
+  } else {
+    toEmoji();
+  }
 
   /* ── セリフ ── */
   var typing = null;
