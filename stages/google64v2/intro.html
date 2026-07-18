@@ -92,9 +92,9 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 
   $('chip').textContent = '📖 はじめに — ' + (I.stage||'');
   // 背景=このステージのAエリア背景
-  $('bgstage').style.backgroundImage = "url('bg/A.png')";
+  $('bgstage').style.backgroundImage = "url('../google64/bg/A.png')";
   if(window.MCQTrack) MCQTrack('intro_view', stageKey);
-  if(window.MCQBgm) MCQBgm.play('A', 'bgm/');
+  if(window.MCQBgm) MCQBgm.play('A', '../google64/bgm/');
 
   var i = -1, typing = null, cur = '';
   function speaker(w){ return w==='boss' ? I.boss : REIKA; }

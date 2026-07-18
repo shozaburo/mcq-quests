@@ -128,11 +128,11 @@
     document.body.appendChild(a);
   })();
 
-  /* ── オーディオ基盤（bgm.js?v=5）を動的ロード → エリアBGM再生 ── */
+  /* ── オーディオ基盤（bgm.js?v=7）を動的ロード → エリアBGM再生 ── */
   (function loadAudio(){
     if(window.MCQBgm){ MCQBgm.play(AREA, 'bgm/'); return; }
     var t = document.createElement('script');
-    t.src = ASSET_BASE + 'bgm.js?v=5';
+    t.src = ASSET_BASE + 'bgm.js?v=7';
     t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA, 'bgm/'); };
     document.head.appendChild(t);
   })();

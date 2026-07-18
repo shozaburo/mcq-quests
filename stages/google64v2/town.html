@@ -126,7 +126,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   if(CFG.board&&CFG.board.color) document.documentElement.style.setProperty('--gold', CFG.board.color);
 
   document.title=(ar.town||('エリア'+A))+' | '+(CFG.goalName||'')+' みんなのAI実践塾';
-  document.getElementById('hero').style.backgroundImage="url('bg/"+A+".png')";
+  document.getElementById('hero').style.backgroundImage="url('../google64/bg/"+A+".png')";
   document.getElementById('cStep').textContent='STEP '+(ar.step||'?');
   document.getElementById('cGoal').textContent=(CFG.goalId||'')+' '+(CFG.goalName||'');
   document.getElementById('tName').textContent=(ar.emoji||'')+' '+(ar.town||('エリア'+A));
@@ -201,7 +201,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
       .then(function(j){ if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; render(); } }).catch(function(){});
   }
   if(window.MCQTrack) MCQTrack('town_view', (CFG.goalId||'?')+':'+A);
-  if(window.MCQBgm) MCQBgm.play(A,'bgm/');
+  if(window.MCQBgm) MCQBgm.play(A,'../google64/bgm/');
 })();
 </script>
 </body>

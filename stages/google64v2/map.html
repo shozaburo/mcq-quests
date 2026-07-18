@@ -103,7 +103,7 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
       var sum=0; for(var n=1;n<=8;n++) sum+=Math.min(1,(CUM[a+n]||0)/TH);
       var pct=Math.round(sum/8*100); total+=pct;
       var full=pct>=100;
-      html+='<a class="town" href="town.html?a='+a+'" style="background-image:url(\'bg/'+a+'.png\')">'
+      html+='<a class="town" href="town.html?a='+a+'" style="background-image:url(\'../google64/bg/'+a+'.png\')">'
         +'<span class="shade"></span>'
         +(full?'<span class="done">🏅</span>':'')
         +'<span class="in">'
