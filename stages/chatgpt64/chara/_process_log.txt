@@ -1,8 +1,0 @@
-A: src=1254x1254 bbox=(291,71,977,1154) tachie=(591, 900) 589KB icon=276KB
-B: src=1254x1254 bbox=(339,108,997,1154) tachie=(587, 900) 734KB icon=0KB
-C: src=1254x1254 bbox=(247,58,1065,1154) tachie=(697, 900) 683KB icon=284KB
-D: src=1254x1254 bbox=(332,102,923,1147) tachie=(527, 900) 639KB icon=0KB
-E: src=1254x1254 bbox=(319,76,937,1165) tachie=(530, 900) 562KB icon=291KB
-F: src=1254x1254 bbox=(312,120,1015,1149) tachie=(637, 900) 770KB icon=328KB
-G: src=1254x1254 bbox=(110,102,1149,1133) tachie=(940, 900) 1043KB icon=281KB
-H: src=1254x1254 bbox=(261,133,960,1130) tachie=(653, 900) 823KB icon=351KB
