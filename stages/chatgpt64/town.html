@@ -102,7 +102,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 <script src="../../assets/bgm.js?v=8"></script>
 <script src="data/config.js?v=4"></script>
 <script src="data/areas.js?v=7"></script>
-<script src="data/characters.js?v=8"></script>
+<script src="data/characters.js?v=9"></script>
 <script src="data/quests/A.js"></script>
 <script src="data/quests/B.js"></script>
 <script src="data/quests/C.js"></script>
@@ -170,22 +170,22 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
     var row=document.getElementById('storyRow');
     var h='<a class="sub" style="text-align:center" href="cutscene.html?area='+A+'&scene=op">🎬 この街の物語（見なくてもOK）</a>';
     if(freed){
-      h+='<a class="sub" style="text-align:center;border-color:var(--gold);color:var(--gold)" href="cutscene.html?area='+A+'&scene=ed">🏅 解放エンディングを見る</a>'
-       +'<button class="sub" id="edPromptBtn" style="cursor:pointer;font-family:inherit">🎥 風刺EDムービーの生成プロンプト（Veo用）</button>';
+      h+='<a class="sub" style="text-align:center;border-color:var(--gold);color:var(--gold)" href="cutscene.html?area='+A+'&scene=ed">🏅 スタンプエンディングを見る</a>'
+       +'<button class="sub" id="edPromptBtn" style="cursor:pointer;font-family:inherit">🎥 お祝いEDムービーの生成プロンプト（Veo用）</button>';
     }else{
-      h+='<div style="text-align:center;font-size:.7rem;color:var(--dim)">🔒 この街の全クエストをみんなで解放すると、エンディングと風刺ムービーが解禁</div>';
+      h+='<div style="text-align:center;font-size:.7rem;color:var(--dim)">🔒 このルームの全クエストをみんなで解放すると、エンディングとお祝いムービーが解禁</div>';
     }
     row.innerHTML=h;
     var btn=document.getElementById('edPromptBtn');
     if(btn) btn.onclick=function(){
-      var p='【風刺EDムービー生成プロンプト】（動画生成AI（Veo等）に貼り、①自分のアバター画像 ②'+(ch.name||'街の主')+'の画像 を添付）\n\n'
-        +'水彩絵本調のアニメーション、8秒。舞台は'+(ar.loc||'')+'を思わせる「'+(ar.town||'')+'」。\n'
-        +'1. 街の主「'+(ch.name||'')+'」（添付②の姿）の腕に巻かれた《帝国公認》の腕章が、するりとほどけて風に舞う。\n'
-        +'2. 空から降ってきた「買収契約書」が金色の光に包まれ、紙吹雪になって散る。\n'
-        +'3. 主と挑戦者（添付①のアバター）が笑顔で拳を合わせ、背後で街に本来の色と光が戻っていく。\n'
-        +'4. ラストは、街の門から下ろされる無機質な帝国旗と、代わりに揚がる手作りの街の旗。\n'
-        +'・全体に温かい風刺のトーン（巨大企業の看板が外れて、土地の暮らしが戻る比喩）。\n'
-        +'・文字・ロゴ・実在ブランドは一切描かない。暴力表現なし、明るくユーモラスに。';
+      var p='【お祝いEDムービー生成プロンプト】（動画生成AI（Veo等）に貼り、①自分のアバター画像 ②'+(ch.name||'ルームの先生')+'の画像 を添付）\n\n'
+        +'やわらかい水彩絵本調のアニメーション、8秒。舞台は明るい現代日本のセミナールーム「'+(ar.town||'')+'」（'+(ar.loc||'')+'）。\n'
+        +'1. 先生「'+(ch.name||'')+'」（添付②の姿）が、挑戦者（添付①のアバター）の「ともだちカード」にスタンプをぽんと押す。\n'
+        +'2. スタンプがきらりと光り、紙吹雪と小さな星が舞って、部屋がぱっと明るくなる。\n'
+        +'3. 先生と挑戦者がハイタッチ（または拳をこつん）。窓の外に夕焼けと街の灯り。\n'
+        +'4. ラストは、豆柴のチャッピーがドアからひょこっと顔を出して、しっぽを振って祝福する。\n'
+        +'・全体に温かく前向きなトーン（学びをひとつ終えた達成感と、次の部屋へのわくわく）。\n'
+        +'・文字・ロゴ・実在ブランドは一切描かない。暴力表現なし、明るくかわいらしく。';
       var box=document.getElementById('edPromptBox');
       box.textContent=p; box.style.display='block';
       (navigator.clipboard?navigator.clipboard.writeText(p):Promise.reject())

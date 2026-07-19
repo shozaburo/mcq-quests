@@ -68,8 +68,7 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
 /* 初回はこのステージの導入シーンへ */
 (function(){
   try{
-    var stageKey = location.pathname.indexOf('claude64')>=0 ? 'claude64'
-                 : location.pathname.indexOf('mimasaka')>=0 ? 'mimasaka' : 'google64';
+    var stageKey = 'chatgpt64';
     window.__stageKey = stageKey;
     var p = new URLSearchParams(location.search);
     if(!localStorage.getItem('mcq_intro_'+stageKey) && p.get('skipintro')!=='1'){
@@ -81,7 +80,7 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
 <script src="../../assets/bgm.js?v=8"></script>
 <script src="data/config.js?v=4"></script>
 <script src="data/areas.js?v=7"></script>
-<script src="data/characters.js?v=8"></script>
+<script src="data/characters.js?v=9"></script>
 <script>
 (function(){
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
