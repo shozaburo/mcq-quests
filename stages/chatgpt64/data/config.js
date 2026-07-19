@@ -20,6 +20,10 @@ window.MCQ_CONFIG = {
   //      α_GAS改修_画像添付_貼り付けコード.md 参照。未デプロイでもURL貼り付けに誘導されるだけで壊れない）
   evidenceUpload: true,
 
+  // v11: 報告完了後のおまけを「討伐ムービー」ではなく「絆ムービー／絆イラスト」に
+  //      （テーマ＝AIとの関係性。実践の書き込み内容が呪文に織り込まれる）
+  bondMovie: true,
+
   logApiUrl: "",
 
   form: {

@@ -428,6 +428,36 @@
   }
   function bossImgUrl(){ return CH.img || ''; }
 
+  /* ── v11: 絆ムービー／絆イラスト（α用・CFG.bondMovie）──
+     γの「討伐」ではなく、AIとの関係性がテーマ。
+     チャッピーは3年前に突如現れた心の友。頼れる相談相手。
+     でも頼り「切って」いないか——主役はAIではなく、対話するあなた自身。
+     全体（これまでの学び）と部分（今日のひとつ）と関係性（結ぶ線）を1枚に。
+     書き込んだ実践内容（practice）をそのまま作品に織り込む。 */
+  function bondPrompts(practice){
+    var card = {};
+    try{ card = JSON.parse(localStorage.getItem('mcq_card_beta') || '{}'); }catch(e){}
+    var heroName = card.name || MEMBER.name || '挑戦者';
+    var deed = (practice && practice.trim())
+      ? practice.trim()
+      : '今日のクエスト「' + (QUEST.name || QID) + '」で学んだこと';
+    var refs = '（参照画像2枚を添付：①自分の挑戦者カード（アバター）画像 ②' + (CH.name || '先生') + 'の画像）';
+    var movie = '【絆ムービー】（8秒）' + refs + '\n\n'
+      + '夕方のAIセミナールーム。窓の外に街の灯りがともりはじめる。\n'
+      + '挑戦者「' + heroName + '」（参照画像①準拠）が、' + (CH.title || '') + 'の' + (CH.name || '先生') + '（参照画像②準拠）と机をはさんで向かい合い、今日の実践を報告している——「' + deed + '」。\n'
+      + '言葉が淡い金色の光の粒になって二人の間を行き交い、挑戦者のノートに小さな星として積もっていく（これまでの学び＝全体の中に、今日のひとつ＝部分が加わる）。\n'
+      + (CH.name || '先生') + 'は答えを差し出すのではなく、嬉しそうに耳を立てて聞き、最後にそっと前足を挙げる。挑戦者は自分の足で立ち上がり、扉へ歩き出す。' + (CH.name || '先生') + 'は窓辺で見送り、しっぽを振る。\n'
+      + 'テーマ：AIに頼り切るのではなく、対話を通じて自分で考え、自分で歩く「ほどよい距離の友情」。主役はAIではなく人間。\n'
+      + '水彩絵本調のアニメーション、あたたかい光、やさしく静かな余韻。文字・ロゴ・実在ブランドは描かない。';
+    var image = '【絆イラスト】（1枚）' + refs + '\n\n'
+      + '夕暮れのAIセミナールームで、挑戦者「' + heroName + '」（参照画像①準拠）と' + (CH.name || '先生') + '（参照画像②準拠）が机をはさんで語り合っている一場面。\n'
+      + '机には今日の実践「' + deed + '」を書いたノートが開かれ、ページから小さな金色の光が立ちのぼる。\n'
+      + '二人のまわりには、これまでの学びが星座のように浮かび（全体）、今日の学びがその中でひときわ輝き（部分）、挑戦者と' + (CH.name || '先生') + 'を結ぶやわらかな光の線（関係性）が描かれる。\n'
+      + '構図の主役は' + (CH.name || '先生') + 'ではなく挑戦者。' + (CH.name || '先生') + 'は半歩引いた聞き役として描く。\n'
+      + '水彩絵本調、あたたかいパステルカラー、やさしい表情。文字・ロゴ・実在ブランドは描かない。';
+    return { movie: movie, image: image };
+  }
+
   /* ───────── シーン ───────── */
 
   /* v9: ルート選択チップ（⚡Spark / 🆓無料）。routes を持つマスだけ表示 */
@@ -865,8 +895,31 @@
         + esc(MEMBER.name ? MEMBER.name + ' さんの活動として記録されました' : 'あなたの活動が記録に加わりました') + '</div>';
     }
 
-    // 討伐ムービー生成（実践100%以上で解放）
-    if(Number(pct) >= 100){
+    // ムービー生成（実践100%以上で解放）
+    if(Number(pct) >= 100 && CFG.bondMovie){
+      // v11: α用「絆ムービー／絆イラスト」——テーマはAIとの関係性（哲学おまけ）
+      var bpr = bondPrompts(practice);
+      html += '<div style="background:#0f1740;color:#eef4ff;border-radius:12px;padding:11px 13px;margin-top:12px">'
+        + '<div style="font-weight:900;margin-bottom:6px">🐕 きょうの「' + esc(CH.name || '先生') + 'と私」を作品にしよう（あなたが主役！）</div>'
+        + '<div style="font-size:.8rem;opacity:.85;margin-bottom:8px;line-height:1.7">'
+        +   'チャッピーは3年前に突如現れた、たよれる心の友。……でも、頼り<b>切って</b>いないかな？<br>'
+        +   'この作品のテーマは<b>「AIとの関係性」</b>——全体（これまでの学び）・部分（今日のひとつ）・関係性（結ぶ線）。'
+        +   '主役はAIではなく、対話するあなた自身です。書き込んだ実践の内容が、そのまま作品に織り込まれます。</div>'
+        + '<div style="font-size:.78rem;opacity:.8;margin-bottom:6px">🎬 動画AI用（Veo・Sora等）／🖼 画像AI用、好きな方をコピーして、下のボタンで<b>①自分のアバター画像</b>と<b>②' + esc(CH.name || '先生') + 'の画像</b>を添付するだけ。</div>'
+        + '<div style="font-weight:800;font-size:.78rem;margin-top:6px">🎬 絆ムービーの呪文（8秒動画）</div>'
+        + '<pre id="bpMovie" style="white-space:pre-wrap;font-size:.78rem;line-height:1.6;background:#080d24;border-radius:8px;padding:10px;max-height:140px;overflow:auto">' + esc(bpr.movie) + '</pre>'
+        + '<div style="font-weight:800;font-size:.78rem;margin-top:8px">🖼 絆イラストの呪文（1枚画像）</div>'
+        + '<pre id="bpImage" style="white-space:pre-wrap;font-size:.78rem;line-height:1.6;background:#080d24;border-radius:8px;padding:10px;max-height:140px;overflow:auto">' + esc(bpr.image) + '</pre>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
+        + '<button class="btn btn-primary" id="cpMovie" style="font-size:.82rem">📋 ムービー呪文をコピー</button>'
+        + '<button class="btn btn-primary" id="cpImage" style="font-size:.82rem">📋 イラスト呪文をコピー</button>'
+        + '</div>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
+        + '<a class="btn btn-ghost" id="dlBoss" href="' + esc(CH.tachie || CH.img || '') + '" download="' + esc(CH.name || 'sensei') + '.png" style="font-size:.82rem">🐕 ' + esc(CH.name || '先生') + 'の画像をDL</a>'
+        + '<button class="btn btn-ghost" id="dlAvatar" style="font-size:.82rem">🃏 自分のアバター画像をDL</button>'
+        + '<a class="btn btn-blue" href="https://gemini.google.com/" target="_blank" rel="noopener" style="font-size:.82rem">🪄 Geminiで生成</a>'
+        + '</div></div>';
+    } else if(Number(pct) >= 100){
       var rewardName = (res && res.rewards && res.rewards[0]) ? res.rewards[0].rewardName : '';
       var bp = battlePrompt(pct, practice, rewardName);
       html += '<div style="background:#0f1740;color:#eef4ff;border-radius:12px;padding:11px 13px;margin-top:12px">'
@@ -912,6 +965,31 @@
       (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){
         $('cpBp').textContent = '✅ コピーしました！';
       }).catch(function(){ $('cpBp').textContent = '⚠ 手動で選択してコピーしてください'; });
+    };
+    // v11: 絆ムービー／イラストのコピー＆アバターDL
+    function wireCopy(btnId, preId, label){
+      var b = $(btnId); if(!b) return;
+      b.onclick = function(){
+        var t = $(preId).textContent;
+        (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){
+          b.textContent = '✅ コピーしました！';
+        }).catch(function(){ b.textContent = '⚠ 手動で選択してコピーしてください'; });
+      };
+    }
+    wireCopy('cpMovie', 'bpMovie');
+    wireCopy('cpImage', 'bpImage');
+    if($('dlAvatar')) $('dlAvatar').onclick = function(){
+      var b64 = '';
+      try{ b64 = localStorage.getItem('mcq_avatar_beta') || ''; }catch(e){}
+      if(!b64){
+        $('dlAvatar').textContent = '🃏 まず挑戦者カードを作ってね（トップ→挑戦者カード）';
+        return;
+      }
+      var a = document.createElement('a');
+      a.href = b64.indexOf('data:') === 0 ? b64 : 'data:image/png;base64,' + b64;
+      a.download = 'avatar.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      $('dlAvatar').textContent = '✅ 保存しました！';
     };
     $('again').onclick = function(){ answered = 0; quizPct = 0; achieved = 0; sceneIntro(); };
   }
