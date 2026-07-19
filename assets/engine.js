@@ -340,6 +340,48 @@
     return Promise.resolve(null);
   }
 
+  /* ── 📷 証拠画像の添付アップロード（v10）──
+     CFG.evidenceUpload が true のステージのみ有効。
+     画像を端末側で縮小(JPEG/最大1600px)→ GAS quest_api の action=uploadEvidence へ
+     text/plain JSONでPOST → マス別アーカイブDriveフォルダに保存され、URLが返る。
+     GAS側の対応が必要（α_GAS改修_画像添付_貼り付けコード.md 参照）。未対応でも
+     失敗時はURL貼り付けに誘導するだけで壊れない。 */
+  function compressImage(file){
+    return new Promise(function(resolve, reject){
+      var fr = new FileReader();
+      fr.onerror = function(){ reject(new Error('read error')); };
+      fr.onload = function(){
+        var img = new Image();
+        img.onerror = function(){ reject(new Error('not an image')); };
+        img.onload = function(){
+          var MAX = 1600;
+          var w = img.width, h = img.height;
+          if(w > MAX || h > MAX){
+            var r = Math.min(MAX / w, MAX / h);
+            w = Math.round(w * r); h = Math.round(h * r);
+          }
+          var cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          cv.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(cv.toDataURL('image/jpeg', 0.85));
+        };
+        img.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+  function uploadEvidence(dataUrl, filename){
+    return fetch(API, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=UTF-8'},  // preflight回避（GASはこれで応答が読める）
+      body: JSON.stringify({
+        action:'uploadEvidence', token: MEMBER.token || '', goalId: CFG.goalId || '',
+        qid: QID, memberName: MEMBER.name || '', filename: filename || 'evidence.jpg',
+        dataUrl: dataUrl
+      })
+    }).then(function(r){ return r.json(); });
+  }
+
   /* ── メンバー入力欄（トークンも旧IDも無い時のみ） ── */
   function memberFieldsHtml(){
     if(MEMBER.token || (MEMBER.id && MEMBER.name)) return '';
@@ -662,15 +704,41 @@
       html += '<div style="font-size:.82rem;background:#fff8e1;border:1px dashed #f0c36d;border-radius:10px;padding:8px 12px;margin:2px 0 6px">'
             + '🍙 <b>サンクスUP!の試練</b>：このミッションは仲間を巻き込むと完了。助けてくれた仲間には、ボードの「🍙サンクスUP!」で感謝を送ろう（相手に+3Pt・あなたに+8EXP）。</div>';
     }
+    var UP = !!(CFG.evidenceUpload && API);   // v10: 画像添付が使えるステージか
     html += '<div class="field-label">実践したこと・感想（チャットにも共有されます）</div>'
           + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
-          + '<div class="field-label">証拠URL（スクショ・ドライブ等）<span id="evReq" style="color:#c62828"></span></div>';
+          + '<div class="field-label">証拠（スクショ' + (UP ? 'の画像添付 or ' : '・') + 'URL）<span id="evReq" style="color:#c62828"></span></div>';
     if(MIS && MIS.evidence){
       html += '<div style="font-size:.8rem;color:var(--muted);margin-top:2px">📎 証拠の例：' + esc(MIS.evidence) + '</div>';
     }
-    html += '<input type="url" id="rE" placeholder="https://...（実践報告は必須）">'
+    if(UP){
+      html += '<label class="btn btn-ghost" style="display:block;text-align:center;cursor:pointer;margin:6px 0 2px">'
+            + '📷 画像を添付する（スマホのスクショOK）'
+            + '<input type="file" id="rImg" accept="image/*" style="display:none"></label>'
+            + '<div id="rImgInfo" style="font-size:.8rem;color:var(--muted);text-align:center"></div>'
+            + '<div style="font-size:.74rem;color:var(--muted);text-align:center;margin-bottom:4px">またはURLを貼る👇（どちらか一方でOK）</div>';
+    }
+    html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">'
           + '<button class="btn btn-green" id="submit">⚔️ この内容で報告する（こうげき！）</button>';
     render(html);
+
+    // v10: 画像選択→端末側で縮小して保持（送信時にアップロード）
+    var pendingImg = null;
+    if(UP){
+      $('rImg').onchange = function(){
+        var f = this.files && this.files[0];
+        if(!f) return;
+        $('rImgInfo').textContent = '🖼 画像を縮小中…';
+        compressImage(f).then(function(dataUrl){
+          pendingImg = { dataUrl: dataUrl, name: (f.name || 'evidence.jpg').replace(/\.[^.]+$/, '') + '.jpg' };
+          var kb = Math.round(dataUrl.length * 0.75 / 1024);
+          $('rImgInfo').textContent = '✅ 添付準備OK：' + f.name + '（約' + kb + 'KB・報告と一緒に送信されます）';
+        }).catch(function(){
+          pendingImg = null;
+          $('rImgInfo').textContent = '⚠ この画像は読み込めませんでした。別の画像かURL貼り付けをお試しください。';
+        });
+      };
+    }
 
     function refreshEvReq(){
       var sel = root.querySelector('.opt.sel');
@@ -695,18 +763,34 @@
       var pct = lv ? lv.value : String(achieved || 25);
       var practice = $('rP').value.trim();
       var evidence = $('rE').value.trim();
-      // 不正抑止：実践125%以上は証拠URL必須
-      if(need && !/^https?:\/\/.+/.test(evidence)){
+      // 不正抑止：実践125%以上は証拠（画像添付 or URL）必須
+      if(need && !/^https?:\/\/.+/.test(evidence) && !pendingImg){
         $('rE').style.borderColor = '#ef5350';
-        $('rE').placeholder = '実践報告には証拠URLが必要です（https://…）';
+        $('rE').placeholder = UP ? '画像を添付するか、証拠URLを貼ってください' : '実践報告には証拠URLが必要です（https://…）';
         $('rE').focus();
         return;
       }
       var score = (quizPct > 0) ? (answered + '/' + QUEST.quiz.length) : '';
-      var btn = $('submit'); btn.disabled = true; btn.textContent = '⚔️ 送信中…';
-      if(window.MCQTrack) MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
-      postReport(pct, practice, evidence, kindOf(pct), score).then(function(res){
-        sceneDone(pct, practice, res);
+      var btn = $('submit'); btn.disabled = true;
+      // v10: 添付画像があれば先にアップロードして証拠URLに変換
+      var pre = Promise.resolve(evidence);
+      if(pendingImg){
+        btn.textContent = '📷 画像をアップロード中…';
+        pre = uploadEvidence(pendingImg.dataUrl, pendingImg.name).then(function(j){
+          if(j && j.ok && j.url) return evidence ? evidence + ' ' + j.url : j.url;
+          throw new Error((j && j.error) || 'upload failed');
+        });
+      }
+      pre.then(function(ev){
+        btn.textContent = '⚔️ 送信中…';
+        if(window.MCQTrack) MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
+        return postReport(pct, practice, ev, kindOf(pct), score).then(function(res){
+          sceneDone(pct, practice, res);
+        });
+      }).catch(function(){
+        btn.disabled = false; btn.textContent = '⚔️ この内容で報告する（こうげき！）';
+        $('rImgInfo').textContent = '⚠ 画像のアップロードに失敗しました。通信環境をご確認のうえ再送するか、スクショをドライブ等に上げてURLを貼ってください。';
+        if(window.MCQTrack) MCQTrack('evidence_upload_fail', (CFG.goalId||'?') + ':' + QID);
       });
     };
   }
