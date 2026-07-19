@@ -201,7 +201,7 @@
     function btn(t){ return '<button style="background:#22304a;color:#cfe8ff;border:1px solid #556;border-radius:6px;padding:2px 8px;font:11px Consolas,monospace;cursor:pointer" data-dev="'+t+'">'+t+'</button>'; }
     d.innerHTML = '<b>🛠 DEV MODE</b>'
       +'<div style="display:flex;gap:4px;flex-wrap:wrap">'
-      + btn('トップ')+btn('β盤')+btn('γ盤')+btn('λ盤')+btn('α盤')+btn('β導入')+btn('γ導入')+btn('λ導入')+btn('α導入')+btn('教室')+btn('カード')+'</div>'
+      + btn('トップ')+btn('β盤')+btn('β2盤')+btn('γ盤')+btn('λ盤')+btn('α盤')+btn('β導入')+btn('β2導入')+btn('γ導入')+btn('λ導入')+btn('α導入')+btn('教室')+btn('カード')+'</div>'
       +'<div style="display:flex;gap:4px;flex-wrap:wrap">'
       + btn('ファネル')+btn('進捗リセット')+btn('DEV解除')+'</div>'
       +'<div id="mcqDevOut" style="max-height:150px;overflow:auto;white-space:pre-wrap"></div>';
@@ -212,6 +212,8 @@
       var R = ROOT;
       if(t==='トップ') location.href = R+'index.html?start=1';
       else if(t==='β盤') location.href = R+'stages/google64/index.html?skipintro=1';
+      else if(t==='β2盤') location.href = R+'stages/google64v2/index.html?skipintro=1';
+      else if(t==='β2導入') location.href = R+'stages/google64v2/intro.html';
       else if(t==='γ盤') location.href = R+'stages/claude64/index.html?skipintro=1';
       else if(t==='β導入') location.href = R+'stages/google64/intro.html';
       else if(t==='γ導入') location.href = R+'stages/claude64/intro.html';

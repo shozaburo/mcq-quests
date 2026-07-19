@@ -19,6 +19,28 @@
   var QUEST = (window.MCQ_QUESTS || {})[QID];
   var URLS  = (window.MCQ_URLS   || {})[QID] || {};
   var API   = CFG.questApiUrl || '';
+  var AB    = CFG.stageAssetBase || '';   // 背景/BGMを他ステージと共用する時のベース（β2→google64）
+
+  /* ── v9: 並行ルート（⚡Spark / 🆓無料）──
+     QUEST.routes = { spark:{t,d,m125,evidence}, free:{t,d,m125,evidence} } がある
+     マスだけ有効。選択は localStorage（マスごと）＋グローバル既定（mcq_spark_on）。 */
+  var ROUTES = (QUEST && QUEST.routes) || null;
+  function sparkUser(){ try{ return localStorage.getItem('mcq_spark_on') === '1'; }catch(e){ return false; } }
+  function routeKey(){ return 'mcq_route_' + (CFG.goalId||'x') + '_' + QID; }
+  function currentRoute(){
+    if(!ROUTES) return '';
+    try{
+      var r = localStorage.getItem(routeKey());
+      if(r === 'spark' || r === 'free') return r;
+    }catch(e){}
+    return sparkUser() ? 'spark' : 'free';
+  }
+  function setRoute(r){
+    try{
+      localStorage.setItem(routeKey(), r);
+      if(r === 'spark') localStorage.setItem('mcq_spark_on', '1');   // 一度⚡を選んだ人は以降⚡が既定
+    }catch(e){}
+  }
 
   /* URL解決：クエスト定義優先→シート由来(urls.js)で補完 */
   var videoUrl   = (QUEST && QUEST.videoUrl)   || URLS.related || '';
@@ -61,7 +83,7 @@
 
   /* ── エリア背景画像を敷く（このステージ内 bg/{AREA}.png を優先） ── */
   (function setStageBg(){
-    var url = "bg/" + AREA + ".png";   // ページ（stages/xxx/）からの相対＝ステージ専用背景
+    var url = AB + "bg/" + AREA + ".png";   // ページ（stages/xxx/）からの相対＝ステージ専用背景
     var img = new Image();
     img.onload = function(){
       document.body.style.backgroundImage =
@@ -130,10 +152,10 @@
 
   /* ── オーディオ基盤（bgm.js?v=7）を動的ロード → エリアBGM再生 ── */
   (function loadAudio(){
-    if(window.MCQBgm){ MCQBgm.play(AREA, 'bgm/'); return; }
+    if(window.MCQBgm){ MCQBgm.play(AREA, AB + 'bgm/'); return; }
     var t = document.createElement('script');
-    t.src = ASSET_BASE + 'bgm.js?v=7';
-    t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA, 'bgm/'); };
+    t.src = ASSET_BASE + 'bgm.js?v=8';
+    t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA, AB + 'bgm/'); };
     document.head.appendChild(t);
   })();
 
@@ -192,6 +214,29 @@
 
   $('qBadge').textContent = QID;
   $('qName').textContent  = QUEST.name;
+
+  /* v9: 必要プランバッジ（β2〜のデータにplanがある時だけ表示） */
+  var PLAN_BADGE = {
+    free:  { t:'🆓 無料でOK',              bg:'#e8f5e9', bd:'#66bb6a', fg:'#2e7d32' },
+    pro:   { t:'💎 Google AI Pro',         bg:'#e3f2fd', bd:'#42a5f5', fg:'#1565c0' },
+    ultra: { t:'⚡ Ultra（Gemini Spark）',  bg:'#fff3e0', bd:'#ffa726', fg:'#e65100' },
+    ws:    { t:'🏢 Workspace Business+',   bg:'#e0f2f1', bd:'#26a69a', fg:'#00695c' }
+  };
+  if(QUEST.plan && PLAN_BADGE[QUEST.plan]){
+    var pb = PLAN_BADGE[QUEST.plan];
+    var pbEl = document.createElement('span');
+    pbEl.textContent = pb.t;
+    pbEl.style.cssText = 'display:inline-block;margin-left:8px;font-size:.66rem;font-weight:900;'
+      + 'background:' + pb.bg + ';border:1.5px solid ' + pb.bd + ';color:' + pb.fg + ';'
+      + 'border-radius:999px;padding:2px 10px;vertical-align:middle;white-space:nowrap';
+    var qn = $('qName'); if(qn) qn.appendChild(pbEl);
+    if(ROUTES){
+      var pbNote = document.createElement('span');
+      pbNote.textContent = '🆓 無料ルートあり';
+      pbNote.style.cssText = pbEl.style.cssText.replace(pb.bg,'#e8f5e9').replace(pb.bd,'#66bb6a').replace(pb.fg,'#2e7d32');
+      qn.appendChild(pbNote);
+    }
+  }
   $('charaName').innerHTML = esc(CH.name) + '<small>' + esc(CH.title) + '</small>';
 
   var img = $('charaImg');
@@ -255,7 +300,8 @@
         note: (practice || '') + (score ? '（クイズ' + score + '）' : ''),
         evidenceUrl: evidence || '',
         miss: String(QUIZ_MISS),
-        timeSec: String(Math.round((Date.now() - QUEST_T0) / 1000))
+        timeSec: String(Math.round((Date.now() - QUEST_T0) / 1000)),
+        route: ROUTES ? currentRoute() : ''
       });
       return fetch(API, {
         method:'POST',
@@ -342,16 +388,44 @@
 
   /* ───────── シーン ───────── */
 
+  /* v9: ルート選択チップ（⚡Spark / 🆓無料）。routes を持つマスだけ表示 */
+  function routeHtml(){
+    if(!ROUTES) return '';
+    var cur = currentRoute();
+    function chip(key, o){
+      var on = (cur === key), spark = (key === 'spark');
+      return '<div class="rchip" data-r="' + key + '" style="flex:1;min-width:140px;cursor:pointer;border-radius:12px;padding:9px 11px;'
+        + 'border:2px solid ' + (on ? (spark ? '#ffa726' : '#66bb6a') : 'rgba(128,128,128,.35)') + ';'
+        + 'background:' + (on ? (spark ? '#fff3e0' : '#e8f5e9') : 'rgba(128,128,128,.06)') + ';opacity:' + (on ? '1' : '.8') + '">'
+        + '<b style="font-size:.85rem">' + esc(o.t || (spark ? '⚡ Sparkルート' : '🆓 無料ルート')) + (on ? ' ✔' : '') + '</b>'
+        + '<div style="font-size:.72rem;color:var(--muted);margin-top:2px;line-height:1.5">' + esc(o.d || '') + '</div></div>';
+    }
+    return '<div style="margin-bottom:10px">'
+      + '<div style="font-weight:900;font-size:.8rem;margin-bottom:5px">🛣 進め方を選ぼう（あとから変更OK・どちらでも100%になれる）</div>'
+      + '<div id="routeBox" style="display:flex;gap:8px;flex-wrap:wrap">'
+      + chip('free',  ROUTES.free  || {})
+      + chip('spark', ROUTES.spark || {})
+      + '</div></div>';
+  }
+  function wireRoute(rerender){
+    var box = $('routeBox'); if(!box) return;
+    box.querySelectorAll('.rchip').forEach(function(c){
+      c.onclick = function(){ setRoute(c.getAttribute('data-r')); if(window.MCQBgm) MCQBgm.se('ok'); rerender(); };
+    });
+  }
+
   // 登場（＋2つの入口：順にやる or 実践から報告）
   function sceneIntro(){
     setStep(1);
     say(L.intro);
     var op = CH.openingVideo
       ? '<a class="btn btn-ghost" href="' + esc(CH.openingVideo) + '" target="_blank" rel="noopener">🎬 サイドストーリー（見なくてもOK）</a>' : '';
-    render('<div id="senpai"></div>'
+    render(routeHtml()
+      + '<div id="senpai"></div>'
       + '<button class="btn btn-primary" id="go">📖 順番に学ぶ（動画から）</button>'
       + '<button class="btn btn-ghost" id="skip">⚡ もう実践した → 報告だけする</button>'
       + op);
+    wireRoute(sceneIntro);
     $('go').onclick = sceneVideo;
     $('skip').onclick = function(){ sceneReport(true); };
     loadSenpai();
@@ -369,6 +443,7 @@
       list.forEach(function(c){
         h += '<div style="font-size:.82rem;margin-top:4px;line-height:1.6">'
           + '<span class="pct pct-' + (c.pct>=200?'200':c.pct>=150?'150':c.pct>=125?'125':'100') + '">' + c.pct + '%</span> '
+          + (c.route === 'spark' ? '<span title="Sparkルートで達成">⚡</span> ' : '')
           + '<b>' + esc(c.nick) + '</b>' + (c.date ? '<small style="color:var(--muted)">（' + esc(c.date) + '）</small>' : '')
           + '<br><span style="color:#5a5245">「' + esc(c.note) + '」</span></div>';
       });
@@ -434,9 +509,12 @@
       if(window.MCQTrack) MCQTrack('video_inline', (CFG.goalId||'?') + ':' + QID);
     });
     v.addEventListener('error', function(){
-      if(!triedRemote && REMOTE_VIDEO_BASE){
+      if(!triedRemote && (REMOTE_VIDEO_BASE || URLS.mp4)){
         triedRemote = true;
-        v.src = REMOTE_VIDEO_BASE + QID + '.mp4';   // 本番サーバーの動画を試す
+        // urls.js の mp4 が他ステージ相対（../google64/…）なら本番サーバーの同パスへ
+        v.src = URLS.mp4
+          ? 'https://re-gi.jp/mcq-site/stages/' + String(URLS.mp4).replace(/^(\.\.\/)+/, '')
+          : REMOTE_VIDEO_BASE + QID + '.mp4';
         return;
       }
       // mp4がどこにも無い → Google Driveの動画をページ内に埋め込む
@@ -463,7 +541,7 @@
     });
     v.addEventListener('pause', function(){ if(window.MCQBgm) MCQBgm.unduck(); });   // 元に戻す
     v.addEventListener('ended', function(){ if(window.MCQBgm){ MCQBgm.unduck(); MCQBgm.se('ok'); } bump(25); });
-    v.src = 'video/' + QID + '.mp4';
+    v.src = URLS.mp4 || ('video/' + QID + '.mp4');
   }
 
   // STEP2 アーカイブ 50%
@@ -555,17 +633,21 @@
       else                     levels.push({pct:25,  cls:'pct-25',  t:'動画を見た', d:'第一歩！'});
     }
     // 実践ラダー（常に選べる。125%以上は証拠必須）
+    // v9: ルート別ミッション（routes[route].m125/evidence があれば上書き）
     var MIS = (window.MCQ_MISSIONS || {})[QID];
+    var RT = ROUTES ? (ROUTES[currentRoute()] || {}) : null;
+    if(RT && (RT.m125 || RT.evidence)) MIS = Object.assign({}, MIS || {}, RT);
+    var routeTag = ROUTES ? (currentRoute() === 'spark' ? '（⚡Spark）' : '（🆓無料）') : '';
     levels.push({
       pct:125, cls:'pct-125',
-      t:'実践ミッションをやった' + (MIS && MIS.social ? ' 🍙' : ''),
+      t:'実践ミッションをやった' + routeTag + (MIS && MIS.social ? ' 🍙' : ''),
       d: MIS ? MIS.m125 : '学んだことを自分の資料・業務で実際に使った',
       needEv:true, social: !!(MIS && MIS.social)
     });
     levels.push({pct:150, cls:'pct-150', t:'仲間と勉強会をした', d:'このテーマで仲間に教えた・一緒に学んだ', needEv:true});
     levels.push({pct:200, cls:'pct-200', t:'飛躍的な成果が出た', d:'売上UP・大幅時短・新商品などの大きな成果', needEv:true});
 
-    var html = memberFieldsHtml();
+    var html = routeHtml() + memberFieldsHtml();
     if(fromSkip){
       html += '<div style="font-size:.85rem;color:var(--muted);margin-bottom:6px">'
             + 'クイズを飛ばして実践から報告します。証拠の添付をお願いします（みんなの記録として残ります）。</div>';
@@ -603,6 +685,7 @@
       };
     });
     refreshEvReq();
+    wireRoute(function(){ sceneReport(fromSkip); });   // v9: 報告画面でもルート切替可
 
     $('submit').onclick = function(){
       if(!captureMember()) return;
@@ -645,8 +728,25 @@
     var rec = elapsed + QUIZ_MISS * 600;
     function fmt(s){ return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
 
+    // v9: ⚡Sparkルートで達成した記録（街ページの⚡表示・照合用）
+    var doneRoute = ROUTES ? currentRoute() : '';
+    if(doneRoute === 'spark'){
+      try{
+        var sk = 'mcq_spark_done_' + (CFG.goalId||'x');
+        var arr = JSON.parse(localStorage.getItem(sk) || '[]');
+        if(arr.indexOf(QID) < 0){ arr.push(QID); localStorage.setItem(sk, JSON.stringify(arr)); }
+      }catch(e){}
+    }
+
     var html = '<div style="text-align:center;font-size:3rem">🎊</div>'
       + '<div style="text-align:center;font-weight:900;font-size:1.3rem;margin:4px 0">' + pct + '% で報告完了！</div>'
+      + (doneRoute
+        ? '<div style="text-align:center;margin:2px 0"><span style="display:inline-block;border-radius:999px;padding:3px 14px;font-weight:900;font-size:.8rem;'
+          + (doneRoute === 'spark'
+            ? 'background:#fff3e0;border:1.5px solid #ffa726;color:#e65100">⚡ Sparkルートで達成！'
+            : 'background:#e8f5e9;border:1.5px solid #66bb6a;color:#2e7d32">🆓 無料ルートで達成！')
+          + '</span></div>'
+        : '')
       + '<div style="text-align:center;margin:6px 0">'
       +   '<span style="display:inline-block;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:999px;padding:4px 16px;font-weight:900;color:#9c6f08">🏆 +' + pt + 'pt</span>'
       +   (noMiss ? ' <span style="display:inline-block;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:999px;padding:4px 16px;font-weight:900;color:#2e7d32">⭐ ノーミス討伐！ +50pt込</span>' : '')

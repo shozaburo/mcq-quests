@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>β Google64 マンダラチャートクエスト | みんなのAI実践塾</title>
+<title>β2 Google64・エージェント編 マンダラチャートクエスト | みんなのAI実践塾</title>
 <style>
   :root{--gold:#FFD700; --muted:#9aa3b5; --ink:#1a2233; --pink:#f06292; --green:#66bb6a;}
   *{box-sizing:border-box;}
@@ -228,7 +228,7 @@
 </div>
 <div class="toast" id="toast"></div>
 
-<script src="../../assets/bgm.js?v=7"></script>
+<script src="../../assets/bgm.js?v=8"></script>
 <script>
 /* 初回はワールド導入（麗夏の解説→教官挨拶）へ */
 (function(){
@@ -506,12 +506,25 @@
   renderBoard();
   if(window.MCQTrack) MCQTrack('board_view', (CFG.goalId||'?'));
 
-  /* v3: 本体GASからチーム進捗を取得してボード更新（demo値を上書き） */
+  /* v3: 本体GASからチーム進捗を取得してボード更新（demo値を上書き）
+     β2: spark(qidごとの⚡達成人数)も受け取り、マスに⚡を刻む */
+  var SPARKQ={};
+  function markSpark(){
+    document.querySelectorAll('a.qcell').forEach(function(el){
+      var qid=(el.querySelector('.qid')||{}).textContent||'';
+      if(!SPARKQ[qid] || el.querySelector('.sparkmark')) return;
+      var s=document.createElement('span');
+      s.className='sparkmark'; s.textContent='⚡';
+      s.style.cssText='position:absolute;top:1px;right:2px;font-size:.66rem;text-shadow:0 0 6px #ffa726';
+      el.style.position='relative'; el.appendChild(s);
+      el.title += '\n⚡ Sparkルート達成 '+SPARKQ[qid]+'人';
+    });
+  }
   if(API){
     fetch(API+'?action=board&goalId='+encodeURIComponent(CFG.goalId||'β'))
       .then(function(r){return r.json();})
       .then(function(j){
-        if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; renderBoard(); }
+        if(j&&j.ok){ if(j.cumPct) CUM=j.cumPct; if(j.spark) SPARKQ=j.spark; renderBoard(); markSpark(); }
       }).catch(function(){});
   }
 
@@ -529,10 +542,13 @@
           var medal = t.rank===1?'🥇':t.rank===2?'🥈':t.rank===3?'🥉':('#'+t.rank);
           h+='<div class="gitem"><b style="min-width:34px">'+medal+'</b>'
             +(t.avatarUrl?'<img src="'+esc(t.avatarUrl)+'" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--gold)" alt="">':'')
-            +'<div style="flex:1">'+esc(t.nick)+(t.noMiss?' <small style="color:#81c784">⭐ノーミス×'+t.noMiss+'</small>':'')+'</div>'
+            +'<div style="flex:1">'+esc(t.nick)
+              +(t.noMiss?' <small style="color:#81c784">⭐ノーミス×'+t.noMiss+'</small>':'')
+              +(t.spark?' <small style="color:#ffb74d" title="⚡Sparkルートで達成したマス数">⚡×'+t.spark+'</small>':'')
+            +'</div>'
             +'<b>'+t.score+'pt</b></div>';
         });
-        if(j.me && j.me.rank) h+='<div class="gitem" style="border:1.5px solid var(--gold)"><b>あなた</b><div style="flex:1">#'+j.me.rank+'位</div><b>'+j.me.score+'pt</b></div>';
+        if(j.me && j.me.rank) h+='<div class="gitem" style="border:1.5px solid var(--gold)"><b>あなた</b><div style="flex:1">#'+j.me.rank+'位'+(j.me.spark?' <small style="color:#ffb74d">⚡×'+j.me.spark+'</small>':'')+'</div><b>'+j.me.score+'pt</b></div>';
         el.innerHTML = h || '<div class="gitem">まだ記録がありません。最初の覇者になろう！</div>';
       }
       // HUDにスコア/順位
