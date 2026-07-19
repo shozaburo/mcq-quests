@@ -6,7 +6,7 @@
    ============================================================ */
 window.MCQ_URLS = {
   "A1": { archive:"https://drive.google.com/drive/folders/1tvDWZVuplWutPPIfPY2tf7TbHgptQ2OZ", drive:"1ySkZT9jUp2ndNj-s68xCPYAoHApZUBVH", info:"110FxFFQOZ5bS6iwyQsWCBY8ejUWMoyKh" },
-  "A2": { archive:"https://drive.google.com/drive/folders/1MVOAQHMsJPs4sAM6OODpcGt98ohFteux" },
+  "A2": { archive:"https://drive.google.com/drive/folders/1MVOAQHMsJPs4sAM6OODpcGt98ohFteux", drive:"1hREAmzIE1wZcLB9x69Hs8cqC3Aub56sO", info:"1OnL4_6kd1EhTEvD6GJsDOUd13b_Fsv_S" },
   "A3": { archive:"https://drive.google.com/drive/folders/1NE4hKGDYuM6-30jbZLRhu9S1TVTTjn18" },
   "A4": { archive:"https://drive.google.com/drive/folders/1BuN1xQoXCyW1R0LqAz0YNaro7lO6-KRc" },
   "A5": { archive:"https://drive.google.com/drive/folders/1uvcruqfAXtvQRM1Z1Ulrt4gKIvfoDbLS" },
