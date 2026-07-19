@@ -232,7 +232,7 @@
     var qn = $('qName'); if(qn) qn.appendChild(pbEl);
     if(ROUTES){
       var pbNote = document.createElement('span');
-      pbNote.textContent = '🆓 無料ルートあり';
+      pbNote.textContent = ((ROUTES.free && ROUTES.free.t) || '🆓 無料ルート') + 'あり';
       pbNote.style.cssText = pbEl.style.cssText.replace(pb.bg,'#e8f5e9').replace(pb.bd,'#66bb6a').replace(pb.fg,'#2e7d32');
       qn.appendChild(pbNote);
     }

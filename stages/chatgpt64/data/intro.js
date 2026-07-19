@@ -10,7 +10,7 @@ window.MCQ_INTRO = {
   boss: {
     name: "チャッピー",
     title: "おしゃべりルームの先生｜豆柴（ChatGPT）",
-    img: "",
+    img: "chara/A.png",
     color: "#10a37f"
   },
 

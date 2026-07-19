@@ -11,7 +11,7 @@ window.MCQ_CHARS = {
 
   A: { /* ChatGPT本体 */
     name: "チャッピー", title: "おしゃべりルームの先生｜豆柴（ChatGPT）",
-    img: "", emoji: "🐕", color: "#10a37f",
+    img: "chara/A_icon.png", tachie: "chara/A.png", emoji: "🐕", color: "#10a37f",
     lines: {
       intro: "このルームで覚えるのは、AIへの話しかけ方だワン。むずかしい呪文はいらないの。ふつうの言葉で頼めばちゃんと伝わる——まずそれを体験しようね。",
       video: "まずは動画を見てみてワン。話しかけるのって、思ってるよりずっとかんたんだよ。",
@@ -30,7 +30,7 @@ window.MCQ_CHARS = {
 
   B: { /* ChatGPT Work */
     name: "ワーク", title: "おまかせルームの先生｜ビーバー（ChatGPT Work）",
-    img: "", emoji: "🦫", color: "#8d6e63",
+    img: "chara/B_icon.png", tachie: "chara/B.png", emoji: "🦫", color: "#8d6e63",
     lines: {
       intro: "ここで覚えるのは、毎日の作業の「おまかせ」。要約もメールもExcelも、材料を渡してくれたら、あとはこっちでコツコツ組み上げる。あなたは確認と判断だけでいいの。",
       video: "まず動画をどうぞ。どこまで任せられるか、見たら想像が変わるから。",
@@ -49,7 +49,7 @@ window.MCQ_CHARS = {
 
   C: { /* GPT-Image 2.0 */
     name: "イメジ", title: "いろどりルームの先生｜クジャク（GPT-Image 2.0）",
-    img: "", emoji: "🦚", color: "#26a69a",
+    img: "chara/C_icon.png", tachie: "chara/C.png", emoji: "🦚", color: "#26a69a",
     lines: {
       intro: "このアトリエで学ぶのは、画像とコンテンツづくりよ。バナーもSNSの画像も、言葉で頼めば描けるの。センスは才能じゃなくて、頼み方。ここでその型を覚えましょ。",
       video: "まずは動画をどうぞ。言葉が絵になる瞬間、ちょっと感動するわよ。",
@@ -68,7 +68,7 @@ window.MCQ_CHARS = {
 
   D: { /* GPTs */
     name: "ジピ", title: "じぶん専用ルームの先生｜オウム（GPTs）",
-    img: "", emoji: "🦜", color: "#7e57c2",
+    img: "chara/D_icon.png", tachie: "chara/D.png", emoji: "🦜", color: "#7e57c2",
     lines: {
       intro: "この部屋で作るのは、じぶん専用のAI。あなたのやり方、覚えるよ。覚えるよ。一度教えれば、毎回説明しなくても「あなた流」で答えるようになるんだ。",
       video: "まず動画を見てね。教えたことをそっくり再現する様子、おもしろいよ。",
@@ -87,7 +87,7 @@ window.MCQ_CHARS = {
 
   E: { /* Codex */
     name: "コデ", title: "あいぼうルームの先生｜黒猫（Codex）",
-    img: "", emoji: "🐈‍⬛", color: "#37474f",
+    img: "chara/E_icon.png", tachie: "chara/E.png", emoji: "🐈‍⬛", color: "#37474f",
     lines: {
       intro: "ここから先は、PCの上で実際に手を動かすAIの話。ブラウザの中の会話とはひと味ちがう。…こわがらなくていい。安全な任せ方から、順番に教えるから。",
       video: "まず動画を。PCの上でAIが働くって、どういうことか見ておいで。",
@@ -106,7 +106,7 @@ window.MCQ_CHARS = {
 
   F: { /* Appshots・開発 */
     name: "アプショ", title: "ものづくりルームの先生｜カワウソ（Appshots）",
-    img: "", emoji: "🦦", color: "#ef6c00",
+    img: "chara/F_icon.png", tachie: "chara/F.png", emoji: "🦦", color: "#ef6c00",
     lines: {
       intro: "この工作室で覚えるのは、AIとのものづくりと仕事の回し方っと！画面はぱっと見せる、作業は同時に走らせる、明日にちゃんと引き継ぐ。現場のコツ、ぜんぶ教えるよ！",
       video: "まずは動画っと！説明3行より画面1枚——見せ方ひとつで仕事が変わるんだ。",
@@ -125,7 +125,7 @@ window.MCQ_CHARS = {
 
   G: { /* MCP */
     name: "エムシー", title: "つながりルームの先生｜タコ（MCP）",
-    img: "", emoji: "🐙", color: "#ec407a",
+    img: "chara/G_icon.png", tachie: "chara/G.png", emoji: "🐙", color: "#ec407a",
     lines: {
       intro: "この部屋で覚えるのは、道具のつなぎ方だよ〜。GmailもDriveもSlackも、バラバラに使ってたらもったいない。8本の足でぜんぶつないで、情報が勝手に流れるようにしちゃおうね〜。",
       video: "まずは動画を見てね〜。つながった瞬間の気持ちよさ、くせになるよ〜。",
@@ -144,7 +144,7 @@ window.MCQ_CHARS = {
 
   H: { /* /goal・完全自律 */
     name: "ゴール", title: "おるすばんルームの先生｜フクロウ（/goal）",
-    img: "", emoji: "🦉", color: "#5c6bc0",
+    img: "chara/H_icon.png", tachie: "chara/H.png", emoji: "🦉", color: "#5c6bc0",
     lines: {
       intro: "ホウ、よくここまで来たね。最後に学ぶのは、あなたが眠っている間もAIが働き続ける仕組み。指示を出す人から、仕組みを持つ人へ。ここが仕上げだよ。",
       video: "まず動画をごらん。夜のあいだに仕事が進む、その静かな景色を。",
