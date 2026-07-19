@@ -68,8 +68,7 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
 /* 初回はこのステージの導入シーンへ */
 (function(){
   try{
-    var stageKey = location.pathname.indexOf('claude64')>=0 ? 'claude64'
-                 : location.pathname.indexOf('mimasaka')>=0 ? 'mimasaka' : 'google64';
+    var stageKey = (location.pathname.match(/\/stages\/([^\/]+)\//)||[])[1] || 'google64';
     window.__stageKey = stageKey;
     var p = new URLSearchParams(location.search);
     if(!localStorage.getItem('mcq_intro_'+stageKey) && p.get('skipintro')!=='1'){

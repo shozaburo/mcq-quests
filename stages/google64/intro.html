@@ -71,7 +71,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   // 案内役＝タイトルで選んだナビ（麗夏 or 池坊サトル）
   var NAV = (window.MCQ_nav ? window.MCQ_nav() : null) || {name:'大塚麗夏', icon:'https://re-gi.jp/icon/reika_tujo.jpg', color:'#e0568a', tachie:'reika.png', point:'reika_point.png', joy:'reika_joy.png'};
   var REIKA = {name:NAV.name, img:(/^http/.test(NAV.icon)?NAV.icon:"../../"+NAV.icon), color:NAV.color};
-  var stageKey = location.pathname.indexOf('claude64')>=0 ? 'claude64' : 'google64';
+  var stageKey = (location.pathname.match(/\/stages\/([^\/]+)\//)||[])[1] || 'google64';
   var $ = function(id){ return document.getElementById(id); };
 
   // 表示順（新形式=script / 旧形式=steps を両対応）
