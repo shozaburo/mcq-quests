@@ -91,8 +91,8 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   }
 
   $('chip').textContent = '📖 はじめに — ' + (I.stage||'');
-  // 背景=このステージのAエリア背景
-  $('bgstage').style.backgroundImage = "url('../google64/bg/A.png')";
+  // 背景=初心者教室と同じセミナールーム（古民家）。麗夏のブリーフィングは室内で
+  $('bgstage').style.backgroundImage = "url('../../assets/venue-kominka.png')";
   if(window.MCQTrack) MCQTrack('intro_view', stageKey);
   if(window.MCQBgm) MCQBgm.play('A', '../google64/bgm/');
 
