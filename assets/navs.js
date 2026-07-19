@@ -9,16 +9,16 @@ window.MCQ_NAVS = {
     name: "大塚麗夏",
     tagline: "AI実践塾ガイド",
     color: "#e0568a",
-    icon: "https://re-gi.jp/icon/reika_tujo.jpg",
-    tachie: "reika.png", point: "reika_point.png", joy: "reika_joy.png",
+    icon: "assets/chara/reika_icon.png?v=2",
+    tachie: "reika.png?v=2", point: "reika_point.png?v=2", joy: "reika_joy.png?v=2",
     intro: "頼れるお姉さん系。テキパキ導いてくれる。"
   },
   satoru: {
     name: "池坊サトル",
     tagline: "AI実践塾コーチ",
     color: "#2f6fb2",
-    icon: "chara/satoru.png",   // ※iconは相対のためHUD等では都度解決
-    tachie: "satoru.png", point: "satoru_point.png", joy: "satoru_joy.png",
+    icon: "assets/chara/satoru_icon.png?v=2",  // ルート相対。stages配下では ../../ を付けて解決
+    tachie: "satoru.png?v=2", point: "satoru_point.png?v=2", joy: "satoru_joy.png?v=2",
     intro: "爽やかで丁寧なお兄さん系。優しく背中を押してくれる。"
   }
 };

@@ -68,7 +68,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   var I = window.MCQ_INTRO || {steps:[]};
   // 案内役＝デイジー（三和電子公式キャラ・このステージ固定）
   var NAV = {name:'デイジー', icon:'chara/daisy.png', color:'#f5b731', tachie:'daisy.png', point:'daisy.png', joy:'daisy.png'};
-  var REIKA = {name:NAV.name, img:NAV.icon, color:NAV.color};
+  var REIKA = {name:NAV.name, img:(/^http/.test(NAV.icon)?NAV.icon:"../../"+NAV.icon), color:NAV.color};
   var stageKey = 'mimasaka';
   var $ = function(id){ return document.getElementById(id); };
 
