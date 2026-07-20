@@ -259,6 +259,7 @@
   // v12: 演出スタイル注入＋なかよし度ゲージ（教官ごとに永続＝一緒に育つ）
   injectFxStyle();
   mountBond();
+  setQuestBg();   // v13: このルーム／街の背景を薄く敷く
 
   /* ── セリフ ── */
   var typing = null;
@@ -579,6 +580,28 @@
     var app = document.querySelector('.app');
     if(app){ app.classList.add('fx-shake'); setTimeout(function(){ app.classList.remove('fx-shake'); }, 520); }
     if(window.MCQBgm) MCQBgm.se('ng');
+  }
+
+  /* v13: クエスト画面本体にも、そのルーム／街の背景を薄く敷く（可読性のため暗めのオーバーレイ）。
+     bg/{AREA}.jpg → 無ければ .png を試し、どちらも無ければ単色のまま。 */
+  function setQuestBg(){
+    var exts = ['jpg', 'png'], i = 0;
+    function tryNext(){
+      if(i >= exts.length) return;              // 背景画像が無いステージはそのまま
+      var url = 'bg/' + AREA + '.' + exts[i++];
+      var im = new Image();
+      im.onload = function(){
+        document.body.style.backgroundImage =
+          "linear-gradient(rgba(15,12,26,.84), rgba(15,12,26,.92)), url('" + url + "')";
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundAttachment = 'fixed';
+        document.body.style.backgroundRepeat = 'no-repeat';
+      };
+      im.onerror = tryNext;
+      im.src = url;
+    }
+    tryNext();
   }
 
   /* ───────── シーン ───────── */
