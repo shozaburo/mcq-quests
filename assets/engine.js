@@ -970,25 +970,32 @@
       }
       var score = (quizPct > 0) ? (answered + '/' + QUEST.quiz.length) : '';
       var btn = $('submit'); btn.disabled = true;
-      // v10: 添付画像があれば先にアップロードして証拠URLに変換
+      // v16: 添付画像があれば先にアップロードして証拠URLに変換。
+      //   ただしアップロードに失敗しても報告は止めない（サーバー未対応でも前に進める）。
+      var imgFailed = false;
       var pre = Promise.resolve(evidence);
       if(pendingImg){
         btn.textContent = '📷 画像をアップロード中…';
         pre = uploadEvidence(pendingImg.dataUrl, pendingImg.name).then(function(j){
           if(j && j.ok && j.url) return evidence ? evidence + ' ' + j.url : j.url;
-          throw new Error((j && j.error) || 'upload failed');
-        });
+          imgFailed = true; return evidence;           // 失敗→画像なし（URL欄があればそれ）で続行
+        }).catch(function(){ imgFailed = true; return evidence; });
       }
       pre.then(function(ev){
         btn.textContent = SOFT ? '送信中…' : '⚔️ 送信中…';
-        if(window.MCQTrack) MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
+        if(window.MCQTrack){
+          MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
+          if(imgFailed) MCQTrack('evidence_upload_fail', (CFG.goalId||'?') + ':' + QID);
+        }
         return postReport(pct, practice, ev, kindOf(pct), score).then(function(res){
+          if(imgFailed && res) res.__imgFailed = true;   // 完了画面で軽く知らせる
+          else if(imgFailed) res = { __imgFailed: true };
           sceneDone(pct, practice, res);
         });
       }).catch(function(){
+        // ここに来るのは通信断など。報告自体が送れなかったときだけ再試行を促す。
         btn.disabled = false; btn.textContent = SOFT ? '💛 この内容で報告する' : '⚔️ この内容で報告する（こうげき！）';
-        $('rImgInfo').textContent = '⚠ 画像のアップロードに失敗しました。通信環境をご確認のうえ再送するか、スクショをドライブ等に上げてURLを貼ってください。';
-        if(window.MCQTrack) MCQTrack('evidence_upload_fail', (CFG.goalId||'?') + ':' + QID);
+        $('rImgInfo').textContent = '⚠ 送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。';
       });
     };
   }
@@ -1061,6 +1068,12 @@
     } else {
       html += '<div style="text-align:center;color:var(--muted);font-size:.9rem">'
         + esc(MEMBER.name ? MEMBER.name + ' さんの活動として記録されました' : 'あなたの活動が記録に加わりました') + '</div>';
+    }
+
+    // v16: 画像は保存できなかったが報告は通したとき、そっと知らせる（報告はブロックしない）
+    if(res && res.__imgFailed){
+      html += '<div style="background:#fff8e1;border:1px solid #f0c36d;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.78rem;color:#8a6d1a">'
+        + '📷 報告は受け付けました。ただし添付画像は今回サーバーに保存できませんでした（管理者の画像保存設定が未完了の可能性）。証拠を残したい場合は、スクショをドライブ等に上げてURLで再報告してください。</div>';
     }
 
     // ムービー生成（実践100%以上で解放）
