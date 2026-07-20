@@ -22,6 +22,11 @@ window.MCQ_CONFIG = {
   //   （画像アップは Google フォーム標準機能→Drive保存、判定はGemini→Google Chat通知）。
   //   ↓ フォーム作成後にベースURL（/viewform）を貼る。空のままなら従来のURL入力欄になる。
   reportFormUrl: "",
+  // ↑ フォーム作成後、公開URL（.../viewform）を貼るとサイトが自動で誘導する。
+  // ↓ フォーム各設問の entry.xxxxx を入れるとプリフィル（氏名・ゴール・クエスト・達成レベル）される。
+  //    プリフィルURLの取り方：フォーム編集→⋮→「事前入力したURLを取得」で各欄に仮値を入れ、
+  //    生成URLの entry.xxxxx=… の番号をここに転記（値は空でOK）。未設定でもフォームは開く。
+  reportFormEntry: { name:"", goalId:"", questId:"", questName:"", level:"" },
 
   // v11: 報告完了後のおまけを「討伐ムービー」ではなく「絆ムービー／絆イラスト」に
   //      （テーマ＝AIとの関係性。実践の書き込み内容が呪文に織り込まれる）

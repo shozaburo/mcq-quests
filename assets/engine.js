@@ -21,6 +21,24 @@
   var URLS  = (window.MCQ_URLS   || {})[QID] || {};
   var API   = CFG.questApiUrl || '';
   var AB    = CFG.stageAssetBase || '';   // 背景/BGMを他ステージと共用する時のベース（β2→google64）
+  var FORM  = CFG.reportFormUrl || '';    // v18: 実践報告フォーム（画像アップ＋Gemini判定＋Chat通知）。空なら従来どおり
+
+  /* v18: 実践報告フォームURLを、氏名・ゴール・クエスト・達成レベルでプリフィルして開く。
+     CFG.reportFormEntry = { name, goalId, questId, questName, level } に各フィールドの
+     entry.xxxx を設定するとプリフィルされる（未設定でもフォームは開く＝非破壊）。 */
+  function buildFormUrl(pct){
+    if(!FORM) return '';
+    var e = CFG.reportFormEntry || {};
+    var q = [];
+    function add(id, val){ if(id) q.push(encodeURIComponent(id) + '=' + encodeURIComponent(val)); }
+    try{ add(e.name, memberLabel()); }catch(_){}
+    add(e.goalId,   (CFG.goalId || '') + ' ' + (CFG.goalName || ''));
+    add(e.questId,  QID);
+    add(e.questName, (QUEST && QUEST.name) || QID);
+    add(e.level,    pct + '%');
+    if(!q.length) return FORM;
+    return FORM + (FORM.indexOf('?') >= 0 ? '&' : '?') + 'usp=pp_url&' + q.join('&');
+  }
 
   /* ── v9: 並行ルート（⚡Spark / 🆓無料）──
      QUEST.routes = { spark:{t,d,m125,evidence}, free:{t,d,m125,evidence} } がある
@@ -911,9 +929,18 @@
     var UP = !!(CFG.evidenceUpload && API);   // v10: 画像添付が使えるステージか
     html += '<div class="field-label">実践したこと・感想（チャットにも共有されます）</div>'
           + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
-          + '<div class="field-label">証拠（スクショ' + (UP ? 'の画像添付 or ' : '・') + 'URL）<span id="evReq" style="color:#c62828"></span></div>';
+          + '<div class="field-label">証拠（スクショ' + (UP ? 'の画像添付 or ' : (FORM ? 'の写真 or ' : '・')) + 'URL）<span id="evReq" style="color:#c62828"></span></div>';
     if(MIS && MIS.evidence){
       html += '<div style="font-size:.8rem;color:var(--muted);margin-top:2px">📎 証拠の例：' + esc(MIS.evidence) + '</div>';
+    }
+    // v18: 実践報告フォーム（画像アップ＋判定＋チャット通知）への誘導。ゲーム記録は下の「報告する」で残る。
+    if(FORM){
+      html += '<div style="background:#e8f4ff;border:1.5px solid #90c2f0;border-radius:12px;padding:10px 12px;margin:6px 0">'
+            + '<button type="button" class="btn btn-blue" id="openForm" style="width:100%">📷 写真をつけて報告する（フォーム）</button>'
+            + '<div style="font-size:.78rem;color:#33608f;margin-top:6px;line-height:1.6">'
+            +   '写真つきの報告はこのフォームから送ってね（判定コメントはチャットに届きます）。<br>'
+            +   'このゲームの記録・ポイントは、フォームのあと下の「報告する」ボタンで残ります。下のURL欄は使わなくてOK。</div>'
+            + '</div>';
     }
     if(UP){
       html += '<label class="btn btn-ghost" style="display:block;text-align:center;cursor:pointer;margin:6px 0 2px">'
@@ -947,8 +974,14 @@
     function refreshEvReq(){
       var sel = root.querySelector('.opt.sel');
       var need = sel && sel.getAttribute('data-need') === '1';
-      $('evReq').textContent = need ? '（必須）' : '（任意）';
+      $('evReq').textContent = FORM ? '（写真はフォームから）' : (need ? '（必須）' : '（任意）');
     }
+    // v18: フォーム誘導ボタン（選択中の達成レベルをプリフィルして開く）
+    if(FORM && $('openForm')) $('openForm').onclick = function(){
+      var lv = root.querySelector('input[name="lv"]:checked');
+      var pct = lv ? lv.value : '125';
+      window.open(buildFormUrl(pct), '_blank', 'noopener');
+    };
     root.querySelectorAll('#action .opt').forEach(function(op){
       op.onclick = function(){
         root.querySelectorAll('#action .opt').forEach(function(o){ o.classList.remove('sel'); });
@@ -967,8 +1000,9 @@
       var pct = lv ? lv.value : String(achieved || 25);
       var practice = $('rP').value.trim();
       var evidence = $('rE').value.trim();
-      // 不正抑止：実践125%以上は証拠（画像添付 or URL）必須
-      if(need && !/^https?:\/\/.+/.test(evidence) && !pendingImg){
+      // 不正抑止：実践125%以上は証拠（画像添付 or URL）必須。
+      // ただしフォーム運用時は写真をフォーム側で受けるため、ここでは必須にしない。
+      if(need && !FORM && !/^https?:\/\/.+/.test(evidence) && !pendingImg){
         $('rE').style.borderColor = '#ef5350';
         $('rE').placeholder = UP ? '画像を添付するか、証拠URLを貼ってください' : '実践報告には証拠URLが必要です（https://…）';
         $('rE').focus();
@@ -1185,6 +1219,15 @@
     if(res && res.__imgFailed){
       html += '<div style="background:#fff8e1;border:1px solid #f0c36d;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.78rem;color:#8a6d1a">'
         + '📷 報告は受け付けました。ただし添付画像は今回サーバーに保存できませんでした（管理者の画像保存設定が未完了の可能性）。証拠を残したい場合は、スクショをドライブ等に上げてURLで再報告してください。</div>';
+    }
+
+    // v18: 実践報告フォームの写真提出リマインド（未提出でも記録は済んでいる）
+    if(FORM && Number(pct) >= 125){
+      html += '<div style="background:#e8f4ff;border:1.5px solid #90c2f0;border-radius:12px;padding:10px 12px;margin-top:10px">'
+        + '<div style="font-weight:800;color:#33608f;font-size:.86rem;margin-bottom:6px">📷 写真の提出、まだの人はこちらから</div>'
+        + '<a class="btn btn-blue" href="' + esc(buildFormUrl(pct)) + '" target="_blank" rel="noopener" style="width:100%">写真をつけて報告フォームへ</a>'
+        + '<div style="font-size:.76rem;color:#33608f;margin-top:6px">判定コメントはチャットに届きます。ゲームの記録・ポイントはこの画面で反映ずみです。</div>'
+        + '</div>';
     }
 
     // v18: α用おまけ（bondMovie フラグ）
