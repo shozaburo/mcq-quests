@@ -16,9 +16,12 @@ window.MCQ_CONFIG = {
   // 本体GAS quest_api のWeb App URL（β/γと共通・goalId='α'で区別）
   questApiUrl: "https://script.google.com/macros/s/AKfycbzIpwPd49mlcRpuPa43fdg9P4n8mN2wEXFy2IcbrM87r5E90VjTHg1nhzVHn2b2Wxro/exec",
 
-  // v10: 報告画面で証拠画像を直接添付できる（GAS側 action=uploadEvidence 対応が必要。
-  //      α_GAS改修_画像添付_貼り付けコード.md 参照。未デプロイでもURL貼り付けに誘導されるだけで壊れない）
-  evidenceUpload: true,
+  // v16: 証拠画像は「実践報告フォーム（Googleフォーム）」で受ける方式に変更。
+  //   自作GASアップロードは廃止（evidenceUpload は使わない）。
+  //   reportFormUrl を設定すると、実践報告（125%以上）でこのフォームへ誘導する
+  //   （画像アップは Google フォーム標準機能→Drive保存、判定はGemini→Google Chat通知）。
+  //   ↓ フォーム作成後にベースURL（/viewform）を貼る。空のままなら従来のURL入力欄になる。
+  reportFormUrl: "",
 
   // v11: 報告完了後のおまけを「討伐ムービー」ではなく「絆ムービー／絆イラスト」に
   //      （テーマ＝AIとの関係性。実践の書き込み内容が呪文に織り込まれる）

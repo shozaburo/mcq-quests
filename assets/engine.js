@@ -249,15 +249,14 @@
     var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '🧑‍🏫';
     if(img.parentNode) img.replaceWith(d);
   }
-  // v14: 画面幅でアイコン／立ち絵を切り替え（下で定義。CH.img無しは絵文字）
-  //   （旧: 常にバスト表示だったのを、広い画面では立ち絵に）
+  // v17: キャラは常に顔アイコン（正方形バスト）表示。立ち絵はPCでバランスが悪いため使わない。
+  if(CH.img){ img.classList.remove('tachie'); img.onerror = toEmoji; img.src = CH.img; }
+  else { toEmoji(); }
 
   // v12: 演出スタイル注入＋なかよし度ゲージ（教官ごとに永続＝一緒に育つ）
   injectFxStyle();
   mountBond();
   setQuestBg();   // v13: このルーム／街の背景を薄く敷く
-  applyCharaResponsive();                                  // v14: 幅に応じてキャラ表示
-  window.addEventListener('resize', applyCharaResponsive); // 回転・リサイズで再適用
 
   /* ── セリフ ── */
   var typing = null;
@@ -592,8 +591,12 @@
       var url = 'bg/' + AREA + '.' + exts[i++];
       var im = new Image();
       im.onload = function(){
+        // SOFT（α等やさしい世界観）は絵本の背景を活かして明るめ。上だけ少し濃く＝ヘッダー白文字の可読性を確保。
+        var ov = SOFT
+          ? "rgba(20,16,30,.58) 0%, rgba(20,16,30,.34) 34%, rgba(20,16,30,.30) 100%"
+          : "rgba(15,12,26,.84), rgba(15,12,26,.92)";
         document.body.style.backgroundImage =
-          "linear-gradient(rgba(15,12,26,.84), rgba(15,12,26,.92)), url('" + url + "')";
+          "linear-gradient(" + ov + "), url('" + url + "')";
         document.body.style.backgroundSize = 'cover';
         document.body.style.backgroundPosition = 'center';
         document.body.style.backgroundAttachment = 'fixed';
@@ -788,10 +791,13 @@
   function sceneArchive(){
     setStep(2);
     say(L.archive || '次はアーカイブだ。過去の実演を見て、手を動かすイメージを固めよ。');
+    var aNote = archiveUrl
+      ? '<div style="font-size:.82rem;color:var(--muted);margin-bottom:8px;line-height:1.7">📚 フォルダの中に、この単元の<b>スライド・レポート（テキスト解説）</b>が入っています。じっくり学びたい人は、これで復習してから次に進もう。</div>'
+      : '';
     var aBtn = archiveUrl
-      ? '<a class="btn btn-blue" href="' + esc(archiveUrl) + '" target="_blank" rel="noopener">📁 アーカイブ（実演）を見る</a>'
+      ? '<a class="btn btn-blue" href="' + esc(archiveUrl) + '" target="_blank" rel="noopener">📁 アーカイブ（スライド・テキスト）で学ぶ</a>'
       : '<button class="btn btn-blue" disabled>📁 アーカイブ（準備中）</button>';
-    render(aBtn
+    render(aNote + aBtn
       + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → クイズへ</button>'
       + '<button class="btn btn-ghost" id="aSkip">クイズは飛ばして報告する</button>');
     $('aWatched').onclick = function(){ bump(50); answered = 0; sceneQuiz(0); };
