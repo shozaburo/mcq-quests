@@ -100,7 +100,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 </div>
 
 <script src="../../assets/bgm.js?v=8"></script>
-<script src="data/config.js?v=6"></script>
+<script src="data/config.js?v=7"></script>
 <script src="data/areas.js?v=7"></script>
 <script src="data/characters.js?v=9"></script>
 <script src="data/quests/A.js"></script>
@@ -134,6 +134,8 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   document.getElementById('tLoc').textContent=ar.loc?('🗺 ロケ地：'+ar.loc):'';
   document.getElementById('tDesc').textContent=ar.desc||'';
   document.getElementById('tGain').innerHTML='<b>🎁 この街を出るとき：</b>'+esc(ar.gain||'');
+  // v15: やさしい世界観（α等）は戦闘的な見出しをルーム向けに
+  if(CFG.soft){ var qh=document.querySelector('h2.qh'); if(qh) qh.textContent='📚 このルームのクエスト（1〜8）'; }
 
   /* 教官（立ち絵があれば表示・なければ絵文字） */
   var face=document.getElementById('sFace');

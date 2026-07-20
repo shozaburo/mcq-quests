@@ -12,6 +12,7 @@
   function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
   var CFG   = window.MCQ_CONFIG || {};
+  var SOFT  = !!CFG.soft;   // v15: やさしい世界観（α等）は「こうげき／討伐」を優しい言葉に
   var PAGE  = window.PAGE || {};
   var QID   = String(PAGE.questId || '').toUpperCase();
   var AREA  = QID.charAt(0);
@@ -566,7 +567,7 @@
   function fxCorrect(){
     FX_COMBO++;
     charaReact('happy');
-    var sub = FX_COMBO >= 2 ? (FX_COMBO + 'れんぞく正解！') : 'こうげき成功！';
+    var sub = FX_COMBO >= 2 ? (FX_COMBO + 'れんぞく正解！') : (SOFT ? 'よくできました！' : 'こうげき成功！');
     fxBanner('せいかい！', sub, true);
     fxConfetti();
     setBond(getBond() + (FX_COMBO >= 3 ? 9 : 6));
@@ -805,7 +806,7 @@
     if(qi===0){ FX_COMBO = 0; if(window.MCQTrack) MCQTrack('quiz_start', (CFG.goalId||'?') + ':' + QID); }
     var item = QUEST.quiz[qi];
     say('第' + (KANJI.charAt(qi) || (qi+1)) + '問！ ' + item.q);
-    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '　⚔️ 正解＝こうげき！</div>';
+    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + (SOFT ? '　✨ 正解でなかよし度アップ！' : '　⚔️ 正解＝こうげき！') + '</div>';
     item.choices.forEach(function(c, ci){
       html += '<div class="choice" data-ci="' + ci + '">' + esc(c) + '<span class="mark"></span></div>';
     });
@@ -826,7 +827,7 @@
         if(ok){ answered++; fxCorrect(); say(L.correct[qi % L.correct.length] + ' ' + item.explain); }
         else  { QUIZ_MISS++; fxWrong();  say(L.wrong + item.explain); }
         var nb = $('nextQ'); nb.removeAttribute('disabled');
-        nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : '審判を受ける →';
+        nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : (SOFT ? 'けっかを見る →' : '審判を受ける →');
         nb.onclick = function(){ (qi+1 < QUEST.quiz.length) ? sceneQuiz(qi+1) : sceneScore(); };
       };
     });
@@ -916,7 +917,7 @@
             + '<div style="font-size:.74rem;color:var(--muted);text-align:center;margin-bottom:4px">またはURLを貼る👇（どちらか一方でOK）</div>';
     }
     html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">'
-          + '<button class="btn btn-green" id="submit">⚔️ この内容で報告する（こうげき！）</button>';
+          + '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '⚔️ この内容で報告する（こうげき！）') + '</button>';
     render(html);
 
     // v10: 画像選択→端末側で縮小して保持（送信時にアップロード）
@@ -979,13 +980,13 @@
         });
       }
       pre.then(function(ev){
-        btn.textContent = '⚔️ 送信中…';
+        btn.textContent = SOFT ? '送信中…' : '⚔️ 送信中…';
         if(window.MCQTrack) MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
         return postReport(pct, practice, ev, kindOf(pct), score).then(function(res){
           sceneDone(pct, practice, res);
         });
       }).catch(function(){
-        btn.disabled = false; btn.textContent = '⚔️ この内容で報告する（こうげき！）';
+        btn.disabled = false; btn.textContent = SOFT ? '💛 この内容で報告する' : '⚔️ この内容で報告する（こうげき！）';
         $('rImgInfo').textContent = '⚠ 画像のアップロードに失敗しました。通信環境をご確認のうえ再送するか、スクショをドライブ等に上げてURLを貼ってください。';
         if(window.MCQTrack) MCQTrack('evidence_upload_fail', (CFG.goalId||'?') + ':' + QID);
       });
@@ -1030,7 +1031,7 @@
         : '')
       + '<div style="text-align:center;margin:6px 0">'
       +   '<span style="display:inline-block;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:999px;padding:4px 16px;font-weight:900;color:#9c6f08">🏆 +' + pt + 'pt</span>'
-      +   (noMiss ? ' <span style="display:inline-block;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:999px;padding:4px 16px;font-weight:900;color:#2e7d32">⭐ ノーミス討伐！ +50pt込</span>' : '')
+      +   (noMiss ? ' <span style="display:inline-block;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:999px;padding:4px 16px;font-weight:900;color:#2e7d32">' + (SOFT ? '⭐ ぜんもん正解！ +50pt込' : '⭐ ノーミス討伐！ +50pt込') + '</span>' : '')
       + '</div>'
       + (quizDone
         ? '<div style="text-align:center;font-size:.85rem;color:var(--muted)">⏱ 記録タイム <b>' + fmt(rec) + '</b>'
@@ -1042,7 +1043,7 @@
     if(res && res.ok){
       if(res.promoted && res.expGained){
         html += '<div style="text-align:center;font-weight:900;color:#2e7d32;font-size:1.1rem;margin:4px 0">'
-              + '⚔️ 討伐成功！ +' + res.expGained + ' EXP 獲得！</div>';
+              + (SOFT ? '✨ 達成！ +' : '⚔️ 討伐成功！ +') + res.expGained + ' EXP 獲得！</div>';
       }
       if(res.rewards && res.rewards.length){
         res.rewards.forEach(function(rw){
