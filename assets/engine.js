@@ -256,6 +256,10 @@
     toEmoji();
   }
 
+  // v12: 演出スタイル注入＋なかよし度ゲージ（教官ごとに永続＝一緒に育つ）
+  injectFxStyle();
+  mountBond();
+
   /* ── セリフ ── */
   var typing = null;
   function say(text, cb){
@@ -458,6 +462,125 @@
     return { movie: movie, image: image };
   }
 
+  /* ── v12: クイズ演出（大げさな正解／教官の表情リアクション／なかよし度＝一緒に育つ）──
+     ・正解：画面バナー「せいかい！」＋紙吹雪＋教官がぴょんと跳ねて笑顔（😊😆🤩）＋連続コンボ
+     ・不正解：画面がゆれ、教官がしょんぼり（😢）
+     ・なかよし度：教官（マス）ごとにlocalStorageで永続。正解で伸び、間違うと少し減る。
+       満タンで「親友！」。次回訪れても引き継がれる＝教官と一緒に育つ感。
+     ・表情の画像差分：characters.js に faces:{happy:'chara/A_happy.png', sad:'…'} を足せば
+       自動で顔が差し替わる（無ければ絵文字リアクション＋アニメで表現）。 */
+  var FX_COMBO = 0;
+  function injectFxStyle(){
+    if(document.getElementById('mcqFxStyle')) return;
+    var s = document.createElement('style'); s.id = 'mcqFxStyle';
+    s.textContent =
+      '@keyframes fxBounce{0%{transform:scale(1)}28%{transform:scale(1.2) translateY(-10px)}52%{transform:scale(.94) translateY(0)}72%{transform:scale(1.08)}100%{transform:scale(1)}}'
+    + '@keyframes fxSad{0%{transform:rotate(0)}25%{transform:rotate(-7deg) translateY(3px)}55%{transform:rotate(5deg)}100%{transform:rotate(0)}}'
+    + '.chara.fx-happy,.chara-emoji.fx-happy{animation:fxBounce .7s;box-shadow:0 0 0 4px rgba(255,213,79,.75),0 0 26px rgba(255,170,60,.8)!important}'
+    + '.chara.fx-sad,.chara-emoji.fx-sad{animation:fxSad .6s;filter:grayscale(.45) brightness(.92)}'
+    + '.stage{position:relative}'
+    + '.fx-face-badge{position:absolute;left:58px;top:-10px;font-size:34px;z-index:6;pointer-events:none;animation:fxPop 1.1s ease-out;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}'
+    + '@keyframes fxPop{0%{transform:scale(.2) translateY(10px);opacity:0}25%{transform:scale(1.35) translateY(-10px);opacity:1}70%{opacity:1}100%{transform:scale(1) translateY(-26px);opacity:0}}'
+    + '.fx-banner{position:fixed;left:50%;top:32%;transform:translate(-50%,-50%) scale(.5);z-index:99999;text-align:center;pointer-events:none;opacity:0;animation:fxBIn .28s cubic-bezier(.2,1.4,.5,1) forwards}'
+    + '.fx-banner.out{animation:fxBOut .4s forwards}'
+    + '.fx-banner-main{font-weight:900;font-size:clamp(2.2rem,10vw,3.4rem);color:#fff;-webkit-text-stroke:2.5px #2e9e4f;text-shadow:0 5px 0 rgba(0,0,0,.18),0 8px 20px rgba(0,0,0,.3)}'
+    + '.fx-banner.bad .fx-banner-main{-webkit-text-stroke:2.5px #d84343}'
+    + '.fx-banner-sub{display:inline-block;margin-top:6px;font-weight:900;font-size:1rem;color:#fff;background:rgba(0,0,0,.32);border-radius:999px;padding:3px 16px}'
+    + '@keyframes fxBIn{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}'
+    + '@keyframes fxBOut{to{opacity:0;transform:translate(-50%,-50%) scale(1.35)}}'
+    + '.fx-confetti{position:fixed;inset:0;pointer-events:none;z-index:99998;overflow:hidden}'
+    + '.fx-confetti span{position:absolute;top:-32px;will-change:transform;animation:fxFall 1.7s linear forwards}'
+    + '@keyframes fxFall{to{transform:translateY(112vh) rotate(400deg);opacity:.15}}'
+    + '.fx-shake{animation:fxShake .5s}'
+    + '@keyframes fxShake{0%,100%{transform:translateX(0)}15%{transform:translateX(-9px)}30%{transform:translateX(9px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}80%{transform:translateX(-3px)}}'
+    + '.choice.correct{border-color:#66bb6a!important;background:#e8f5e9!important;animation:fxCorrect .6s}'
+    + '@keyframes fxCorrect{0%{box-shadow:0 0 0 0 rgba(102,187,106,.75)}100%{box-shadow:0 0 0 16px rgba(102,187,106,0)}}'
+    + '.choice.correct .mark{color:#2e7d32;font-weight:900;font-size:1.5rem}'
+    + '.choice.wrong{border-color:#ef5350!important;background:#ffebee!important}'
+    + '.choice.wrong .mark{color:#c62828;font-weight:900;font-size:1.3rem}'
+    + '.fx-bond{margin:8px 2px 0}'
+    + '.fx-bond-bar{height:9px;border-radius:99px;background:rgba(0,0,0,.13);overflow:hidden}'
+    + '.fx-bond-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#ffd54f,#ff8a65);transition:width .7s cubic-bezier(.2,1,.4,1)}'
+    + '.fx-bond-label{font-size:.68rem;font-weight:800;color:var(--chara,#f57c00);margin-top:3px;display:block}'
+    + '.fx-bond.full .fx-bond-fill{background:linear-gradient(90deg,#ffd54f,#ff5e8a);box-shadow:0 0 10px rgba(255,138,101,.8)}';
+    document.head.appendChild(s);
+  }
+  function charaEl(){ return document.getElementById('charaImg') || document.querySelector('.chara-emoji'); }
+  function charaReact(kind){
+    var el = charaEl(); if(!el) return;
+    el.classList.remove('fx-happy','fx-sad'); void el.offsetWidth;
+    el.classList.add(kind === 'happy' ? 'fx-happy' : 'fx-sad');
+    // 表情の画像差分があれば一時的に差し替え（無ければ絵文字リアクションのみ）
+    var img = document.getElementById('charaImg');
+    if(img && CH.faces && CH.faces[kind]){
+      var base = CH.img; img.src = CH.faces[kind];
+      setTimeout(function(){ img.src = base; }, 1400);
+    }
+    var badge = document.createElement('div'); badge.className = 'fx-face-badge';
+    badge.textContent = kind === 'happy'
+      ? (FX_COMBO >= 3 ? '🤩' : (FX_COMBO >= 2 ? '😆' : '😊'))
+      : '😢';
+    var stage = el.closest('.stage') || el.parentNode;
+    if(stage){ stage.appendChild(badge); setTimeout(function(){ badge.remove(); }, 1200); }
+  }
+  function fxBanner(main, sub, good){
+    var o = document.createElement('div'); o.className = 'fx-banner ' + (good ? 'good' : 'bad');
+    o.innerHTML = '<div class="fx-banner-main">' + main + '</div>' + (sub ? '<div class="fx-banner-sub">' + sub + '</div>' : '');
+    document.body.appendChild(o);
+    setTimeout(function(){ o.classList.add('out'); }, 850);
+    setTimeout(function(){ o.remove(); }, 1300);
+  }
+  function fxConfetti(){
+    var wrap = document.createElement('div'); wrap.className = 'fx-confetti';
+    var em = ['🎉','✨','⭐','💛','🐾','🎊','💫'];
+    for(var i=0;i<24;i++){
+      var p = document.createElement('span'); p.textContent = em[i % em.length];
+      p.style.left = (Math.random()*100) + '%';
+      p.style.animationDelay = (Math.random()*0.35) + 's';
+      p.style.fontSize = (14 + Math.random()*18) + 'px';
+      wrap.appendChild(p);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(function(){ wrap.remove(); }, 2000);
+  }
+  function bondKey(){ return 'mcq_bond_' + (CFG.goalId || 'x') + '_' + AREA; }
+  function getBond(){ try{ var v = parseInt(localStorage.getItem(bondKey())||'0',10); return isNaN(v)?0:Math.max(0,Math.min(100,v)); }catch(e){ return 0; } }
+  function setBond(v){ v = Math.max(0,Math.min(100,v)); try{ localStorage.setItem(bondKey(), String(v)); }catch(e){} renderBond(); return v; }
+  function renderBond(){
+    var box = document.getElementById('fxBond'); if(!box) return;
+    var v = getBond();
+    box.classList.toggle('full', v >= 100);
+    box.querySelector('.fx-bond-fill').style.width = v + '%';
+    box.querySelector('.fx-bond-label').textContent =
+      (v >= 100 ? '💛 ' + (CH.name||'先生') + 'と親友になった！' : '💛 ' + (CH.name||'先生') + 'となかよし度 ' + v);
+  }
+  function mountBond(){
+    var stp = document.querySelector('.stepper');
+    if(!stp || document.getElementById('fxBond')) { renderBond(); return; }
+    var b = document.createElement('div'); b.className = 'fx-bond'; b.id = 'fxBond';
+    b.innerHTML = '<div class="fx-bond-bar"><div class="fx-bond-fill"></div></div><span class="fx-bond-label"></span>';
+    stp.parentNode.insertBefore(b, stp.nextSibling);
+    renderBond();
+  }
+  function fxCorrect(){
+    FX_COMBO++;
+    charaReact('happy');
+    var sub = FX_COMBO >= 2 ? (FX_COMBO + 'れんぞく正解！') : 'こうげき成功！';
+    fxBanner('せいかい！', sub, true);
+    fxConfetti();
+    setBond(getBond() + (FX_COMBO >= 3 ? 9 : 6));
+    if(window.MCQBgm){ MCQBgm.se('ok'); if(FX_COMBO >= 3) setTimeout(function(){ MCQBgm.se('fanfare'); }, 120); }
+  }
+  function fxWrong(){
+    FX_COMBO = 0;
+    charaReact('sad');
+    fxBanner('おしい！', 'もういちど かんがえよう', false);
+    setBond(Math.max(0, getBond() - 3));
+    var app = document.querySelector('.app');
+    if(app){ app.classList.add('fx-shake'); setTimeout(function(){ app.classList.remove('fx-shake'); }, 520); }
+    if(window.MCQBgm) MCQBgm.se('ng');
+  }
+
   /* ───────── シーン ───────── */
 
   /* v9: ルート選択チップ（⚡Spark / 🆓無料）。routes を持つマスだけ表示 */
@@ -635,7 +758,7 @@
   var KANJI = '一二三四五六七八九十';
   function sceneQuiz(qi){
     setStep(3);
-    if(qi===0 && window.MCQTrack) MCQTrack('quiz_start', (CFG.goalId||'?') + ':' + QID);
+    if(qi===0){ FX_COMBO = 0; if(window.MCQTrack) MCQTrack('quiz_start', (CFG.goalId||'?') + ':' + QID); }
     var item = QUEST.quiz[qi];
     say('第' + (KANJI.charAt(qi) || (qi+1)) + '問！ ' + item.q);
     var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '　⚔️ 正解＝こうげき！</div>';
@@ -656,8 +779,8 @@
           if(ci === ans){ c.classList.add('correct'); c.querySelector('.mark').textContent = '◯'; }
           else if(ci === picked){ c.classList.add('wrong'); c.querySelector('.mark').textContent = '✕'; }
         });
-        if(ok){ answered++; say(L.correct[qi % L.correct.length] + ' ' + item.explain); if(window.MCQBgm) MCQBgm.se('ok'); }
-        else  { QUIZ_MISS++; say(L.wrong + item.explain); if(window.MCQBgm) MCQBgm.se('ng'); }
+        if(ok){ answered++; fxCorrect(); say(L.correct[qi % L.correct.length] + ' ' + item.explain); }
+        else  { QUIZ_MISS++; fxWrong();  say(L.wrong + item.explain); }
         var nb = $('nextQ'); nb.removeAttribute('disabled');
         nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : '審判を受ける →';
         nb.onclick = function(){ (qi+1 < QUEST.quiz.length) ? sceneQuiz(qi+1) : sceneScore(); };
