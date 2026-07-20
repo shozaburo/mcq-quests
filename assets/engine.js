@@ -1007,6 +1007,111 @@
   }
 
   // v3: 討伐演出（EXP・ご褒美・称号・討伐ムービープロンプト・記録タイム）
+  /* ── v18: α用おまけ ──────────────────────────────────
+     ④ 各マスクリア → 先生（チャッピー等）のワンポイントアドバイス（動画枠つき）
+     ⑤ エリア全クリア（A1〜A8を報告完了）→ 記念写真／記念動画の生成おまけ
+        ・なかよし度（getBond）で先生の表情・行動が変わる
+        ・書き込んだ感想を呪文に織り込む／card.htmlでカード作成へ誘導
+     β/γ は従来どおり（bondMovie フラグでα限定） */
+  function clearKey(){ return 'mcq_cleared_' + (CFG.goalId || 'x'); }
+  function getCleared(){ try{ return JSON.parse(localStorage.getItem(clearKey()) || '[]') || []; }catch(e){ return []; } }
+  function recordClear(qid){
+    var a = getCleared();
+    if(a.indexOf(qid) < 0){ a.push(qid); try{ localStorage.setItem(clearKey(), JSON.stringify(a)); }catch(e){} }
+  }
+  function areaCleared(area){
+    var a = getCleared();
+    for(var n=1; n<=8; n++){ if(a.indexOf(area + n) < 0) return false; }
+    return true;
+  }
+  function adviceVideoPrompt(text){
+    return '【ワンポイントアドバイス動画・8秒】参照画像：' + (CH.name || '先生') + '（' + (CH.title || '') + '）。\n'
+      + '現代日本のAIセミナールームで、' + (CH.name || '先生') + 'がカメラ（見ている人）に向かって、'
+      + 'かわいい仕草（首をかしげる・前足をちょこんと挙げる）でワンポイントアドバイスをする。\n'
+      + 'セリフ：「' + text + '」\n'
+      + '水彩絵本調のあたたかいアニメーション、やさしい笑顔、8秒。文字・ロゴ・実在ブランドは描かない。';
+  }
+  function adviceBlock(){
+    var ad = (window.MCQ_ADVICE || {})[QID] || {};
+    var text = String(ad.text || L.done.replace('{pct}', achieved)).replace(/\{memberName\}/g, memberLabel());
+    var col = CH.color || '#10a37f';
+    var h = '<div style="background:#f0faf5;border:1.5px solid #b9e6cf;border-radius:14px;padding:12px 14px;margin-top:12px">'
+      + '<div style="display:flex;gap:10px;align-items:flex-start">'
+      + (CH.img
+          ? '<img src="' + esc(CH.img) + '" alt="" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid ' + col + ';flex:none">'
+          : '<span style="font-size:2rem;flex:none">' + (CH.emoji || '🐕') + '</span>')
+      + '<div><div style="font-weight:900;color:' + col + ';font-size:.82rem;margin-bottom:2px">💡 ' + esc(CH.name || '先生') + 'のワンポイント</div>'
+      + '<div style="font-size:.92rem;line-height:1.75">' + esc(text) + '</div></div></div>';
+    if(ad.video){
+      h += '<video src="' + esc(ad.video) + '" controls playsinline preload="metadata" style="width:100%;border-radius:10px;margin-top:10px;background:#000"></video>';
+    }
+    h += '</div>';
+    return h;
+  }
+  /* なかよし度で先生の表情・行動を分岐（記念生成の呪文に差し込む） */
+  function bondScene(bond){
+    var nm = CH.name || '先生';
+    if(bond >= 100) return { rel:'親友', face: nm + 'は満面の笑みで、うれしくてたまらない様子。挑戦者にぴょんと飛びついて頬をすり寄せ、ふたりはおそろいのポーズをとる', extra:'まわりに金色の光の粒とちいさなハートがふわりと舞う' };
+    if(bond >= 70)  return { rel:'大の仲良し', face: nm + 'はうれしそうに目を細め、しっぽを大きく振って挑戦者にぴったり寄り添う', extra:'やわらかな夕日の光に包まれる' };
+    if(bond >= 40)  return { rel:'なかよし', face: nm + 'はにこにこ笑顔で、挑戦者のとなりにちょこんと並ぶ', extra:'あたたかい室内のあかりに照らされる' };
+    return { rel:'これからよろしく', face: nm + 'はちょっと照れたように、半歩だけ距離をおいてはにかむ', extra:'静かな夕方のひかりがさしこむ' };
+  }
+  function memorialPrompts(practice, impression, bond){
+    var card = {}; try{ card = JSON.parse(localStorage.getItem('mcq_card_beta') || '{}'); }catch(e){}
+    var heroName = card.name || MEMBER.name || '挑戦者';
+    var nm = CH.name || '先生';
+    var bs = bondScene(bond);
+    var areaName = (window.MCQ_AREAS && window.MCQ_AREAS[AREA] && window.MCQ_AREAS[AREA].town) || 'このルーム';
+    var feel = (impression && impression.trim()) ? impression.trim()
+             : ((practice && practice.trim()) ? practice.trim() : 'ここまで学んできたこと');
+    var refs = '（参照画像2枚を添付：①自分の挑戦者カード（アバター）画像 ②' + nm + 'の画像）';
+    var common = '主役は' + nm + 'ではなく、対話してきた' + heroName + 'さん自身。'
+      + 'これは「' + areaName + '」（A1〜A8）を巡り終えた記念。ふたりのなかよし度は「' + bs.rel + '」。\n'
+      + heroName + 'さんの今の気持ち：「' + feel + '」が、やさしくにじむ。\n';
+    var image = '【記念写真】（1枚画像）' + refs + '\n\n'
+      + '現代日本のAIセミナールームで、「' + areaName + '」を巡り終えた記念のツーショット。\n'
+      + heroName + '（参照画像①準拠）と' + nm + '（参照画像②準拠）が並んで写る。\n'
+      + bs.face + '。' + bs.extra + '。\n'
+      + common
+      + '水彩絵本調、あたたかいパステルカラー、やさしい表情。文字・ロゴ・実在ブランドは描かない。';
+    var movie = '【記念動画】（8秒）' + refs + '\n\n'
+      + '夕暮れのAIセミナールーム。「' + areaName + '」を巡り終えた' + heroName + '（参照画像①準拠）と' + nm + '（参照画像②準拠）。\n'
+      + bs.face + '。' + bs.extra + '。\n'
+      + 'ふたりでカメラのほうを向いて、記念の一枚を撮るように笑い合う。最後に' + nm + 'がちょこんと前足を挙げてポーズ。\n'
+      + common
+      + '水彩絵本調のあたたかいアニメーション、やさしく静かな余韻、8秒。文字・ロゴ・実在ブランドは描かない。';
+    return { image: image, movie: movie, rel: bs.rel };
+  }
+  function memorialBlock(practice){
+    var bond = getBond();
+    var mp = memorialPrompts(practice, '', bond);
+    var nm = CH.name || '先生';
+    return '<div style="background:linear-gradient(160deg,#123a2b,#0f2f4a);color:#eef4ff;border-radius:14px;padding:13px 14px;margin-top:14px">'
+      + '<div style="text-align:center;font-size:1.8rem">🎉🏅</div>'
+      + '<div style="text-align:center;font-weight:900;font-size:1.05rem;margin:2px 0 6px">' + esc(nm) + 'のルーム、ぜんぶクリア！記念にのこそう</div>'
+      + '<div style="font-size:.8rem;opacity:.9;line-height:1.7;margin-bottom:9px">'
+      +   'A1〜A8をやりきった、おめでとうワン！🐾 いまの' + esc(nm) + 'は「<b>' + esc(mp.rel) + '</b>」——きみとの<b>なかよし度</b>で、写真の中の表情がちょっと変わるんだ。<br>'
+      +   'よかったら、今日の気持ちをひとこと書いてね。その言葉が記念の作品にそっと織り込まれるよ。</div>'
+      + '<textarea id="memImp" placeholder="例：最初はこわかったけど、話しかけるのが楽しくなった！" style="width:100%;min-height:56px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;padding:9px 11px;font-family:inherit;font-size:.86rem"></textarea>'
+      + '<div style="font-size:.78rem;opacity:.8;margin:9px 0 5px">下の呪文をコピーして、<b>①自分のアバター画像</b>と<b>②' + esc(nm) + 'の画像</b>を添えて生成AIへ。写真・動画、好きな方でどうぞ。</div>'
+      + '<div style="font-weight:800;font-size:.78rem;margin-top:6px">🖼 記念写真の呪文（1枚画像）</div>'
+      + '<pre id="mpImage" style="white-space:pre-wrap;font-size:.77rem;line-height:1.6;background:#071726;border-radius:8px;padding:10px;max-height:150px;overflow:auto">' + esc(mp.image) + '</pre>'
+      + '<div style="font-weight:800;font-size:.78rem;margin-top:8px">🎬 記念動画の呪文（8秒）</div>'
+      + '<pre id="mpMovie" style="white-space:pre-wrap;font-size:.77rem;line-height:1.6;background:#071726;border-radius:8px;padding:10px;max-height:150px;overflow:auto">' + esc(mp.movie) + '</pre>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px">'
+      +   '<button class="btn btn-primary" id="cpMpImage" style="font-size:.82rem">📋 写真の呪文をコピー</button>'
+      +   '<button class="btn btn-primary" id="cpMpMovie" style="font-size:.82rem">📋 動画の呪文をコピー</button>'
+      + '</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
+      +   '<a class="btn btn-ghost" id="dlBoss" href="' + esc(CH.tachie || CH.img || '') + '" download="' + esc(nm) + '.png" style="font-size:.82rem">🐕 ' + esc(nm) + 'の画像をDL</a>'
+      +   '<button class="btn btn-ghost" id="dlAvatar" style="font-size:.82rem">🃏 自分のアバター画像をDL</button>'
+      +   '<a class="btn btn-ghost" href="../../card.html" target="_blank" rel="noopener" style="font-size:.82rem">🎴 カードを作る／作り直す</a>'
+      +   '<a class="btn btn-blue" href="https://gemini.google.com/" target="_blank" rel="noopener" style="font-size:.82rem">🪄 生成AIをひらく</a>'
+      + '</div>'
+      + '<div style="font-size:.72rem;opacity:.7;margin-top:8px">🎴 まだ自分のカードが無い人は「カードを作る」から先に作って保存してね（アバター画像が呪文に使えるようになるよ）。</div>'
+      + '</div>';
+  }
+
   function sceneDone(pct, practice, res){
     setStep(4);
     say(L.done.replace('{pct}', pct));
@@ -1082,30 +1187,14 @@
         + '📷 報告は受け付けました。ただし添付画像は今回サーバーに保存できませんでした（管理者の画像保存設定が未完了の可能性）。証拠を残したい場合は、スクショをドライブ等に上げてURLで再報告してください。</div>';
     }
 
-    // ムービー生成（実践100%以上で解放）
-    if(Number(pct) >= 100 && CFG.bondMovie){
-      // v11: α用「絆ムービー／絆イラスト」——テーマはAIとの関係性（哲学おまけ）
-      var bpr = bondPrompts(practice);
-      html += '<div style="background:#0f1740;color:#eef4ff;border-radius:12px;padding:11px 13px;margin-top:12px">'
-        + '<div style="font-weight:900;margin-bottom:6px">🐕 きょうの「' + esc(CH.name || '先生') + 'と私」を作品にしよう（あなたが主役！）</div>'
-        + '<div style="font-size:.8rem;opacity:.85;margin-bottom:8px;line-height:1.7">'
-        +   'チャッピーは3年前に突如現れた、たよれる心の友。……でも、頼り<b>切って</b>いないかな？<br>'
-        +   'この作品のテーマは<b>「AIとの関係性」</b>——全体（これまでの学び）・部分（今日のひとつ）・関係性（結ぶ線）。'
-        +   '主役はAIではなく、対話するあなた自身です。書き込んだ実践の内容が、そのまま作品に織り込まれます。</div>'
-        + '<div style="font-size:.78rem;opacity:.8;margin-bottom:6px">🎬 動画AI用（Veo・Sora等）／🖼 画像AI用、好きな方をコピーして、下のボタンで<b>①自分のアバター画像</b>と<b>②' + esc(CH.name || '先生') + 'の画像</b>を添付するだけ。</div>'
-        + '<div style="font-weight:800;font-size:.78rem;margin-top:6px">🎬 絆ムービーの呪文（8秒動画）</div>'
-        + '<pre id="bpMovie" style="white-space:pre-wrap;font-size:.78rem;line-height:1.6;background:#080d24;border-radius:8px;padding:10px;max-height:140px;overflow:auto">' + esc(bpr.movie) + '</pre>'
-        + '<div style="font-weight:800;font-size:.78rem;margin-top:8px">🖼 絆イラストの呪文（1枚画像）</div>'
-        + '<pre id="bpImage" style="white-space:pre-wrap;font-size:.78rem;line-height:1.6;background:#080d24;border-radius:8px;padding:10px;max-height:140px;overflow:auto">' + esc(bpr.image) + '</pre>'
-        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
-        + '<button class="btn btn-primary" id="cpMovie" style="font-size:.82rem">📋 ムービー呪文をコピー</button>'
-        + '<button class="btn btn-primary" id="cpImage" style="font-size:.82rem">📋 イラスト呪文をコピー</button>'
-        + '</div>'
-        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
-        + '<a class="btn btn-ghost" id="dlBoss" href="' + esc(CH.tachie || CH.img || '') + '" download="' + esc(CH.name || 'sensei') + '.png" style="font-size:.82rem">🐕 ' + esc(CH.name || '先生') + 'の画像をDL</a>'
-        + '<button class="btn btn-ghost" id="dlAvatar" style="font-size:.82rem">🃏 自分のアバター画像をDL</button>'
-        + '<a class="btn btn-blue" href="https://gemini.google.com/" target="_blank" rel="noopener" style="font-size:.82rem">🪄 Geminiで生成</a>'
-        + '</div></div>';
+    // v18: α用おまけ（bondMovie フラグ）
+    if(CFG.bondMovie){
+      // ④ このマスをクリア記録（100%＝実践報告 or クイズ満点。エリア全クリア判定に使う）
+      if(Number(pct) >= 100) recordClear(QID);
+      // ④ 先生のワンポイントアドバイス（動画があれば動画も）
+      html += adviceBlock();
+      // ⑤ Aエリア全マス（A1〜A8）クリアで記念生成おまけを解放
+      if(areaCleared(AREA)) html += memorialBlock(practice);
     } else if(Number(pct) >= 100){
       var rewardName = (res && res.rewards && res.rewards[0]) ? res.rewards[0].rewardName : '';
       var bp = battlePrompt(pct, practice, rewardName);
@@ -1163,13 +1252,20 @@
         }).catch(function(){ b.textContent = '⚠ 手動で選択してコピーしてください'; });
       };
     }
-    wireCopy('cpMovie', 'bpMovie');
-    wireCopy('cpImage', 'bpImage');
+    // v18: 記念写真／記念動画のコピー＆感想の呪文への反映
+    wireCopy('cpMpImage', 'mpImage');
+    wireCopy('cpMpMovie', 'mpMovie');
+    var memImp = $('memImp');
+    if(memImp) memImp.oninput = function(){
+      var mp = memorialPrompts(practice, memImp.value, getBond());
+      if($('mpImage')) $('mpImage').textContent = mp.image;
+      if($('mpMovie')) $('mpMovie').textContent = mp.movie;
+    };
     if($('dlAvatar')) $('dlAvatar').onclick = function(){
       var b64 = '';
       try{ b64 = localStorage.getItem('mcq_avatar_beta') || ''; }catch(e){}
       if(!b64){
-        $('dlAvatar').textContent = '🃏 まず挑戦者カードを作ってね（トップ→挑戦者カード）';
+        $('dlAvatar').textContent = '🎴 まず「カードを作る」でカードを保存してね';
         return;
       }
       var a = document.createElement('a');
