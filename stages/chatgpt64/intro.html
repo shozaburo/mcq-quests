@@ -22,9 +22,10 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 .face img{width:92px;height:92px;border-radius:14px;object-fit:cover;object-position:top;border:3px solid #fff;
   box-shadow:0 4px 14px rgba(0,0,0,.4);background:#241a33}
 /* 透過の等身大立ち絵：大きく・枠なし・下端でセリフ枠に寄り添う */
-.face img.tachie{width:auto;height:min(96vh,860px);border:none;border-radius:0;object-fit:contain;object-position:top;
+.face img.tachie{width:auto;max-width:86vw;height:min(60vh,460px);border:none;border-radius:0;object-fit:contain;object-position:top;
   background:none;box-shadow:none;filter:drop-shadow(2px 4px 8px rgba(0,0,0,.5));
-  position:relative;z-index:0;margin-bottom:calc(-1 * min(48vh, 430px))}  /* バストアップ表示：腰から下はセリフ枠の裏へ */
+  position:relative;z-index:0;margin-bottom:calc(-1 * min(22vh,165px))}  /* バストアップ表示：幅は画面内に収め、腰から下はセリフ枠の裏へ */
+@media(min-width:721px){.face img.tachie{max-width:430px;height:min(82vh,660px);margin-bottom:calc(-1 * min(34vh,270px))}}
 /* セリフ枠 */
 .dlg{background:rgba(15,10,24,.93);border:2px solid var(--pink);border-radius:14px;padding:16px 18px 40px;min-height:130px;
   cursor:pointer;position:relative;z-index:2}
@@ -38,7 +39,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 .dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}
 .dots span.on{background:var(--gold)}
 /* 終了ボタン */
-.fin{display:none;flex-direction:column;gap:10px;padding:0 4px 8px}
+.fin{display:none;flex-direction:column;gap:10px;padding:0 4px 8px;position:relative;z-index:3}
 .fin.show{display:flex}
 .btn{display:block;text-align:center;background:linear-gradient(180deg,#ffe082,#c9992e);color:#1a1a2e;font-weight:900;
   border:none;border-radius:12px;padding:14px;font-size:15px;cursor:pointer;text-decoration:none;font-family:inherit;
@@ -97,12 +98,11 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   if(window.MCQTrack) MCQTrack('intro_view', stageKey);
   if(window.MCQBgm) MCQBgm.play('A', 'bgm/');
 
-  var i = -1, typing = null, cur = '';
+  var i = -1, typing = null, cur = '', faceGen = 0;
   function speaker(w){ return w==='boss' ? I.boss : REIKA; }
-  // 立ち絵候補（あれば大きく透過表示・無ければ丸アイコンにフォールバック）
-  var bo1='ABCDEFGH'.indexOf((I.boss&&I.boss.name)?'A':'A'); // Aエリアの教官
   function setFace(b, sp){
     var el = $('faceImg');
+    var myGen = ++faceGen;   // 世代トークン：古い非同期プリロードが後から上書きするのを防ぐ
     // ボス（チャッピー）は透過立ち絵で大きく表示
     if(b.who==='boss'){
       if(sp.img){ el.style.display=''; el.src = sp.img; el.classList.add('tachie'); }
@@ -113,8 +113,8 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
                   : b.pose==='point' ? NAV.point
                   : NAV.tachie));
     var probe = new Image();
-    probe.onload = function(){ el.src = tachie; el.classList.add('tachie'); };
-    probe.onerror = function(){ el.src = sp.img; el.classList.remove('tachie'); };
+    probe.onload  = function(){ if(myGen!==faceGen) return; el.style.display=''; el.src = tachie; el.classList.add('tachie'); };
+    probe.onerror = function(){ if(myGen!==faceGen) return; el.style.display=''; el.src = sp.img; el.classList.remove('tachie'); };
     probe.src = tachie;
   }
   function show(n){

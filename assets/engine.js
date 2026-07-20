@@ -248,18 +248,15 @@
     var d = document.createElement('div'); d.className = 'chara-emoji'; d.textContent = CH.emoji || '🧑‍🏫';
     if(img.parentNode) img.replaceWith(d);
   }
-  if(CH.img){
-    img.classList.remove('tachie');   // バスト表示（104x104角丸・object-fit:cover）
-    img.onerror = toEmoji;
-    img.src = CH.img;
-  } else {
-    toEmoji();
-  }
+  // v14: 画面幅でアイコン／立ち絵を切り替え（下で定義。CH.img無しは絵文字）
+  //   （旧: 常にバスト表示だったのを、広い画面では立ち絵に）
 
   // v12: 演出スタイル注入＋なかよし度ゲージ（教官ごとに永続＝一緒に育つ）
   injectFxStyle();
   mountBond();
   setQuestBg();   // v13: このルーム／街の背景を薄く敷く
+  applyCharaResponsive();                                  // v14: 幅に応じてキャラ表示
+  window.addEventListener('resize', applyCharaResponsive); // 回転・リサイズで再適用
 
   /* ── セリフ ── */
   var typing = null;
@@ -503,7 +500,10 @@
     + '.fx-bond-bar{height:9px;border-radius:99px;background:rgba(0,0,0,.13);overflow:hidden}'
     + '.fx-bond-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#ffd54f,#ff8a65);transition:width .7s cubic-bezier(.2,1,.4,1)}'
     + '.fx-bond-label{font-size:.68rem;font-weight:800;color:var(--chara,#f57c00);margin-top:3px;display:block}'
-    + '.fx-bond.full .fx-bond-fill{background:linear-gradient(90deg,#ffd54f,#ff5e8a);box-shadow:0 0 10px rgba(255,138,101,.8)}';
+    + '.fx-bond.full .fx-bond-fill{background:linear-gradient(90deg,#ffd54f,#ff5e8a);box-shadow:0 0 10px rgba(255,138,101,.8)}'
+    // v14: 横に広い画面では立ち絵（全身透過）を大きめに＝背景となじませる。狭い画面は角丸アイコン。
+    + '@media(min-width:721px) and (min-height:601px){.chara.tachie{width:168px!important;max-height:272px!important}}'
+    + '@media(min-width:1000px) and (min-height:601px){.chara.tachie{width:196px!important;max-height:320px!important}}';
     document.head.appendChild(s);
   }
   function charaEl(){ return document.getElementById('charaImg') || document.querySelector('.chara-emoji'); }
@@ -602,6 +602,27 @@
       im.src = url;
     }
     tryNext();
+  }
+
+  /* v14: 画面の横幅でキャラの見せ方を変える（スマホ対応）。
+     ・広い画面（≥721px）：全身の立ち絵（透過png）を大きめに＝背景となじむ
+     ・狭い画面（スマホ）：正方形の顔アイコンでコンパクトに
+     立ち絵が無ければアイコン、アイコンも無ければ絵文字にフォールバック。 */
+  function applyCharaResponsive(){
+    var img = document.getElementById('charaImg');
+    if(!img){ return; }               // すでに絵文字に置換済み
+    if(!CH || !CH.img){ toEmoji(); return; }
+    img.onerror = function(){
+      // 立ち絵の読み込み失敗→アイコン、アイコンも失敗→絵文字
+      if(CH.tachie && img.getAttribute('data-cur') === CH.tachie && CH.img){
+        img.classList.remove('tachie'); img.setAttribute('data-cur', CH.img); img.src = CH.img;
+      } else { toEmoji(); }
+    };
+    var wide = window.matchMedia('(min-width:721px) and (min-height:601px)').matches;
+    var useTachie = wide && !!CH.tachie;
+    var want = useTachie ? CH.tachie : CH.img;
+    img.classList.toggle('tachie', useTachie);
+    if(img.getAttribute('data-cur') !== want){ img.setAttribute('data-cur', want); img.src = want; }
   }
 
   /* ───────── シーン ───────── */
