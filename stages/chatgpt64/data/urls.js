@@ -13,7 +13,7 @@ window.MCQ_URLS = {
   "A6": { archive:"https://drive.google.com/drive/folders/1565LeIk13uSSwuqokwRJWS1UZs1jju-d", drive:"1xBh6NZZ_xRv8MM5-cbglay1C_N4HB10c", info:"1STxeTIAjN0Hmc8pSSWD8bycDxQaafcWN" },
   "A7": { archive:"https://drive.google.com/drive/folders/1npI_SO-LpxzxxG7XhGWx0NN3-8Wj2Yk5", drive:"1lxe7CMgETKnrJlYch6OljS3pRErtefU_", info:"1FPlvWcsMn0e8Vmnn_xuHe4RIMU7ixqgy" },
   "A8": { archive:"https://drive.google.com/drive/folders/1Ayg7RpwGR7fnADEBsO0bzgG1yBaUmCTu", drive:"1zCYggvVGtAz-8l3LAJR55UXIobh4GHnx", info:"1tPPy-nUGFNEuJK8tKSg0q-OqXitvqNSg" },
-  "B1": { archive:"https://drive.google.com/drive/folders/1XtlZfJGCFvCKm9qbYKRoOdeDTIT6FtUR" },
+  "B1": { archive:"https://drive.google.com/drive/folders/1XtlZfJGCFvCKm9qbYKRoOdeDTIT6FtUR", drive:"1ygoob9J1arYUMI53sxSP-jaoks2VKtWy", info:"141sMIDttCyv_AuMyoyDPEMZcuxtTIhb5" },
   "B2": { archive:"https://drive.google.com/drive/folders/1c2STnbGv8Napm6WC2uzS9vFZ26vo8oU_" },
   "B3": { archive:"https://drive.google.com/drive/folders/1h19IZYXGVVGVqwB5maAjxyqfE1COskLY" },
   "B4": { archive:"https://drive.google.com/drive/folders/160s_RUCpXKjgAUI0CjQN-H2BZncN2PJZ" },

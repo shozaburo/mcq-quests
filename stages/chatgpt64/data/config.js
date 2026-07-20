@@ -3,7 +3,7 @@
    ここを直せば全64ページに反映される
    ============================================================ */
 window.MCQ_CONFIG = {
-  goalId: "α",
+  goalId: "θ",
   goalName: "ChatGPT64",
 
   // マンダラボードの見た目（ご褒美イラスト＝タイルの下に隠れた絵）
@@ -13,7 +13,7 @@ window.MCQ_CONFIG = {
     threshold: 400       // 1マス開放の累積%閾値（progress.js側が優先）
   },
 
-  // 本体GAS quest_api のWeb App URL（β/γと共通・goalId='α'で区別）
+  // 本体GAS quest_api のWeb App URL（β/γと共通・goalId='θ'で区別）
   questApiUrl: "https://script.google.com/macros/s/AKfycbzIpwPd49mlcRpuPa43fdg9P4n8mN2wEXFy2IcbrM87r5E90VjTHg1nhzVHn2b2Wxro/exec",
 
   // v16: 証拠画像は「実践報告フォーム（Googleフォーム）」で受ける方式に変更。
