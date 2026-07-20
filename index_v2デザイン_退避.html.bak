@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>みんなのAI実践塾 マンダラチャートクエスト</title>
+<style>
+:root{--gold:#FFD700;--gold-deep:#b8860b;--ink:#f2f0ea;--dim:#9aa3b5;--pink:#f06292;--purple:#7e57c2;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.6;overflow:hidden;
+  background-image:radial-gradient(1000px 500px at 50% -5%,rgba(255,215,0,.14),transparent 70%),
+    radial-gradient(2px 2px at 18% 30%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1.5px 1.5px at 72% 18%,rgba(255,255,255,.6),transparent),
+    radial-gradient(2px 2px at 85% 55%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1.5px 1.5px at 35% 70%,rgba(255,255,255,.45),transparent),
+    radial-gradient(2px 2px at 55% 42%,rgba(255,255,255,.5),transparent);}
+.stage{height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  max-width:760px;margin:0 auto;padding:20px 14px;text-align:center}
+
+/* ===== タイトル画面 ===== */
+#title.hide{display:none}
+.tt-sub{color:var(--gold);letter-spacing:.3em;font-weight:800;font-size:clamp(.7rem,2.4vw,.9rem)}
+.tt-main{font-weight:900;font-size:clamp(1.7rem,6.4vw,3rem);line-height:1.3;margin:10px 0 4px;
+  background:linear-gradient(180deg,#fff6d8,var(--gold) 60%,#c98f00);-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 30px rgba(255,215,0,.25);}
+.tt-cap{color:var(--dim);font-size:clamp(.78rem,2.6vw,.95rem);margin-bottom:34px}
+.start{background:linear-gradient(180deg,#ffe082,var(--gold-deep));color:#1a1a2e;font-weight:900;font-size:clamp(1rem,3.4vw,1.2rem);
+  border:none;border-radius:999px;padding:16px 54px;cursor:pointer;font-family:inherit;
+  box-shadow:0 6px 26px rgba(255,215,0,.35);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.tt-foot{position:absolute;bottom:16px;left:0;right:0;color:var(--dim);font-size:.72rem}
+
+/* ===== コンテンツ選択 ===== */
+#select{display:none;width:100%}
+#select.show{display:block}
+.sel-h{font-weight:900;font-size:clamp(1.1rem,4vw,1.5rem);color:var(--gold);margin-bottom:4px}
+.sel-c{color:var(--dim);font-size:.85rem;margin-bottom:16px}
+.worlds{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+@media(max-width:560px){.worlds{grid-template-columns:1fr}}
+.world{position:relative;border:2px solid rgba(255,255,255,.15);border-radius:16px;padding:16px 15px;text-decoration:none;color:#fff;
+  background:linear-gradient(150deg,#3a4160,#20263f);box-shadow:0 5px 18px rgba(0,0,0,.35);overflow:hidden}
+.world:hover{transform:translateY(-3px);border-color:var(--gold)}
+.world .we{font-size:1.9rem}
+.world .wt{font-weight:900;font-size:1rem;margin-top:2px}
+.world .wd{font-size:.76rem;color:#cfd3e2;margin-top:3px;line-height:1.55}
+.world .wtag{position:absolute;top:10px;right:10px;font-size:.62rem;font-weight:900;border-radius:999px;padding:2px 10px}
+.world.beta{border-color:rgba(255,215,0,.55)} .world.beta .wtag{background:var(--gold);color:#1a1a2e}
+.world.gamma{border-color:rgba(126,87,194,.65)} .world.gamma .wtag{background:var(--purple);color:#fff}
+.world.lambda{border-color:rgba(245,183,49,.6)} .world.lambda .wtag{background:#f5b731;color:#1a1a2e}
+.world.alpha{border-color:rgba(16,163,127,.65)} .world.alpha .wtag{background:#10a37f;color:#fff}
+.world.soon{opacity:.55;pointer-events:none} .world.soon .wtag{background:#555;color:#ddd}
+.world.beta2{border-color:rgba(124,77,255,.65)} .world.beta2 .wtag{background:#7C4DFF;color:#fff}
+.subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:var(--ink);border-radius:999px;
+  padding:8px 18px;font-size:.82rem;font-weight:800;text-decoration:none}
+.sub:hover{border-color:var(--gold);color:var(--gold)}
+.back{margin-top:18px;background:none;border:none;color:var(--dim);font-size:.78rem;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- タイトル画面 -->
+  <div id="title">
+    <div class="tt-sub">みんなのAI実践塾</div>
+    <h1 class="tt-main">マンダラチャート<br>クエスト</h1>
+    <div class="tt-cap">— 学びを、冒険に。 —</div>
+    <button class="start" id="startBtn">▶ ゲームスタート</button>
+    <div class="tt-foot">みんなのAI実践塾 ｜ MANDALA CHART QUEST</div>
+  </div>
+
+  <!-- ナビ選択 -->
+  <div id="navpick" style="display:none;width:100%">
+    <div class="sel-h">🧭 案内役を選ぼう</div>
+    <div class="sel-c">冒険をサポートしてくれる相棒です。あとで変えられます。</div>
+    <div class="worlds" id="navCards" style="grid-template-columns:1fr 1fr"></div>
+    <button class="back" id="navBack">← タイトルへ戻る</button>
+  </div>
+
+  <!-- コンテンツ選択 -->
+  <div id="select">
+    <div class="sel-h">🗺 ワールドを選ぼう</div>
+    <div class="sel-c">ステージは今後も増えていきます。好きなワールドから冒険を始めよう。</div>
+    <div class="worlds">
+      <a class="world beta" href="stages/google64v2/map.html">
+        <span class="wtag">第1部</span>
+        <div class="we">🔍</div>
+        <div class="wt">Google・Gemini<span style="font-size:.8em;opacity:.85">（東日本編）</span></div>
+        <div class="wd">Googleの土台からGemini Notebook・AIエージェントまで、北海道から旅する8つの街の64クエスト。⚡Spark（Ultra）を使う人は⚡ルート、なくても🆓無料ルートで最後まで進める。まずはここから。</div>
+      </a>
+      <a class="world gamma" href="stages/claude64/map.html">
+        <span class="wtag">第2部</span>
+        <div class="we">🤖</div>
+        <div class="wt">Claude code cowork<span style="font-size:.8em;opacity:.85">（西日本編）</span></div>
+        <div class="wd">相棒Claudeに仕事を任せ、AIと協働する64クエスト。神戸から旅する8つの街。Excel・資料・自動化までAIを部下に。</div>
+      </a>
+      <a class="world lambda" href="stages/mimasaka/index.html">
+        <span class="wtag">企業編</span>
+        <div class="we">🏭</div>
+        <div class="wt">美作クエスト：三和電子64</div>
+        <div class="wd">津山・美作の親方衆とともに、AIで進化する実装屋を目指す64の行動クエスト。案内役はデイジー。</div>
+      </a>
+      <a class="world alpha" href="stages/chatgpt64/map.html">
+        <span class="wtag">第3部</span>
+        <div class="we">🐕</div>
+        <div class="wt">ChatGPT work codex<span style="font-size:.8em;opacity:.85">（セミナールーム編）</span></div>
+        <div class="wd">豆柴のチャッピーと学ぶChatGPT・Work・Codexの64クエスト。8つのルームを回って、目指せチャッピーの親友。</div>
+      </a>
+    </div>
+    <div class="subrow">
+      <a class="sub" href="nyumon.html">🏫 パソコン初心者教室（大塚麗夏がサポート）</a>
+      <a class="sub" href="card.html">🃏 挑戦者カードを作る</a>
+      <a class="sub" href="stages/google64/map.html">📜 旧版：Google64 第一章（続きをやる人向け）</a>
+      <button class="sub" id="changeNav" style="cursor:pointer;font-family:inherit">🧭 案内役を変える</button>
+    </div>
+    <button class="back" id="backBtn">← タイトルへ戻る</button>
+  </div>
+
+</div>
+
+<script src="assets/bgm.js?v=8"></script>
+<script src="assets/navs.js?v=3"></script>
+<script>
+(function(){
+  var t=document.getElementById('title'), s=document.getElementById('select');
+  var np=document.getElementById('navpick');
+
+  /* 🧭 ナビ選択（案内役＝麗夏 or サトル） */
+  function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function renderNavCards(){
+    var NAVS=window.MCQ_NAVS||{};
+    var cur=window.MCQ_navKey?window.MCQ_navKey():'reika';
+    var h='';
+    Object.keys(NAVS).forEach(function(k){
+      var n=NAVS[k];
+      var img='assets/chara/'+n.tachie;
+      h+='<a class="world" data-nav="'+k+'" href="#" style="border-color:'+(cur===k?'var(--gold)':'rgba(255,255,255,.15)')+';display:flex;gap:12px;align-items:center;min-height:120px">'
+        +'<img src="'+esc(img)+'" alt="'+esc(n.name)+'" style="height:110px;width:auto;object-fit:contain;object-position:bottom;filter:drop-shadow(1px 2px 4px rgba(0,0,0,.4))">'
+        +'<div><div class="wt">'+esc(n.name)+'</div><div class="wd">'+esc(n.intro)+'</div></div></a>';
+    });
+    document.getElementById('navCards').innerHTML=h;
+    document.querySelectorAll('#navCards [data-nav]').forEach(function(a){
+      a.addEventListener('click',function(e){
+        e.preventDefault();
+        try{ localStorage.setItem('mcq_nav', a.getAttribute('data-nav')); }catch(err){}
+        if(window.MCQBgm)MCQBgm.se('ok');
+        if(window.MCQTrack) MCQTrack('nav_pick', a.getAttribute('data-nav'));
+        np.style.display='none'; s.classList.add('show');
+      });
+    });
+  }
+  document.getElementById('navBack').onclick=function(){ np.style.display='none'; t.classList.remove('hide'); };
+
+  /* マイページ/メールの ?token= を保存（engine.js と同じキー）。
+     同一オリジンなので各ステージ・カード・入門ページへ自動で引き継がれ、
+     本人ログイン状態（EXP・称号・ご褒美・サンクスUP）で遊べる。 */
+  try {
+    var _tk = new URLSearchParams(location.search).get('token');
+    if (_tk) localStorage.setItem('mcq_member_token', _tk);
+  } catch(e){}
+
+  if(window.MCQTrack) MCQTrack('title_view');
+
+  /* ワールドマップ背景（assets/worldmap.png を置くと自動表示） */
+  (function(){
+    var wm=new Image();
+    wm.onload=function(){
+      document.body.style.backgroundImage =
+        "linear-gradient(180deg, rgba(12,9,22,.62), rgba(12,9,22,.86)), url('assets/worldmap.png')";
+      document.body.style.backgroundSize = "cover, cover";
+      document.body.style.backgroundPosition = "center, center";
+    };
+    wm.src='assets/worldmap.png';
+  })();
+
+  document.getElementById('startBtn').onclick=function(){
+    if(window.MCQBgm)MCQBgm.se('fanfare');
+    if(window.MCQTrack) MCQTrack('game_start');
+    t.classList.add('hide');
+    // 初回はナビ選択→以降はワールド選択へ直行
+    var chosen=false; try{ chosen=!!localStorage.getItem('mcq_nav'); }catch(e){}
+    if(chosen){ s.classList.add('show'); }
+    else { renderNavCards(); np.style.display='block'; }
+  };
+  document.getElementById('backBtn').onclick=function(){
+    s.classList.remove('show'); t.classList.remove('hide');
+  };
+  document.getElementById('changeNav').onclick=function(){
+    s.classList.remove('show'); renderNavCards(); np.style.display='block';
+  };
+  /* ワールド選択の計測 */
+  document.querySelectorAll('.world, .sub').forEach(function(a){
+    a.addEventListener('click', function(){
+      if(window.MCQTrack) MCQTrack('world_click', (a.getAttribute('href')||'').split('/').slice(-2).join('/'));
+    });
+  });
+  // ?start=1 で選択画面から開始（他ページの「トップ」から戻った時に便利）
+  if(new URLSearchParams(location.search).get('start')==='1'){
+    t.classList.add('hide'); s.classList.add('show');
+  }
+
+  /* 🛠 開発者モード：下部ロゴを素早く5回タップでON/OFF（URL不要・永続） */
+  (function(){
+    var foot=document.querySelector('.tt-foot');
+    if(!foot) return;
+    var taps=0, timer=null;
+    foot.style.cursor='default';
+    foot.addEventListener('click', function(){
+      taps++;
+      clearTimeout(timer); timer=setTimeout(function(){ taps=0; }, 1600);
+      if(taps>=5){ taps=0; if(window.MCQDevToggle) MCQDevToggle(); }
+    });
+  })();
+})();
+</script>
+</body>
+</html>

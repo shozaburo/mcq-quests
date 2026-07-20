@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -48,9 +48,8 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 .world.beta{border-color:rgba(255,215,0,.55)} .world.beta .wtag{background:var(--gold);color:#1a1a2e}
 .world.gamma{border-color:rgba(126,87,194,.65)} .world.gamma .wtag{background:var(--purple);color:#fff}
 .world.lambda{border-color:rgba(245,183,49,.6)} .world.lambda .wtag{background:#f5b731;color:#1a1a2e}
-.world.alpha{border-color:rgba(16,163,127,.65)} .world.alpha .wtag{background:#10a37f;color:#fff}
 .world.soon{opacity:.55;pointer-events:none} .world.soon .wtag{background:#555;color:#ddd}
-.world.beta2{border-color:rgba(124,77,255,.65)} .world.beta2 .wtag{background:#7C4DFF;color:#fff}
+.world.alpha{border-color:rgba(16,163,127,.65)} .world.alpha .wtag{background:#10a37f;color:#fff}
 .subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
 .sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:var(--ink);border-radius:999px;
   padding:8px 18px;font-size:.82rem;font-weight:800;text-decoration:none}
@@ -87,7 +86,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
         <span class="wtag">第1部</span>
         <div class="we">🔍</div>
         <div class="wt">Google・Gemini<span style="font-size:.8em;opacity:.85">（東日本編）</span></div>
-        <div class="wd">Googleの土台からGemini Notebook・AIエージェントまで、北海道から旅する8つの街の64クエスト。⚡Spark（Ultra）を使う人は⚡ルート、なくても🆓無料ルートで最後まで進める。まずはここから。</div>
+        <div class="wd">Googleの土台からGemini・NotebookLM・AIエージェントまで、北海道から旅する8つの街の64クエスト。⚡Spark（Ultra）を使う人は⚡ルート、なくても🆓無料ルートで最後まで進める。まずはここから。</div>
       </a>
       <a class="world gamma" href="stages/claude64/map.html">
         <span class="wtag">第2部</span>
@@ -95,23 +94,29 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
         <div class="wt">Claude code cowork<span style="font-size:.8em;opacity:.85">（西日本編）</span></div>
         <div class="wd">相棒Claudeに仕事を任せ、AIと協働する64クエスト。神戸から旅する8つの街。Excel・資料・自動化までAIを部下に。</div>
       </a>
-      <a class="world lambda" href="stages/mimasaka/index.html">
-        <span class="wtag">企業編</span>
-        <div class="we">🏭</div>
-        <div class="wt">美作クエスト：三和電子64</div>
-        <div class="wd">津山・美作の親方衆とともに、AIで進化する実装屋を目指す64の行動クエスト。案内役はデイジー。</div>
-      </a>
       <a class="world alpha" href="stages/chatgpt64/map.html">
         <span class="wtag">第3部</span>
         <div class="we">🐕</div>
         <div class="wt">ChatGPT work codex<span style="font-size:.8em;opacity:.85">（セミナールーム編）</span></div>
         <div class="wd">豆柴のチャッピーと学ぶChatGPT・Work・Codexの64クエスト。8つのルームを回って、目指せチャッピーの親友。</div>
       </a>
+      <a class="world lambda" href="stages/mimasaka/index.html">
+        <span class="wtag">企業編</span>
+        <div class="we">🏭</div>
+        <div class="wt">美作クエスト：三和電子64</div>
+        <div class="wd">津山・美作の親方衆とともに、AIで進化する実装屋を目指す64の行動クエスト。案内役はデイジー。</div>
+      </a>
+      <a class="world soon" href="#">
+        <span class="wtag">COMING SOON</span>
+        <div class="we">🏯</div>
+        <div class="wt">？？？編</div>
+        <div class="wd">新たなステージを準備中……。</div>
+      </a>
     </div>
     <div class="subrow">
       <a class="sub" href="nyumon.html">🏫 パソコン初心者教室（大塚麗夏がサポート）</a>
       <a class="sub" href="card.html">🃏 挑戦者カードを作る</a>
-      <a class="sub" href="stages/google64/map.html">📜 旧版：Google64 第一章（続きをやる人向け）</a>
+      <a class="sub" href="stages/google64/map.html">📜 旧版 Google64（第一章・続きをやる人向け）</a>
       <button class="sub" id="changeNav" style="cursor:pointer;font-family:inherit">🧭 案内役を変える</button>
     </div>
     <button class="back" id="backBtn">← タイトルへ戻る</button>
@@ -119,8 +124,8 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 
 </div>
 
-<script src="assets/bgm.js?v=8"></script>
-<script src="assets/navs.js?v=3"></script>
+<script src="assets/bgm.js?v=6"></script>
+<script src="assets/navs.js"></script>
 <script>
 (function(){
   var t=document.getElementById('title'), s=document.getElementById('select');

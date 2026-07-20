@@ -857,6 +857,33 @@
     });
   }
 
+  /* 🎉 満点お祝い：紙吹雪＋ファンファーレ（音OFFでも紙吹雪は出る） */
+  function celebrate(){
+    if(window.MCQBgm){ MCQBgm.se('fanfare'); setTimeout(function(){ MCQBgm.se('fanfare'); }, 360); }
+    try{
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99999;overflow:hidden';
+      var emo = ['🎉','✨','🎊','🌟','💛'];
+      for(var i=0;i<28;i++){
+        var s = document.createElement('span');
+        s.textContent = emo[i % emo.length];
+        var left = Math.random()*100, dur = 1.6 + Math.random()*1.2, delay = Math.random()*0.5, sz = 14 + Math.random()*20;
+        s.style.cssText = 'position:absolute;top:-8%;left:'+left+'%;font-size:'+sz+'px;opacity:0;'
+          + 'animation:mcqConfetti '+dur+'s ease-in '+delay+'s forwards';
+        wrap.appendChild(s);
+      }
+      if(!document.getElementById('mcqConfettiCss')){
+        var st = document.createElement('style'); st.id='mcqConfettiCss';
+        st.textContent = '@keyframes mcqConfetti{0%{transform:translateY(0) rotate(0);opacity:0}'
+          + '10%{opacity:1}100%{transform:translateY(108vh) rotate(540deg);opacity:0}}';
+        document.head.appendChild(st);
+      }
+      document.body.appendChild(wrap);
+      setTimeout(function(){ if(wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 3400);
+    }catch(e){}
+  }
+
   function sceneScore(){
     setStep(3);
     var total = QUEST.quiz.length, c = answered;
@@ -878,6 +905,7 @@
             + '<button class="btn btn-ghost" id="backVideo">動画を見直す</button>';
     }
     render(html);
+    if(quizPct === 100) celebrate();   // 🎉 全問正解でファンファーレ＋紙吹雪
     if($('toReport')) $('toReport').onclick = function(){ sceneReport(false); };
     if($('retry')) $('retry').onclick = function(){ answered = 0; sceneQuiz(0); };
     if($('backVideo')) $('backVideo').onclick = sceneVideo;
