@@ -65,6 +65,26 @@
   var videoUrl   = (QUEST && QUEST.videoUrl)   || URLS.related || '';
   var archiveUrl = (QUEST && QUEST.archiveUrl) || URLS.archive || '';
 
+  /* ── 教材の3分類（2026-07 新データモデル）──
+     ① digest = 動画概要（短い解説）＝主教材。無ければ「準備中」と正直に出す
+     ② slide/info = スライド・要点インフォグラフィック＝主教材
+     ③ archives[] = 朝活の生録画（長い）＝復習用。日付付きで別枠に列挙
+     旧 drive/archive 単数フィールドは後方互換で残す（他ステージがまだ使う） */
+  var digestId  = URLS.digest || URLS.drive || '';       // 動画概要のDriveファイルID
+  var slideId   = URLS.slide  || '';                     // スライド（PDF等）
+  var notesId   = URLS.notes  || '';                     // その回のGeminiメモ（テキスト解説）
+  var docsList  = URLS.docs   || [];                     // 配布資料
+  var checkUrl  = URLS.check  || '';                     // NotebookLMの理解度クイズ
+  var folderUrl = URLS.folder || URLS.archive || '';     // Driveフォルダ（まとめて見る）
+  // アーカイブ生録画：新 archives[] を優先。無ければ旧 archive がDriveの動画IDだった場合のみ拾う
+  var archiveList = (URLS.archives && URLS.archives.length) ? URLS.archives.slice() : [];
+  archiveList.sort(function(a,b){ return String(b.date||'').localeCompare(String(a.date||'')); });
+  function driveView(id){ return 'https://drive.google.com/file/d/' + id + '/view'; }
+  function jpDate(d){
+    var m = String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? (m[1] + '年' + (+m[2]) + '月' + (+m[3]) + '日') : String(d||'');
+  }
+
   /* ── 討伐ムービー用：エリアの舞台と共通スタイル ── */
   var AREA_SCENE = {
     A:'北の雪原。フキの葉と雪の結晶が舞う静寂の野', B:'猛吹雪の秋田の山小屋。囲炉裏の火と和太鼓',
@@ -737,12 +757,21 @@
   function sceneVideo(){
     setStep(1);
     say(L.video);
-    // mp4が無い時の外部ボタン：アーカイブ動画（直で見られる）を最優先
-    var extHtml = archiveUrl
-      ? '<a class="btn btn-blue" href="' + esc(archiveUrl) + '" target="_blank" rel="noopener">▶ 解説動画（アーカイブ）を見る</a>'
-      : (videoUrl
-        ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔗 解説ページを開く（NotebookLM）</a>'
-        : '<button class="btn btn-blue" disabled>▶ 解説動画（準備中）</button>');
+    // mp4も動画概要も無い時の外部ボタン。
+    //   ※ 以前はここでアーカイブ生録画（30〜60分・1GB級）へ飛ばしていたため
+    //     「動画を押すといきなり長い録画が始まって分かりにくい」状態だった。
+    //     生録画は STEP2 の「📼 復習アーカイブ」に隔離し、ここには出さない。
+    var extHtml = videoUrl
+      ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔎 NotebookLMで解説を見る</a>'
+      : '<button class="btn btn-blue" disabled>▶ 動画概要（準備中）</button>';
+    if(!digestId && !videoUrl && archiveList.length){
+      extHtml += '<div style="font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.7">'
+        + 'このマスの動画概要はまだ準備中です。次の画面の <b>📼 復習アーカイブ</b>（朝活の録画）で学べます。</div>';
+    }
+    // 📑 スライド資料（あれば主教材として動画の下に出す）
+    var slideHtml = slideId
+      ? '<a class="btn btn-blue" href="' + driveView(slideId) + '" target="_blank" rel="noopener">📑 スライド資料で要点を見る</a>'
+      : '';
     // 📊 要点インフォグラフィック（Driveの画像を全体表示・タップで拡大）
     var infoId = URLS.info || '';
     var infoHtml = infoId
@@ -758,6 +787,7 @@
       + '<video id="qVideo" controls playsinline preload="metadata" '
       +   'style="display:none;width:100%;max-height:320px;border-radius:12px;background:#000;margin-bottom:4px"></video>'
       + '<div id="extWrap">' + extHtml + '</div>'
+      + slideHtml
       + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
     $('watched').onclick = function(){ bump(25); sceneArchive(); };
 
@@ -780,7 +810,7 @@
       }
       // mp4がどこにも無い → Google Driveの動画をページ内に埋め込む
       //（NotebookLMからDL済みの動画。リンク共有=全員閲覧可を確認済み）
-      var driveId = URLS.drive || '';
+      var driveId = digestId;
       if(driveId){
         var ifr = document.createElement('iframe');
         ifr.src = 'https://drive.google.com/file/d/' + driveId + '/preview';
@@ -809,13 +839,60 @@
   function sceneArchive(){
     setStep(2);
     say(L.archive || '次はアーカイブだ。過去の実演を見て、手を動かすイメージを固めよ。');
-    var aNote = archiveUrl
-      ? '<div style="font-size:.82rem;color:var(--muted);margin-bottom:8px;line-height:1.7">📚 フォルダの中に、この単元の<b>スライド・レポート（テキスト解説）</b>が入っています。じっくり学びたい人は、これで復習してから次に進もう。</div>'
-      : '';
-    var aBtn = archiveUrl
-      ? '<a class="btn btn-blue" href="' + esc(archiveUrl) + '" target="_blank" rel="noopener">📁 アーカイブ（スライド・テキスト）で学ぶ</a>'
-      : '<button class="btn btn-blue" disabled>📁 アーカイブ（準備中）</button>';
-    render(aNote + aBtn
+    /* 教材を種別ごとに“見えるように”並べる。
+       以前は archive フォルダ1本を「スライド・テキストが入っています」と案内していたが、
+       実際に入っているのは朝活の生録画とメモで、スライドは無かった。表記を実物に合わせる。 */
+    var h = '';
+
+    // 📝 テキスト解説（その回のGeminiメモ）＝いちばん手軽に復習できる
+    if(notesId){
+      h += '<a class="btn btn-blue" href="https://docs.google.com/document/d/' + esc(notesId) + '/edit" '
+        +   'target="_blank" rel="noopener">📝 テキスト解説を読む（この回のメモ）</a>';
+    }
+
+    // 📎 配布資料・関連ドキュメント
+    if(docsList.length){
+      h += '<div style="font-size:.82rem;color:var(--muted);margin:10px 0 6px;line-height:1.7">📎 この回の配布資料</div>';
+      docsList.forEach(function(d){
+        if(!d || !d.id) return;
+        h += '<a class="btn btn-ghost" href="' + driveView(d.id) + '" target="_blank" rel="noopener" '
+          +   'style="text-align:left">📎 ' + esc(d.t || '資料') + '</a>';
+      });
+    }
+
+    // 📼 復習アーカイブ（朝活の生録画・長い）＝日付ごとに別枠。主動画とは明確に分離
+    if(archiveList.length){
+      h += '<div style="font-size:.82rem;color:var(--muted);margin:10px 0 6px;line-height:1.7">'
+        + '📼 <b>復習アーカイブ</b>（朝活の録画・30〜60分の長編です。じっくり深掘りしたい人向け）</div>';
+      archiveList.forEach(function(a){
+        if(!a || !a.id) return;
+        h += '<a class="btn btn-ghost" href="' + driveView(a.id) + '" target="_blank" rel="noopener">'
+          + '📼 ' + esc(jpDate(a.date)) + 'の回' + (a.label ? '（' + esc(a.label) + '）' : '') + '</a>';
+      });
+    }
+
+    // 🎯 NotebookLMの理解度クイズ（今まで urls.js に入っていたのに画面に出ていなかった）
+    if(checkUrl){
+      h += '<a class="btn btn-ghost" href="' + esc(checkUrl) + '" target="_blank" rel="noopener">'
+        + '🎯 NotebookLMの理解度クイズで腕試し</a>';
+    }
+
+    // 🔎 このマスのNotebookLM（元素材。追加で質問できる）
+    if(videoUrl){
+      h += '<a class="btn btn-ghost" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">'
+        + '🔎 NotebookLMで追加質問する（元の資料）</a>';
+    }
+
+    // 📁 まとめて開く（Driveフォルダ／講座アーカイブページ）
+    if(folderUrl){
+      var isDrive = /drive\.google\.com/.test(folderUrl);
+      h += '<a class="btn btn-ghost" href="' + esc(folderUrl) + '" target="_blank" rel="noopener">'
+        + (isDrive ? '📁 Driveフォルダをまとめて開く' : '📚 アーカイブ・資料のページを開く') + '</a>';
+    }
+
+    if(!h) h = '<button class="btn btn-blue" disabled>📁 復習教材（準備中）</button>';
+
+    render(h
       + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → クイズへ</button>'
       + '<button class="btn btn-ghost" id="aSkip">クイズは飛ばして報告する</button>');
     $('aWatched').onclick = function(){ bump(50); answered = 0; sceneQuiz(0); };
