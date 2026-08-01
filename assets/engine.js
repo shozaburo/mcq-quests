@@ -552,10 +552,16 @@
     + '@media(min-width:721px) and (min-height:601px){.chara.tachie{width:168px!important;max-height:272px!important}}'
     + '@media(min-width:1000px) and (min-height:601px){.chara.tachie{width:196px!important;max-height:320px!important}}'
     // v19: スマホは「進む」ボタンを画面下（親指ゾーン）に貼り付け＝スクロールせず次へ行ける
-    + '@media(max-width:720px){#action .btn-primary{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:30;box-shadow:0 6px 18px rgba(0,0,0,.35)}}';
+    + '@media(max-width:720px){#action .btn-primary{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:30;box-shadow:0 6px 18px rgba(0,0,0,.35)}}'
+    // v20: 結果画面ではキャラを大きく見せる（ゲームの楽しさ演出）
+    + '.chara.hero{width:132px!important;height:132px!important;max-height:none!important}'
+    + '.chara-emoji.hero{font-size:72px!important}';
     document.head.appendChild(s);
   }
   function charaEl(){ return document.getElementById('charaImg') || document.querySelector('.chara-emoji'); }
+  /* v20: クイズ中はキャラ・セリフ枠を隠して問題文を主役にする／結果画面ではキャラを大きく */
+  function showStage(on){ var st = document.querySelector('.stage'); if(st) st.style.display = on ? '' : 'none'; }
+  function stageHero(on){ var el = charaEl(); if(el) el.classList.toggle('hero', !!on); }
   function charaReact(kind){
     var el = charaEl(); if(!el) return;
     el.classList.remove('fx-happy','fx-sad'); void el.offsetWidth;
@@ -615,7 +621,7 @@
   function fxCorrect(){
     FX_COMBO++;
     charaReact('happy');
-    var sub = FX_COMBO >= 2 ? (FX_COMBO + 'れんぞく正解！') : (SOFT ? 'よくできました！' : 'こうげき成功！');
+    var sub = FX_COMBO >= 2 ? (FX_COMBO + 'れんぞく正解！') : 'いいね、その調子！';
     fxBanner('せいかい！', sub, true);
     fxConfetti();
     setBond(getBond() + (FX_COMBO >= 3 ? 9 : 6));
@@ -768,6 +774,7 @@
   })();
   function sceneVideo(){
     setStep(1);
+    showStage(true); stageHero(false);
     say(L.video);
     // mp4も動画概要も無い時の外部ボタン。
     //   ※ 以前はここでアーカイブ生録画（30〜60分・1GB級）へ飛ばしていたため
@@ -911,19 +918,24 @@
     $('aSkip').onclick = function(){ bump(50); sceneReport(false); };
   }
 
-  // STEP3 クイズ（1問ずつ）＝ボスへの「こうげき」
+  // STEP3 クイズ（1問ずつ）
+  //   v20: クイズ中はキャラ・セリフ枠を隠し、問題文を本文に大きく表示（読みやすさ最優先）。
+  //        キャラのリアクション・激励は結果画面（sceneScore）でまとめて行う。
   var answered = 0, quizPct = 0;
   var KANJI = '一二三四五六七八九十';
   function sceneQuiz(qi){
     setStep(3);
     if(qi===0){ FX_COMBO = 0; if(window.MCQTrack) MCQTrack('quiz_start', (CFG.goalId||'?') + ':' + QID); }
+    showStage(false); stageHero(false);
     var item = QUEST.quiz[qi];
-    say('第' + (KANJI.charAt(qi) || (qi+1)) + '問！ ' + item.q);
-    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + (SOFT ? '　✨ 正解でなかよし度アップ！' : '　⚔️ 正解＝こうげき！') + '</div>';
+    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '　✨ 正解でなかよし度アップ！</div>'
+      + '<div style="font-weight:800;font-size:1.02rem;line-height:1.85;margin:4px 2px 12px">'
+      +   '<span style="color:var(--chara,#f57c00)">第' + (KANJI.charAt(qi) || (qi+1)) + '問</span>　' + esc(item.q) + '</div>';
     item.choices.forEach(function(c, ci){
       html += '<div class="choice" data-ci="' + ci + '">' + esc(c) + '<span class="mark"></span></div>';
     });
-    html += '<button class="btn btn-primary" id="nextQ" disabled>選択肢を選ぼう</button>';
+    html += '<div id="qExplain" style="display:none;border-radius:10px;padding:10px 13px;margin-top:10px;font-size:.88rem;line-height:1.75"></div>'
+      + '<button class="btn btn-primary" id="nextQ" disabled>選択肢を選ぼう</button>';
     render(html);
 
     var picked = null;
@@ -937,10 +949,18 @@
           if(ci === ans){ c.classList.add('correct'); c.querySelector('.mark').textContent = '◯'; }
           else if(ci === picked){ c.classList.add('wrong'); c.querySelector('.mark').textContent = '✕'; }
         });
-        if(ok){ answered++; fxCorrect(); say(L.correct[qi % L.correct.length] + ' ' + item.explain); }
-        else  { QUIZ_MISS++; fxWrong();  say(L.wrong + item.explain); }
+        if(ok){ answered++; fxCorrect(); }
+        else  { QUIZ_MISS++; fxWrong(); }
+        // 解説は本文にそのまま出す（セリフ枠は使わない＝読みやすい）
+        var ex = $('qExplain');
+        if(ex){
+          ex.style.display = 'block';
+          ex.style.background = ok ? 'rgba(102,187,106,.14)' : 'rgba(239,83,80,.12)';
+          ex.style.border = '1.5px solid ' + (ok ? 'rgba(102,187,106,.55)' : 'rgba(239,83,80,.5)');
+          ex.innerHTML = '<b>' + (ok ? '◯ 正解！' : '✕ ざんねん…') + '</b>　' + esc(item.explain || '');
+        }
         var nb = $('nextQ'); nb.removeAttribute('disabled');
-        nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : (SOFT ? 'けっかを見る →' : '審判を受ける →');
+        nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : 'けっかを見る →';
         nb.onclick = function(){ (qi+1 < QUEST.quiz.length) ? sceneQuiz(qi+1) : sceneScore(); };
       };
     });
@@ -975,17 +995,40 @@
 
   function sceneScore(){
     setStep(3);
+    // v20: 結果画面はキャラの見せ場。大きく登場して、キャラの口調で称賛/激励する。
+    showStage(true); stageHero(true);
     var total = QUEST.quiz.length, c = answered;
     // 合格ライン：半分以上=75%、全問=100%
     quizPct = (c === total) ? 100 : (c >= Math.ceil(total/2) ? 75 : 0);
     if(window.MCQTrack) MCQTrack('quiz_score', (CFG.goalId||'?') + ':' + QID + ':' + quizPct);
-    if(quizPct === 100) say(L.score100);
-    else if(quizPct === 75) say(L.score75);
-    else say(L.scoreFail);
+    var noMiss = (quizPct === 100 && QUIZ_MISS === 0);
+    var elapsed = Math.round((Date.now() - QUEST_T0) / 1000);
+    var rec = elapsed + QUIZ_MISS * 600;
+    function fmt(s){ return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+    // キャラのセリフ（characters.js の各キャラ定義＝ゴーレムなら渋い激励、が自動で乗る）
+    var line = (quizPct === 100) ? L.score100 : (quizPct === 75) ? L.score75 : L.scoreFail;
+    if(noMiss) line += SOFT ? ' しかも一度もまちがえずにクリア！すごい！' : ' しかも一度のミスもない、完璧なクリアだ。';
+    else if(quizPct === 100 && QUIZ_MISS > 0) line += SOFT ? ' 次はノーミスクリアをめざしてみよう！' : ' 次はノーミスの一発クリアを狙うがよい。';
+    say(line);
     if(quizPct > 0) bump(quizPct);
     var html = '<div class="score-wrap"><div class="score-big">' + c + ' / ' + total + '</div>';
     if(quizPct > 0) html += '<div class="score-pct">獲得：<span class="pct ' + (quizPct === 100 ? 'pct-100' : 'pct-75') + '">' + quizPct + '%</span></div>';
     html += '</div>';
+    // 📈 きみの成果（パラメーターがどう変わったかのフィードバック）
+    function row(icon, label, val){
+      return '<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(128,128,128,.25);font-size:.88rem">'
+        + '<span>' + icon + ' ' + label + '</span><b>' + val + '</b></div>';
+    }
+    html += '<div style="background:rgba(245,197,66,.1);border:1.5px solid rgba(245,197,66,.5);border-radius:12px;padding:10px 14px;margin:8px 0">'
+      + '<div style="font-weight:900;font-size:.85rem;margin-bottom:4px">📈 きみの成果</div>'
+      + row('🎯', 'クイズ正解', c + ' / ' + total + (quizPct > 0 ? '（' + quizPct + '%達成）' : ''))
+      + row('💥', 'ミス', QUIZ_MISS === 0 ? 'なし！' : QUIZ_MISS + '回（記録タイムに +' + QUIZ_MISS*10 + '分）')
+      + row('⏱', '記録タイム', fmt(rec) + (QUIZ_MISS > 0 ? '（実測 ' + fmt(elapsed) + '）' : ''))
+      + row('💛', CH.name + 'となかよし度', String(getBond()))
+      + (noMiss ? '<div style="margin-top:6px;font-weight:900;color:#2e7d32;font-size:.85rem">🏅 ノーミス一発クリア！ 報告時に <b>+50pt</b> ボーナス！</div>' : '')
+      + (quizPct > 0 && rec <= 300 ? '<div style="margin-top:4px;font-weight:900;color:#e65100;font-size:.85rem">⚡ スピードクリア！ この速さはランキング上位級！</div>' : '')
+      + '<div style="margin-top:6px;font-size:.74rem;color:var(--muted)">ポイントは報告時に加算：100%=100pt／実践125%〜=225pt〜（🏆は右上に反映）</div>'
+      + '</div>';
     if(quizPct > 0){
       html += '<button class="btn btn-primary" id="toReport">🚀 報告へ進む →</button>'
             + '<button class="btn btn-ghost" id="retry">もう一度挑む（100%を狙う）</button>';
@@ -995,15 +1038,16 @@
     }
     render(html);
     if(quizPct === 100) celebrate();   // 🎉 全問正解でファンファーレ＋紙吹雪
-    if($('toReport')) $('toReport').onclick = function(){ sceneReport(false); };
-    if($('retry')) $('retry').onclick = function(){ answered = 0; sceneQuiz(0); };
-    if($('backVideo')) $('backVideo').onclick = sceneVideo;
+    if($('toReport')) $('toReport').onclick = function(){ stageHero(false); sceneReport(false); };
+    if($('retry')) $('retry').onclick = function(){ stageHero(false); answered = 0; sceneQuiz(0); };   // ミス数・タイムは持ち越し（ボーナス狙いの引き直し防止）
+    if($('backVideo')) $('backVideo').onclick = function(){ stageHero(false); sceneVideo(); };
   }
 
   // STEP4 報告（実践優先・不正チェック）
   //   fromSkip=true のときは実践125%を既定選択
   function sceneReport(fromSkip){
     setStep(4);
+    showStage(true); stageHero(false);
     say(fromSkip ? (L.ladder) : (L.ladder));
     var levels = [];
     // これまでの学習到達（動画/アーカイブ/クイズ）
@@ -1067,7 +1111,7 @@
             + '<div style="font-size:.74rem;color:var(--muted);text-align:center;margin-bottom:4px">またはURLを貼る👇（どちらか一方でOK）</div>';
     }
     html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">'
-          + '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '⚔️ この内容で報告する（こうげき！）') + '</button>';
+          + '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') + '</button>';
     render(html);
 
     // v10: 画像選択→端末側で縮小して保持（送信時にアップロード）
@@ -1139,7 +1183,7 @@
         }).catch(function(){ imgFailed = true; return evidence; });
       }
       pre.then(function(ev){
-        btn.textContent = SOFT ? '送信中…' : '⚔️ 送信中…';
+        btn.textContent = '送信中…';
         if(window.MCQTrack){
           MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
           if(imgFailed) MCQTrack('evidence_upload_fail', (CFG.goalId||'?') + ':' + QID);
@@ -1151,7 +1195,7 @@
         });
       }).catch(function(){
         // ここに来るのは通信断など。報告自体が送れなかったときだけ再試行を促す。
-        btn.disabled = false; btn.textContent = SOFT ? '💛 この内容で報告する' : '⚔️ この内容で報告する（こうげき！）';
+        btn.disabled = false; btn.textContent = SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する';
         $('rImgInfo').textContent = '⚠ 送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。';
       });
     };
@@ -1265,14 +1309,16 @@
 
   function sceneDone(pct, practice, res){
     setStep(4);
+    showStage(true); stageHero(false);
     say(L.done.replace('{pct}', pct));
 
     // 🏅 スコア＆記録タイム計算
     var quizDone = (quizPct > 0);
     var noMiss = quizDone && QUIZ_MISS === 0;
-    var pt = (function(n){ n=Number(n)||0;
+    var basePt = (function(n){ n=Number(n)||0;
       if(n>=200)return 300; if(n>=150)return 250; if(n>=125)return 225;
-      if(n>=100)return 100; if(n>=75)return 75; return 0; })(pct) + (noMiss ? 50 : 0);
+      if(n>=100)return 100; if(n>=75)return 75; return 0; })(pct);
+    var pt = basePt + (noMiss ? 50 : 0);
     addLocalScore(pt);
     var hudS = document.getElementById('hudScore'); if(hudS) hudS.textContent = localScore();
     var elapsed = Math.round((Date.now() - QUEST_T0) / 1000);
@@ -1300,11 +1346,14 @@
         : '')
       + '<div style="text-align:center;margin:6px 0">'
       +   '<span style="display:inline-block;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:999px;padding:4px 16px;font-weight:900;color:#9c6f08">🏆 +' + pt + 'pt</span>'
-      +   (noMiss ? ' <span style="display:inline-block;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:999px;padding:4px 16px;font-weight:900;color:#2e7d32">' + (SOFT ? '⭐ ぜんもん正解！ +50pt込' : '⭐ ノーミス討伐！ +50pt込') + '</span>' : '')
+      +   (noMiss ? ' <span style="display:inline-block;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:999px;padding:4px 16px;font-weight:900;color:#2e7d32">⭐ ノーミス達成！ +50pt込</span>' : '')
       + '</div>'
+      // v20: 🏆の内訳をきちんとフィードバック（右上のポイントが何で増えたか分かるように）
+      + '<div style="text-align:center;font-size:.8rem;color:var(--muted)">内訳：達成' + pct + '% → ' + basePt + 'pt' + (noMiss ? ' ＋ ノーミスボーナス50pt' : '') + '</div>'
       + (quizDone
         ? '<div style="text-align:center;font-size:.85rem;color:var(--muted)">⏱ 記録タイム <b>' + fmt(rec) + '</b>'
           + (QUIZ_MISS > 0 ? '（実測 ' + fmt(elapsed) + ' ＋ ミス' + QUIZ_MISS + '回 ×10分）' : '（ノーミス・実測どおり！）')
+          + (QUIZ_MISS === 0 && rec <= 300 ? '<br><b style="color:#e65100">⚡ この速さは見事！マス覇者（最速記録）を狙えるぞ</b>' : '')
           + '</div>'
         : '');
 
@@ -1312,7 +1361,7 @@
     if(res && res.ok){
       if(res.promoted && res.expGained){
         html += '<div style="text-align:center;font-weight:900;color:#2e7d32;font-size:1.1rem;margin:4px 0">'
-              + (SOFT ? '✨ 達成！ +' : '⚔️ 討伐成功！ +') + res.expGained + ' EXP 獲得！</div>';
+              + '✨ 達成！ +' + res.expGained + ' EXP 獲得！</div>';
       }
       if(res.rewards && res.rewards.length){
         res.rewards.forEach(function(rw){
