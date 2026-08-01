@@ -762,7 +762,7 @@
     //     「動画を押すといきなり長い録画が始まって分かりにくい」状態だった。
     //     生録画は STEP2 の「📼 復習アーカイブ」に隔離し、ここには出さない。
     var extHtml = videoUrl
-      ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔎 NotebookLMで解説を見る</a>'
+      ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔎 Gemini Notebookで解説を見る</a>'
       : '<button class="btn btn-blue" disabled>▶ 動画概要（準備中）</button>';
     if(!digestId && !videoUrl && archiveList.length){
       extHtml += '<div style="font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.7">'
@@ -871,16 +871,16 @@
       });
     }
 
-    // 🎯 NotebookLMの理解度クイズ（今まで urls.js に入っていたのに画面に出ていなかった）
+    // 🎯 Gemini Notebook の理解度クイズ（今まで urls.js に入っていたのに画面に出ていなかった）
     if(checkUrl){
       h += '<a class="btn btn-ghost" href="' + esc(checkUrl) + '" target="_blank" rel="noopener">'
-        + '🎯 NotebookLMの理解度クイズで腕試し</a>';
+        + '🎯 Gemini Notebookの理解度クイズで腕試し</a>';
     }
 
-    // 🔎 このマスのNotebookLM（元素材。追加で質問できる）
+    // 🔎 このマスの Gemini Notebook（元素材。追加で質問できる）
     if(videoUrl){
       h += '<a class="btn btn-ghost" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">'
-        + '🔎 NotebookLMで追加質問する（元の資料）</a>';
+        + '🔎 Gemini Notebookで追加質問する（元の資料）</a>';
     }
 
     // 📁 まとめて開く（Driveフォルダ／講座アーカイブページ）
