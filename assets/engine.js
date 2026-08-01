@@ -420,13 +420,17 @@
     });
   }
   function uploadEvidence(dataUrl, filename){
+    /* v28: GAS側の実装は action='saveEvidence' / パラメータ名 imageBase64。
+       ここが 'uploadEvidence' / 'dataUrl' のままだったため、
+       画像添付は一度も成立していなかった（サーバーが常に unknown action を返す）。
+       GASに合わせて送る。data:〜 のプレフィックスはGAS側で外してくれる。 */
     return fetch(API, {
       method:'POST',
       headers:{'Content-Type':'text/plain;charset=UTF-8'},  // preflight回避（GASはこれで応答が読める）
       body: JSON.stringify({
-        action:'uploadEvidence', token: MEMBER.token || '', goalId: CFG.goalId || '',
+        action:'saveEvidence', token: MEMBER.token || '', goalId: CFG.goalId || '',
         qid: QID, memberName: MEMBER.name || '', filename: filename || 'evidence.jpg',
-        dataUrl: dataUrl
+        imageBase64: dataUrl
       })
     }).then(function(r){ return r.json(); });
   }
@@ -1115,21 +1119,56 @@
     if($('backVideo')) $('backVideo').onclick = function(){ stageHero(false); sceneVideo(); };
   }
 
-  // STEP4 報告（実践優先・不正チェック）
-  //   fromSkip=true のときは実践125%を既定選択
+  /* ── STEP4 報告（v28で2画面に分割）─────────────────────────
+     以前は1画面に「学習の到達」も「実践125%以上」も並べていたため、
+     まだ実践していない人まで『※証拠必須』の赤字と証拠URL欄を見せられて、
+     報告する前に手が止まっていた。
+       画面1 sceneReport         … 学習の報告。証拠なしで出せる。
+       画面2 sceneReportPractice … 実践の報告（125/150/200%）。証拠が要る。
+     fromSkip=true（クイズを飛ばして実践から報告）は画面2へ直行する。 */
   function sceneReport(fromSkip){
+    if(fromSkip) return sceneReportPractice(true);
     setStep(4);
     showStage(true); stageHero(false);
-    say(fromSkip ? (L.ladder) : (L.ladder));
+    say(L.ladder);
+
+    // いまの学習到達（動画→アーカイブ→クイズ）を1つだけ提示する。選ばせる必要はない。
+    var lv = (achieved >= 100) ? {pct:100, cls:'pct-100', t:'クイズに全問正解した',     d:'完璧な理解！'}
+           : (achieved >= 75)  ? {pct:75,  cls:'pct-75',  t:'クイズに合格した',         d:'半分以上正解！'}
+           : (achieved >= 50)  ? {pct:50,  cls:'pct-50',  t:'動画とアーカイブを見た',   d:'学びの土台ができた'}
+           :                     {pct:25,  cls:'pct-25',  t:'動画を見た',               d:'第一歩！'};
+
+    var html = routeHtml() + memberFieldsHtml()
+      + '<label class="opt sel" data-need="0" style="cursor:default">'
+      +   '<input type="radio" name="lv" value="' + lv.pct + '" checked>'
+      +   '<div><b>' + esc(lv.t) + ' <span class="pct ' + lv.cls + '">' + lv.pct + '%</span></b>'
+      +   '<small>' + esc(lv.d) + '</small></div></label>'
+      + '<div class="field-label">感想・気づき（チャットにも共有されます）</div>'
+      + '<textarea id="rP" rows="2" placeholder="例：ここが分かってスッキリした／さっそく使ってみたい"></textarea>'
+      + '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 これで報告する' : '🚀 これで報告する') + '</button>'
+      + '<div style="border-top:1px dashed rgba(128,128,128,.35);margin:14px 0 8px;padding-top:10px">'
+      +   '<div style="font-size:.84rem;color:var(--muted);line-height:1.7;margin-bottom:6px">'
+      +     '学んだことを<b>実際の仕事で使った</b>なら、もう一段上の報告ができます（ポイントも大きい）。</div>'
+      +   '<button class="btn btn-primary" id="toPractice">🔥 実践したことも報告する（125%〜）→</button>'
+      + '</div>';
+    render(html);
+    wireRoute(function(){ sceneReport(false); });
+    $('toPractice').onclick = function(){ sceneReportPractice(false); };
+    $('submit').onclick = function(){
+      if(!captureMember()) return;
+      submitReport({ pct: String(lv.pct), practice: $('rP').value.trim(),
+                     evidence: '', img: null, btn: $('submit'),
+                     label: (SOFT ? '💛 これで報告する' : '🚀 これで報告する') });
+    };
+  }
+
+  // 画面2：実践の報告（125%以上・証拠が要る）
+  function sceneReportPractice(fromSkip){
+    setStep(4);
+    showStage(true); stageHero(false);
+    say(L.ladder);
     var levels = [];
-    // これまでの学習到達（動画/アーカイブ/クイズ）
-    if(!fromSkip){
-      if(achieved >= 100)      levels.push({pct:100, cls:'pct-100', t:'クイズに全問正解した', d:'完璧な理解！'});
-      else if(achieved >= 75)  levels.push({pct:75,  cls:'pct-75',  t:'クイズに合格した', d:'半分以上正解！'});
-      else if(achieved >= 50)  levels.push({pct:50,  cls:'pct-50',  t:'動画とアーカイブを見た', d:'学びの土台ができた'});
-      else                     levels.push({pct:25,  cls:'pct-25',  t:'動画を見た', d:'第一歩！'});
-    }
-    // 実践ラダー（常に選べる。125%以上は証拠必須）
+    // 実践ラダー（この画面は125%以上だけ。すべて証拠が要る）
     // v9: ルート別ミッション（routes[route].m125/evidence があれば上書き）
     var MIS = (window.MCQ_MISSIONS || {})[QID];
     var RT = ROUTES ? (ROUTES[currentRoute()] || {}) : null;
@@ -1145,10 +1184,11 @@
     levels.push({pct:200, cls:'pct-200', t:'飛躍的な成果が出た', d:'売上UP・大幅時短・新商品などの大きな成果', needEv:true});
 
     var html = routeHtml() + memberFieldsHtml();
-    if(fromSkip){
-      html += '<div style="font-size:.85rem;color:var(--muted);margin-bottom:6px">'
-            + 'クイズを飛ばして実践から報告します。証拠の添付をお願いします（みんなの記録として残ります）。</div>';
-    }
+    html += '<div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;line-height:1.7">'
+          + (fromSkip
+              ? 'クイズを飛ばして<b>実践から</b>報告します。'
+              : '<b>実践の報告</b>です。')
+          + 'やった証拠（スクショなど）を1枚つけてください。みんなの記録として残ります。</div>';
     levels.forEach(function(o, i){
       html += '<label class="opt' + (i===0?' sel':'') + '" data-need="' + (o.needEv?'1':'0') + '">'
             + '<input type="radio" name="lv" value="' + o.pct + '"' + (i===0?' checked':'') + '>'
@@ -1175,33 +1215,104 @@
             +   'このゲームの記録・ポイントは、フォームのあと下の「報告する」ボタンで残ります。下のURL欄は使わなくてOK。</div>'
             + '</div>';
     }
+    /* v28: 証拠は「画像そのもの」を第一手段にする。
+       URLを貼るにはいったんDrive等に上げる必要があり、そこで報告が止まっていた。
+       PCは Ctrl+V でスクショを直接貼れる／ドラッグ&ドロップも可、
+       スマホはタップでカメラロール（=写真）を選ぶ、が最短経路。 */
     if(UP){
-      html += '<label class="btn btn-ghost" style="display:block;text-align:center;cursor:pointer;margin:6px 0 2px">'
-            + '📷 画像を添付する（スマホのスクショOK）'
-            + '<input type="file" id="rImg" accept="image/*" style="display:none"></label>'
+      html += '<div id="rDrop" style="border:2px dashed rgba(128,128,128,.55);border-radius:14px;'
+            +   'padding:16px 12px;text-align:center;margin:6px 0 4px;cursor:pointer;transition:.15s">'
+            +   '<div style="font-size:1.6rem;line-height:1">📷</div>'
+            +   '<div style="font-weight:900;font-size:.92rem;margin-top:4px">タップして写真・スクショを選ぶ</div>'
+            +   '<div style="font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1.7">'
+            +     'パソコンなら <b>Ctrl+V</b>（Macは⌘+V）でスクショをそのまま貼り付け／ドラッグ＆ドロップもOK</div>'
+            +   '<input type="file" id="rImg" accept="image/*" style="display:none">'
+            + '</div>'
+            + '<div id="rImgPrev" style="display:none;margin:6px 0 4px;text-align:center">'
+            +   '<img id="rImgThumb" alt="添付した証拠画像" style="max-width:100%;max-height:34vh;'
+            +     'border-radius:12px;border:1px solid rgba(128,128,128,.4);display:block;margin:0 auto">'
+            +   '<button type="button" class="btn btn-ghost" id="rImgClear" style="margin-top:6px">🗑 この画像をはずす</button>'
+            + '</div>'
             + '<div id="rImgInfo" style="font-size:.8rem;color:var(--muted);text-align:center"></div>'
-            + '<div style="font-size:.74rem;color:var(--muted);text-align:center;margin-bottom:4px">またはURLを貼る👇（どちらか一方でOK）</div>';
+            + '<details style="margin:4px 0 2px"><summary style="font-size:.78rem;color:var(--muted);cursor:pointer">'
+            +   'URLで出したい人はこちら（画像を付けたなら不要）</summary>';
     }
-    html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">'
-          + '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') + '</button>';
+    html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">';
+    if(UP) html += '</details>';
+    html += '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') + '</button>'
+          + '<button class="btn btn-ghost" id="backBasic">← 学習の報告にもどる</button>';
     render(html);
+    if($('backBasic')) $('backBasic').onclick = function(){ sceneReport(false); };
 
-    // v10: 画像選択→端末側で縮小して保持（送信時にアップロード）
+    /* v28: 画像の入り口を3つ用意する（選ぶ／貼り付ける／落とす）。
+       どれも同じ takeFile() に集約し、端末側で縮小してから保持する（送信は報告時）。 */
     var pendingImg = null;
     if(UP){
-      $('rImg').onchange = function(){
-        var f = this.files && this.files[0];
-        if(!f) return;
-        $('rImgInfo').textContent = '🖼 画像を縮小中…';
+      var drop = $('rDrop'), prev = $('rImgPrev'), thumb = $('rImgThumb'), info = $('rImgInfo');
+
+      function takeFile(f){
+        if(!f || !/^image\//.test(f.type || '')){
+          info.textContent = '⚠ 画像ファイルではないようです。写真かスクリーンショットを選んでください。';
+          return;
+        }
+        info.textContent = '🖼 画像を縮小中…';
         compressImage(f).then(function(dataUrl){
           pendingImg = { dataUrl: dataUrl, name: (f.name || 'evidence.jpg').replace(/\.[^.]+$/, '') + '.jpg' };
+          thumb.src = dataUrl;
+          prev.style.display = 'block';
+          drop.style.display = 'none';
           var kb = Math.round(dataUrl.length * 0.75 / 1024);
-          $('rImgInfo').textContent = '✅ 添付準備OK：' + f.name + '（約' + kb + 'KB・報告と一緒に送信されます）';
+          info.textContent = '✅ 添付OK（約' + kb + 'KB）。このまま報告すると一緒に送られます。';
+          if(window.MCQTrack) MCQTrack('evidence_attached', (CFG.goalId||'?') + ':' + QID);
         }).catch(function(){
           pendingImg = null;
-          $('rImgInfo').textContent = '⚠ この画像は読み込めませんでした。別の画像かURL貼り付けをお試しください。';
+          info.textContent = '⚠ この画像は読み込めませんでした。別の画像を試すか、URLで出してください。';
         });
+      }
+
+      drop.onclick = function(){ $('rImg').click(); };
+      $('rImg').onchange = function(){ takeFile(this.files && this.files[0]); };
+
+      $('rImgClear').onclick = function(){
+        pendingImg = null; thumb.removeAttribute('src');
+        prev.style.display = 'none'; drop.style.display = 'block';
+        info.textContent = ''; $('rImg').value = '';
       };
+
+      // ドラッグ＆ドロップ（PC）
+      ['dragenter','dragover'].forEach(function(ev){
+        drop.addEventListener(ev, function(e){
+          e.preventDefault(); e.stopPropagation();
+          drop.style.borderColor = '#2e7d32'; drop.style.background = 'rgba(46,125,50,.08)';
+        });
+      });
+      ['dragleave','drop'].forEach(function(ev){
+        drop.addEventListener(ev, function(e){
+          e.preventDefault(); e.stopPropagation();
+          drop.style.borderColor = ''; drop.style.background = '';
+        });
+      });
+      drop.addEventListener('drop', function(e){
+        var dt = e.dataTransfer;
+        if(dt && dt.files && dt.files.length) takeFile(dt.files[0]);
+      });
+
+      /* 貼り付け（PCのスクショが一番よく使われる経路）。
+         document に付けるので、URL欄など画面のどこにフォーカスがあっても拾える。
+         報告画面を離れたあとも生き残らないよう、要素の生存でガードして自分を外す。 */
+      var onPaste = function(e){
+        if(!document.body.contains(drop) && !document.body.contains(prev)){
+          document.removeEventListener('paste', onPaste); return;
+        }
+        var items = (e.clipboardData && e.clipboardData.items) || [];
+        for(var i = 0; i < items.length; i++){
+          if(items[i].kind === 'file' && /^image\//.test(items[i].type)){
+            var f = items[i].getAsFile();
+            if(f){ e.preventDefault(); takeFile(f); return; }
+          }
+        }
+      };
+      document.addEventListener('paste', onPaste);
     }
 
     function refreshEvReq(){
@@ -1223,26 +1334,38 @@
       };
     });
     refreshEvReq();
-    wireRoute(function(){ sceneReport(fromSkip); });   // v9: 報告画面でもルート切替可
+    wireRoute(function(){ sceneReportPractice(fromSkip); });   // v9: 報告画面でもルート切替可
 
     $('submit').onclick = function(){
       if(!captureMember()) return;
       var sel = root.querySelector('.opt.sel');
       var need = sel && sel.getAttribute('data-need') === '1';
       var lv = root.querySelector('input[name="lv"]:checked');
-      var pct = lv ? lv.value : String(achieved || 25);
+      var pct = lv ? lv.value : '125';
       var practice = $('rP').value.trim();
       var evidence = $('rE').value.trim();
       // 不正抑止：実践125%以上は証拠（画像添付 or URL）必須。
       // ただしフォーム運用時は写真をフォーム側で受けるため、ここでは必須にしない。
       if(need && !FORM && !/^https?:\/\/.+/.test(evidence) && !pendingImg){
-        $('rE').style.borderColor = '#ef5350';
-        $('rE').placeholder = UP ? '画像を添付するか、証拠URLを貼ってください' : '実践報告には証拠URLが必要です（https://…）';
-        $('rE').focus();
+        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ 証拠がまだです。上の枠から写真・スクショを1枚つけてください（URLでも可）。';
+        if($('rDrop')){ $('rDrop').style.borderColor = '#ef5350'; $('rDrop').scrollIntoView({block:'center', behavior:'smooth'}); }
+        else { $('rE').style.borderColor = '#ef5350'; $('rE').focus(); }
         return;
       }
+      submitReport({ pct: pct, practice: practice, evidence: evidence, img: pendingImg,
+                     btn: $('submit'), label: (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') });
+    };
+  }
+
+  /* 送信処理は2つの報告画面で共通。
+     画像があれば先にアップロードして証拠URLに変換するが、
+     アップロードに失敗しても報告そのものは止めない（サーバー未対応でも前に進める）。 */
+  function submitReport(o){
+    var pct = o.pct, practice = o.practice || '', evidence = o.evidence || '';
+    var pendingImg = o.img, btn = o.btn;
+    {
       var score = (quizPct > 0) ? (answered + '/' + QUEST.quiz.length) : '';
-      var btn = $('submit'); btn.disabled = true;
+      btn.disabled = true;
       // v16: 添付画像があれば先にアップロードして証拠URLに変換。
       //   ただしアップロードに失敗しても報告は止めない（サーバー未対応でも前に進める）。
       var imgFailed = false;
@@ -1267,10 +1390,10 @@
         });
       }).catch(function(){
         // ここに来るのは通信断など。報告自体が送れなかったときだけ再試行を促す。
-        btn.disabled = false; btn.textContent = SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する';
-        $('rImgInfo').textContent = '⚠ 送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。';
+        btn.disabled = false; btn.textContent = o.label || '報告する';
+        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ 送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。';
       });
-    };
+    }
   }
 
   // v3: 討伐演出（EXP・ご褒美・称号・討伐ムービープロンプト・記録タイム）
