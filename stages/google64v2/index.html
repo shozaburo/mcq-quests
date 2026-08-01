@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>β2 Google64・エージェント編 マンダラチャートクエスト | みんなのAI実践塾</title>
+<title>Gemini編 マンダラチャートクエスト | みんなのAI実践塾</title>
 <style>
   :root{--gold:#FFD700; --muted:#9aa3b5; --ink:#1a2233; --pink:#f06292; --green:#66bb6a;}
   *{box-sizing:border-box;}
@@ -141,7 +141,7 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="goal">β GOAL ─ GOOGLE 64</span>
+    <span class="goal">GOAL</span>
     <h1 id="centerCatch">Google賢者になろう</h1>
     <p>動画で学び、クイズで試し、実践で「こうげき」。みんなの力でボスのHPを削り、64の封印を解け！</p>
     <!-- CROSS-LINK: 別サイトに分離するときはこの1行を消す -->
@@ -239,7 +239,7 @@
   }
 })();
 </script>
-<script src="data/config.js?v=5"></script>
+<script src="data/config.js?v=6"></script>
 <script src="data/characters.js?v=10"></script>
 <script src="data/areas.js?v=9"></script>
 <script src="data/progress.js"></script>
@@ -277,7 +277,7 @@
   if(CFG.goalName){
     document.title = CFG.goalName + ' マンダラチャートクエスト | みんなのAI実践塾';
     var _gl=document.querySelector('.goal');
-    if(_gl) _gl.textContent = (CFG.goalId||'') + ' GOAL ─ ' + String(CFG.goalName).toUpperCase();
+    if(_gl) _gl.textContent = 'GOAL ─ ' + String(CFG.goalName).toUpperCase();
   }
 
   /* ── v3: トークン取得（マイページリンク経由） ── */

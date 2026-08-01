@@ -141,7 +141,7 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="goal">λ GOAL ─ 美作クエスト</span>
+    <span class="goal">GOAL</span>
     <h1 id="centerCatch">Google賢者になろう</h1>
     <p>動画で学び、クイズで試し、実践で「こうげき」。みんなの力でボスのHPを削り、64の封印を解け！</p>
     <!-- CROSS-LINK: 別サイトに分離するときはこの1行を消す -->
@@ -269,7 +269,7 @@
   if(CFG.goalName){
     document.title = CFG.goalName + ' マンダラチャートクエスト | みんなのAI実践塾';
     var _gl=document.querySelector('.goal');
-    if(_gl) _gl.textContent = (CFG.goalId||'') + ' GOAL ─ ' + String(CFG.goalName).toUpperCase();
+    if(_gl) _gl.textContent = 'GOAL ─ ' + String(CFG.goalName).toUpperCase();
   }
 
   /* ── v3: トークン取得（マイページリンク経由） ── */

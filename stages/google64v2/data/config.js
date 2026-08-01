@@ -4,7 +4,7 @@
    ============================================================ */
 window.MCQ_CONFIG = {
   goalId: "β2",
-  goalName: "Google64・エージェント編",
+  goalName: "Gemini編",
 
   // マンダラボードの見た目
   board: {
