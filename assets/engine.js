@@ -922,15 +922,23 @@
   //   v20: クイズ中はキャラ・セリフ枠を隠し、問題文を本文に大きく表示（読みやすさ最優先）。
   //        キャラのリアクション・激励は結果画面（sceneScore）でまとめて行う。
   var answered = 0, quizPct = 0;
+  /* v26: 誤答を覚えて「どこで間違えたか」を返す。
+     MISSED = [{i, q, picked, answer, choices, explain}]（i は元の問題番号）
+     ORDER  = いま出題している問題番号の並び（弱点だけ再挑戦のとき部分集合になる） */
+  var MISSED = [];
+  var ORDER = null;   // null = 全問。配列 = その番号だけ出す
+  function quizOrder(){ return ORDER || QUEST.quiz.map(function(_, i){ return i; }); }
   var KANJI = '一二三四五六七八九十';
+  /* qi は「出題順のインデックス」。実際の問題番号は quizOrder()[qi] */
   function sceneQuiz(qi){
     setStep(3);
+    var ORD = quizOrder(), qn = ORD[qi];
     if(qi===0){ FX_COMBO = 0; if(window.MCQTrack) MCQTrack('quiz_start', (CFG.goalId||'?') + ':' + QID); }
     showStage(false); stageHero(false);
-    var item = QUEST.quiz[qi];
-    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + QUEST.quiz.length + '　✨ 正解でなかよし度アップ！</div>'
+    var item = QUEST.quiz[qn];
+    var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + ORD.length + (ORDER ? '（にがて集中）' : '') + '　✨ 正解でなかよし度アップ！</div>'
       + '<div style="font-weight:800;font-size:1.02rem;line-height:1.85;margin:4px 2px 12px">'
-      +   '<span style="color:var(--chara,#f57c00)">第' + (KANJI.charAt(qi) || (qi+1)) + '問</span>　' + esc(item.q) + '</div>';
+      +   '<span style="color:var(--chara,#f57c00)">第' + (KANJI.charAt(qn) || (qn+1)) + '問</span>　' + esc(item.q) + '</div>';
     item.choices.forEach(function(c, ci){
       html += '<div class="choice" data-ci="' + ci + '">' + esc(c) + '<span class="mark"></span></div>';
     });
@@ -949,8 +957,19 @@
           if(ci === ans){ c.classList.add('correct'); c.querySelector('.mark').textContent = '◯'; }
           else if(ci === picked){ c.classList.add('wrong'); c.querySelector('.mark').textContent = '✕'; }
         });
-        if(ok){ answered++; fxCorrect(); }
-        else  { QUIZ_MISS++; fxWrong(); }
+        if(ok){
+          answered++; fxCorrect();
+          // 一度間違えた問題を解き直して正解したら、弱点リストから外す
+          MISSED = MISSED.filter(function(m){ return m.i !== qn; });
+        } else {
+          QUIZ_MISS++; fxWrong();
+          if(!MISSED.some(function(m){ return m.i === qn; })){
+            MISSED.push({ i:qn, q:item.q, picked:picked, answer:ans,
+                          choices:item.choices, explain:item.explain || '' });
+          } else {
+            MISSED.forEach(function(m){ if(m.i === qn) m.picked = picked; });
+          }
+        }
         // 解説は本文にそのまま出す（セリフ枠は使わない＝読みやすい）
         var ex = $('qExplain');
         if(ex){
@@ -960,8 +979,8 @@
           ex.innerHTML = '<b>' + (ok ? '◯ 正解！' : '✕ ざんねん…') + '</b>　' + esc(item.explain || '');
         }
         var nb = $('nextQ'); nb.removeAttribute('disabled');
-        nb.textContent = (qi+1 < QUEST.quiz.length) ? '次の問いへ →' : 'けっかを見る →';
-        nb.onclick = function(){ (qi+1 < QUEST.quiz.length) ? sceneQuiz(qi+1) : sceneScore(); };
+        nb.textContent = (qi+1 < ORD.length) ? '次の問いへ →' : 'けっかを見る →';
+        nb.onclick = function(){ (qi+1 < ORD.length) ? sceneQuiz(qi+1) : sceneScore(); };
       };
     });
   }
@@ -997,7 +1016,11 @@
     setStep(3);
     // v20: 結果画面はキャラの見せ場。大きく登場して、キャラの口調で称賛/激励する。
     showStage(true); stageHero(true);
-    var total = QUEST.quiz.length, c = answered;
+    var total = QUEST.quiz.length;
+    // v26: 「まだ間違えたままの問題」を基準に採点する。
+    //      弱点だけ解き直したときも、全体で何問できているかが正しく出る。
+    var c = ORDER ? (total - MISSED.length) : answered;
+    if(c < 0) c = 0; if(c > total) c = total;
     // 合格ライン：半分以上=75%、全問=100%
     quizPct = (c === total) ? 100 : (c >= Math.ceil(total/2) ? 75 : 0);
     if(window.MCQTrack) MCQTrack('quiz_score', (CFG.goalId||'?') + ':' + QID + ':' + quizPct);
@@ -1009,6 +1032,13 @@
     var line = (quizPct === 100) ? L.score100 : (quizPct === 75) ? L.score75 : L.scoreFail;
     if(noMiss) line += SOFT ? ' しかも一度もまちがえずにクリア！すごい！' : ' しかも一度のミスもない、完璧なクリアだ。';
     else if(quizPct === 100 && QUIZ_MISS > 0) line += SOFT ? ' 次はノーミスクリアをめざしてみよう！' : ' 次はノーミスの一発クリアを狙うがよい。';
+    // v26: まだ落としている問題があるなら「下に何が出ているか」まで言い切る（突き放さない）
+    if(MISSED.length){
+      var nokori = MISSED.length + '問';
+      line += SOFT
+        ? ' 残りは' + nokori + '。下に「どこで分かれたか」を出しておいたよ。そこだけ読んで、もう一度その' + nokori + 'に挑もう！'
+        : ' 落としたのは' + nokori + 'だけじゃ。下に分かれ目を記しておいた。そこを掴んでその' + nokori + 'に挑み直せ——それで抜ける。';
+    }
     say(line);
     if(quizPct > 0) bump(quizPct);
     var html = '<div class="score-wrap"><div class="score-big">' + c + ' / ' + total + '</div>';
@@ -1029,17 +1059,46 @@
       + (quizPct > 0 && rec <= 300 ? '<div style="margin-top:4px;font-weight:900;color:#e65100;font-size:.85rem">⚡ スピードクリア！ この速さはランキング上位級！</div>' : '')
       + '<div style="margin-top:6px;font-size:.74rem;color:var(--muted)">ポイントは報告時に加算：100%=100pt／実践125%〜=225pt〜（🏆は右上に反映）</div>'
       + '</div>';
+
+    /* v26: 📝 まちがえた問題だけを振り返る「復習カード」。
+       「映像に戻れ」と突き放さず、どこをどう取り違えたかを具体的に見せる。 */
+    if(MISSED.length){
+      html += '<div style="background:rgba(239,83,80,.08);border:1.5px solid rgba(239,83,80,.45);border-radius:12px;padding:11px 14px;margin:8px 0">'
+        + '<div style="font-weight:900;font-size:.88rem;margin-bottom:6px;color:#c62828">📝 ここが分かれ目（'
+        + MISSED.length + '問）</div>';
+      MISSED.forEach(function(m){
+        html += '<div style="padding:8px 0;border-top:1px dashed rgba(128,128,128,.3)">'
+          + '<div style="font-weight:800;font-size:.86rem;line-height:1.7">第' + (KANJI.charAt(m.i) || (m.i+1)) + '問　' + esc(m.q) + '</div>'
+          + '<div style="font-size:.82rem;line-height:1.8;margin-top:5px">'
+          +   '<div style="color:#c62828">✕ あなた：' + esc(m.choices[m.picked] || '') + '</div>'
+          +   '<div style="color:#2e7d32">◯ 正解　：' + esc(m.choices[m.answer] || '') + '</div>'
+          + '</div>'
+          + (m.explain ? '<div style="font-size:.8rem;line-height:1.75;margin-top:5px;color:var(--muted)">💡 ' + esc(m.explain) + '</div>' : '')
+          + '</div>';
+      });
+      html += '</div>';
+    }
+
     if(quizPct > 0){
-      html += '<button class="btn btn-primary" id="toReport">🚀 報告へ進む →</button>'
-            + '<button class="btn btn-ghost" id="retry">もう一度挑む（100%を狙う）</button>';
+      html += '<button class="btn btn-primary" id="toReport">🚀 報告へ進む →</button>';
+      if(MISSED.length) html += '<button class="btn btn-ghost" id="retryWeak">🎯 まちがえた' + MISSED.length + '問だけ解き直す（100%を狙う）</button>';
+      html += '<button class="btn btn-ghost" id="retry">はじめから全問やり直す</button>';
     } else {
-      html += '<button class="btn btn-primary" id="retry">🔥 もう一度挑む</button>'
+      if(MISSED.length) html += '<button class="btn btn-primary" id="retryWeak">🎯 まちがえた' + MISSED.length + '問だけ解き直す</button>';
+      html += '<button class="btn ' + (MISSED.length ? 'btn-ghost' : 'btn-primary') + '" id="retry">🔥 はじめから挑む</button>'
             + '<button class="btn btn-ghost" id="backVideo">動画を見直す</button>';
     }
     render(html);
     if(quizPct === 100) celebrate();   // 🎉 全問正解でファンファーレ＋紙吹雪
     if($('toReport')) $('toReport').onclick = function(){ stageHero(false); sceneReport(false); };
-    if($('retry')) $('retry').onclick = function(){ stageHero(false); answered = 0; sceneQuiz(0); };   // ミス数・タイムは持ち越し（ボーナス狙いの引き直し防止）
+    // ミス数・タイムは持ち越し（ボーナス狙いの引き直し防止）
+    if($('retry')) $('retry').onclick = function(){ stageHero(false); answered = 0; ORDER = null; MISSED = []; sceneQuiz(0); };
+    // v26: にがてだけ解き直す（MISSED は正解できたぶんだけ自動で減る）
+    if($('retryWeak')) $('retryWeak').onclick = function(){
+      stageHero(false);
+      ORDER = MISSED.map(function(m){ return m.i; }).sort(function(a,b){ return a-b; });
+      sceneQuiz(0);
+    };
     if($('backVideo')) $('backVideo').onclick = function(){ stageHero(false); sceneVideo(); };
   }
 
