@@ -787,9 +787,22 @@
       extHtml += '<div style="font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.7">'
         + 'このマスの動画概要はまだ準備中です。次の画面の <b>📼 復習アーカイブ</b>（朝活の録画）で学べます。</div>';
     }
-    // 📑 スライド資料（あれば主教材として動画の下に出す）
+    /* 📑 スライド資料（PDF）
+       以前はDriveへ飛ばすリンクだった。「スライドを見るのにいちいちDriveを開くのが
+       面倒」という指摘を受け、ページ内にビューワーを埋め込む。置き場所は動画のすぐ下
+       ＝見終わってそのまま要点を追える位置。Driveの /preview はPDFのページ送りと
+       全画面に対応しているので、専用ライブラリを足さずにビューワーになる。 */
     var slideHtml = slideId
-      ? '<a class="btn btn-blue" href="' + driveView(slideId) + '" target="_blank" rel="noopener">📑 スライド資料で要点を見る</a>'
+      ? '<div style="margin:14px 0 4px">'
+        + '<div style="font-size:.82rem;color:var(--muted);margin-bottom:6px;line-height:1.7">'
+        +   '📑 <b>スライド資料</b>（この回の要点。ページ送りできます）</div>'
+        + '<iframe src="https://drive.google.com/file/d/' + esc(slideId) + '/preview" loading="lazy" '
+        +   'allow="fullscreen" allowfullscreen title="スライド資料" '
+        +   'style="width:100%;aspect-ratio:4/3;height:auto;min-height:280px;max-height:72vh;'
+        +   'border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#fff;display:block"></iframe>'
+        + '<a class="btn btn-ghost" href="' + driveView(slideId) + '" target="_blank" rel="noopener" '
+        +   'style="margin-top:6px">🔍 スライドを別タブで大きく見る</a>'
+        + '</div>'
       : '';
     // 📊 要点インフォグラフィック（Driveの画像を全体表示・タップで拡大）
     var infoId = URLS.info || '';
