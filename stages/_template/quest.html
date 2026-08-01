@@ -14,22 +14,15 @@
 <script src="data/config.js?v=5"></script>
 <script src="data/characters.js?v=9"></script>
 <script src="data/urls.js?v=4"></script>
-<script src="data/quests/A.js"></script>
-<script src="data/quests/B.js"></script>
-<script src="data/quests/C.js"></script>
-<script src="data/quests/D.js"></script>
-<script src="data/quests/E.js"></script>
-<script src="data/quests/F.js"></script>
-<script src="data/quests/G.js"></script>
-<script src="data/quests/H.js"></script>
-<script src="data/missions/A.js"></script>
-<script src="data/missions/B.js"></script>
-<script src="data/missions/C.js"></script>
-<script src="data/missions/D.js"></script>
-<script src="data/missions/E.js"></script>
-<script src="data/missions/F.js"></script>
-<script src="data/missions/G.js"></script>
-<script src="data/missions/H.js"></script>
-<script src="../../assets/engine.js?v=23"></script>
+<script>
+/* v19: 1マス表示に必要なエリア分だけ読む（初期ロード軽量化。全64マス分は読まない） */
+(function(){
+  var a=((window.PAGE&&window.PAGE.questId)||'A1').charAt(0);
+  if('ABCDEFGH'.indexOf(a)<0)a='A';
+  document.write('<script src="data/quests/'+a+'.js"><\/script>');
+  document.write('<script src="data/missions/'+a+'.js"><\/script>');
+})();
+</script>
+<script src="../../assets/engine.js?v=24"></script>
 </body>
 </html>

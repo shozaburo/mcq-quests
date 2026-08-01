@@ -5,6 +5,8 @@
    達成%: 動画25 / アーカイブ50 / クイズ(半分以上75・全問100) / 実践125-200
    v3: トークン認証（本体GAS連携）・討伐演出（EXP/ご褒美/称号）・
        討伐ムービー生成プロンプト（自分のアバター×ボス×実践内容）
+   v19: スマホ・サクサク化（背景jpg優先／fixed廃止／動画をaspect-ratio化／
+        プライマリボタンを画面下に固定＝親指ゾーン）
    ============================================================ */
 (function(){
   'use strict';
@@ -120,20 +122,27 @@
     return self ? self.getAttribute('src').replace(/engine\.js.*$/, '') : 'assets/';
   })();
 
-  /* ── エリア背景画像を敷く（このステージ内 bg/{AREA}.png を優先） ── */
+  /* ── エリア背景画像を敷く（このステージ内 bg/{AREA}.jpg → .png の順に試す） ── */
   (function setStageBg(){
-    var url = AB + "bg/" + AREA + ".png";   // ページ（stages/xxx/）からの相対＝ステージ専用背景
-    var img = new Image();
-    img.onload = function(){
-      document.body.style.backgroundImage =
-        "linear-gradient(180deg, rgba(20,14,6,.30) 0%, rgba(20,14,6,.55) 26%, rgba(244,246,251,.0) 40%, var(--bg) 46%), "
-        + "url('" + url + "')";
-      document.body.style.backgroundSize = "cover, cover";
-      document.body.style.backgroundPosition = "center top, center top";
-      document.body.style.backgroundRepeat = "no-repeat, no-repeat";
-      document.body.style.backgroundAttachment = "scroll, fixed";
-    };
-    img.src = url;  // 無ければ既存グラデのまま
+    var exts = ['jpg', 'png'], i = 0;   // v19: 軽いjpgを優先（PNGは後方互換）
+    function tryNext(){
+      if(i >= exts.length) return;      // 無ければ既存グラデのまま
+      var url = AB + "bg/" + AREA + "." + exts[i++];
+      var img = new Image();
+      img.onload = function(){
+        document.body.style.backgroundImage =
+          "linear-gradient(180deg, rgba(20,14,6,.30) 0%, rgba(20,14,6,.55) 26%, rgba(244,246,251,.0) 40%, var(--bg) 46%), "
+          + "url('" + url + "')";
+        document.body.style.backgroundSize = "cover, cover";
+        document.body.style.backgroundPosition = "center top, center top";
+        document.body.style.backgroundRepeat = "no-repeat, no-repeat";
+        // v19: fixed はiOSで効かず描画も重いためやめる（サクサク化）
+        document.body.style.backgroundAttachment = "scroll, scroll";
+      };
+      img.onerror = tryNext;
+      img.src = url;
+    }
+    tryNext();
   })();
 
   /* ── 🏅 スコアHUD（上部固定：アバター/EXP/スコア/順位） ── */
@@ -541,7 +550,9 @@
     + '.fx-bond.full .fx-bond-fill{background:linear-gradient(90deg,#ffd54f,#ff5e8a);box-shadow:0 0 10px rgba(255,138,101,.8)}'
     // v14: 横に広い画面では立ち絵（全身透過）を大きめに＝背景となじませる。狭い画面は角丸アイコン。
     + '@media(min-width:721px) and (min-height:601px){.chara.tachie{width:168px!important;max-height:272px!important}}'
-    + '@media(min-width:1000px) and (min-height:601px){.chara.tachie{width:196px!important;max-height:320px!important}}';
+    + '@media(min-width:1000px) and (min-height:601px){.chara.tachie{width:196px!important;max-height:320px!important}}'
+    // v19: スマホは「進む」ボタンを画面下（親指ゾーン）に貼り付け＝スクロールせず次へ行ける
+    + '@media(max-width:720px){#action .btn-primary{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:30;box-shadow:0 6px 18px rgba(0,0,0,.35)}}';
     document.head.appendChild(s);
   }
   function charaEl(){ return document.getElementById('charaImg') || document.querySelector('.chara-emoji'); }
@@ -637,7 +648,8 @@
           "linear-gradient(" + ov + "), url('" + url + "')";
         document.body.style.backgroundSize = 'cover';
         document.body.style.backgroundPosition = 'center';
-        document.body.style.backgroundAttachment = 'fixed';
+        // v19: fixed はiOSで効かず描画も重いためやめる（サクサク化）
+        document.body.style.backgroundAttachment = 'scroll';
         document.body.style.backgroundRepeat = 'no-repeat';
       };
       im.onerror = tryNext;
@@ -785,7 +797,7 @@
     render(
       infoHtml
       + '<video id="qVideo" controls playsinline preload="metadata" '
-      +   'style="display:none;width:100%;max-height:320px;border-radius:12px;background:#000;margin-bottom:4px"></video>'
+      +   'style="display:none;width:100%;aspect-ratio:16/9;max-height:62vh;height:auto;border-radius:12px;background:#000;margin-bottom:4px"></video>'
       + '<div id="extWrap">' + extHtml + '</div>'
       + slideHtml
       + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
@@ -816,7 +828,7 @@
         ifr.src = 'https://drive.google.com/file/d/' + driveId + '/preview';
         ifr.setAttribute('allow', 'autoplay; fullscreen');
         ifr.setAttribute('allowfullscreen', '');
-        ifr.style.cssText = 'width:100%;height:320px;border:none;border-radius:12px;background:#000;margin-bottom:4px;display:block';
+        ifr.style.cssText = 'width:100%;aspect-ratio:16/9;height:auto;min-height:220px;border:none;border-radius:12px;background:#000;margin-bottom:4px;display:block';
         v.replaceWith(ifr);
         var w2 = $('extWrap'); if(w2) w2.style.display = 'none';
         if(window.MCQTrack) MCQTrack('video_drive', (CFG.goalId||'?') + ':' + QID);

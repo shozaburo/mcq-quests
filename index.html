@@ -167,16 +167,16 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 
   if(window.MCQTrack) MCQTrack('title_view');
 
-  /* ワールドマップ背景（assets/worldmap.png を置くと自動表示） */
+  /* ワールドマップ背景（assets/worldmap.jpg を置くと自動表示） */
   (function(){
     var wm=new Image();
     wm.onload=function(){
       document.body.style.backgroundImage =
-        "linear-gradient(180deg, rgba(12,9,22,.62), rgba(12,9,22,.86)), url('assets/worldmap.png')";
+        "linear-gradient(180deg, rgba(12,9,22,.62), rgba(12,9,22,.86)), url('assets/worldmap.jpg')";
       document.body.style.backgroundSize = "cover, cover";
       document.body.style.backgroundPosition = "center, center";
     };
-    wm.src='assets/worldmap.png';
+    wm.src='assets/worldmap.jpg';
   })();
 
   document.getElementById('startBtn').onclick=function(){
