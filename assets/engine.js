@@ -776,6 +776,14 @@
       return m ? 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/video/' : '';
     }catch(e){ return ''; }
   })();
+  // スライドPDFも動画と同じ考え方（実体は本番サーバー。テストサイトからは本番を見る）
+  var REMOTE_SLIDE_BASE = (function(){
+    try{
+      if(location.hostname === 're-gi.jp') return '';
+      var m = location.pathname.match(/\/stages\/([^\/]+)\//);
+      return m ? 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/slide/' : '';
+    }catch(e){ return ''; }
+  })();
   function sceneVideo(){
     setStep(1);
     showStage(true); stageHero(false);
@@ -796,16 +804,30 @@
        面倒」という指摘を受け、ページ内にビューワーを埋め込む。置き場所は動画のすぐ下
        ＝見終わってそのまま要点を追える位置。Driveの /preview はPDFのページ送りと
        全画面に対応しているので、専用ライブラリを足さずにビューワーになる。 */
+    /* v29: slide は2通りの書き方を受ける。
+         ・DriveファイルID（従来）      → Driveの /preview で埋め込む
+         ・PDFのパス/URL（.pdf で終わる）→ そのまま埋め込む（ブラウザ内蔵ビューワー）
+       Gemini Notebook から取り出したPDFは自前サーバーに置くので後者を使う。
+       ローカルに無い場合に備え、相対パスは本番の同じパスへフォールバックする。 */
+    var slideIsPdf = /\.pdf(\?.*)?$/i.test(slideId);
+    var slideSrc = !slideIsPdf ? ('https://drive.google.com/file/d/' + slideId + '/preview')
+      : /^https?:/i.test(slideId) ? slideId
+      /* 相対パス（例 slide/A1.pdf）。PDFは重くGitHubに置けないので実体は本番サーバーだけに
+         ある。テストサイトから開いたときも見えるよう、本番の同じパスへ向ける。 */
+      : (REMOTE_SLIDE_BASE ? REMOTE_SLIDE_BASE + slideId.replace(/^slide\//, '') : slideId);
+    var slideOpen = slideIsPdf ? slideSrc : driveView(slideId);
     var slideHtml = slideId
       ? '<div style="margin:14px 0 4px">'
         + '<div style="font-size:.82rem;color:var(--muted);margin-bottom:6px;line-height:1.7">'
-        +   '📑 <b>スライド資料</b>（この回の要点。ページ送りできます）</div>'
-        + '<iframe src="https://drive.google.com/file/d/' + esc(slideId) + '/preview" loading="lazy" '
+        +   (SOFT ? '📑 <b>スライド</b>（この回のポイント。めくって見てね）'
+                  : '📑 <b>スライド資料</b>（この回の要点。ページ送りできます）') + '</div>'
+        + '<iframe id="qSlide" src="' + esc(slideSrc) + '" loading="lazy" '
         +   'allow="fullscreen" allowfullscreen title="スライド資料" '
         +   'style="width:100%;aspect-ratio:4/3;height:auto;min-height:280px;max-height:72vh;'
         +   'border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#fff;display:block"></iframe>'
-        + '<a class="btn btn-ghost" href="' + driveView(slideId) + '" target="_blank" rel="noopener" '
-        +   'style="margin-top:6px">🔍 スライドを別タブで大きく見る</a>'
+        + '<a class="btn btn-ghost" href="' + esc(slideOpen) + '" target="_blank" rel="noopener" '
+        +   'style="margin-top:6px">'
+        +   (SOFT ? '🔍 大きい画面で見る' : '🔍 スライドを別タブで大きく見る') + '</a>'
         + '</div>'
       : '';
     // 📊 要点インフォグラフィック（Driveの画像を全体表示・タップで拡大）
@@ -1143,13 +1165,17 @@
       +   '<input type="radio" name="lv" value="' + lv.pct + '" checked>'
       +   '<div><b>' + esc(lv.t) + ' <span class="pct ' + lv.cls + '">' + lv.pct + '%</span></b>'
       +   '<small>' + esc(lv.d) + '</small></div></label>'
-      + '<div class="field-label">感想・気づき（チャットにも共有されます）</div>'
-      + '<textarea id="rP" rows="2" placeholder="例：ここが分かってスッキリした／さっそく使ってみたい"></textarea>'
+      + '<div class="field-label">' + (SOFT ? 'きょうの気づき（みんなにも届きます）' : '感想・気づき（チャットにも共有されます）') + '</div>'
+      + '<textarea id="rP" rows="2" placeholder="'
+      +   (SOFT ? '例：ここが分かってスッキリした／さっそく使ってみたい'
+              : '例：ここが理解できた／自分の業務でこう使えそうだ') + '"></textarea>'
       + '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 これで報告する' : '🚀 これで報告する') + '</button>'
       + '<div style="border-top:1px dashed rgba(128,128,128,.35);margin:14px 0 8px;padding-top:10px">'
       +   '<div style="font-size:.84rem;color:var(--muted);line-height:1.7;margin-bottom:6px">'
-      +     '学んだことを<b>実際の仕事で使った</b>なら、もう一段上の報告ができます（ポイントも大きい）。</div>'
-      +   '<button class="btn btn-primary" id="toPractice">🔥 実践したことも報告する（125%〜）→</button>'
+      +     (SOFT ? 'ならったことを<b>おしごとで使ってみた</b>なら、もう一段うえの報告ができるよ（ポイントも大きい！）'
+                  : '学んだことを<b>実際の仕事で使った</b>なら、もう一段上の報告ができます（ポイントも大きい）。') + '</div>'
+      +   '<button class="btn btn-primary" id="toPractice">'
+      +     (SOFT ? '🌱 やってみたことも報告する（125%〜）→' : '🔥 実践したことも報告する（125%〜）→') + '</button>'
       + '</div>';
     render(html);
     wireRoute(function(){ sceneReport(false); });
@@ -1185,10 +1211,12 @@
 
     var html = routeHtml() + memberFieldsHtml();
     html += '<div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;line-height:1.7">'
-          + (fromSkip
-              ? 'クイズを飛ばして<b>実践から</b>報告します。'
-              : '<b>実践の報告</b>です。')
-          + 'やった証拠（スクショなど）を1枚つけてください。みんなの記録として残ります。</div>';
+          + (SOFT
+              ? ((fromSkip ? 'クイズはとばして<b>やってみたこと</b>から報告するよ。' : '<b>やってみたこと</b>の報告だよ。')
+                 + 'やった様子（スクショや写真）を1枚つけてね。みんなの記録としてのこるよ。')
+              : ((fromSkip ? 'クイズを飛ばして<b>実践から</b>報告します。' : '<b>実践の報告</b>です。')
+                 + 'やった証拠（スクショなど）を1枚つけてください。みんなの記録として残ります。'))
+          + '</div>';
     levels.forEach(function(o, i){
       html += '<label class="opt' + (i===0?' sel':'') + '" data-need="' + (o.needEv?'1':'0') + '">'
             + '<input type="radio" name="lv" value="' + o.pct + '"' + (i===0?' checked':'') + '>'
@@ -1223,24 +1251,29 @@
       html += '<div id="rDrop" style="border:2px dashed rgba(128,128,128,.55);border-radius:14px;'
             +   'padding:16px 12px;text-align:center;margin:6px 0 4px;cursor:pointer;transition:.15s">'
             +   '<div style="font-size:1.6rem;line-height:1">📷</div>'
-            +   '<div style="font-weight:900;font-size:.92rem;margin-top:4px">タップして写真・スクショを選ぶ</div>'
+            +   '<div style="font-weight:900;font-size:.92rem;margin-top:4px">'
+            +     (SOFT ? 'タップして写真・スクショをえらぶ' : 'タップして写真・スクショを選ぶ') + '</div>'
             +   '<div style="font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1.7">'
-            +     'パソコンなら <b>Ctrl+V</b>（Macは⌘+V）でスクショをそのまま貼り付け／ドラッグ＆ドロップもOK</div>'
+            +     (SOFT ? 'パソコンなら <b>Ctrl+V</b>（Macは⌘+V）でスクショをそのまま貼れるよ／ドラッグ＆ドロップもOK'
+                        : 'パソコンなら <b>Ctrl+V</b>（Macは⌘+V）でスクショをそのまま貼り付け／ドラッグ＆ドロップもOK') + '</div>'
             +   '<input type="file" id="rImg" accept="image/*" style="display:none">'
             + '</div>'
             + '<div id="rImgPrev" style="display:none;margin:6px 0 4px;text-align:center">'
             +   '<img id="rImgThumb" alt="添付した証拠画像" style="max-width:100%;max-height:34vh;'
             +     'border-radius:12px;border:1px solid rgba(128,128,128,.4);display:block;margin:0 auto">'
-            +   '<button type="button" class="btn btn-ghost" id="rImgClear" style="margin-top:6px">🗑 この画像をはずす</button>'
+            +   '<button type="button" class="btn btn-ghost" id="rImgClear" style="margin-top:6px">'
+            +     (SOFT ? '🔄 べつの画像にする' : '🗑 この画像をはずす') + '</button>'
             + '</div>'
             + '<div id="rImgInfo" style="font-size:.8rem;color:var(--muted);text-align:center"></div>'
             + '<details style="margin:4px 0 2px"><summary style="font-size:.78rem;color:var(--muted);cursor:pointer">'
-            +   'URLで出したい人はこちら（画像を付けたなら不要）</summary>';
+            +   (SOFT ? 'URLで出したい人はこちら（画像をつけたならいらないよ）'
+                      : 'URLで出したい人はこちら（画像を付けたなら不要）') + '</summary>';
     }
     html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">';
     if(UP) html += '</details>';
     html += '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') + '</button>'
-          + '<button class="btn btn-ghost" id="backBasic">← 学習の報告にもどる</button>';
+          + '<button class="btn btn-ghost" id="backBasic">'
+          +   (SOFT ? '← まなびの報告にもどる' : '← 学習の報告にもどる') + '</button>';
     render(html);
     if($('backBasic')) $('backBasic').onclick = function(){ sceneReport(false); };
 
@@ -1347,7 +1380,9 @@
       // 不正抑止：実践125%以上は証拠（画像添付 or URL）必須。
       // ただしフォーム運用時は写真をフォーム側で受けるため、ここでは必須にしない。
       if(need && !FORM && !/^https?:\/\/.+/.test(evidence) && !pendingImg){
-        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ 証拠がまだです。上の枠から写真・スクショを1枚つけてください（URLでも可）。';
+        if($('rImgInfo')) $('rImgInfo').textContent = SOFT
+          ? '⚠ 写真がまだだよ。上の枠から写真・スクショを1枚えらんでね（URLでもOK）'
+          : '⚠ 証拠がまだです。上の枠から写真・スクショを1枚つけてください（URLでも可）。';
         if($('rDrop')){ $('rDrop').style.borderColor = '#ef5350'; $('rDrop').scrollIntoView({block:'center', behavior:'smooth'}); }
         else { $('rE').style.borderColor = '#ef5350'; $('rE').focus(); }
         return;
