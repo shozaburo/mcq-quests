@@ -1,3 +1,10 @@
-
 # スライドPDFは大きいので本番サーバーのみ（動画と同じ扱い）
 stages/*/slide/
+
+# インフォグラの原本PNG（1枚6MB前後の作業用マスター）。
+# サイトが使うのは同じフォルダの軽量JPGなので、テストサイトには要らない。
+# 正本 H:\…\mcq-site\stages\*\info\_backup_原本PNG\ に残してある。
+stages/*/info/_backup_原本PNG/
+
+# urls.js などの日付つきバックアップ
+*.bak_*

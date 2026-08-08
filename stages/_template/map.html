@@ -21,24 +21,98 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
 .overall{max-width:460px;margin:14px auto 4px;display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--dim)}
 .overall .bar{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
 .overall .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffe082,var(--gold));border-radius:99px;transition:width .8s}
-/* 街カード */
-.towns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
-@media(max-width:640px){.towns{grid-template-columns:1fr}}
-.town{position:relative;display:block;border-radius:16px;overflow:hidden;text-decoration:none;color:#fff;
-  border:2px solid rgba(255,255,255,.14);min-height:150px;background:#241a33 center/cover no-repeat;
-  transition:transform .15s,border-color .15s}
+/* ===== 世界観の背景（v32）=====
+   ステージごとに config.board.mapBg を置ければそれを、無ければ共有のワールドマップ。
+   文字が読めなくなるので必ず暗幕をかける。 */
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:var(--mapbg,none) center/cover no-repeat;
+  opacity:.5;filter:saturate(.85)}
+body::after{content:'';position:fixed;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(14,10,24,.72),rgba(20,14,34,.9) 60%,rgba(26,18,40,.96))}
+
+/* ===== 切り替えスイッチ（街 / マンダラ盤）===== */
+.viewsw{display:flex;gap:0;max-width:420px;margin:16px auto 4px;border:2px solid var(--gold);
+  border-radius:999px;overflow:hidden;background:rgba(0,0,0,.4)}
+.viewsw a{flex:1;text-align:center;padding:9px 6px;font-size:.86rem;font-weight:900;
+  text-decoration:none;color:var(--dim)}
+.viewsw a.on{background:var(--gold);color:#1a1206}
+.viewsw a:not(.on):hover{color:var(--gold)}
+.swnote{text-align:center;font-size:.72rem;color:var(--dim);margin-top:6px}
+
+/* ===== 街カード（v32：正方形サムネ＋読める本文）===== */
+.towns{display:grid;grid-template-columns:1fr 1fr;gap:38px 74px;margin-top:22px;position:relative}
+/* PCは真ん中に道を通す。v33: 道から各カードへ枝と「駅」の丸を出す。
+   線を引いただけだと左右を分ける仕切りに見えて、つながって見えなかった。 */
+@media(min-width:641px){
+  .towns::before{content:'';position:absolute;left:50%;top:40px;bottom:40px;width:0;
+    border-left:3px dashed rgba(245,197,66,.42);transform:translateX(-50%);z-index:0}
+  /* v34: 下げるのは margin ではなく transform。
+     margin だとグリッドの行の高さがずれて、左のカードだけ引き伸ばされて大きくなっていた。
+     transform はレイアウトに影響しないので、左右のカードが必ず同じ高さになる。 */
+  .town:nth-child(even){transform:translateY(64px)}
+  .town:nth-child(even):hover{transform:translateY(61px)}
+  .towns{padding-bottom:64px}
+  /* 枝（カード→道） */
+  .town::before{content:'';position:absolute;top:46px;width:34px;height:0;
+    border-top:3px dashed rgba(245,197,66,.42);z-index:0}
+  .town:nth-child(odd)::before{right:-36px}
+  .town:nth-child(even)::before{left:-36px}
+  /* 駅の丸（道の上） */
+  .town::after{content:'';position:absolute;top:39px;width:15px;height:15px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 0 4px rgba(245,197,66,.22);z-index:1}
+  .town:nth-child(odd)::after{right:-45px}
+  .town:nth-child(even)::after{left:-45px}
+}
+@media(max-width:640px){.towns{grid-template-columns:1fr;gap:14px}}
+.town{position:relative;z-index:1;display:flex;gap:12px;border-radius:16px;padding:12px;
+  text-decoration:none;color:#fff;background:rgba(22,16,34,.86);
+  border:2px solid rgba(255,255,255,.16);transition:transform .15s,border-color .15s}
 .town:hover{transform:translateY(-3px);border-color:var(--gold)}
-.town .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.25),rgba(10,8,18,.86) 78%)}
-.town .in{position:relative;z-index:1;padding:12px 14px;display:flex;flex-direction:column;height:100%;min-height:150px}
-.town .step{align-self:flex-start;background:rgba(0,0,0,.55);border:1px solid var(--gold);color:var(--gold);
-  border-radius:999px;padding:1px 10px;font-size:.66rem;font-weight:900}
-.town .nm{font-size:1.15rem;font-weight:900;margin-top:auto;text-shadow:0 2px 6px rgba(0,0,0,.7)}
-.town .loc{display:inline-block;font-size:.6rem;font-weight:700;color:#ffd98a;opacity:.9;margin-left:4px;vertical-align:middle}
-.town .tt{font-size:.78rem;color:#ffe9b3;font-weight:700}
-.town .tc{font-size:.7rem;color:#cfc7b8;margin-top:2px}
+.town .thumb{flex:none;width:88px;height:88px;border-radius:12px;object-fit:cover;
+  border:1px solid rgba(255,255,255,.22);background:#241a33}
+.town .in{display:flex;flex-direction:column;min-width:0;flex:1}
+.town .step{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.town .stepno{display:grid;place-items:center;width:26px;height:26px;flex:none;
+  background:var(--gold);color:#1a1206;border-radius:8px;font-size:1rem;font-weight:900}
+.town .lv{font-size:.68rem;font-weight:800;color:#ffe9b3;min-width:0}
+.town .learn{font-size:1.02rem;font-weight:900;line-height:1.4}
+.town .gain{font-size:.71rem;color:#ddd5c8;line-height:1.6;margin-top:4px}
+.town .flavor{font-size:.63rem;color:#9c9488;margin-top:6px;
+  border-top:1px solid rgba(255,255,255,.14);padding-top:4px}
 .town .pbar{height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;margin-top:7px}
 .town .pbar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s}
-.town .done{position:absolute;top:10px;right:12px;z-index:1;font-size:1.2rem;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+.town .done{position:absolute;top:8px;right:10px;font-size:1.15rem;z-index:2}
+/* ここにいる人たち（v33） */
+/* 高さを固定する。顔がある時と「まだ誰もいません」の時で高さが変わると、
+   カードごとに背丈が違って見える。 */
+.town .faces{display:flex;align-items:center;gap:4px;margin-top:8px;height:30px;overflow:hidden}
+.town .face{width:26px;height:26px;border-radius:50%;object-fit:cover;
+  border:2px solid rgba(245,197,66,.75);background:#332845}
+.town .facen{font-size:.64rem;color:var(--dim);font-weight:800}
+.town .top1{display:inline-flex;align-items:center;gap:4px;font-size:.64rem;font-weight:900;
+  color:#ffd98a;background:rgba(245,197,66,.14);border:1px solid rgba(245,197,66,.4);
+  border-radius:999px;padding:1px 8px}
+/* ランキングのちら見せ（v33） */
+.rank{margin-top:14px;border:1px solid rgba(245,197,66,.42);border-radius:14px;
+  background:rgba(0,0,0,.34);padding:11px 14px}
+.rank h3{font-size:.82rem;font-weight:900;color:var(--gold);margin-bottom:7px;
+  display:flex;align-items:center;gap:6px}
+.rank h3 a{margin-left:auto;font-size:.7rem;color:var(--dim);text-decoration:none}
+.rank h3 a:hover{color:var(--gold)}
+.rank ol{list-style:none;display:flex;gap:14px;flex-wrap:wrap}
+.rank li{display:flex;align-items:center;gap:6px;font-size:.74rem}
+.rank li .rk{font-weight:900;color:var(--gold);min-width:1.6em}
+.rank li img{width:24px;height:24px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.3)}
+.rank li .sc{color:var(--dim);font-size:.68rem}
+.rank .mine{font-size:.72rem;color:var(--dim);margin-top:7px;border-top:1px dashed rgba(255,255,255,.18);padding-top:6px}
+/* マンダラ盤への入り口 */
+.mandala{display:flex;align-items:center;gap:13px;margin-top:16px;padding:14px 16px;
+  border:2px solid var(--gold);border-radius:16px;text-decoration:none;color:#fff;
+  background:linear-gradient(135deg,rgba(245,197,66,.18),rgba(245,197,66,.06))}
+.mandala:hover{background:linear-gradient(135deg,rgba(245,197,66,.3),rgba(245,197,66,.12))}
+.mandala .mi{font-size:1.7rem;flex:none}
+.mandala b{display:block;font-size:.98rem;font-weight:900;color:var(--gold)}
+.mandala small{display:block;font-size:.74rem;color:var(--dim);line-height:1.6;margin-top:2px}
+.mandala .arrow{margin-left:auto;color:var(--gold);font-weight:900;font-size:1.1rem}
 /* フッター */
 .subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 .sub{display:inline-block;background:rgba(255,255,255,.07);color:#ddd;border:1px solid rgba(255,255,255,.28);
@@ -51,14 +125,35 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
   <header>
     <span class="goal" id="hGoal">AREA MAP</span>
     <h1><span class="em">🗾</span> <span id="hTitle">8つの街</span>をめぐる旅</h1>
-    <p id="hSub">好きな街から入ってOK。おすすめは STEP 1 の街から。</p>
+    <p id="hSub">A から順に進むのがおすすめですが、<b style="color:var(--gold)">どのエリアからでも入れます</b>。<br>
+      もう知っているところは飛ばしてOK。</p>
+    <div class="viewsw">
+      <a class="on" href="javascript:void(0)">🗺 街で見る</a>
+      <a href="index.html?skipintro=1">🧩 マンダラ盤</a>
+    </div>
+    <p class="swnote">同じ64マスを、街ごと／盤面ごとに見比べられます。</p>
     <div class="overall"><span>全体の解放</span><div class="bar"><i id="ovBar"></i></div><b id="ovVal" style="color:var(--gold)">0%</b></div>
   </header>
+
+  <a class="mandala" href="index.html?skipintro=1">
+    <span class="mi">🧩</span>
+    <span>
+      <b>マンダラ盤で64マスを見る</b>
+      <small>全体の地図です。クリアするとまとめカードの絵がはまっていきます。<br>
+        いま <b id="lootN" style="color:var(--gold)">0 / 64</b> 枚。ここから直接どのマスへも行けます。</small>
+    </span>
+    <span class="arrow">→</span>
+  </a>
+
+  <div class="rank" id="rankBox" style="display:none">
+    <h3>🏆 いま伸びている人<a href="#" id="rankMore">くわしく見る →</a></h3>
+    <ol id="rankTop"></ol>
+    <div class="mine" id="rankMine"></div>
+  </div>
 
   <div class="towns" id="towns"></div>
 
   <div class="subrow">
-    <a class="sub" href="index.html?skipintro=1">🧩 全体マップ（マンダラ盤面）</a>
     <a class="sub" href="intro.html">📖 はじめに（もう一度見る）</a>
     <a class="sub" href="../../index.html?start=1">🏠 トップへ</a>
   </div>
@@ -77,8 +172,10 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
   }catch(e){}
 })();
 </script>
-<script src="../../assets/bgm.js?v=8"></script>
+<script src="../../assets/bgm.js?v=9"></script>
 <script src="data/config.js?v=6"></script>
+<script src="../../assets/devtools.js?v=1"></script>
+<script src="../../assets/myhud.js?v=1"></script>
 <script src="data/areas.js?v=8"></script>
 <script src="data/characters.js?v=9"></script>
 <script>
@@ -91,6 +188,12 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
   document.title=(CFG.goalName||'')+' エリアマップ | みんなのAI実践塾';
   document.getElementById('hGoal').textContent=(CFG.goalId||'')+' '+(CFG.goalName||'').toUpperCase()+' — AREA MAP';
   if(CFG.board&&CFG.board.color) document.documentElement.style.setProperty('--gold', CFG.board.color);
+  /* v32: 世界観の背景。ステージ専用画像(board.mapBg)があればそれ、無ければ共有ワールドマップ。
+     「和風の日本」「帝国っぽい日本」などステージ固有の絵を用意したらconfigに足すだけで替わる。 */
+  (function(){
+    var bg=(CFG.board&&CFG.board.mapBg)||'../../assets/worldmap.jpg';
+    document.documentElement.style.setProperty('--mapbg', "url('"+bg+"')");
+  })();
   if(window.MCQTrack) MCQTrack('map_view', CFG.goalId||'?');
 
   var CUM={};
@@ -102,28 +205,81 @@ header p{color:var(--dim);font-size:.85rem;margin-top:4px}
       var sum=0; for(var n=1;n<=8;n++) sum+=Math.min(1,(CUM[a+n]||0)/TH);
       var pct=Math.round(sum/8*100); total+=pct;
       var full=pct>=100;
-      html+='<a class="town" href="town.html?a='+a+'" style="background-image:url(\'bg/'+a+'.png\')">'
-        +'<span class="shade"></span>'
+      /* v32: 街の絵は正方形サムネに。カード全面に敷くと文字と混ざって何の場所か読めなかった。
+         見出しはA〜Hのエリア記号＋学ぶ内容。街の名前は舞台装置なので最下段に小さく。 */
+      var flavor=[esc(ar.emoji||'')+' '+esc(ar.town||('エリア'+a)),
+                  (ar.loc?esc(ar.loc):''), (ch.name?'主：'+esc(ch.name):'')]
+                 .filter(Boolean).join('　/　');
+      html+='<a class="town" href="town.html?a='+a+'">'
         +(full?'<span class="done">🏅</span>':'')
+        +'<img class="thumb" loading="lazy" alt="" src="bg/'+a+'.jpg">'
         +'<span class="in">'
-        +'<span class="step">STEP '+(ar.step||'?')+'</span>'
-        +'<span class="nm">'+esc(ar.emoji||'')+' '+esc(ar.town||('エリア'+a))
-          +(ar.loc?'<span class="loc">🗺 ロケ地：'+esc(ar.loc)+'</span>':'')+'</span>'
-        +'<span class="tt">'+esc(ar.title||'')+'</span>'
-        +'<span class="tc">主：'+esc(ch.name||'?')+'　'+esc(ar.sub||'')+'</span>'
+        +'<span class="step"><b class="stepno">'+a+'</b>'
+          +'<span class="lv">'+esc(ar.sub||'')+'</span></span>'
+        +'<span class="learn">'+esc(ar.title||('エリア'+a))+'</span>'
+        +(ar.gain?'<span class="gain">🎁 '+esc(ar.gain)+'</span>':'')
+        +'<span class="flavor">'+flavor+'</span>'
         +'<span class="pbar"><i style="width:'+pct+'%;background:'+(ch.color||'#f5c542')+'"></i></span>'
+        +'<span class="faces" data-area="'+a+'"></span>'
         +'</span></a>';
     });
     document.getElementById('towns').innerHTML=html;
+    // まとめカードの所持枚数（マンダラ盤への導線に出す）
+    try{
+      var lk='mcq_loot_'+(CFG.goalId||'x');
+      var got=(JSON.parse(localStorage.getItem(lk)||'[]')||[]).length;
+      var el=document.getElementById('lootN'); if(el) el.textContent=got+' / 64';
+    }catch(e){}
     var ov=Math.round(total/8);
     document.getElementById('ovBar').style.width=ov+'%';
     document.getElementById('ovVal').textContent=ov+'%';
   }
+  /* ── v33: エリアごとの「ここにいる人」──
+     quest_api の faces アクションから取る。まだ未デプロイなら何も出さず素通りする
+     （画面が壊れないこと優先）。 */
+  function renderFaces(byArea){
+    Object.keys(byArea||{}).forEach(function(a){
+      var box=document.querySelector('.faces[data-area="'+a+'"]'); if(!box) return;
+      var d=byArea[a]||{}; var ms=(d.members||[]).slice(0,5);
+      if(!ms.length){ box.innerHTML='<span class="facen">まだ誰もいません。一番乗りのチャンス。</span>'; return; }
+      var h=ms.map(function(m){
+        return m.avatarUrl
+          ? '<img class="face" loading="lazy" alt="'+esc(m.nick||'')+'" title="'+esc(m.nick||'')+'" src="'+esc(m.avatarUrl)+'" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'facen\',textContent:\''+esc((m.nick||'?').slice(0,2))+'\'}))">'
+          : '<span class="face" style="display:grid;place-items:center;font-size:.6rem;font-weight:900">'+esc((m.nick||'?').slice(0,2))+'</span>';
+      }).join('');
+      if(d.total>ms.length) h+='<span class="facen">+'+(d.total-ms.length)+'人</span>';
+      if(d.top) h+='<span class="top1">👑 '+esc(d.top.nick||'')+' '+(d.top.score||0)+'pt</span>';
+      box.innerHTML=h;
+    });
+  }
+  function renderRank(j){
+    if(!j||!j.ok||!(j.top||[]).length) return;
+    var box=document.getElementById('rankBox'); box.style.display='block';
+    document.getElementById('rankTop').innerHTML=(j.top||[]).slice(0,3).map(function(r){
+      var medal=['🥇','🥈','🥉'][r.rank-1]||('#'+r.rank);
+      return '<li><span class="rk">'+medal+'</span>'
+        +(r.avatarUrl?'<img loading="lazy" alt="" src="'+esc(r.avatarUrl)+'" onerror="this.remove()">':'')
+        +'<b>'+esc(r.nick||'')+'</b><span class="sc">'+(r.score||0)+'pt</span></li>';
+    }).join('');
+    if(j.me&&j.me.rank) document.getElementById('rankMine').textContent=
+      'あなたは いま '+j.me.rank+'位（'+(j.me.score||0)+'pt）。';
+    var more=document.getElementById('rankMore');
+    if(more) more.setAttribute('href','index.html?skipintro=1');
+  }
+
   render();
   if(API){
-    fetch(API+'?action=board&goalId='+encodeURIComponent(CFG.goalId||'β'))
+    var gid=encodeURIComponent(CFG.goalId||'β');
+    fetch(API+'?action=board&goalId='+gid)
       .then(function(r){return r.json();})
-      .then(function(j){ if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; render(); } }).catch(function(){});
+      .then(function(j){ if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; render(); if(window.__faces) renderFaces(window.__faces); } }).catch(function(){});
+    var tk=''; try{ tk=localStorage.getItem('mcq_member_token')||''; }catch(e){}
+    fetch(API+'?action=ranking&goalId='+gid+(tk?'&token='+encodeURIComponent(tk):''))
+      .then(function(r){return r.json();}).then(renderRank).catch(function(){});
+    fetch(API+'?action=faces&goalId='+gid)
+      .then(function(r){return r.json();})
+      .then(function(j){ if(j&&j.ok&&j.areas){ window.__faces=j.areas; renderFaces(j.areas); } })
+      .catch(function(){});
   }
 })();
 </script>

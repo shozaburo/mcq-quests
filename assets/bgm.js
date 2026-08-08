@@ -201,7 +201,7 @@
     function btn(t){ return '<button style="background:#22304a;color:#cfe8ff;border:1px solid #556;border-radius:6px;padding:2px 8px;font:11px Consolas,monospace;cursor:pointer" data-dev="'+t+'">'+t+'</button>'; }
     d.innerHTML = '<b>🛠 DEV MODE</b>'
       +'<div style="display:flex;gap:4px;flex-wrap:wrap">'
-      + btn('トップ')+btn('Gemini一章')+btn('Gemini盤')+btn('Claude盤')+btn('美作盤')+btn('ChatGPT盤')+btn('Gemini一章導入')+btn('Gemini導入')+btn('Claude導入')+btn('美作導入')+btn('ChatGPT導入')+btn('教室')+btn('カード')+'</div>'
+      + btn('トップ')+btn('Gemini盤')+btn('Claude盤')+btn('美作盤')+btn('ChatGPT盤')+btn('Gemini導入')+btn('Claude導入')+btn('美作導入')+btn('ChatGPT導入')+btn('教室')+btn('カード')+'</div>'
       +'<div style="display:flex;gap:4px;flex-wrap:wrap">'
       + btn('ファネル')+btn('進捗リセット')+btn('DEV解除')+'</div>'
       +'<div id="mcqDevOut" style="max-height:150px;overflow:auto;white-space:pre-wrap"></div>';
@@ -211,11 +211,9 @@
       if(!t) return;
       var R = ROOT;
       if(t==='トップ') location.href = R+'index.html?start=1';
-      else if(t==='Gemini一章') location.href = R+'stages/google64/index.html?skipintro=1';
-      else if(t==='Gemini盤') location.href = R+'stages/google64v2/index.html?skipintro=1';
-      else if(t==='Gemini導入') location.href = R+'stages/google64v2/intro.html';
+      else if(t==='Gemini盤') location.href = R+'stages/google64/index.html?skipintro=1';
+      else if(t==='Gemini導入') location.href = R+'stages/google64/intro.html';
       else if(t==='Claude盤') location.href = R+'stages/claude64/index.html?skipintro=1';
-      else if(t==='Gemini一章導入') location.href = R+'stages/google64/intro.html';
       else if(t==='Claude導入') location.href = R+'stages/claude64/intro.html';
       else if(t==='美作盤') location.href = R+'stages/mimasaka/index.html?skipintro=1';
       else if(t==='美作導入') location.href = R+'stages/mimasaka/intro.html';

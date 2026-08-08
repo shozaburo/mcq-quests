@@ -12,7 +12,9 @@ body{background:linear-gradient(180deg,#14101c,#1d1530 45%,#241a33);color:var(--
   font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.75;min-height:100dvh}
 .wrap{max-width:760px;margin:0 auto;padding:0 14px 60px}
 /* ヒーロー（街の風景） */
-.hero{position:relative;margin:0 -14px;height:34vh;min-height:200px;max-height:300px;
+/* v35: hero は .wrap の外（body直下）なので、負のマージンを付けると
+   画面幅より28px広くなって常に横スクロールが出ていた。 */
+.hero{position:relative;margin:0;height:34vh;min-height:200px;max-height:300px;
   background:#241a33 center 40%/cover no-repeat}
 .hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.30),transparent 40%,rgba(20,16,28,.94) 92%,#14101c)}
 .hero .chips{position:absolute;top:12px;left:14px;display:flex;gap:8px;z-index:2}
@@ -45,12 +47,28 @@ body{background:linear-gradient(180deg,#14101c,#1d1530 45%,#241a33);color:var(--
 /* クエスト一覧 */
 h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 .qlist{display:flex;flex-direction:column;gap:8px}
-.q{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
-  border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);transition:border-color .15s,transform .12s}
-.q:hover{border-color:var(--ac);transform:translateX(3px)}
+/* v34: 一覧を「復習で使える索引」に。タイトルだけの1行から、
+   やること・教材への直リンク・みんなの声まで見える段組みにする。 */
+.q{display:block;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;padding:12px 14px;text-decoration:none;color:var(--ink);transition:border-color .15s}
+.q:hover{border-color:var(--ac)}
+.qhead{display:flex;align-items:center;gap:12px}
 .q .no{width:34px;height:34px;border-radius:10px;background:var(--ac);color:#fff;font-weight:900;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem}
-.q .nm{flex:1;font-size:.86rem;font-weight:700;min-width:0}
+.q .nm{flex:1;font-size:.9rem;font-weight:800;min-width:0}
+.q .doing{font-size:.76rem;color:#cfc7b8;line-height:1.75;margin:8px 0 0 46px}
+/* 教材への直リンク。復習は「見たいものに一発で飛べる」が命 */
+.qmat{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 0 46px}
+.qmat a{font-size:.72rem;font-weight:800;text-decoration:none;border-radius:999px;padding:3px 11px;
+  border:1px solid rgba(255,255,255,.28);color:#e7e0d2;background:rgba(0,0,0,.25)}
+.qmat a:hover{border-color:var(--gold);color:var(--gold)}
+.qmat a.none{opacity:.32;pointer-events:none}
+/* みんなの声 */
+.qcm{margin:9px 0 0 46px;border-top:1px dashed rgba(255,255,255,.16);padding-top:7px}
+.qcm .c{font-size:.74rem;color:#cfc7b8;line-height:1.7;margin-bottom:3px}
+.qcm .c b{color:var(--gold);font-weight:800}
+.qcm .c .pt{font-size:.66rem;color:var(--dim);margin-left:4px}
+.qcm .empty{font-size:.72rem;color:var(--dim)}
 .q .pb{width:70px;flex-shrink:0}
 .q .pb .bar{height:6px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden}
 .q .pb .bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:99px}
@@ -99,10 +117,21 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   </div>
 </div>
 
-<script src="../../assets/bgm.js?v=8"></script>
+<script src="../../assets/bgm.js?v=9"></script>
 <script src="data/config.js?v=6"></script>
+<script src="../../assets/devtools.js?v=1"></script>
+<script src="../../assets/myhud.js?v=1"></script>
 <script src="data/areas.js?v=8"></script>
 <script src="data/characters.js?v=10"></script>
+<script src="data/urls.js?v=40"></script>
+<script src="data/missions/A.js"></script>
+<script src="data/missions/B.js"></script>
+<script src="data/missions/C.js"></script>
+<script src="data/missions/D.js"></script>
+<script src="data/missions/E.js"></script>
+<script src="data/missions/F.js"></script>
+<script src="data/missions/G.js"></script>
+<script src="data/missions/H.js"></script>
 <script src="data/quests/A.js"></script>
 <script src="data/quests/B.js"></script>
 <script src="data/quests/C.js"></script>
@@ -145,6 +174,35 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   var greet=String((ch.lines&&ch.lines.intro)||'').replace(/\{memberName\}/g,'あなた').replace(/<[^>]+>/g,'');
   document.getElementById('sGreet').textContent=greet;
 
+
+  /* 教材URLの解決。slide/info は DriveファイルID でも
+     'slide/A1.pdf' のようなパスでも来る（engine.js と同じ規則）。 */
+  function matUrl(v){
+    v=String(v||'');
+    if(/^https?:/i.test(v)) return v;
+    if(/\.(pdf|png|jpe?g|webp|gif)(\?.*)?$/i.test(v)){
+      try{
+        if(location.hostname!=='re-gi.jp'){
+          var m=location.pathname.match(/\/stages\/([^\/]+)\//);
+          if(m) return 'https://re-gi.jp/mcq-site/stages/'+m[1]+'/'+v;
+        }
+      }catch(e){}
+      return v;
+    }
+    return 'https://drive.google.com/file/d/'+v+'/view';
+  }
+
+  /* みんなの声。100%以上に限らず出す（塾長指示）。 */
+  function paintComments(byQid){
+    document.querySelectorAll('[data-cm]').forEach(function(box){
+      var cs=(byQid||{})[box.getAttribute('data-cm')]||[];
+      if(!cs.length){ box.innerHTML='<span class="empty">まだ声がありません。最初のひとことをどうぞ。</span>'; return; }
+      box.innerHTML=cs.map(function(c){
+        return '<div class="c">💬 <b>'+esc(c.nick||'')+'</b>「'+esc(c.note||'')+'」'
+          +'<span class="pt">'+(c.pct||0)+'% '+esc(c.date||'')+'</span></div>';
+      }).join('');
+    });
+  }
   /* クエスト一覧 */
   var CUM={};
   function render(){
@@ -154,14 +212,36 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
       var ratio=Math.min(1,(CUM[qid]||0)/TH);
       if(ratio>=1) fullCnt++;
       var pct=Math.round(ratio*100);
-      html+='<a class="q'+(ratio>=1?' full':'')+'" href="quest.html?id='+qid+'">'
+      /* v34: 1行タイトルだけだと復習に使えない。
+         「何をやるマスか」＋「教材への直リンク」＋「みんなの声」まで出す。 */
+      var U=(window.MCQ_URLS||{})[qid]||{};
+      var M=(window.MCQ_MISSIONS||{})[qid]||{};
+      var doing=M.m125||'';
+      var vid=U.digest||U.drive||'';
+      var mat='';
+      mat+= vid ? '<a href="https://drive.google.com/file/d/'+esc(vid)+'/view" target="_blank" rel="noopener">🎬 動画</a>'
+                : '<a class="none">🎬 動画</a>';
+      mat+= U.slide ? '<a href="'+esc(matUrl(U.slide))+'" target="_blank" rel="noopener">📑 スライド</a>'
+                    : '<a class="none">📑 スライド</a>';
+      mat+= U.info ? '<a href="'+esc(matUrl(U.info))+'" target="_blank" rel="noopener">📊 まとめ</a>'
+                   : '<a class="none">📊 まとめ</a>';
+      if(U.archive) mat+='<a href="'+esc(U.archive)+'" target="_blank" rel="noopener">📁 アーカイブ</a>';
+      if(U.notes)   mat+='<a href="https://docs.google.com/document/d/'+esc(U.notes)+'/edit" target="_blank" rel="noopener">📝 メモ</a>';
+
+      html+='<div class="q'+(ratio>=1?' full':'')+'">'
+        +'<a class="qhead" href="quest.html?id='+qid+'" style="text-decoration:none;color:inherit">'
         +'<span class="no">'+(ratio>=1?'✓':qid)+'</span>'
         +'<span class="nm">'+esc(q.name||'準備中')+'</span>'
         +'<span class="pb"><span class="bar"><i style="width:'+pct+'%"></i></span><small>'+pct+'%</small></span>'
-        +'<span class="go">▶</span></a>';
+        +'<span class="go">▶</span></a>'
+        +(doing?'<div class="doing">'+esc(doing)+'</div>':'')
+        +'<div class="qmat">'+mat+'</div>'
+        +'<div class="qcm" data-cm="'+qid+'"><span class="empty">読み込み中…</span></div>'
+        +'</div>';
     }
     document.getElementById('qlist').innerHTML=html;
     renderStory(fullCnt>=8);
+    if(window.__cm) paintComments(window.__cm);
   }
 
   /* ── 🎬 物語（おまけ）とエンディング ──
@@ -199,6 +279,11 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
     fetch(API+'?action=board&goalId='+encodeURIComponent(CFG.goalId||'β'))
       .then(function(r){return r.json();})
       .then(function(j){ if(j&&j.ok&&j.cumPct){ CUM=j.cumPct; render(); } }).catch(function(){});
+    /* みんなの声はエリア単位で1回だけ取る（8マス分を1リクエストで） */
+    fetch(API+'?action=comments&goalId='+encodeURIComponent(CFG.goalId||'β')+'&qid='+A)
+      .then(function(r){return r.json();})
+      .then(function(j){ if(j&&j.ok&&j.byQid){ window.__cm=j.byQid; paintComments(j.byQid); } })
+      .catch(function(){});
   }
   if(window.MCQTrack) MCQTrack('town_view', (CFG.goalId||'?')+':'+A);
   if(window.MCQBgm) MCQBgm.play(A,'bgm/');

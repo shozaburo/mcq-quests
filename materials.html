@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>教材ぜんぶ一覧 | マンダラチャートクエスト</title>
+<style>
+/* ============================================================
+   📦 教材ぜんぶ一覧（関係者向け）
+   全5コース320マスの 動画／スライド／まとめ／アーカイブ を1枚に。
+   ・販売代理店に「何があるか」を見せる
+   ・AI講師が教材をすぐ取り出す
+   トップからは目立たない位置にリンクを置く。検索エンジンには載せない。
+   ============================================================ */
+:root{--gold:#f5c542;--ink:#f1efe9;--dim:#a49c8f;--line:rgba(255,255,255,.14);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#141019;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;
+  line-height:1.6;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 14px 60px}
+h1{font-size:1.3rem;font-weight:900}
+.sub{color:var(--dim);font-size:.8rem;margin-top:4px}
+/* 集計 */
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.sum .box{background:#1d1727;border:1px solid var(--line);border-radius:12px;padding:10px 13px}
+.sum .box b{display:block;font-size:1.35rem;color:var(--gold);font-weight:900}
+.sum .box span{font-size:.72rem;color:var(--dim)}
+/* 操作 */
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0 8px;
+  position:sticky;top:0;background:#141019;padding:8px 0;z-index:5;border-bottom:1px solid var(--line)}
+.bar select,.bar input{background:#241d31;border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:7px 10px;font-size:.8rem;font-family:inherit}
+.bar input{flex:1;min-width:150px}
+.bar label{font-size:.76rem;color:var(--dim);display:flex;align-items:center;gap:5px;cursor:pointer}
+.bar button{background:rgba(245,197,66,.16);border:1px solid var(--gold);color:var(--gold);
+  border-radius:8px;padding:7px 13px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit}
+/* 表 */
+table{width:100%;border-collapse:collapse;margin-top:6px}
+th{position:sticky;top:52px;background:#1d1727;font-size:.72rem;color:var(--dim);text-align:left;
+  padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:4}
+td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top;font-size:.8rem}
+tr:hover td{background:rgba(255,255,255,.03)}
+.qid{font-weight:900;color:var(--gold);white-space:nowrap}
+.stg{font-size:.68rem;color:var(--dim);white-space:nowrap}
+.nm{font-weight:700}
+.doing{font-size:.72rem;color:#bdb5a7;margin-top:2px;line-height:1.5}
+.mat a{display:inline-block;font-size:.7rem;font-weight:800;text-decoration:none;border-radius:6px;
+  padding:2px 8px;margin:1px 3px 1px 0;border:1px solid var(--line);color:#e3dccd;white-space:nowrap}
+.mat a:hover{border-color:var(--gold);color:var(--gold)}
+.mat .none{display:inline-block;font-size:.7rem;padding:2px 8px;margin:1px 3px 1px 0;
+  border:1px dashed rgba(255,255,255,.16);border-radius:6px;color:#5d5749;white-space:nowrap}
+.areahd td{background:#20182c;font-weight:900;font-size:.78rem;color:#ffe9b3;padding:8px}
+.foot{margin-top:22px;font-size:.72rem;color:var(--dim);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📦 教材ぜんぶ一覧</h1>
+  <div class="sub">全5コース・320マスの 動画／スライド／まとめ（インフォグラ）／アーカイブ。関係者向けページです。</div>
+
+  <div class="sum" id="sum"></div>
+
+  <div class="bar">
+    <select id="fStage"><option value="">すべてのコース</option></select>
+    <input id="fq" type="text" placeholder="マス名で絞り込み（例：議事録）">
+    <label><input type="checkbox" id="fHas"> 素材があるマスだけ</label>
+    <button id="copy">📋 表示中のリンクをコピー</button>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th style="width:52px">マス</th><th>クエスト</th>
+      <th style="width:330px">素材</th>
+    </tr></thead>
+    <tbody id="rows"><tr><td colspan="3" style="padding:22px;color:#8b8478">読み込み中…</td></tr></tbody>
+  </table>
+
+  <div class="foot">
+    ・「準備中」は素材が未作成のマスです。<br>
+    ・スライドとまとめは、ファイル実体が本番サーバー、または Google ドライブにあります。<br>
+    ・このページは検索エンジンに載りません。URLを知っている人だけが見られます。
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var CAT=null;
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function el(id){ return document.getElementById(id); }
+
+  function matHtml(m){
+    function one(url,label){
+      return url ? '<a href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>'
+                 : '<span class="none">'+label+'</span>';
+    }
+    return one(m.url.video,'🎬 動画') + one(m.url.slide,'📑 スライド')
+         + one(m.url.info,'📊 まとめ') + one(m.url.archive,'📁 アーカイブ')
+         + (m.url.notes ? one(m.url.notes,'📝 メモ') : '');
+  }
+
+  function render(){
+    if(!CAT) return;
+    var fs=el('fStage').value, q=el('fq').value.trim().toLowerCase(), only=el('fHas').checked;
+    var html='', shown=0, links=[];
+    CAT.stages.forEach(function(st){
+      if(fs && st.key!==fs) return;
+      st.areas.forEach(function(ar){
+        var rows='';
+        ar.masses.forEach(function(m){
+          if(only && !(m.has.video||m.has.slide||m.has.info)) return;
+          if(q && (m.name+' '+m.doing).toLowerCase().indexOf(q)<0) return;
+          shown++;
+          ['video','slide','info'].forEach(function(k){ if(m.url[k]) links.push(m.id+' '+k+' '+m.url[k]); });
+          rows += '<tr><td class="qid">'+esc(m.id)+'</td>'
+            + '<td><div class="nm">'+esc(m.name)+'</div>'
+            + (m.doing?'<div class="doing">'+esc(m.doing)+'</div>':'')+'</td>'
+            + '<td class="mat">'+matHtml(m)+'</td></tr>';
+        });
+        if(rows){
+          html += '<tr class="areahd"><td colspan="3">'+esc(st.short)+'　'+esc(ar.area)+'：'
+                + esc(ar.title||'')+'</td></tr>' + rows;
+        }
+      });
+    });
+    el('rows').innerHTML = html || '<tr><td colspan="3" style="padding:22px;color:#8b8478">該当なし</td></tr>';
+    window.__links = links;
+    el('copy').textContent = '📋 表示中のリンクをコピー（'+links.length+'）';
+  }
+
+  fetch('assets/catalog.json?v=2').then(function(r){return r.json();}).then(function(j){
+    CAT=j;
+    var t={video:0,slide:0,info:0,mass:0};
+    j.stages.forEach(function(s){
+      el('fStage').insertAdjacentHTML('beforeend','<option value="'+esc(s.key)+'">'+esc(s.short)+'</option>');
+      s.areas.forEach(function(a){ a.masses.forEach(function(m){
+        t.mass++; if(m.has.video)t.video++; if(m.has.slide)t.slide++; if(m.has.info)t.info++; }); });
+    });
+    el('sum').innerHTML =
+       '<div class="box"><b>'+t.mass+'</b><span>マス（全コース）</span></div>'
+      +'<div class="box"><b>'+t.video+' / '+t.mass+'</b><span>🎬 動画</span></div>'
+      +'<div class="box"><b>'+t.slide+' / '+t.mass+'</b><span>📑 スライド</span></div>'
+      +'<div class="box"><b>'+t.info+' / '+t.mass+'</b><span>📊 まとめ</span></div>';
+    render();
+  }).catch(function(){
+    el('rows').innerHTML='<tr><td colspan="3" style="padding:22px;color:#c88">索引が読み込めませんでした。</td></tr>';
+  });
+
+  el('fStage').onchange=render; el('fHas').onchange=render;
+  el('fq').addEventListener('input',render);
+  el('copy').onclick=function(){
+    var t=(window.__links||[]).join('\n');
+    navigator.clipboard.writeText(t).then(function(){
+      el('copy').textContent='✅ コピーしました';
+      setTimeout(render,1500);
+    });
+  };
+})();
+</script>
+</body>
+</html>

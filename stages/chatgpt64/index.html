@@ -91,6 +91,14 @@
   a.qcell .pctb i{display:block; height:100%; background:linear-gradient(90deg,#f57c00,var(--gold));}
   a.qcell.full{border-color:rgba(255,215,0,.75); box-shadow:inset 0 0 14px rgba(255,215,0,.35);}
   a.qcell.full::after{content:"✨"; position:absolute; right:4px; bottom:4px; font-size:.75rem;}
+  /* v30: まとめカード（インフォグラ）を集めると、マスに絵がはまる */
+  a.qcell .lootbg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;}
+  a.qcell.got{border-color:rgba(255,215,0,.85); box-shadow:inset 0 0 12px rgba(255,215,0,.5);}
+  a.qcell.got .qid,a.qcell.got .nm,a.qcell.got .step{position:relative; z-index:1;
+    text-shadow:0 1px 4px #000,0 0 8px #000;}
+  a.qcell.got .nm{background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,0)); padding-top:6px;}
+  a.qcell .lootq{position:absolute; right:3px; bottom:3px; z-index:1; font-size:.62rem;
+    font-weight:900; color:rgba(255,255,255,.30);}
 
   /* エリア中心（ボス＝HPバー付き） */
   .gate{background:rgba(10,6,18,.78); border:1.5px solid rgba(255,215,0,.4);
@@ -213,11 +221,13 @@
 </div>
 <div class="toast" id="toast"></div>
 
-<script src="../../assets/bgm.js?v=8"></script>
+<script src="../../assets/bgm.js?v=9"></script>
 <script src="data/config.js?v=10"></script>
+<script src="../../assets/devtools.js?v=1"></script>
 <script src="data/characters.js?v=10"></script>
 <script src="data/areas.js?v=8"></script>
 <script src="data/progress.js"></script>
+<script src="data/urls.js?v=40"></script>
 <script src="data/quests/A.js"></script>
 <script src="data/quests/B.js"></script>
 <script src="data/quests/C.js"></script>
@@ -359,6 +369,38 @@
   };
 
   /* 既存GAS(members_page)と同じ配置定義 */
+
+  /* ── 📊 まとめカード（インフォグラ）のコレクション ──
+     クエストのクイズを終えると engine.js の sceneLoot が localStorage に積む。
+     ここでは「持っているマスだけ」絵を敷く。持っていないマスは右下に「?」。
+     素材がまだ無いマスも「?」のまま（あとで urls.js に info が入れば自動で出る）。 */
+  var LOOT = (function(){
+    try{ return JSON.parse(localStorage.getItem('mcq_loot_'+(CFG.goalId||'x'))||'[]')||[]; }
+    catch(e){ return []; }
+  })();
+  var URLS = window.MCQ_URLS || {};
+  function lootImgOf(qid){
+    var u = URLS[qid] || {};
+    if(!u.info) return '';
+    if(LOOT.indexOf(qid) < 0) return '';
+    return u.info;
+  }
+  /* info は2通りの書き方を受ける（engine.js と同じ規則）。
+       ・DriveファイルID       → Driveのサムネイル
+       ・画像のパス/URL       → そのまま（実体は本番サーバーにしか無いので、
+                                テストサイトからは本番の同じパスを見る） */
+  function lootSrcOf(v){
+    if(!/\.(png|jpe?g|webp|gif)(\?.*)?$/i.test(v))
+      return 'https://drive.google.com/thumbnail?id=' + v + '&sz=w360';
+    if(/^https?:/i.test(v)) return v;
+    try{
+      if(location.hostname !== 're-gi.jp'){
+        var m = location.pathname.match(/\/stages\/([^\/]+)\//);
+        if(m) return 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/' + v;
+      }
+    }catch(e){}
+    return v;
+  }
   var AREA_POS  = {F:[0,0], C:[0,1], G:[0,2], B:[1,0], D:[1,2], E:[2,0], A:[2,1], H:[2,2]};
   var QUEST_POS = {6:[0,0], 3:[0,1], 7:[0,2], 2:[1,0], 4:[1,2], 5:[2,0], 1:[2,1], 8:[2,2]};
   var CENTER_GRID = [['F','C','G'],['B','*','D'],['E','A','H']];
@@ -412,8 +454,10 @@
         var ac=(CHARS[cell.qid.charAt(0)]||{}).color||'#888';
         var ratio=fillRatio(cell.qid);
         var full=ratio>=1;
-        html+='<a class="cell qcell'+(full?' full':'')+'" href="quest.html?id='+cell.qid+'" '
-            +'style="background:'+tileBg(ratio)+';border-color:'+ac+'66" title="'+esc(q.name||'')+'（累積'+(CUM[cell.qid]||0)+'% / '+TH+'%）">'
+        var lootId=lootImgOf(cell.qid);
+        html+='<a class="cell qcell'+(full?' full':'')+(lootId?' got':'')+'" href="quest.html?id='+cell.qid+'" '
+            +'style="background:'+tileBg(ratio)+';border-color:'+ac+'66" title="'+esc(q.name||'')+'（累積'+(CUM[cell.qid]||0)+'% / '+TH+'%）'+(lootId?'／まとめカード獲得ずみ':'')+'">'
+            +(lootId?'<img class="lootbg" loading="lazy" alt="" src="'+esc(lootSrcOf(lootId))+'" onerror="this.remove()">':'<span class="lootq">?</span>')
             +'<span class="qid" style="color:'+ac+'">'+cell.qid+'</span>'
             +'<span class="nm">'+esc(q.name||'準備中')+'</span>'
             +'<span class="step">'+cell.n+'</span>'

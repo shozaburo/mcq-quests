@@ -7,16 +7,19 @@
 <style>
 :root{--gold:#FFD700;--gold-deep:#b8860b;--ink:#f2f0ea;--dim:#9aa3b5;--pink:#f06292;--purple:#7e57c2;}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.6;overflow:hidden;
+html,body{min-height:100%}
+/* 縦は伸ばす。以前は overflow:hidden で、カードが増えると画面外に出て
+   スクロールもできなくなっていた（はじまりの64が触れない事故の原因）。 */
+body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.6;
+  overflow-x:hidden;overflow-y:auto;background-attachment:fixed;
   background-image:radial-gradient(1000px 500px at 50% -5%,rgba(255,215,0,.14),transparent 70%),
     radial-gradient(2px 2px at 18% 30%,rgba(255,255,255,.7),transparent),
     radial-gradient(1.5px 1.5px at 72% 18%,rgba(255,255,255,.6),transparent),
     radial-gradient(2px 2px at 85% 55%,rgba(255,255,255,.5),transparent),
     radial-gradient(1.5px 1.5px at 35% 70%,rgba(255,255,255,.45),transparent),
     radial-gradient(2px 2px at 55% 42%,rgba(255,255,255,.5),transparent);}
-.stage{height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  max-width:760px;margin:0 auto;padding:20px 14px;text-align:center}
+.stage{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  max-width:760px;margin:0 auto;padding:20px 14px 34px;text-align:center}
 
 /* ===== タイトル画面 ===== */
 #title.hide{display:none}
@@ -50,6 +53,20 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 .world.lambda{border-color:rgba(245,183,49,.6)} .world.lambda .wtag{background:#f5b731;color:#1a1a2e}
 .world.soon{opacity:.55;pointer-events:none} .world.soon .wtag{background:#555;color:#ddd}
 .world.alpha{border-color:rgba(16,163,127,.65)} .world.alpha .wtag{background:#10a37f;color:#fff}
+/* ===== はじまりの64（3つのコースの上・まずはここから） ===== */
+.first64{position:relative;display:flex;align-items:center;gap:12px;text-align:left;text-decoration:none;color:#fff;
+  border:2px solid rgba(102,187,106,.7);border-radius:16px;padding:14px 15px;margin:6px 0 20px;
+  background:linear-gradient(150deg,#2e5d3a,#1b3324);box-shadow:0 5px 18px rgba(0,0,0,.35)}
+.first64:hover{transform:translateY(-3px);border-color:#a5d6a7}
+.first64 .f64-av{flex:0 0 56px;width:56px;height:56px;border-radius:50%;object-fit:cover;background:#fff;
+  border:2px solid rgba(165,214,167,.85)}
+.first64 .f64-tag{position:absolute;top:-9px;left:14px;background:#66bb6a;color:#10241a;
+  font-size:.62rem;font-weight:900;border-radius:999px;padding:2px 10px}
+.first64 .f64-t{font-weight:900;font-size:1rem}
+.first64 .f64-d{font-size:.75rem;color:#cfe6d3;margin-top:3px;line-height:1.55}
+.f64-alt{margin:-14px 0 20px;text-align:right}
+.f64-alt a{color:var(--dim);font-size:.72rem;text-decoration:underline}
+.f64-alt a:hover{color:#a5d6a7}
 .subrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
 .sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:var(--ink);border-radius:999px;
   padding:8px 18px;font-size:.82rem;font-weight:800;text-decoration:none}
@@ -79,14 +96,28 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 
   <!-- コンテンツ選択 -->
   <div id="select">
+    <!-- はじまりの64（マイページ内）。tokenがあれば直行、なければログイン案内へ -->
+    <a class="first64" id="first64" href="#">
+      <span class="f64-tag">まずはここから</span>
+      <img class="f64-av" src="assets/chara/sq_reika_cheer.jpg" alt="大塚麗夏">
+      <div>
+        <div class="f64-t">🌱 はじまりの64</div>
+        <div class="f64-d">パソコンとAIの、いちばん最初。スクショが撮れれば大丈夫です。大塚麗夏が1マスずつ案内します。<br>3つのコースがむずかしく感じたら、まずこちらから。</div>
+      </div>
+    </a>
+    <!-- 複数アカウントで /u/2/ が挿し込まれて開けない人向けの逃げ道。
+         こちらは ai-jissen.com アカウント前提の形なので、既定リンクにはしない。 -->
+    <div class="f64-alt"><a id="first64alt" href="#">うまく開けないときはこちら →</a></div>
     <div class="sel-h">🗺 ワールドを選ぼう</div>
     <div class="sel-c">ステージは今後も増えていきます。好きなワールドから冒険を始めよう。</div>
     <div class="worlds">
-      <a class="world beta" href="stages/google64v2/map.html">
+      <!-- Gemini編の本線は google64。動画・スライド・まとめカードが全64マス揃っている。
+           Spark(Ultra)対応の google64v2 は素材が未整備なので、9月の改訂まで導線を出さない。 -->
+      <a class="world beta" href="stages/google64/map.html">
         <span class="wtag">第1部</span>
         <div class="we">🔍</div>
         <div class="wt">Gemini編<span style="font-size:.8em;opacity:.85">（Google・東日本編）</span></div>
-        <div class="wd">Googleの土台からGemini・NotebookLM・AIエージェントまで、北海道から旅する8つの街の64クエスト。⚡Spark（Ultra）を使う人は⚡ルート、なくても🆓無料ルートで最後まで進める。まずはここから。</div>
+        <div class="wd">Googleの土台からGemini・Gemini Notebookまで、北海道から旅する8つの街の64クエスト。動画・スライド・まとめカードが全マスに揃っています。まずはここから。</div>
       </a>
       <a class="world gamma" href="stages/claude64/map.html">
         <span class="wtag">第2部</span>
@@ -114,17 +145,22 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
       </a>
     </div>
     <div class="subrow">
-      <a class="sub" href="nyumon.html">🏫 パソコン初心者教室（大塚麗夏がサポート）</a>
+      <!-- 旧「パソコン初心者教室」(nyumon.html) は上の「はじまりの64」に統合したため導線を外した。
+           ファイル自体は残してあるので、必要ならこの行を戻すだけで復活する。 -->
       <a class="sub" href="card.html">🃏 挑戦者カードを作る</a>
-      <a class="sub" href="stages/google64/map.html">📜 旧版 Gemini編（第一章・続きをやる人向け）</a>
       <button class="sub" id="changeNav" style="cursor:pointer;font-family:inherit">🧭 案内役を変える</button>
+    </div>
+    <!-- 関係者向け（販売代理店・AI講師）。目立たせないので subrow とは別行・小さく。 -->
+    <div style="text-align:center;margin-top:14px">
+      <a href="concierge.html" style="color:var(--dim);font-size:.74rem;text-decoration:underline;margin:0 8px">🧭 学びのコンシェルジュ</a>
+      <a href="materials.html" style="color:var(--dim);font-size:.72rem;text-decoration:underline;opacity:.75;margin:0 8px">📦 教材ぜんぶ一覧</a>
     </div>
     <button class="back" id="backBtn">← タイトルへ戻る</button>
   </div>
 
 </div>
 
-<script src="assets/bgm.js?v=6"></script>
+<script src="assets/bgm.js?v=9"></script>
 <script src="assets/navs.js"></script>
 <script>
 (function(){
@@ -164,6 +200,30 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
     var _tk = new URLSearchParams(location.search).get('token');
     if (_tk) localStorage.setItem('mcq_member_token', _tk);
   } catch(e){}
+
+  /* 🌱 はじまりの64 はマイページ内のタブなので、?section=hajimari で直接開く。
+     token を持っていればそのまま本人の画面へ。無ければマイページの
+     「専用URLのご案内」が出るので、そこからログインしてもらう。 */
+  (function(){
+    var a = document.getElementById('first64');
+    if(!a) return;
+    var MYPAGE = 'https://script.google.com/macros/s/AKfycbwcWQkVDos5Jky6GCDqZk9ZBbgIz0FqAFmTOAeigLCoPCz6yl_P84GgXbHzGXacmBhp/exec';
+    var tk = '';
+    try { tk = localStorage.getItem('mcq_member_token') || ''; } catch(e){}
+    /* &authuser=0 は必須。Googleアカウントに複数ログインしていると Chrome が
+       /macros/u/2/s/... とアカウント番号を挿し込み、GASのWebアプリURLが
+       「現在、ファイルを開くことができません」で開けなくなる。
+       アカウントが1つの人には影響しない。詳細は _引き継ぎ_マイページ軽量化.md */
+    var q = '?section=hajimari&authuser=0' + (tk ? '&token=' + encodeURIComponent(tk) : '');
+    a.href = MYPAGE + q;
+    /* 逃げ道：ai-jissen.com ドメイン経由。/u/2/ 挿し込みを受けない形。 */
+    var alt = document.getElementById('first64alt');
+    if(alt) alt.href = MYPAGE.replace('/macros/s/', '/a/macros/ai-jissen.com/s/') + q;
+    a.addEventListener('click', function(){
+      if(window.MCQBgm) MCQBgm.se('ok');
+      if(window.MCQTrack) MCQTrack('hajimari64_open', tk ? 'token' : 'notoken');
+    });
+  })();
 
   if(window.MCQTrack) MCQTrack('title_view');
 

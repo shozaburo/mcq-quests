@@ -12,9 +12,10 @@
 <!-- ?id=A1 で表示するクエストを指定（64マス共通の1ファイル） -->
 <script>window.PAGE={questId:(new URLSearchParams(location.search).get('id')||'A1').toUpperCase()};</script>
 <script src="data/config.js?v=13"></script>
+<script src="../../assets/devtools.js?v=1"></script>
 <script src="data/characters.js?v=11"></script>
 <script src="data/areas.js?v=8"></script>
-<script src="data/urls.js?v=14"></script>
+<script src="data/urls.js?v=40"></script>
 <script src="data/advice.js?v=5"></script>
 <script>
 /* v19: 1マス表示に必要なエリア分だけ読む（初期ロード軽量化。全64マス分は読まない） */
@@ -25,6 +26,6 @@
   document.write('<script src="data/missions/'+a+'.js"><\/script>');
 })();
 </script>
-<script src="../../assets/engine.js?v=29"></script>
+<script src="../../assets/engine.js?v=36"></script>
 </body>
 </html>

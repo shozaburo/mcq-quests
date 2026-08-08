@@ -198,11 +198,11 @@
     document.body.appendChild(a);
   })();
 
-  /* ── オーディオ基盤（bgm.js?v=7）を動的ロード → エリアBGM再生 ── */
+  /* ── オーディオ基盤（bgm.js?v=9）を動的ロード → エリアBGM再生 ── */
   (function loadAudio(){
     if(window.MCQBgm){ MCQBgm.play(AREA, AB + 'bgm/'); return; }
     var t = document.createElement('script');
-    t.src = ASSET_BASE + 'bgm.js?v=8';
+    t.src = ASSET_BASE + 'bgm.js?v=9';
     t.onload = function(){ if(window.MCQBgm) MCQBgm.play(AREA, AB + 'bgm/'); };
     document.head.appendChild(t);
   })();
@@ -233,10 +233,15 @@
     '<div class="app">'
     + '<div class="head"><span class="badge" id="qBadge"></span><h1 id="qName"></h1></div>'
     + '<div class="stepper">'
+    /* v30: 1画面1タスクに分解した。
+       以前は STEP1 に インフォグラ＋動画＋スライド が同居していて、まとめ（インフォグラ）が
+       動画より上にある状態だった。順序を 動画→スライド→クイズ→まとめ獲得 に直し、
+       インフォグラフィックは「読む素材」から「クリアで手に入る報酬」に格上げした。 */
     +   '<div class="dot" data-step="1" title="動画25%"></div>'
-    +   '<div class="dot" data-step="2" title="アーカイブ50%"></div>'
+    +   '<div class="dot" data-step="2" title="スライド50%"></div>'
     +   '<div class="dot" data-step="3" title="クイズ75/100%"></div>'
-    +   '<div class="dot" data-step="4" title="実践報告"></div>'
+    +   '<div class="dot" data-step="4" title="まとめを獲得"></div>'
+    +   '<div class="dot" data-step="5" title="実践報告"></div>'
     + '</div>'
     + '<div class="stage">'
     +   '<img class="chara" id="charaImg" alt="">'
@@ -461,23 +466,74 @@
     return true;
   }
 
-  /* ── 討伐ムービー生成プロンプト（自分のアバター×ボス×実践内容） ── */
+  /* ── 継承ムービー生成プロンプト（v35で全面書き直し）─────────────
+     塾長指示 2026-08-03:
+       ・挑戦者カードの3パワーを設定していれば、それを全面に出す
+       ・いまのGeminiは8秒が限界。8秒で成立する構成にする
+       ・「みんなで倒した」ではなく、主と融合して型を受け継ぐ見せ方にする
+     いちばん高いパワーで技のエフェクトと融合の演出が変わる＝
+     自分のカードで映像が変わるので、カードを作る動機になる。 */
+  var POWER_FX = {
+    omoi: { icon:'💗', label:'思いやり', color:'桜色と乳白色',
+            aura:'やわらかな桜の花びらと同心円の波紋が広がり、周囲のものをそっと包む',
+            fuse:'二人を包む大きな光の輪ができ、輪の中で背中合わせに立った二人の輪郭がゆっくり溶け合う' },
+    hira: { icon:'💡', label:'ひらめき', color:'金色と藍',
+            aura:'金色の光の粒が線でつながって星座になり、空中に回路のような紋様が走る',
+            fuse:'主の姿が無数の光点にほどけ、その一粒ずつが挑戦者の輪郭を内側から描き直していく' },
+    gui:  { icon:'🔥', label:'ぐいぐい', color:'朱色と黒',
+            aura:'朱色の炎が渦を巻き、踏み込んだ足元から火の粉の軌跡が一直線に伸びる',
+            fuse:'主が炎そのものになって挑戦者の背に回り込み、二人の影がひとつの大きな影として立ち上がる' }
+  };
   function battlePrompt(pct, practice, rewardName){
     var card = {};
     try{ card = JSON.parse(localStorage.getItem('mcq_card_beta') || '{}'); }catch(e){}
     var heroName  = card.name || MEMBER.name || '挑戦者';
     var heroTitle = card.title ? '『' + card.title + '』' : '';
     var skill     = card.skillName || '学びの一撃';
-    var scene     = AREA_SCENE[AREA] || '幻想的な戦いの舞台';
-    var deed      = practice ? '挑戦者が実際に成し遂げたこと：「' + practice + '」。この偉業のイメージが光のエフェクトとなって技に宿る。' : '';
-    var gift      = rewardName ? '最後に' + CH.name + 'が「' + rewardName + '」を手渡し、二人が笑い合う。' : '最後に二人が拳を合わせ、笑い合う。';
-    return '【討伐ムービー】（8秒・参照画像2枚を添付：①自分のアバター画像 ②' + CH.name + 'の画像）\n\n'
-      + scene + '。挑戦者' + heroTitle + '「' + heroName + '」（参照画像①準拠）が必殺技『' + skill + '』を放つ。'
-      + CH.name + '（参照画像②準拠）は正面から受け止め、ニヤリと笑って敗北を認める。'
-      + deed
-      + '砕けた封印のタイルが金色の光の粒になって夜空に舞い上がる。'
-      + gift
-      + '\n\n' + STYLE_SUFFIX;
+    var scene     = AREA_SCENE[AREA] || '幻想的な舞台';
+    var boss      = CH.name || '主';
+
+    // 3パワー。設定があれば最大のものが映像の主役になる
+    var o = Number(card.omoi), h = Number(card.hira), g = Number(card.gui);
+    var hasPower = !!(card.name || card.skillName) && (o > 0 || h > 0 || g > 0);
+    var key = 'hira';
+    if(hasPower){ key = (o >= h && o >= g) ? 'omoi' : (h >= g ? 'hira' : 'gui'); }
+    var fx = POWER_FX[key];
+
+    var powerLine = hasPower
+      ? '■ 挑戦者の3つの力（カード設定）\n'
+        + '  💗 思いやり ' + (o || 0) + ' ／ 💡 ひらめき ' + (h || 0) + ' ／ 🔥 ぐいぐい ' + (g || 0) + '\n'
+        + '  いちばん高いのは ' + fx.icon + ' ' + fx.label + '。技の色と融合の見え方はこの力に従う（' + fx.color + 'を基調に）。\n'
+      : '■ 挑戦者の3つの力：未設定（🃏挑戦者カードを作ると、あなたの力に合わせて映像が変わります）\n';
+
+    var deedLine = practice
+      ? '  挑戦者が実際に成し遂げたこと：「' + practice + '」。この記憶が光の文様となって技に宿る。\n'
+      : '';
+    var giftLine = rewardName
+      ? '主は消える間際に「' + rewardName + '」をそっと置いていく。'
+      : '主は満ち足りた笑みだけを残す。';
+
+    return '【継承ムービー】8秒 ／ 参照画像3枚を添付\n'
+      + '  ①自分のアバター画像（🃏挑戦者カード）\n'
+      + '  ②' + boss + 'の画像\n'
+      + '  ③挑戦者カードそのもの（あれば）\n\n'
+      + '■ テーマ：討伐ではなく「継承」\n'
+      + '  ' + boss + 'は倒される敵ではない。この土地の型を守ってきた主であり、\n'
+      + '  挑戦者がその型を受け継げると認めたとき、自ら光になって挑戦者に宿る。\n'
+      + '  「勝った／負けた」ではなく「受け渡された」と見えること。\n\n'
+      + powerLine
+      + deedLine + '\n'
+      + '■ 舞台：' + scene + '\n\n'
+      + '■ カット割り（8秒厳守・カット数は4つまで）\n'
+      + '  0.0–2.0s｜挑戦者カードが宙に浮かび、表面に光が走る。カードから挑戦者' + heroTitle + '「' + heroName + '」（参照画像①）が実体化して着地。\n'
+      + '  2.0–4.0s｜正面に' + boss + '（参照画像②）。挑戦者が必殺技『' + skill + '』を構える。' + fx.aura + '。\n'
+      + '  4.0–6.0s｜' + boss + 'はよけずに正面で受け、ふっと笑って両腕を開く。' + fx.fuse + '。\n'
+      + '  6.0–8.0s｜融合した挑戦者が一歩前に出て立つ。胸にこのエリアの紋章が灯る。' + giftLine + '\n\n'
+      + '■ 守ること\n'
+      + '  ・8秒に収める。説明的な間を作らない。カメラは1カット1動作。\n'
+      + '  ・血や破壊、痛みの表現は入れない。「受け継ぐ」以外の結末にしない。\n'
+      + '  ・群衆や他の挑戦者は出さない。主役は' + heroName + 'と' + boss + 'の2人だけ。\n'
+      + '  ・' + STYLE_SUFFIX;
   }
   function bossImgUrl(){ return CH.img || ''; }
 
@@ -776,14 +832,66 @@
       return m ? 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/video/' : '';
     }catch(e){ return ''; }
   })();
-  // スライドPDFも動画と同じ考え方（実体は本番サーバー。テストサイトからは本番を見る）
-  var REMOTE_SLIDE_BASE = (function(){
+  /* スライドPDF・インフォグラ画像も動画と同じ考え方。
+     実体は重いので本番サーバーにだけ置き、テストサイト（GitHub Pages）からは本番を見る。 */
+  var REMOTE_STAGE_BASE = (function(){
     try{
       if(location.hostname === 're-gi.jp') return '';
       var m = location.pathname.match(/\/stages\/([^\/]+)\//);
-      return m ? 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/slide/' : '';
+      return m ? 'https://re-gi.jp/mcq-site/stages/' + m[1] + '/' : '';
     }catch(e){ return ''; }
   })();
+  var REMOTE_SLIDE_BASE = REMOTE_STAGE_BASE ? (REMOTE_STAGE_BASE + 'slide/') : '';
+  /* ── スライドHTML（v30でsceneVideoから独立）────────────────
+     slide は2通りの書き方を受ける。
+       ・DriveファイルID（従来）      → Driveの /preview で埋め込む
+       ・PDFのパス/URL（.pdf で終わる）→ そのまま埋め込む（ブラウザ内蔵ビューワー）
+     Gemini Notebook から取り出したPDFは自前サーバーに置くので後者。
+     相対パスは本番の同じパスへフォールバックする（PDFは重くGitHubに置けないため）。 */
+  function slideHtml(){
+    if(!slideId) return '';
+    var isPdf = /\.pdf(\?.*)?$/i.test(slideId);
+    var src = !isPdf ? ('https://drive.google.com/file/d/' + slideId + '/preview')
+      : /^https?:/i.test(slideId) ? slideId
+      : (REMOTE_SLIDE_BASE ? REMOTE_SLIDE_BASE + slideId.replace(/^slide\//, '') : slideId);
+    var open = isPdf ? src : driveView(slideId);
+    return '<div style="margin:0 0 4px">'
+      + '<div style="font-size:.82rem;color:var(--muted);margin-bottom:6px;line-height:1.7">'
+      +   (SOFT ? '📑 <b>スライド</b>（この回のポイント。めくって見てね）'
+                : '📑 <b>スライド資料</b>（この回の要点。ページ送りできます）') + '</div>'
+      + '<iframe id="qSlide" src="' + esc(src) + '" loading="lazy" '
+      +   'allow="fullscreen" allowfullscreen title="スライド資料" '
+      +   'style="width:100%;aspect-ratio:4/3;height:auto;min-height:280px;max-height:72vh;'
+      +   'border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#fff;display:block"></iframe>'
+      + '<a class="btn btn-ghost" href="' + esc(open) + '" target="_blank" rel="noopener" style="margin-top:6px">'
+      +   (SOFT ? '🔍 大きい画面で見る' : '🔍 スライドを別タブで大きく見る') + '</a>'
+      + '</div>';
+  }
+
+  /* ── 🏆 まとめカード（インフォグラフィック）＝クリアで手に入る報酬 ──
+     v30より前は sceneVideo の先頭に出していた。動画を見る前にまとめが見えていて
+     順序が逆だったのと、1画面に3つ並んで「1つずつ進む」感が無かったため移した。 */
+  var LOOT_KEY = 'mcq_loot_' + (CFG.goalId || 'x');
+  function infoId(){ return URLS.info || ''; }
+  /* info は2通りの書き方を受ける（slide と同じ考え方）。
+       ・DriveファイルID                → Driveのサムネイル/プレビュー
+       ・画像のパス/URL（.png .jpg …）  → そのまま表示
+     Gemini編は個別ノートから取り出したPNGを自前サーバーに置くので後者。
+     相対パスはテストサイトからでも見えるよう本番の同じパスへ寄せる。 */
+  function isImgPath(v){ return /\.(png|jpe?g|webp|gif)(\?.*)?$/i.test(v); }
+  function infoSrc(v, w){
+    if(!isImgPath(v)) return 'https://drive.google.com/thumbnail?id=' + v + '&sz=w' + (w || 1600);
+    if(/^https?:/i.test(v)) return v;
+    return REMOTE_STAGE_BASE ? REMOTE_STAGE_BASE + v : v;
+  }
+  function infoOpen(v){ return isImgPath(v) ? infoSrc(v) : driveView(v); }
+  function getLoot(){ try{ return JSON.parse(localStorage.getItem(LOOT_KEY) || '[]') || []; }catch(e){ return []; } }
+  function addLoot(qid){
+    var a = getLoot();
+    if(a.indexOf(qid) < 0){ a.push(qid); try{ localStorage.setItem(LOOT_KEY, JSON.stringify(a)); }catch(e){} return true; }
+    return false;
+  }
+
   function sceneVideo(){
     setStep(1);
     showStage(true); stageHero(false);
@@ -799,55 +907,15 @@
       extHtml += '<div style="font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.7">'
         + 'このマスの動画概要はまだ準備中です。次の画面の <b>📼 復習アーカイブ</b>（朝活の録画）で学べます。</div>';
     }
-    /* 📑 スライド資料（PDF）
-       以前はDriveへ飛ばすリンクだった。「スライドを見るのにいちいちDriveを開くのが
-       面倒」という指摘を受け、ページ内にビューワーを埋め込む。置き場所は動画のすぐ下
-       ＝見終わってそのまま要点を追える位置。Driveの /preview はPDFのページ送りと
-       全画面に対応しているので、専用ライブラリを足さずにビューワーになる。 */
-    /* v29: slide は2通りの書き方を受ける。
-         ・DriveファイルID（従来）      → Driveの /preview で埋め込む
-         ・PDFのパス/URL（.pdf で終わる）→ そのまま埋め込む（ブラウザ内蔵ビューワー）
-       Gemini Notebook から取り出したPDFは自前サーバーに置くので後者を使う。
-       ローカルに無い場合に備え、相対パスは本番の同じパスへフォールバックする。 */
-    var slideIsPdf = /\.pdf(\?.*)?$/i.test(slideId);
-    var slideSrc = !slideIsPdf ? ('https://drive.google.com/file/d/' + slideId + '/preview')
-      : /^https?:/i.test(slideId) ? slideId
-      /* 相対パス（例 slide/A1.pdf）。PDFは重くGitHubに置けないので実体は本番サーバーだけに
-         ある。テストサイトから開いたときも見えるよう、本番の同じパスへ向ける。 */
-      : (REMOTE_SLIDE_BASE ? REMOTE_SLIDE_BASE + slideId.replace(/^slide\//, '') : slideId);
-    var slideOpen = slideIsPdf ? slideSrc : driveView(slideId);
-    var slideHtml = slideId
-      ? '<div style="margin:14px 0 4px">'
-        + '<div style="font-size:.82rem;color:var(--muted);margin-bottom:6px;line-height:1.7">'
-        +   (SOFT ? '📑 <b>スライド</b>（この回のポイント。めくって見てね）'
-                  : '📑 <b>スライド資料</b>（この回の要点。ページ送りできます）') + '</div>'
-        + '<iframe id="qSlide" src="' + esc(slideSrc) + '" loading="lazy" '
-        +   'allow="fullscreen" allowfullscreen title="スライド資料" '
-        +   'style="width:100%;aspect-ratio:4/3;height:auto;min-height:280px;max-height:72vh;'
-        +   'border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#fff;display:block"></iframe>'
-        + '<a class="btn btn-ghost" href="' + esc(slideOpen) + '" target="_blank" rel="noopener" '
-        +   'style="margin-top:6px">'
-        +   (SOFT ? '🔍 大きい画面で見る' : '🔍 スライドを別タブで大きく見る') + '</a>'
-        + '</div>'
-      : '';
-    // 📊 要点インフォグラフィック（Driveの画像を全体表示・タップで拡大）
-    var infoId = URLS.info || '';
-    var infoHtml = infoId
-      ? '<a href="https://drive.google.com/file/d/' + esc(infoId) + '/view" target="_blank" rel="noopener" '
-        +   'style="display:block;text-decoration:none;margin-bottom:12px" title="タップで拡大">'
-        + '<img src="https://drive.google.com/thumbnail?id=' + esc(infoId) + '&sz=w1600" alt="要点インフォグラフィック" '
-        +   'style="width:100%;border-radius:12px;display:block;border:1px solid rgba(255,255,255,.18)" '
-        +   'onerror="this.parentNode.style.display=\'none\'">'
-        + '<div style="text-align:center;font-size:.75rem;color:#9aa;margin-top:4px">📊 このクエストの要点（タップで拡大）</div></a>'
-      : '';
+    /* v30: この画面は動画だけ。スライドは次の画面（sceneSlide）、
+       インフォグラフィックは最後の報酬（sceneLoot）に移した。 */
     render(
-      infoHtml
-      + '<video id="qVideo" controls playsinline preload="metadata" '
+      '<video id="qVideo" controls playsinline preload="metadata" '
       +   'style="display:none;width:100%;aspect-ratio:16/9;max-height:62vh;height:auto;border-radius:12px;background:#000;margin-bottom:4px"></video>'
       + '<div id="extWrap">' + extHtml + '</div>'
-      + slideHtml
-      + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → 次へ</button>');
-    $('watched').onclick = function(){ bump(25); sceneArchive(); };
+      + '<button class="btn btn-primary" id="watched">見た！ <span class="pct pct-25">25%</span> → '
+      +   (slideId ? 'スライドへ' : '次へ') + '</button>');
+    $('watched').onclick = function(){ bump(25); sceneSlide(); };
 
     // mp4があれば埋め込み再生に切り替え（外部ボタンは隠して迷いをなくす）
     var v = $('qVideo');
@@ -894,9 +962,17 @@
   }
 
   // STEP2 アーカイブ 50%
-  function sceneArchive(){
+  /* ── STEP2 スライド（v30）──
+     動画の次はスライドだけを1画面で。復習アーカイブ・配布資料は
+     「もっと深掘りしたい人向け」として、スライドの下にたたんで置く。 */
+  function sceneSlide(){
     setStep(2);
-    say(L.archive || '次はアーカイブだ。過去の実演を見て、手を動かすイメージを固めよ。');
+    /* 口調はキャラごとに違う（チャッピーの「ワン」を全員に喋らせない）。
+       characters.js に slide 用のセリフがあればそれを最優先で使う。 */
+    say(slideId
+      ? (L.slide || (SOFT ? 'つぎはスライド！ 動画の要点がまとまっています。'
+                          : '次はスライドだ。動画の要点がここにまとまっている。'))
+      : (L.archive || '次は復習教材だ。手を動かすイメージを固めよ。'));
     /* 教材を種別ごとに“見えるように”並べる。
        以前は archive フォルダ1本を「スライド・テキストが入っています」と案内していたが、
        実際に入っているのは朝活の生録画とメモで、スライドは無かった。表記を実物に合わせる。 */
@@ -948,13 +1024,56 @@
         + (isDrive ? '📁 Driveフォルダをまとめて開く' : '📚 アーカイブ・資料のページを開く') + '</a>';
     }
 
-    if(!h) h = '<button class="btn btn-blue" disabled>📁 復習教材（準備中）</button>';
+    /* 深掘り素材はスライドの下。中身が無い日は見出しごと出さない
+       （「準備中」ボタンだけが残ると、やることが無いのに詰まったように見える） */
+    var deep = h
+      ? '<details style="margin-top:14px">'
+        + '<summary style="cursor:pointer;font-size:.84rem;color:var(--muted);padding:8px 0">'
+        +   '📚 もっと深掘りしたい人へ（録画・配布資料・元ノート）</summary>'
+        + '<div style="margin-top:8px">' + h + '</div></details>'
+      : '';
 
-    render(h
+    var sl = slideHtml();
+    render((sl || '<button class="btn btn-blue" disabled>📑 スライド（準備中）</button>')
+      + deep
       + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → クイズへ</button>'
       + '<button class="btn btn-ghost" id="aSkip">クイズは飛ばして報告する</button>');
     $('aWatched').onclick = function(){ bump(50); answered = 0; sceneQuiz(0); };
     $('aSkip').onclick = function(){ bump(50); sceneReport(false); };
+  }
+  /* 旧名。他所から呼ばれても動くように残す */
+  function sceneArchive(){ return sceneSlide(); }
+
+  /* ── STEP4 まとめカード獲得（v30・新規）──
+     クイズを終えると、このマスのインフォグラフィックが手に入る。
+     素材が無いマスはこの画面を出さずに素通りする（「？」のまま盤面に残る）。 */
+  function sceneLoot(){
+    var id = infoId();
+    if(!id) return sceneReport(false);      // まだ作っていないマスは飛ばす
+    setStep(4);
+    var isNew = addLoot(QID);
+    say(isNew
+      ? (SOFT ? 'やったねー！このマスのまとめカード、手に入れたワン！'
+              : 'よくやった。この回の要点を1枚にまとめた「まとめカード」だ。持っていけ。')
+      : (SOFT ? 'もういちど見ていくワン？' : 'すでに手に入れているカードだ。もう一度見ておくか。'));
+    if(isNew && typeof celebrate === 'function') celebrate();
+
+    var got = getLoot().length;
+    render(
+      '<div style="text-align:center;font-weight:900;font-size:1.15rem;margin-bottom:4px;color:var(--gold,#ffd54f)">'
+      +   (isNew ? '🏆 まとめカードを手に入れた！' : '📊 まとめカード') + '</div>'
+      + '<div style="text-align:center;font-size:.8rem;color:var(--muted);margin-bottom:12px">'
+      +   'コレクション ' + got + ' / 64 枚</div>'
+      + '<a href="' + esc(infoOpen(id)) + '" target="_blank" rel="noopener" '
+      +   'style="display:block;text-decoration:none;margin-bottom:10px" title="タップで拡大">'
+      + '<img src="' + esc(infoSrc(id, 1600)) + '" alt="まとめカード" '
+      +   'style="width:100%;border-radius:12px;display:block;border:2px solid var(--gold,#ffd54f)" '
+      +   'onerror="this.parentNode.style.display=\'none\'">'
+      + '<div style="text-align:center;font-size:.75rem;color:#9aa;margin-top:4px">タップで拡大</div></a>'
+      /* 9×9マンダラ盤面は index.html。map.html は8つの街の一覧なので間違えないこと */
+      + '<a class="btn btn-ghost" href="index.html?skipintro=1">🧩 集めたカードをマンダラ盤面で見る</a>'
+      + '<button class="btn btn-primary" id="lootNext">🚀 報告へ進む →</button>');
+    $('lootNext').onclick = function(){ sceneReport(false); };
   }
 
   // STEP3 クイズ（1問ずつ）
@@ -1129,7 +1248,8 @@
     }
     render(html);
     if(quizPct === 100) celebrate();   // 🎉 全問正解でファンファーレ＋紙吹雪
-    if($('toReport')) $('toReport').onclick = function(){ stageHero(false); sceneReport(false); };
+    // v30: 報告の前に「まとめカード獲得」を挟む（素材が無いマスは自動で素通り）
+    if($('toReport')) $('toReport').onclick = function(){ stageHero(false); sceneLoot(); };
     // ミス数・タイムは持ち越し（ボーナス狙いの引き直し防止）
     if($('retry')) $('retry').onclick = function(){ stageHero(false); answered = 0; ORDER = null; MISSED = []; sceneQuiz(0); };
     // v26: にがてだけ解き直す（MISSED は正解できたぶんだけ自動で減る）
@@ -1150,7 +1270,7 @@
      fromSkip=true（クイズを飛ばして実践から報告）は画面2へ直行する。 */
   function sceneReport(fromSkip){
     if(fromSkip) return sceneReportPractice(true);
-    setStep(4);
+    setStep(5);
     showStage(true); stageHero(false);
     say(L.ladder);
 
@@ -1190,7 +1310,7 @@
 
   // 画面2：実践の報告（125%以上・証拠が要る）
   function sceneReportPractice(fromSkip){
-    setStep(4);
+    setStep(5);
     showStage(true); stageHero(false);
     say(L.ladder);
     var levels = [];
@@ -1538,7 +1658,7 @@
   }
 
   function sceneDone(pct, practice, res){
-    setStep(4);
+    setStep(5);
     showStage(true); stageHero(false);
     say(L.done.replace('{pct}', pct));
 
@@ -1626,26 +1746,41 @@
         + '</div>';
     }
 
-    // v18: α用おまけ（bondMovie フラグ）
+    /* ── v35: エンディングは「エリア8マス完走」だけ ──────────────
+       これまでは1マス100%のたびに討伐ムービーの呪文とサイドストーリーを出していた。
+       毎回フィナーレが来ると「1回目は面白いが、2回目からは邪魔」になる（塾長指摘 2026-08-03）。
+       元の仕様どおり、エリアを走り切ったときだけの特別な演出に戻す。
+       マスのクリア記録は全ステージで残す（今まではα専用だった）。 */
+    if(Number(pct) >= 100) recordClear(QID);
+    var justFinishedArea = areaCleared(AREA);
+
     if(CFG.bondMovie){
-      // ④ このマスをクリア記録（100%＝実践報告 or クイズ満点。エリア全クリア判定に使う）
-      if(Number(pct) >= 100) recordClear(QID);
       // ④ 先生のワンポイントアドバイス（動画があれば動画も）
       html += adviceBlock();
-      // ⑤ Aエリア全マス（A1〜A8）クリアで記念生成おまけを解放
-      if(areaCleared(AREA)) html += memorialBlock(practice);
-    } else if(Number(pct) >= 100){
+      // ⑤ エリア全マスクリアで記念生成おまけを解放
+      if(justFinishedArea) html += memorialBlock(practice);
+    } else if(justFinishedArea){
       var rewardName = (res && res.rewards && res.rewards[0]) ? res.rewards[0].rewardName : '';
       var bp = battlePrompt(pct, practice, rewardName);
       html += '<div style="background:#0f1740;color:#eef4ff;border-radius:12px;padding:11px 13px;margin-top:12px">'
-        + '<div style="font-weight:900;margin-bottom:6px">🎬 討伐ムービーを作ろう（あなたが主役！）</div>'
-        + '<div style="font-size:.8rem;opacity:.85;margin-bottom:8px">呪文をコピーして動画AIに貼り、<b>①自分のアバター画像</b>（🃏挑戦者カードで作ったもの）と<b>②ボスの画像</b>を添付するだけ。</div>'
+        + '<div style="font-weight:900;margin-bottom:6px">🎬 エリア' + AREA + ' 完走！ 継承ムービーを作ろう（あなたが主役！）</div>'
+        + '<div style="font-size:.8rem;opacity:.85;margin-bottom:8px">8マスすべてを走り切った人だけの特典です。'
+        + esc(CH.name || '主') + 'を倒すのではなく、<b>その型を受け継いで融合する</b>8秒の映像。<br>'
+        + '呪文をコピーして動画AIに貼り、<b>①自分のアバター</b>・<b>②' + esc(CH.name || '主') + 'の画像</b>・<b>③挑戦者カード</b>を添付するだけ。'
+        + '<br>🃏カードの3つの力を設定していると、<b>いちばん高い力に合わせて技の色と融合の見え方が変わります</b>。</div>'
         + '<pre id="bpText" style="white-space:pre-wrap;font-size:.78rem;line-height:1.6;background:#080d24;border-radius:8px;padding:10px;max-height:180px;overflow:auto">' + esc(bp) + '</pre>'
         + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'
         + '<button class="btn btn-primary" id="cpBp" style="font-size:.85rem">📋 呪文をコピー</button>'
         + '<a class="btn btn-blue" href="https://gemini.google.com/" target="_blank" rel="noopener" style="font-size:.85rem">🪄 Geminiで生成</a>'
         + '<a class="btn btn-ghost" href="' + esc(bossImgUrl()) + '" target="_blank" rel="noopener" style="font-size:.85rem">🖼 ボス画像を開く</a>'
         + '</div></div>';
+    } else if(Number(pct) >= 100){
+      // 途中のマスは「あと何マスで完走か」だけ静かに出す
+      var doneN = 0, cl = getCleared();
+      for(var dn = 1; dn <= 8; dn++) if(cl.indexOf(AREA + dn) >= 0) doneN++;
+      html += '<div style="text-align:center;font-size:.84rem;color:var(--muted);margin-top:10px">'
+        + 'このエリア ' + doneN + ' / 8 マス。'
+        + (doneN >= 8 ? '' : '<b>あと' + (8 - doneN) + 'マスで完走です。</b>') + '</div>';
     }
 
     // 🖼 アバターを本体に登録（ランキング・Chatにも反映）
@@ -1655,8 +1790,9 @@
       html += '<button class="btn btn-ghost" id="setAvatar" style="margin-top:10px">🖼 このアバターをランキング・Chatにも登録する</button>';
     }
 
-    var ed = CH.endingVideo
-      ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener" style="margin-top:10px">🎬 サイドストーリー（討伐後）</a>' : '';
+    /* v35: サイドストーリーもエリア完走時だけ。毎回出すとエンディングの重みが無くなる。 */
+    var ed = (CH.endingVideo && justFinishedArea)
+      ? '<a class="btn btn-blue" href="' + esc(CH.endingVideo) + '" target="_blank" rel="noopener" style="margin-top:10px">🎬 エリア' + AREA + ' エンディングを見る</a>' : '';
     html += ed
       + '<a class="btn btn-primary" href="town.html?a=' + AREA + '" style="margin-top:14px">🏘 街にもどる（次のクエストへ）</a>'
       + '<a class="btn btn-ghost" href="index.html">🧩 全体マップ（マンダラ盤面）</a>'
