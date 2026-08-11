@@ -123,7 +123,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
 <script src="../../assets/myhud.js?v=1"></script>
 <script src="data/areas.js?v=8"></script>
 <script src="data/characters.js?v=11"></script>
-<script src="data/urls.js?v=41"></script>
+<script src="data/urls.js?v=42"></script>
 <script src="data/missions/A.js"></script>
 <script src="data/missions/B.js"></script>
 <script src="data/missions/C.js"></script>
@@ -176,6 +176,13 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   var greet=String((ch.lines&&ch.lines.intro)||'').replace(/\{memberName\}/g,'あなた').replace(/<[^>]+>/g,'');
   document.getElementById('sGreet').textContent=greet;
 
+
+  /* 録画の日付を読める形に。engine.js の同名関数と同じ書き方。
+     街ページは engine.js を読み込まないので、ここにも置いておく。 */
+  function jpDate(d){
+    var m = String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? (m[1] + '年' + (+m[2]) + '月' + (+m[3]) + '日') : String(d||'');
+  }
 
   /* 教材URLの解決。slide/info は DriveファイルID でも
      'slide/A1.pdf' のようなパスでも来る（engine.js と同じ規則）。 */
@@ -232,7 +239,23 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
                     : '<a class="none">📑 スライド</a>';
       mat+= U.info ? '<a href="'+esc(matUrl(U.info))+'" target="_blank" rel="noopener">📊 まとめ</a>'
                    : '<a class="none">📊 まとめ</a>';
-      if(U.archive) mat+='<a href="'+esc(U.archive)+'" target="_blank" rel="noopener">📁 アーカイブ</a>';
+      /* 📼 朝活の録画。日付ごとに1本ずつ出す。
+         ここは復習の索引なので「あの日の回が見たい」に直接応えられるようにする。
+         同じ日に2本ある回（前半／後半）はラベルで見分ける。
+         📁 は Drive フォルダ。中を自分で探す用なので、録画の後ろに置く。 */
+      var arcs = (U.archives||[]).filter(function(a){ return a && a.id; }).slice();
+      arcs.sort(function(a,b){
+        var d = String(b.date||'').localeCompare(String(a.date||''));
+        if (d !== 0) return d;
+        /* localeCompare だと 後半 < 前半 になってしまう。素の比較で 前半→後半。 */
+        var la = String(a.label||'') || '￿', lb = String(b.label||'') || '￿';
+        return la < lb ? -1 : la > lb ? 1 : 0;
+      });
+      arcs.forEach(function(a){
+        mat+='<a href="https://drive.google.com/file/d/'+esc(a.id)+'/view" target="_blank" rel="noopener">'
+           +'📼 '+esc(jpDate(a.date))+(a.label?'（'+esc(a.label)+'）':'')+'</a>';
+      });
+      if(U.archive) mat+='<a href="'+esc(U.archive)+'" target="_blank" rel="noopener">📁 フォルダ</a>';
       if(U.notes)   mat+='<a href="https://docs.google.com/document/d/'+esc(U.notes)+'/edit" target="_blank" rel="noopener">📝 メモ</a>';
 
       html+='<div class="q'+(ratio>=1?' full':'')+'">'

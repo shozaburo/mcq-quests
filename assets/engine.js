@@ -80,7 +80,16 @@
   var folderUrl = URLS.folder || URLS.archive || '';     // Driveフォルダ（まとめて見る）
   // アーカイブ生録画：新 archives[] を優先。無ければ旧 archive がDriveの動画IDだった場合のみ拾う
   var archiveList = (URLS.archives && URLS.archives.length) ? URLS.archives.slice() : [];
-  archiveList.sort(function(a,b){ return String(b.date||'').localeCompare(String(a.date||'')); });
+  /* 新しい回が上。同じ日に2本ある回（前半／後半）は、並び順が運任せだと
+     どちらを先に見ればいいのか分からないので、日付が同じならラベル順にする
+     （前=U+524D < 後=U+5F8C なので 前半→後半 になる）。 */
+  function arcLabelKey(x){ return String((x&&x.label)||'') || '￿'; }  // 無印は最後
+  archiveList.sort(function(a,b){
+    var d = String(b.date||'').localeCompare(String(a.date||''));
+    if (d !== 0) return d;
+    var la = arcLabelKey(a), lb = arcLabelKey(b);   // 前半→後半（素の比較）
+    return la < lb ? -1 : la > lb ? 1 : 0;
+  });
   function driveView(id){ return 'https://drive.google.com/file/d/' + id + '/view'; }
   function jpDate(d){
     var m = String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -899,13 +908,13 @@
     // mp4も動画概要も無い時の外部ボタン。
     //   ※ 以前はここでアーカイブ生録画（30〜60分・1GB級）へ飛ばしていたため
     //     「動画を押すといきなり長い録画が始まって分かりにくい」状態だった。
-    //     生録画は STEP2 の「📼 復習アーカイブ」に隔離し、ここには出さない。
+    //     生録画は STEP2 の「📼 この回の録画」に隔離し、ここには出さない。
     var extHtml = videoUrl
       ? '<a class="btn btn-blue" href="' + esc(videoUrl) + '" target="_blank" rel="noopener">🔎 Gemini Notebookで解説を見る</a>'
       : '<button class="btn btn-blue" disabled>▶ 動画概要（準備中）</button>';
     if(!digestId && !videoUrl && archiveList.length){
       extHtml += '<div style="font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.7">'
-        + 'このマスの動画概要はまだ準備中です。次の画面の <b>📼 復習アーカイブ</b>（朝活の録画）で学べます。</div>';
+        + 'このマスの動画概要はまだ準備中です。次の画面の <b>📼 この回の録画</b>（朝活のライブ）で学べます。</div>';
     }
     /* v30: この画面は動画だけ。スライドは次の画面（sceneSlide）、
        インフォグラフィックは最後の報酬（sceneLoot）に移した。 */
@@ -963,7 +972,7 @@
 
   // STEP2 アーカイブ 50%
   /* ── STEP2 スライド（v30）──
-     動画の次はスライドだけを1画面で。復習アーカイブ・配布資料は
+     動画の次はスライドだけを1画面で。配布資料・元ノートは
      「もっと深掘りしたい人向け」として、スライドの下にたたんで置く。 */
   function sceneSlide(){
     setStep(2);
@@ -994,13 +1003,17 @@
       });
     }
 
-    // 📼 復習アーカイブ（朝活の生録画・長い）＝日付ごとに別枠。主動画とは明確に分離
+    /* 📼 朝活の録画。以前は下の <details>（閉じた状態）の中に入れていたが、
+       見出しが「もっと深掘りしたい人へ」だったこともあり、毎朝撮っているのに
+       ほとんど開かれていなかった。折りたたみの外に出して、最初から見える所に置く。
+       他の深掘り素材（配布資料・元ノート）は今までどおり折りたたみの中。 */
+    var arc = '';
     if(archiveList.length){
-      h += '<div style="font-size:.82rem;color:var(--muted);margin:10px 0 6px;line-height:1.7">'
-        + '📼 <b>復習アーカイブ</b>（朝活の録画・30〜60分の長編です。じっくり深掘りしたい人向け）</div>';
+      arc = '<div style="font-size:.82rem;color:var(--muted);margin:14px 0 6px;line-height:1.7">'
+          + '📼 <b>この回の録画</b>（朝活のライブ・30〜60分。話の流れごと見たい人はこちら）</div>';
       archiveList.forEach(function(a){
         if(!a || !a.id) return;
-        h += '<a class="btn btn-ghost" href="' + driveView(a.id) + '" target="_blank" rel="noopener">'
+        arc += '<a class="btn btn-ghost" href="' + driveView(a.id) + '" target="_blank" rel="noopener">'
           + '📼 ' + esc(jpDate(a.date)) + 'の回' + (a.label ? '（' + esc(a.label) + '）' : '') + '</a>';
       });
     }
@@ -1029,12 +1042,13 @@
     var deep = h
       ? '<details style="margin-top:14px">'
         + '<summary style="cursor:pointer;font-size:.84rem;color:var(--muted);padding:8px 0">'
-        +   '📚 もっと深掘りしたい人へ（録画・配布資料・元ノート）</summary>'
+        +   '📚 もっと深掘りしたい人へ（配布資料・元ノート）</summary>'
         + '<div style="margin-top:8px">' + h + '</div></details>'
       : '';
 
     var sl = slideHtml();
     render((sl || '<button class="btn btn-blue" disabled>📑 スライド（準備中）</button>')
+      + arc
       + deep
       + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → クイズへ</button>'
       + '<button class="btn btn-ghost" id="aSkip">クイズは飛ばして報告する</button>');

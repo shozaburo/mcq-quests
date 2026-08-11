@@ -107,7 +107,7 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/1MwqzDPG-K2sB9mHUmpJkXelGVLk5jpAw", info:"info/B5.jpg", mp4:"video/B5.mp4"},
 
   "B6": { digest:"1xTv_feTsWeGS3BODCrX6fmHTTJk7xS6f", slide:"slide/B6.pdf", drive:"1xTv_feTsWeGS3BODCrX6fmHTTJk7xS6f",
-    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1"},
+    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1",label:"後半"},
               {date:"2025-12-09", id:"1lUX1bsbNcC_0aH4p0k21JwLs13hNxs_R", label:"前半"}],
     notes:"1E2XwiV94CoFxxCvIA0e6j-ThNqXmafUvnKqfKqXJt8U",
     docs:[{t:"議事録とタスク抽出の完全マニュアル", id:"1kPQwPYYLEgcMtrvhsqciJA-BRQ_SaQbB_nCbqwxf4CQ"},
@@ -360,7 +360,7 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/1u3P85xFyJR2cl7st1fs7fik7aYkz8BkV", info:"info/F8.jpg", mp4:"video/F8.mp4"},
 
   "G1": { digest:"", drive:"",
-    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1"},
+    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1",label:"後半"},
               {date:"2025-12-09", id:"1lUX1bsbNcC_0aH4p0k21JwLs13hNxs_R", label:"前半"}],
     notes:"1E2XwiV94CoFxxCvIA0e6j-ThNqXmafUvnKqfKqXJt8U",
     docs:[{t:"議事録とタスク抽出の完全マニュアル", id:"1kPQwPYYLEgcMtrvhsqciJA-BRQ_SaQbB_nCbqwxf4CQ"},
@@ -370,7 +370,7 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8", info:"info/G1.jpg", slide:"slide/G1.pdf", mp4:"video/G1.mp4"},
 
   "G2": { digest:"", drive:"",
-    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1"},
+    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1",label:"後半"},
               {date:"2025-12-09", id:"1lUX1bsbNcC_0aH4p0k21JwLs13hNxs_R", label:"前半"}],
     notes:"1E2XwiV94CoFxxCvIA0e6j-ThNqXmafUvnKqfKqXJt8U",
     docs:[{t:"タスクダンジョンと賢者NotebookLM", id:"1_aopgyek7akgb3-EOqZcmwW4INVdNo6W"}],
@@ -379,7 +379,7 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8", info:"info/G2.jpg", slide:"slide/G2.pdf", mp4:"video/G2.mp4"},
 
   "G3": { digest:"1vpPqZZpu6aBHIvpuTAn8B-X4Di6dNY-I", slide:"slide/G3.pdf", drive:"1vpPqZZpu6aBHIvpuTAn8B-X4Di6dNY-I",
-    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1"}],
+    archives:[{date:"2025-12-09", id:"1X4vVb-Zs8FLm1Imp86Yvm5BpSBPnWCZ1",label:"後半"}],
     notes:"1E2XwiV94CoFxxCvIA0e6j-ThNqXmafUvnKqfKqXJt8U", docs:[],
     related:"https://notebooklm.google.com/notebook/f0dc8bc2-138e-402f-aac8-733e4169bf84", check:"",
     folder:"https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8",
