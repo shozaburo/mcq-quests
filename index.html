@@ -216,9 +216,14 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
        アカウントが1つの人には影響しない。詳細は _引き継ぎ_マイページ軽量化.md */
     var q = '?section=hajimari&authuser=0' + (tk ? '&token=' + encodeURIComponent(tk) : '');
     a.href = MYPAGE + q;
-    /* 逃げ道：ai-jissen.com ドメイン経由。/u/2/ 挿し込みを受けない形。 */
+    /* 逃げ道：re-gi.jp/my/ 経由。ここが ai-jissen.com ドメイン形
+       （/u/2/ 挿し込みを受けない形）へ送り出し、あわせて token を端末に覚え、
+       マイページ側にも「以降のページ内リンクもこの形で」と伝える（dom=1）。
+       素の形だと一度入れてもリンクを踏むたびに同じ壁に当たっていた。
+       この逃げ道はホーム画面に追加して使える。 */
     var alt = document.getElementById('first64alt');
-    if(alt) alt.href = MYPAGE.replace('/macros/s/', '/a/macros/ai-jissen.com/s/') + q;
+    if(alt) alt.href = 'https://re-gi.jp/my/?section=hajimari'
+      + (tk ? '&token=' + encodeURIComponent(tk) : '');
     a.addEventListener('click', function(){
       if(window.MCQBgm) MCQBgm.se('ok');
       if(window.MCQTrack) MCQTrack('hajimari64_open', tk ? 'token' : 'notoken');

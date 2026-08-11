@@ -180,7 +180,7 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
   function matUrl(v){
     v=String(v||'');
     if(/^https?:/i.test(v)) return v;
-    if(/\.(pdf|png|jpe?g|webp|gif)(\?.*)?$/i.test(v)){
+    if(/\.(pdf|png|jpe?g|webp|gif|mp4)(\?.*)?$/i.test(v)){
       try{
         if(location.hostname!=='re-gi.jp'){
           var m=location.pathname.match(/\/stages\/([^\/]+)\//);
@@ -219,8 +219,13 @@ h2.qh{margin:22px 0 8px;font-size:1rem;color:var(--gold)}
       var doing=M.m125||'';
       var vid=U.digest||U.drive||'';
       var mat='';
-      mat+= vid ? '<a href="https://drive.google.com/file/d/'+esc(vid)+'/view" target="_blank" rel="noopener">🎬 動画</a>'
-                : '<a class="none">🎬 動画</a>';
+      /* 🎬 の実体は Drive だけではない。engine.js と同じく urls.js の mp4（サーバー実体）が最優先。
+         Driveが空でもmp4がある回があり、そこを灰色にすると「動画が無い」と誤解される
+         （D2/D3 で実際に起きた）。 */
+      var vurl = U.mp4 ? matUrl(U.mp4)
+              : (vid ? 'https://drive.google.com/file/d/'+vid+'/view' : '');
+      mat+= vurl ? '<a href="'+esc(vurl)+'" target="_blank" rel="noopener">🎬 動画</a>'
+                 : '<a class="none">🎬 動画</a>';
       mat+= U.slide ? '<a href="'+esc(matUrl(U.slide))+'" target="_blank" rel="noopener">📑 スライド</a>'
                     : '<a class="none">📑 スライド</a>';
       mat+= U.info ? '<a href="'+esc(matUrl(U.info))+'" target="_blank" rel="noopener">📊 まとめ</a>'
