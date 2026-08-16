@@ -82,8 +82,12 @@
     background:linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,0) 55%,rgba(0,0,0,.10))}
   .mbar .tk{position:absolute;top:0;bottom:0;width:1px;background:rgba(58,50,38,.16)}
   .mbar .tk.big{background:rgba(58,50,38,.3)}
-  .mrow .mnum{font-size:.86rem;font-weight:bold;width:2.4em;text-align:right;flex:none;
+  .mrow .mnum{font-size:.86rem;font-weight:bold;width:2.6em;text-align:right;flex:none;
     font-variant-numeric:tabular-nums}
+  .mrow .mnum.wide{width:5.6em;font-size:.8rem}
+  .mbar .full{position:absolute;top:-1px;bottom:-1px;left:66.6%;width:2px;background:#8a7d64;opacity:.75}
+  .mbar .overmark{position:absolute;right:3px;top:0;font-size:.58rem;color:#b3341e;font-weight:bold;line-height:15px}
+  .mrow.debt .mbar{background:linear-gradient(#f6e2de,#fbeeeb)}
   .mrow.warn .mbar{border-color:#b3341e;box-shadow:inset 0 1px 2px rgba(58,50,38,.18),0 0 0 1.5px rgba(179,52,30,.5)}
   .mrow.bump .mbar{animation:mbump .5s}
   @keyframes mbump{30%{transform:scale(1.03,1.25)}60%{transform:scale(1,.94)}}
@@ -196,6 +200,11 @@
     width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;
     border-top:18px solid var(--accent)}
   .rlabel{font-size:9.5px;font-weight:bold;fill:#fff}
+  .hitarea{border:2.5px solid var(--accent);border-radius:10px;padding:9px 10px;background:#fffdf7;
+    animation:stamp .45s cubic-bezier(.2,1.6,.4,1)}
+  .hitarea .hl{font-size:.66rem;color:#8a7d64;letter-spacing:.14em}
+  .hitarea .hn{font-size:1.5rem;font-weight:bold;line-height:1.3}
+  .hitarea .hg{font-size:.76rem;color:#5a5040;line-height:1.5;margin-top:2px}
 
   /* ---- 賽（ドット表示・転がる） ---- */
   .dicebox{perspective:600px;text-align:center;margin:14px 0 10px}
@@ -279,6 +288,18 @@
   .rrow .rm{color:#8a7d64;font-size:.72rem;white-space:nowrap}
   .rrow .rp{font-weight:bold;width:3.2em;text-align:right}
 
+  /* 結果のマンダラ（到達度で色が濃くなる） */
+  .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:10px 0}
+  .rcell{border:1px solid var(--line);border-radius:8px;padding:7px 4px;text-align:center;min-height:62px;
+    display:flex;flex-direction:column;justify-content:center;background:#fff}
+  .rcell .rlab{font-size:.66rem;color:#6d6250}
+  .rcell .rval{font-size:1.15rem;font-weight:bold;line-height:1.2}
+  .rcell .rval small{font-size:.66rem;font-weight:normal}
+  .rcell.v0{background:#f6f2e8;color:#b3341e}
+  .rcell.v10{background:#f2f6f1}.rcell.v30{background:#e4efe2}
+  .rcell.v60{background:#c9e0c6}.rcell.v100{background:#a3cc9f}
+  .rcell.ctr{background:linear-gradient(160deg,#fdf6e0,#f5e9c8);border-color:var(--gold)}
+  .rcell .rmid{font-size:.74rem;font-weight:bold;line-height:1.35}
   .statrow{display:flex;justify-content:space-between;font-size:.86rem;padding:5px 2px;border-bottom:1px dashed var(--line)}
   .scorebig{text-align:center;font-size:1.9rem;font-weight:bold;color:var(--accent)}
   .scoredetail{font-size:.78rem;color:#8a7d64;text-align:center;margin-bottom:6px}
@@ -382,7 +403,7 @@
   </footer>
 </div>
 
-<script src="data.js?v=6"></script>
+<script src="data.js?v=7"></script>
 <script>
 "use strict";
 const D = window.MANDALA_LIFE;
@@ -400,12 +421,24 @@ const BLOCK_POS = Object.fromEntries(AKEYS.map(k=>{ const g=MANDALA_CELL[k];
 const WHEEL_ORDER = ["C","G","D","H","A","E","B","F"];
 const WHEEL_COLORS = {A:"#3e6b48",B:"#3d5a80",C:"#b8912f",D:"#b5657d",
                       E:"#8a6a4a",F:"#6b4f86",G:"#2f7f8c",H:"#c9722c"};
-/* 三つのメーター */
+/* 三つのメーター
+   心・体 … 0〜150（100が満ちた状態。100超は無理をしている領域）
+   お金   … 手持ちの現預金（万円）。0を割れば借入。四半期ごとに金利10%
+   ※日本の給与所得者の月収中央値をおよそ30万円とみて、そのあたりが真ん中に来るようにしている */
+const MET_MAX = 150, MET_FULL = 100;
+const MONEY_FULL = 100;        // 100万円でメーター満タン相当
 const METERS = [
-  {key:"kokoro", name:"心",   color:"var(--heart)", icon:"heart"},
-  {key:"karada", name:"体",   color:"var(--body)",  icon:"body"},
-  {key:"okane",  name:"お金", color:"var(--coin)",  icon:"coin"}
+  {key:"kokoro", name:"心",   color:"var(--heart)", icon:"heart", kind:"gauge"},
+  {key:"karada", name:"体",   color:"var(--body)",  icon:"body",  kind:"gauge"},
+  {key:"okane",  name:"お金", color:"var(--coin)",  icon:"coin",  kind:"money"}
 ];
+/* お金を他の二つと同じ物差し（0〜150）に写す。33万で50、67万で100 */
+function moneyIndex(man){ return Math.max(0, Math.min(MET_MAX, Math.round(man*1.5))); }
+function meterIndex(pl, key){ return key==="okane" ? moneyIndex(pl.m.okane) : pl.m[key]; }
+function yen(man){
+  if(man < 0) return `−${Math.abs(man).toLocaleString()}万円`;
+  return `${man.toLocaleString()}万円`;
+}
 const DECK_SIZE = 81, RISK_CARDS = 27;
 
 /* data.js が古いまま（ブラウザキャッシュ）だと動きが壊れるので、起動時に照合する */
@@ -443,10 +476,10 @@ function harmony(pl){
 }
 function scoreOf(pl){
   const h = harmony(pl);
-  const ms = METERS.map(mt=>pl.m[mt.key]);
+  const ms = METERS.map(mt=>meterIndex(pl, mt.key));   // お金は指数に直して比べる
   const mMin = Math.min(...ms);
   /* 心体財も「一番低いもの」で効く。8分野の調和と同じ思想 */
-  const mcoef = 0.5 + mMin/100;              // 0.5〜1.5
+  const mcoef = 0.5 + mMin/100;              // 0.5〜2.0（100が満ち、150まで伸びる）
   return { ...h, mAvg:ms.reduce((a,b)=>a+b,0)/3, mMin, mcoef,
            score: Math.round(h.avg*10*h.coef*mcoef) };
 }
@@ -565,10 +598,11 @@ document.getElementById("btn-atdone").onclick = ()=>{
 
 /* ---- はじまりの賽：心・体・お金の持ち点は人それぞれ ---- */
 function startComment(m){
-  const low = METERS.reduce((a,b)=> m[a.key]<=m[b.key] ? a : b);
-  const high = METERS.reduce((a,b)=> m[a.key]>=m[b.key] ? a : b);
-  const spread = m[high.key] - m[low.key];
-  if(spread <= 10) return "三つとも似た持ち点。平らな地面からの出発です。";
+  const ix = k => k==="okane" ? moneyIndex(m.okane) : m[k];
+  const low = METERS.reduce((a,b)=> ix(a.key)<=ix(b.key) ? a : b);
+  const high = METERS.reduce((a,b)=> ix(a.key)>=ix(b.key) ? a : b);
+  const spread = ix(high.key) - ix(low.key);
+  if(spread <= 12) return "三つとも似た持ち点。平らな地面からの出発です。";
   const t = {
     kokoro:{h:"心の張りがある",l:"心の余白が少ない"},
     karada:{h:"体に恵まれている",l:"体に不安がある"},
@@ -605,14 +639,15 @@ function rollStartMeters(pl, done){
     METERS.forEach((mt,i)=>{
       const n = 1 + Math.floor(Math.random()*6);
       res[mt.key] = n;
-      pl.m[mt.key] = n*10 + 20;          // 目1→30 … 目6→80
+      /* 心・体は 50〜100。お金は 10〜60万円（月収中央値30万のあたりが真ん中） */
+      pl.m[mt.key] = (mt.kind==="money") ? n*10 : n*10 + 40;
       setDie(dice[i], n);
       dice[i].classList.remove("rolling");
       dice[i].classList.add("settled");
     });
     await wait(FAST?60:600);
     document.getElementById("startresult").innerHTML = `
-      <div class="meters" style="margin:4px 0 10px">${METERS.map(mt=>meterRow(mt, pl.m[mt.key])).join("")}</div>
+      <div class="meters" style="margin:4px 0 10px">${METERS.map(mt=>meterRow(mt, pl)).join("")}</div>
       <div class="insightbox"><span class="il">第6原則「主体性」</span><br>${startComment(pl.m)}</div>`;
     btn.disabled = false;
     btn.textContent = "この持ち点ではじめる";
@@ -632,16 +667,32 @@ function meterIcon(mt){
   }[mt.icon];
   return `<svg class="mico" viewBox="0 0 17 17">${p}</svg>`;
 }
-const METER_TICKS = (()=>{ let s=""; for(let i=1;i<10;i++)
-  s += `<span class="tk${i===5?" big":""}" style="left:${i*10}%"></span>`; return s; })();
-function meterRow(mt, v){
-  return `<div class="mrow${v<=20?" warn":""}" data-m="${mt.key}">
+/* 目盛りは 0〜150。100（満ちた状態）に太い線 */
+const METER_TICKS = (()=>{ let s=""; for(let i=1;i<15;i++)
+  s += `<span class="tk${i===10?" big":""}" style="left:${i/15*100}%"></span>`; return s; })();
+function meterRow(mt, pl){
+  const raw = pl.m[mt.key];
+  const money = mt.kind === "money";
+  const idx = money ? moneyIndex(raw) : raw;
+  const w = Math.max(0, Math.min(100, idx/MET_MAX*100));
+  const debt = money && raw < 0;
+  const over = !money && raw > MET_FULL;
+  const label = money ? yen(raw) : raw;
+  return `<div class="mrow${idx<=20?" warn":""}${debt?" debt":""}" data-m="${mt.key}">
     ${meterIcon(mt)}<span class="mlab">${mt.name}</span>
-    <div class="mbar"><i style="width:${v}%;background:${mt.color}"></i>${METER_TICKS}</div>
-    <span class="mnum" style="color:${mt.color}">${v}</span></div>`;
+    <div class="mbar"><i style="width:${w}%;background:${debt?"#b3341e":mt.color}"></i>${METER_TICKS}
+      <span class="full"></span>${over?`<span class="overmark">無理</span>`:""}</div>
+    <span class="mnum${money?" wide":""}" style="color:${debt?"#b3341e":mt.color}">${label}</span></div>`;
 }
 function renderMeters(pl){
-  document.getElementById("meters").innerHTML = METERS.map(mt=>meterRow(mt, pl.m[mt.key])).join("");
+  document.getElementById("meters").innerHTML = METERS.map(mt=>meterRow(mt, pl)).join("");
+}
+/* メーターを動かす。心・体は0〜150で頭打ち、お金は青天井（マイナスは借入） */
+function moveMeterOf(pl, key, amt){
+  const before = pl.m[key];
+  pl.m[key] = (key==="okane") ? before + amt
+                              : Math.max(0, Math.min(MET_MAX, before + amt));
+  return pl.m[key] - before;
 }
 /* メーターが動いたときの手応え（バーが跳ね、増減が浮かんで消える） */
 function flashMeters(deltas){
@@ -779,27 +830,32 @@ function renderRoster(){
     const h = harmony(pl);
     return `<div class="rrow${i===S.turn?" now":""}">
       <span class="rn">${i===S.turn?"▶ ":""}${esc(pl.name)}</span>
-      <span class="rm">♥${pl.m.kokoro} 体${pl.m.karada} ¥${pl.m.okane}</span>
+      <span class="rm">心${pl.m.kokoro} 体${pl.m.karada} ${yen(pl.m.okane)}</span>
       <span class="rp">${Math.round(h.avg)}%</span></div>`;
   }).join("");
 }
 
 /* ================= 進捗の付与 =================
-   賽の目 n → そのエリアに n×10% 相当（8マス分＝n*80ポイント／10）を
-   進みの遅いマスから順に、はしごに沿って配る。
-   例：まっさらなエリアに 6 が出ると、8マスすべてが60%（○）になる。 */
+   賽の目 n → そのエリアに n×10%ぶん（8マス分＝n*80ポイント）を、
+   まだ上限に達していないマスから「ランダムに」選んで、はしごに沿って配る。
+   きれいに揃って埋まることは現実には起こらない。 */
 function grantProgress(pl, ak, gainPct){
-  let pool = gainPct * 8;                      // 8マスに配る総ポイント（%×8マス）
+  let pool = gainPct * 8;
   const cells = pl.progress[ak];
   const before = areaPct(pl,ak);
   let guard = 0;
-  while(pool > 0 && guard++ < 200){
-    let idx=-1, minV=999;
-    for(let i=0;i<8;i++){ if(cells[i]<minV){ minV=cells[i]; idx=i; } }
-    if(minV >= 130) break;
-    const next = LADDER.find(v=>v>minV);
-    const cost = next - minV;
-    if(pool >= cost){ cells[idx]=next; pool -= cost; } else break;
+  while(pool > 0 && guard++ < 300){
+    const open = [];
+    for(let i=0;i<8;i++){
+      if(cells[i] >= 130) continue;
+      const next = LADDER.find(v=>v>cells[i]);
+      if(next - cells[i] <= pool) open.push(i);     // いま払えるマスだけ
+    }
+    if(!open.length) break;
+    const idx = open[Math.floor(Math.random()*open.length)];
+    const next = LADDER.find(v=>v>cells[idx]);
+    pool -= next - cells[idx];
+    cells[idx] = next;
   }
   return areaPct(pl,ak) - before;
 }
@@ -879,18 +935,22 @@ async function openDiaryPage(type){
   if(type === "progress"){
     v.innerHTML = `<div class="verdict">
       <div class="vt">アクション</div>
-      <div class="vs">八分野から、この一週間で動かすものを選ぶ</div></div>`;
-    await wait(FAST?80:1250);
-    overlay.classList.remove("active");
-    cardbox.style.padding = "";
-    startAreaPick();                 // 盤面のマンダラで選ばせる
+      <div class="vs">八分野から、この一週間で動かすものを選ぶ</div>
+      <button class="btn" id="v-next" style="margin-top:10px">分野を選ぶ</button></div>`;
+    document.getElementById("v-next").onclick = ()=>{
+      overlay.classList.remove("active");
+      cardbox.style.padding = "";
+      startAreaPick();                 // 盤面のマンダラで選ばせる
+    };
   } else {
     v.innerHTML = `<div class="verdict risk">
       <div class="vt">リスク発生</div>
-      <div class="vs">突然のトラブル（四苦八苦）か、<br>それとも幸運の縁か</div></div>`;
-    await wait(FAST?80:1450);
-    cardbox.style.padding = "";
-    openRiskCard();
+      <div class="vs">突然のトラブル（四苦八苦）か、<br>それとも幸運の縁か</div>
+      <button class="btn" id="v-next" style="margin-top:10px;background:#a33b2e">ルーレットを回す</button></div>`;
+    document.getElementById("v-next").onclick = ()=>{
+      cardbox.style.padding = "";
+      openRiskCard();
+    };
   }
 }
 
@@ -952,7 +1012,7 @@ async function rollProgress(ak){
     <h3>${ANAME[ak]}　<span style="color:var(--accent2)">＋${gain}%</span></h3>
     <div class="dicebox">${dieHTML(n)}<div class="dicecap">${n} の目 ＝ ${n*10}%</div></div>
     <div class="effects"><span class="up">${ANAME[ak]} の到達度 ${areaPct(pl,ak)}%</span>
-      （遅れているマスから順に埋まりました）<br>
+      （動いたマスは、その週に手がついたところ）<br>
       <span style="color:#8a7d64;font-size:.82rem">○（60%）以上のマス：${done} / 8</span></div>
     <div class="insightbox"><span class="il">実践会のことば</span><br>
       10%：はじめの一歩／30%：少しは行動できた／60%：まぁまぁ行動できた／100%：計画どおり／130%：やり過ぎた</div>
@@ -985,13 +1045,21 @@ async function openRiskCard(){
   w.style.transformOrigin = "100px 100px";
   w.style.transform = `rotate(${wheelDeg}deg)`;
   await wait(SPIN_MS);
-  document.getElementById("rhit").innerHTML = `<strong style="color:var(--accent);font-size:1rem">${ANAME[ak]}</strong> の出来事`;
-  await wait(FAST?60:600);
   pl.lastArea = ak;
-  /* リスクの3回に1回ほどは、賽を振る運命の回（四苦八苦／幸運の縁） */
-  const fates = Array.isArray(D.fateCards) ? D.fateCards : [];
-  if(fates.length && Math.random() < 0.3) openFate(fates[Math.floor(Math.random()*fates.length)], ak);
-  else openEpisode(drawEpisode(pl,ak), ak);
+  /* どの分野に止まったかを、大きく見せてから進む */
+  document.getElementById("rhit").innerHTML = `
+    <div class="hitarea" style="border-color:${WHEEL_COLORS[ak]}">
+      <div class="hl">ルーレットが止まりました</div>
+      <div class="hn" style="color:${WHEEL_COLORS[ak]}">${ak}. ${ANAME[ak]}</div>
+      <div class="hg">${esc(D.profiles[pl.profile].areas[ak].goalOptions[pl.goals[ak]])}</div>
+    </div>
+    <button class="btn" id="r-next" style="margin-top:10px;background:#a33b2e">この分野で何が起きたか見る</button>`;
+  document.getElementById("r-next").onclick = ()=>{
+    /* リスクの3回に1回ほどは、賽を振る運命の回（四苦八苦／幸運の縁） */
+    const fates = Array.isArray(D.fateCards) ? D.fateCards : [];
+    if(fates.length && Math.random() < 0.3) openFate(fates[Math.floor(Math.random()*fates.length)], ak);
+    else openEpisode(drawEpisode(pl,ak), ak);
+  };
 }
 
 /* ---- 運命の回：賽の目のぶんだけ、劇的に動く ---- */
@@ -1023,12 +1091,10 @@ async function resolveFate(fc, ak){
   const e = fc.effect, sign = e.sign || 1;
   const lines = [], mDelta = {}, gains = {};
   const moveMeter = (key, amt)=>{
-    const before = pl.m[key];
-    pl.m[key] = Math.max(0, Math.min(100, before + amt));
-    const real = pl.m[key] - before;
+    const real = moveMeterOf(pl, key, amt);
     if(real){ mDelta[key] = real;
       const mt = METERS.find(x=>x.key===key);
-      lines.push(`<span class="mchg" style="color:${real>0?mt.color:"#b3341e"}">${mt.name} ${real>0?"+":""}${real}</span>`);
+      lines.push(`<span class="mchg" style="color:${real>0?mt.color:"#b3341e"}">${mt.name} ${real>0?"+":""}${mt.kind==="money"?`${real}万円`:real}</span>`);
     }
   };
   if(e.type === "metersDice"){
@@ -1070,13 +1136,18 @@ function loseProgress(pl, ak, lossPct){
   let pool = lossPct * 8;
   const cells = pl.progress[ak];
   let guard = 0;
-  while(pool > 0 && guard++ < 200){
-    let idx=-1, maxV=-1;
-    for(let i=0;i<8;i++){ if(cells[i]>maxV){ maxV=cells[i]; idx=i; } }
-    if(maxV <= 0) break;
-    const prev = [...LADDER].reverse().find(v=>v<maxV);
-    const cost = maxV - prev;
-    if(pool >= cost){ cells[idx]=prev; pool -= cost; } else break;
+  while(pool > 0 && guard++ < 300){
+    const open = [];
+    for(let i=0;i<8;i++){
+      if(cells[i] <= 0) continue;
+      const prev = [...LADDER].reverse().find(v=>v<cells[i]);
+      if(cells[i] - prev <= pool) open.push(i);
+    }
+    if(!open.length) break;
+    const idx = open[Math.floor(Math.random()*open.length)];
+    const prev = [...LADDER].reverse().find(v=>v<cells[idx]);
+    pool -= cells[idx] - prev;
+    cells[idx] = prev;
   }
 }
 function drawEpisode(pl, ak){
@@ -1094,18 +1165,20 @@ function openEpisode(ep, ak){
   const pl = cur();
   cardbox.className = "gamecard risk";
   const prof = D.profiles[pl.profile];
+  /* 表示の並びは毎回シャッフルする。「だいたいAが正解」を作らないため */
+  const opts = shuffle(["a","b","c"].filter(k=>ep[k]));
+  cardbox.className = "gamecard risk";
   cardbox.innerHTML = `
     <span class="ctype risk">${ANAME[ak]}の出来事</span><span class="ctype plain">${esc(pl.name)}</span>
     <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:4px">
       ${faceHTML(prof)}<h3 style="flex:1;margin:0">${esc(ep.title)}</h3></div>
     <p class="situ">${esc(ep.text)}</p>
-    <button class="choice" id="ch-a"><span class="ck">A</span>${esc(ep.a.label)}</button>
-    <button class="choice" id="ch-b"><span class="ck">B</span>${esc(ep.b.label)}</button>
-    ${ep.c ? `<button class="choice" id="ch-c"><span class="ck">C</span>${esc(ep.c.label)}</button>` : ""}
+    ${opts.map((k,i)=>`<button class="choice" id="ch-${i}">
+      <span class="ck">${"①②③"[i]}</span>${esc(ep[k].label)}</button>`).join("")}
     <p class="note">どれにも代償と実りがあります。この人になったつもりで。</p>`;
-  document.getElementById("ch-a").onclick = ()=>resolve(ep, ep.a, ak);
-  document.getElementById("ch-b").onclick = ()=>resolve(ep, ep.b, ak);
-  if(ep.c) document.getElementById("ch-c").onclick = ()=>resolve(ep, ep.c, ak);
+  opts.forEach((k,i)=>{
+    document.getElementById("ch-"+i).onclick = ()=>resolve(ep, ep[k], ak);
+  });
 }
 function resolve(ep, ch, ak){
   const pl = cur();
@@ -1129,11 +1202,9 @@ function resolve(ep, ch, ak){
   METERS.forEach(mt=>{
     const dv = (ch.meters||{})[mt.key] || 0;
     if(!dv) return;
-    const before = pl.m[mt.key];
-    pl.m[mt.key] = Math.max(0, Math.min(100, before + dv*5));
-    const real = pl.m[mt.key] - before;
+    const real = moveMeterOf(pl, mt.key, dv*5);
     if(real) mDelta[mt.key] = real;
-    mline.push(`<span class="mchg" style="color:${dv>0?mt.color:"#b3341e"}">${mt.name} ${dv>0?"+":""}${dv*5}</span>`);
+    mline.push(`<span class="mchg" style="color:${dv>0?mt.color:"#b3341e"}">${mt.name} ${dv>0?"+":""}${mt.kind==="money"?`${dv*5}万円`:dv*5}</span>`);
   });
   pl.insights.push(ep.insight);
 
@@ -1192,6 +1263,19 @@ function resetQuarterProgress(){
     pl.usedEp = [];
   });
 }
+/* 借入は四半期ごとに10%ふくらむ */
+const LOAN_RATE = 0.10;
+function chargeInterest(){
+  const charged = [];
+  S.players.forEach(pl=>{
+    if(pl.m.okane < 0){
+      const interest = Math.max(1, Math.round(Math.abs(pl.m.okane)*LOAN_RATE));
+      pl.m.okane -= interest;
+      charged.push({name:pl.name, interest, after:pl.m.okane});
+    }
+  });
+  return charged;
+}
 function mentorFor(pl){
   const ps = AKEYS.map(k=>({k,v:areaPct(pl,k)})).sort((a,b)=>a.v-b.v);
   const low=ps[0], high=ps[ps.length-1];
@@ -1222,7 +1306,7 @@ function openReview(q){
       const pv = prev ? prev.players[x.i] : null;
       const d = pv ? x.avg - pv.avg : x.avg;
       return `<div class="statrow"><span>${["🥇","🥈","🥉"][ri]||"　"} ${esc(x.name)}
-        <br><small style="color:#8a7d64">8分野平均 ${x.avg}%${d>0?`（+${d}）`:""}　♥${x.m.kokoro} 体${x.m.karada} ¥${x.m.okane}</small></span>
+        <br><small style="color:#8a7d64">8分野平均 ${x.avg}%${d>0?`（+${d}）`:""}　心${x.m.kokoro} 体${x.m.karada} ${yen(x.m.okane)}</small></span>
         <strong>${x.score}点</strong></div>`;
     }).join("")}
     <div id="revbody"></div>`;
@@ -1245,8 +1329,21 @@ function openReview(q){
         <div style="height:8px"></div>
         <button class="btn sub" id="q-pause">ここで一区切りにする（記録を見る）</button>`;
       document.getElementById("q-go").onclick = ()=>{
+        const charged = chargeInterest();   // 借入は四半期ごとに10%ふくらむ
         resetQuarterProgress();            // 進捗は四半期ごとに仕切り直し
         save();
+        if(charged.length){
+          body.innerHTML = `<div class="mentor" style="border-left-color:#a33b2e">
+            <span class="ml" style="color:#a33b2e">借入の利息（四半期 10%）</span><br>
+            ${charged.map(c=>`${esc(c.name)}さん　利息 ${c.interest}万円 → 残高 <strong style="color:#b3341e">${yen(c.after)}</strong>`).join("<br>")}
+            <br><small>マイナスのまま置くと、利息が利息を生みます。</small></div>
+            <button class="btn" id="q-go2">${QNAME[q+1]}へ進む</button>`;
+          document.getElementById("q-go2").onclick = ()=>{
+            overlay.classList.remove("active"); busy=false;
+            document.getElementById("btn-draw").disabled=false; renderAll();
+          };
+          return;
+        }
         overlay.classList.remove("active"); busy=false;
         document.getElementById("btn-draw").disabled=false; renderAll();
       };
@@ -1271,6 +1368,55 @@ function openReview(q){
   pickNext();
 }
 
+/* ================= 結果のマンダラ＋レーダー ================= */
+/* 8分野を、マンダラの並び（F C G / B 中心 D / E A H）そのままの角に置く。
+   単一の人物を見る図なので面はひとつ、色は一色。 */
+const RADAR_ORDER = ["C","G","D","H","A","E","B","F"];   // 12時から時計回り＝盤の巡り
+function radarSVG(pl, size){
+  const R = 52, cx = 85, cy = 84;
+  const pt = (i, r)=>{
+    const a = (i*45 - 90) * Math.PI/180;
+    return [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+  };
+  const ring = (r, w, col)=>{
+    const d = RADAR_ORDER.map((k,i)=>{ const [x,y]=pt(i,r); return `${i?"L":"M"}${x.toFixed(1)} ${y.toFixed(1)}`; }).join(" ")+" Z";
+    return `<path d="${d}" fill="none" stroke="${col}" stroke-width="${w}"/>`;
+  };
+  let g = "";
+  [25,50,75,100].forEach(p=> g += ring(R*p/100, p===100?1.2:0.7, p===100?"#b3a893":"#ded4bd"));
+  RADAR_ORDER.forEach((k,i)=>{ const [x,y]=pt(i,R);
+    g += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#ded4bd" stroke-width="0.7"/>`; });
+  const vals = RADAR_ORDER.map(k=>Math.min(100, areaPct(pl,k)));
+  const area = vals.map((v,i)=>{ const [x,y]=pt(i, R*Math.max(v,0)/100);
+    return `${i?"L":"M"}${x.toFixed(1)} ${y.toFixed(1)}`; }).join(" ")+" Z";
+  g += `<path d="${area}" fill="rgba(62,107,72,.30)" stroke="#3e6b48" stroke-width="2" stroke-linejoin="round"/>`;
+  vals.forEach((v,i)=>{ const [x,y]=pt(i, R*Math.max(v,0)/100);
+    g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#3e6b48" stroke="#fffdf7" stroke-width="1.5"/>`; });
+  RADAR_ORDER.forEach((k,i)=>{
+    const [x,y] = pt(i, R+17);
+    g += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      style="font-size:8.5px;fill:#5a5040">${k}.${ANAME[k]}</text>
+      <text x="${x.toFixed(1)}" y="${(y+8.5).toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      style="font-size:8px;font-weight:bold;fill:#3e6b48">${areaPct(pl,k)}%</text>`;
+  });
+  return `<svg viewBox="0 0 170 174" style="width:100%;max-width:${size||320}px;height:auto;display:block;margin:2px auto 0">${g}</svg>`;
+}
+/* 結果のマンダラ（A型の形で到達度を出す） */
+function resultMandala(pl){
+  const p = D.profiles[pl.profile];
+  const cells = new Array(9).fill("");
+  cells[4] = `<div class="rcell ctr"><div class="rlab">中心の言葉</div>
+    <div class="rmid">${esc(p.centerOptions[pl.center])}</div></div>`;
+  AKEYS.forEach(ak=>{
+    const v = areaPct(pl,ak);
+    const lv = v>=100?"v100":v>=60?"v60":v>=30?"v30":v>0?"v10":"v0";
+    cells[MANDALA_CELL[ak]] = `<div class="rcell ${lv}">
+      <div class="rlab">${ak}. ${ANAME[ak]}</div>
+      <div class="rval">${v}<small>%</small></div></div>`;
+  });
+  return `<div class="rgrid">${cells.join("")}</div>`;
+}
+
 /* ================= 結果 ================= */
 function rankOf(sc){
   if(sc>=1200) return ["秀","八分野が響き合う、見事な一年でした"];
@@ -1287,7 +1433,7 @@ function endGame(uptoQ){
     <h3 style="font-size:1.02rem">${full?"一年（2027年）の結果":QNAME[uptoQ]+"までの結果"}</h3>
     <p class="note" style="margin-bottom:6px">得点は四半期ごとの積み上げです（進捗は四半期ごとに0%へ戻り、心・体・お金は持ち越し）。</p>
     ${rows.map((x,ri)=>`<div class="statrow"><span>${["🥇","🥈","🥉"][ri]||"　"} ${esc(x.pl.name)}
-      <br><small style="color:#8a7d64">${esc(D.profiles[x.pl.profile].name.split("（")[0])}／この四半期 ${Math.round(x.r.avg)}%　調和 ${x.r.coef.toFixed(2)}　心体財 最低${x.r.mMin}</small></span>
+      <br><small style="color:#8a7d64">${esc(D.profiles[x.pl.profile].name.split("（")[0])}／この四半期 ${Math.round(x.r.avg)}%　調和 ${x.r.coef.toFixed(2)}　心体財の最低 ${x.r.mMin}</small></span>
       <strong>${x.tot}点${full&&ri===0?` <span style="color:var(--gold)">${rankOf(x.tot)[0]}</span>`:""}</strong></div>`).join("")}
     </div>`;
   rows.forEach(({pl,r})=>{
@@ -1299,8 +1445,9 @@ function endGame(uptoQ){
       <p class="note" style="margin:2px 0 6px">中心の言葉：「${esc(p.centerOptions[pl.center])}」</p>
       <div class="scorebig">${r.score}<small style="font-size:.9rem">点</small></div>
       <div class="scoredetail">8分野平均 ${Math.round(r.avg)}% × 調和 ${r.coef.toFixed(2)} × 心体財 ${r.mcoef.toFixed(2)}</div>
-      <div class="meters" style="margin:8px 0">${METERS.map(mt=>meterRow(mt, pl.m[mt.key])).join("")}</div>
-      ${growth.map(g=>`<div class="statrow"><span>${g.n}</span><strong>${g.v}%</strong></div>`).join("")}
+      <div class="meters" style="margin:8px 0">${METERS.map(mt=>meterRow(mt, pl)).join("")}</div>
+      ${resultMandala(pl)}
+      ${radarSVG(pl)}
       <div class="mentor" style="margin-top:10px"><span class="ml">${full?"年間":QNAME[uptoQ]+"の"}リフレクション</span><br>${mentorFor(pl)}</div>
       ${uniq.length?`<p class="note" style="margin-top:10px">手帳に残った気づき：</p>
       <ul style="list-style:none">${uniq.map(s=>`<li style="font-size:.84rem;margin:6px 0;padding-left:1.3em;position:relative"><span style="position:absolute;left:0;color:var(--gold)">✎</span>${esc(s)}</li>`).join("")}</ul>`:""}
