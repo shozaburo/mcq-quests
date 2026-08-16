@@ -260,12 +260,13 @@
   .choice:active{background:#faf3e3}
   .choice .ck{display:inline-block;background:var(--ink);color:#fff;border-radius:5px;
     font-size:.72rem;padding:0 6px;margin-right:6px}
-  .areapick{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}
-  .areapick button{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:8px 3px;
-    font-family:inherit;cursor:pointer;text-align:center;font-size:.74rem;line-height:1.35}
-  .areapick button b{display:block;font-size:.95rem}
-  .areapick button.low{border-color:var(--accent);background:#fdf4ee}
-  .areapick button.focus{border-color:var(--gold);background:#fbf6e4}
+  /* 重点分野を選ぶマンダラ（結果と同じ .rgrid/.rcell を、押せる形で使う） */
+  .rgrid button.rcell{font-family:inherit;width:100%;cursor:pointer;border-width:1.5px}
+  .rgrid button.rcell:hover,.rgrid button.rcell:focus-visible{border-color:var(--gold);outline:none;
+    box-shadow:0 0 0 3px #fbf6e4}
+  .rgrid button.rcell.low{border-color:var(--accent)}
+  .rgrid button.rcell.low .rlab{color:var(--accent)}
+  .rgrid button.rcell .rmk{font-size:.6rem;color:var(--accent);letter-spacing:.08em}
   .effects{font-size:.84rem;margin:8px 0;line-height:1.85}
   .effects .up{color:var(--accent2);font-weight:bold}
   .effects .down{color:#b3341e;font-weight:bold}
@@ -1354,15 +1355,27 @@ function openReview(q){
     body.innerHTML = `<div class="mentor"><span class="ml">${esc(pl.name)}さんへ（マンダラ思考8大原則）</span><br>${mentorFor(pl)}</div>
       <p class="situ"><strong>${esc(pl.name)}さんの、来四半期の重点分野（♦）を選んでください。</strong>
       決めた時点で「はじめの一歩」が刻まれ、来期はその分野が進みやすく、出来事も集まります。</p>
-      <div class="areapick" id="fpick"></div>`;
+      <div class="rgrid" id="fpick"></div>
+      <p class="note" style="margin-top:2px">この三か月の到達度です。緑が濃いほど進み、赤字は手つかず。
+      いちばん低い分野には印をつけてあります。</p>`;
+    /* 盤・結果と同じマンダラの並び（F C G / B 中心 D / E A H）で、押せる形に */
     const fp = document.getElementById("fpick");
+    const pf = D.profiles[pl.profile];
+    const low = Math.min(...AKEYS.map(x=>areaPct(pl,x)));
+    const cells = new Array(9).fill("");
+    cells[4] = `<div class="rcell ctr"><div class="rlab">中心の言葉</div>
+      <div class="rmid">${esc(pf.centerOptions[pl.center])}</div></div>`;
     AKEYS.forEach(k=>{
       const v = areaPct(pl,k);
-      const b = document.createElement("button");
-      if(v === Math.min(...AKEYS.map(x=>areaPct(pl,x)))) b.classList.add("low");
-      b.innerHTML = `<b>${k}. ${ANAME[k]}</b>${v}%`;
-      b.onclick = ()=>{ pl.focus = k; idx++; save(); pickNext(); };
-      fp.appendChild(b);
+      const lv = v>=100?"v100":v>=60?"v60":v>=30?"v30":v>0?"v10":"v0";
+      cells[MANDALA_CELL[k]] = `<button class="rcell ${lv}${v===low?" low":""}" data-k="${k}">
+        <div class="rlab">${k}. ${ANAME[k]}</div>
+        <div class="rval">${v}<small>%</small></div>
+        ${v===low?`<div class="rmk">いちばん低い</div>`:""}</button>`;
+    });
+    fp.innerHTML = cells.join("");
+    fp.querySelectorAll("button[data-k]").forEach(b=>{
+      b.onclick = ()=>{ pl.focus = b.dataset.k; idx++; save(); pickNext(); };
     });
   };
   pickNext();
