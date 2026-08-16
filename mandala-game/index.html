@@ -128,48 +128,83 @@
 
   /* ---- 手帳（マンダラ手帳をモデルにした週間行動計画ページ） ---- */
   .deckarea{text-align:center;margin:14px 0 8px}
-  .diarybook{position:relative;width:150px;height:196px;margin:0 auto 10px;cursor:pointer;
-    perspective:900px}
-  .cover{position:absolute;inset:0;border-radius:4px 8px 8px 4px;
+  /* 閉じた手帳。曼荼羅手帳は細長く、ひらくと見開きがマンダラと同じ正方形になる */
+  .diarybook{position:relative;width:104px;height:200px;margin:0 auto 10px;cursor:pointer;
+    perspective:1000px}
+  .diarybook .leaf{position:absolute;inset:0;border-radius:2px 5px 5px 2px;background:#fdfaf0;
+    border-left:5px solid #16233a;box-shadow:0 6px 16px rgba(20,28,44,.35);
+    background-image:repeating-linear-gradient(#fdfaf0,#fdfaf0 7px,#e6eef5 7px,#e6eef5 8px);
+    background-position:0 14px}
+  .cover{position:absolute;inset:0;border-radius:2px 6px 6px 2px;
     background:linear-gradient(115deg,#20344f,#2c476b 45%,#1b2c44);
     box-shadow:0 6px 16px rgba(20,28,44,.45), inset 2px 0 0 rgba(255,255,255,.10);
-    border-left:6px solid #16233a}
-  .cover .gold{position:absolute;right:13px;top:24px;text-align:right;color:#d8b661;
-    font-size:.62rem;letter-spacing:.14em;line-height:1.7;text-shadow:0 1px 1px rgba(0,0,0,.4)}
-  .cover .corner{position:absolute;width:26px;height:26px;border:2px solid #d8b661;opacity:.85}
-  .cover .corner.tr{right:0;top:0;border-left:none;border-bottom:none;border-radius:0 8px 0 0}
-  .cover .corner.br{right:0;bottom:0;border-left:none;border-top:none;border-radius:0 0 8px 0}
+    border-left:6px solid #16233a;
+    backface-visibility:hidden}          /* 裏返っても金文字が鏡文字にならない */
+  .cover .gold{position:absolute;right:10px;top:22px;text-align:right;color:#d8b661;
+    font-size:.58rem;letter-spacing:.13em;line-height:1.75;text-shadow:0 1px 1px rgba(0,0,0,.4)}
+  .cover .corner{position:absolute;width:20px;height:20px;border:2px solid #d8b661;opacity:.85}
+  .cover .corner.tr{right:0;top:0;border-left:none;border-bottom:none;border-radius:0 6px 0 0}
+  .cover .corner.br{right:0;bottom:0;border-left:none;border-top:none;border-radius:0 0 6px 0}
   .diarybook .edge{position:absolute;right:-4px;top:5px;bottom:5px;width:5px;border-radius:0 3px 3px 0;
     background:repeating-linear-gradient(#fffdf7,#fffdf7 2px,#ded4bd 2px,#ded4bd 3px)}
   .diarybook.opening .cover{animation:coverOpen .75s cubic-bezier(.3,.7,.3,1) forwards;
     transform-origin:left center}
-  @keyframes coverOpen{to{transform:rotateY(-155deg);box-shadow:none}}
+  @keyframes coverOpen{to{transform:rotateY(-160deg);box-shadow:none}}
   .deckcount{font-size:.74rem;color:#8a7d64}
 
-  /* 週間行動計画ページ */
-  .wpage{background:#fffdf7;border:1.5px solid #4a86b8;border-radius:3px;padding:0;
-    overflow:hidden;box-shadow:0 6px 22px rgba(58,50,38,.3)}
-  .wpage .whead{display:flex;align-items:baseline;gap:8px;padding:6px 9px 4px;
-    border-bottom:1.5px solid #4a86b8}
-  .wpage .wmon{font-size:1.05rem;font-weight:bold;color:#1f4e79}
-  .wpage .wttl{font-size:.82rem;font-weight:bold;letter-spacing:.05em;color:#1f4e79}
-  .wpage .wen{font-size:.56rem;color:#7ba3c4;letter-spacing:.04em}
-  .wbig{text-align:center;padding:9px 6px 7px;background:
-    repeating-linear-gradient(#fbfaf3,#fbfaf3 11px,#eef3f7 11px,#eef3f7 12px)}
-  .wbig .wrange{font-size:1.65rem;font-weight:bold;color:#1f4e79;letter-spacing:.02em;line-height:1.15}
-  .wbig .wrange small{font-size:.9rem}
-  .wbig .wsub{font-size:.66rem;color:#6d6250;letter-spacing:.12em;margin-top:2px}
-  .wdays{display:grid;grid-template-columns:repeat(7,1fr);gap:0;border-top:1px solid #b8d0e2}
-  .wday{border-right:1px solid #d6e3ee;padding:3px 1px 4px;text-align:center;
-    background:repeating-linear-gradient(#fff,#fff 6px,#f4f8fb 6px,#f4f8fb 7px)}
-  .wday:last-child{border-right:none}
-  .wday.sat{color:#2f6fa8}.wday.sun{color:#b3341e}
-  .wday .wd{font-size:.55rem;color:#8a7d64}
-  .wday .wn{font-size:.86rem;font-weight:bold;line-height:1.2}
-  .wday.today{background:#fdf6e0;box-shadow:inset 0 0 0 1.5px var(--gold)}
-  .wgoal{margin:0;padding:9px 10px 11px;background:#dbeaf4;border-top:1.5px solid #4a86b8}
-  .wgoal .wglabel{font-size:.62rem;color:#1f4e79;font-weight:bold;letter-spacing:.06em}
-  .wgoal .wgen{font-size:.5rem;color:#6f9ec4}
+  /* ---- 週間行動計画の見開き ----
+     曼荼羅手帳の週間ページは、それ自体が3×3のマンダラになっている。
+     中央が「今週の目標・役割」、まわりを7日と「今週の評価」が囲む。
+     細長い本をひらくと、見開きがマンダラチャートと同じ正方形になるのが特徴。 */
+  .spread{--ink:#1f4e79;--rule:#d3e2ee;position:relative;background:#fffdf7;
+    border:1px solid #9dbdd6;border-radius:2px;overflow:hidden;
+    box-shadow:0 8px 26px rgba(58,50,38,.32)}
+  .sphead{display:flex;align-items:baseline;gap:5px;padding:4px 7px 3px;
+    border-bottom:1.5px solid var(--ink);background:#fbfdff}
+  .sphead .spm{font-size:.92rem;font-weight:bold;color:var(--ink);line-height:1}
+  .sphead .spt{font-size:.72rem;font-weight:bold;letter-spacing:.04em;color:var(--ink)}
+  .sphead .spe{font-size:.5rem;color:#7ba3c4;letter-spacing:.03em}
+  .sphead .sprange{margin-left:auto;font-size:.95rem;font-weight:bold;color:var(--ink);
+    letter-spacing:.01em;white-space:nowrap}
+  .sphead .sprange small{font-size:.62rem;font-weight:normal}
+  /* 3列＋MEMO＝3.66 に対して3行。マスが正方形になり、見開き全体もほぼ正方形に収まる */
+  .spgrid{display:grid;grid-template-columns:1fr 1fr 1fr .66fr;
+    grid-template-rows:repeat(3,1fr);aspect-ratio:3.66/3}
+  .spcell{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:2px 3px;min-width:0;overflow:hidden;position:relative}
+  .spcell.gut{border-left:3px double #9dbdd6;
+    box-shadow:inset 7px 0 9px -7px rgba(60,50,30,.30)}   /* ここが見開きの綴じ目 */
+  .spcell .dh{display:flex;align-items:baseline;gap:3px;line-height:1;
+    border-bottom:1px solid var(--rule);padding-bottom:2px}
+  .spcell .dn{font-size:1.35rem;font-weight:bold;color:var(--ink);letter-spacing:-.02em}
+  .spcell .dw{font-size:.52rem;color:#6d6250}
+  .spcell .den{font-size:.44rem;color:#a8bdcf;margin-left:auto}
+  .spcell.sat .dn,.spcell.sat .dw{color:#2f6fa8}
+  .spcell.sun .dn,.spcell.sun .dw{color:#b3341e}
+  /* 時刻の目盛りが入った罫線（左の細い柱が時刻欄のなごり） */
+  .spcell .dl{height:calc(100% - 21px);margin:2px 0 0 7px;border-left:1px solid #c3d6e6;
+    background:repeating-linear-gradient(#fffdf7,#fffdf7 8px,#c9dbe9 8px,#c9dbe9 9px)}
+  .spcell.ctr{background:#dcebf5;border-color:#9dbdd6}
+  .spcell .cl{font-size:.54rem;font-weight:bold;color:var(--ink);letter-spacing:0;
+    line-height:1.4;display:block}
+  .spcell .ce{font-size:.4rem;color:#6f9ec4;display:block;line-height:1.3}
+  .spcell.rev{background:#f4f9fc}
+  .spcell.rev .cl{font-size:.5rem}
+  .spcell.memo{background:#fdfdf8}
+  .spcell .ml2{font-size:.56rem;font-weight:bold;color:var(--ink);letter-spacing:.06em}
+  .spfoot{display:flex;align-items:center;gap:6px;padding:3px 7px 4px;font-size:.5rem;
+    color:#8a7d64;border-top:1px solid var(--rule)}
+  .spfoot .pg{margin-left:auto;letter-spacing:.2em;color:#a8bdcf}
+  /* 記帳（お金が動いた週はMEMO欄に書き込まれる） */
+  .kicho{font-size:.46rem;line-height:1.55;margin-top:3px;color:#3a3226}
+  .kicho .kp{color:var(--accent2);font-weight:bold}
+  .kicho .km{color:#b3341e;font-weight:bold}
+  .kicho hr{border:none;border-top:1px solid var(--rule);margin:2px 0}
+  /* 判定は見開きの中央（今週の目標・役割の欄）に「押される」。紙面は左右に残す */
+  .stamp{position:absolute;left:50%;top:50%;width:64%;transform:translate(-50%,-50%) rotate(-2.5deg)}
+  .stamp .verdict{padding:8px 6px 9px;box-shadow:0 4px 14px rgba(58,50,38,.28)}
+  .stamp .verdict .vs{font-size:.7rem}
+  .stamp .verdict .btn{margin-top:8px;padding:9px 10px;font-size:.86rem}
   .verdict{margin-top:6px;text-align:center;padding:11px 8px;border-radius:6px;background:#fffdf7;
     border:2.5px solid var(--accent2);animation:stamp .5s cubic-bezier(.2,1.6,.4,1)}
   .verdict.risk{border-color:#a33b2e}
@@ -276,6 +311,16 @@
   .insightbox .il{font-size:.66rem;color:#a08a3c;letter-spacing:.15em}
   .principlechip{display:inline-block;font-size:.7rem;border:1px solid var(--gold);color:#8a6d1f;
     border-radius:14px;padding:1px 10px;margin-bottom:5px;background:#fbf6e4}
+  /* Gemini／Veo 3 に渡すプロンプト欄 */
+  .gpanel{margin:10px 0 2px}
+  .gpanel .gp-body{display:none}
+  .gpanel.show .gp-body{display:block}
+  .gpanel .gp-text{width:100%;box-sizing:border-box;font-family:inherit;font-size:.72rem;
+    line-height:1.65;padding:8px 9px;border:1px solid var(--line);border-radius:7px;
+    background:#fffdf7;color:#3a3226;resize:vertical}
+  .gpanel .gp-act{display:flex;gap:7px;margin-top:7px}
+  .gpanel .gp-act .btn{flex:1;margin:0;text-decoration:none;display:flex;
+    align-items:center;justify-content:center;font-size:.85rem;padding:11px 6px;white-space:nowrap}
   .mentor{background:#eef2f6;border-left:4px solid var(--blue);border-radius:6px;
     padding:9px 11px;font-size:.85rem;margin:9px 0;line-height:1.7}
   .mentor .ml{font-size:.66rem;color:var(--blue);letter-spacing:.14em}
@@ -374,6 +419,7 @@
     <div class="deckarea" id="deckarea">
       <div class="diarybook" id="diarybook">
         <div class="edge"></div>
+        <div class="leaf"></div>
         <div class="cover">
           <span class="corner tr"></span><span class="corner br"></span>
           <span class="gold">2027<br>MANDALA<br>DIARY</span>
@@ -404,7 +450,7 @@
   </footer>
 </div>
 
-<script src="data.js?v=10"></script>
+<script src="data.js?v=11"></script>
 <script>
 "use strict";
 const D = window.MANDALA_LIFE;
@@ -435,6 +481,12 @@ const METERS = [
 ];
 /* お金を他の二つと同じ物差し（0〜150）に写す。33万で50、67万で100 */
 function moneyIndex(man){ return Math.max(0, Math.min(MET_MAX, Math.round(man*1.5))); }
+/* 月収（世帯）。賽の目 n → n*5+10 で 15〜40万円。中央値の30万は目4にあたる。
+   専業でも学生でも「世帯の月収」で置く。生活費は月収の82%として、残りが手元に積まれる */
+const INCOME_OF_DIE = n => n*5 + 10;
+const LIVING_RATE = 0.82;
+const PAY_EVERY = 4;                       // 4週に一度が給料日（13週で3回）
+const livingCost = inc => Math.round(inc * LIVING_RATE);
 function meterIndex(pl, key){ return key==="okane" ? moneyIndex(pl.m.okane) : pl.m[key]; }
 function yen(man){
   if(man < 0) return `−${Math.abs(man).toLocaleString()}万円`;
@@ -444,7 +496,8 @@ const DECK_SIZE = 81, RISK_CARDS = 27;
 
 /* data.js が古いまま（ブラウザキャッシュ）だと動きが壊れるので、起動時に照合する */
 (function checkData(){
-  const ok = D && Array.isArray(D.progressFlavors) && D.profiles && D.profiles[0]
+  const ok = D && Array.isArray(D.progressFlavors) && D.areaMoney && D.areaMoney.A
+             && D.profiles && D.profiles[0]
              && D.profiles[0].episodes && D.profiles[0].episodes[0] && D.profiles[0].episodes[0].c;
   if(ok) return;
   const bar = document.createElement("div");
@@ -588,7 +641,7 @@ document.getElementById("btn-atdone").onclick = ()=>{
     name, profile: selProf, center:+ct.dataset.i, goals,
     /* 行動はまだ何も起こしていない。すべて0%から積み上げる */
     progress: Object.fromEntries(AKEYS.map(k=>[k,[0,0,0,0,0,0,0,0]])),
-    m: {kokoro:0, karada:0, okane:0},
+    m: {kokoro:0, karada:0, okane:0}, income:30, paidWeek:0,
     focus:null, usedEp:[], insights:[], lastArea:null
   });
   rollStartMeters(S.players[S.players.length-1], ()=>{
@@ -612,43 +665,57 @@ function startComment(m){
   return `${t[high.key].h}が、${t[low.key].l}ところからの出発です。`
        + "　持ち点は選べません。ここからどう組み立てるかだけが選べます。";
 }
+/* 四つの賽：心・体・現預金・月収（世帯）。月収は、これから一年の家計の土台になる */
+const START_DICE = [
+  {id:"kokoro", name:"心",     color:"var(--heart)", set:(pl,n)=>pl.m.kokoro = n*10+40},
+  {id:"karada", name:"体",     color:"var(--body)",  set:(pl,n)=>pl.m.karada = n*10+40},
+  {id:"okane",  name:"現預金", color:"var(--coin)",  set:(pl,n)=>pl.m.okane  = n*10},
+  {id:"income", name:"月収",   color:"#7a6a4a",      set:(pl,n)=>pl.income   = INCOME_OF_DIE(n)}
+];
 function rollStartMeters(pl, done){
   cardbox.className = "gamecard prog";
   cardbox.innerHTML = `
     <span class="ctype plain">はじまりの賽</span>
     <h3>${esc(pl.name)}さんの、いまの持ち点</h3>
-    <p class="situ">人生の出発点は、人によって違います。三つの賽を振ってください。</p>
-    <div style="display:flex;gap:10px;justify-content:center;margin:14px 0" id="startdice">
-      ${METERS.map(mt=>`<div style="text-align:center">
-        <div style="perspective:600px">${dieHTML(1,"sd-"+mt.key)}</div>
-        <div class="dicecap" style="margin-top:5px;color:${mt.color}">${mt.name}</div></div>`).join("")}
+    <p class="situ">人生の出発点は、人によって違います。四つの賽を振ってください。
+      <br><small style="color:#8a7d64">月収は世帯の月収です。ひとりで稼いでいても、家族で支えていても、
+      家計に入ってくる額で置きます。</small></p>
+    <div style="display:flex;gap:9px;justify-content:center;margin:14px 0;flex-wrap:wrap" id="startdice">
+      ${START_DICE.map(sd=>`<div style="text-align:center">
+        <div style="perspective:600px">${dieHTML(1,"sd-"+sd.id)}</div>
+        <div class="dicecap" style="margin-top:5px;color:${sd.color}">${sd.name}</div></div>`).join("")}
     </div>
     <div id="startresult"></div>
-    <button class="btn" id="sd-roll">三つの賽を振る</button>`;
+    <button class="btn" id="sd-roll">四つの賽を振る</button>`;
   overlay.classList.add("active");
   document.getElementById("sd-roll").onclick = async ()=>{
     const btn = document.getElementById("sd-roll");
     btn.disabled = true; btn.textContent = "…";
-    const dice = METERS.map(mt=>document.getElementById("sd-"+mt.key));
+    const dice = START_DICE.map(sd=>document.getElementById("sd-"+sd.id));
     dice.forEach(d=>d.classList.add("rolling"));
-    const res = {};
     const spins = FAST?3:11;
     for(let i=0;i<spins;i++){
       dice.forEach(d=>setDie(d, 1+Math.floor(Math.random()*6)));
       await wait(FAST?25:(60+i*7));
     }
-    METERS.forEach((mt,i)=>{
+    START_DICE.forEach((sd,i)=>{
+      /* 心・体は50〜100。現預金は10〜60万円。月収は15〜40万円（中央値30万は目4） */
       const n = 1 + Math.floor(Math.random()*6);
-      res[mt.key] = n;
-      /* 心・体は 50〜100。お金は 10〜60万円（月収中央値30万のあたりが真ん中） */
-      pl.m[mt.key] = (mt.kind==="money") ? n*10 : n*10 + 40;
+      sd.set(pl, n);
       setDie(dice[i], n);
       dice[i].classList.remove("rolling");
       dice[i].classList.add("settled");
     });
+    pl.paidWeek = 0;
     await wait(FAST?60:600);
+    const lc = livingCost(pl.income);
     document.getElementById("startresult").innerHTML = `
-      <div class="meters" style="margin:4px 0 10px">${METERS.map(mt=>meterRow(mt, pl)).join("")}</div>
+      <div class="meters" style="margin:4px 0 8px">${METERS.map(mt=>meterRow(mt, pl)).join("")}</div>
+      <div class="effects" style="border-top:1px dashed var(--line);padding-top:7px">
+        <b>月収（世帯）${pl.income}万円</b>　${PAY_EVERY}週に一度、手帳に記帳されます<br>
+        <span style="color:#8a7d64;font-size:.82rem">給与 ${pl.income}万円 − 生活費 ${lc}万円 →
+        <span class="up">手元に ＋${pl.income-lc}万円</span>
+        学びにも、人づきあいにも、遊びにも、ここから出ていきます</span></div>
       <div class="insightbox"><span class="il">第6原則「主体性」</span><br>${startComment(pl.m)}</div>`;
     btn.disabled = false;
     btn.textContent = "この持ち点ではじめる";
@@ -902,32 +969,75 @@ async function drawCard(){
   }
 }
 
-/* ---- 週間行動計画のページをめくる ---- */
+/* ---- 給料日（4週に一度）。手帳のMEMO欄に記帳される ---- */
+const MONTH_NAMES = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+function payIfPayday(pl){
+  if(S.week % PAY_EVERY !== 0 || pl.paidWeek === S.week) return null;
+  pl.paidWeek = S.week;
+  const lc = livingCost(pl.income);
+  pl.m.okane += pl.income - lc;
+  save();
+  return { income: pl.income, living: lc, net: pl.income - lc, after: pl.m.okane };
+}
+/* 分野ごとの、こまめなお金の動き。学びも遊びも人づきあいも、動かせばお金が動く */
+function pickAreaMoney(ak){
+  const list = D.areaMoney && D.areaMoney[ak];
+  if(!Array.isArray(list) || !list.length) return null;
+  return list[Math.floor(Math.random()*list.length)];
+}
+/* ---- 週間行動計画の見開きをひらく ----
+   曼荼羅手帳の週間ページは3×3のマンダラ。中央が「今週の目標・役割」、
+   まわりを月〜日の7日と「今週の評価・感想・対策」が囲む。
+   細長い本をひらくと、見開きがマンダラチャートと同じ正方形になる。 */
 async function openDiaryPage(type){
   const pl = cur();
   const days = weekDays(S.week);
   const first = days[0], last = days[6];
+  const pay = payIfPayday(pl);
+  /* 3×3のどこに何を置くか。中央(4)が今週の目標・役割 */
+  const SLOT = [0,1,2, 3,null,4, 5,6,"rev"];   // 数字は days の添字
+  const GUT  = [2,5,8];                        // 綴じ目（3列目）
+  const dayCell = (i, gut)=>{
+    const d = days[i];
+    return `<div class="spcell${d.sat?" sat":""}${d.sun?" sun":""}${gut?" gut":""}">
+      <div class="dh"><span class="dn">${d.d}</span><span class="dw">（${d.nm}）</span>
+        <span class="den">${["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i]}</span></div>
+      <div class="dl"></div></div>`;
+  };
+  const cells = SLOT.map((s,gi)=>{
+    const gut = GUT.includes(gi);
+    if(s === null) return `<div class="spcell ctr${gut?" gut":""}">
+        <span class="cl">■ 今週の目標・役割</span><span class="ce">Weekly Objective / Results</span></div>`;
+    if(s === "rev") return `<div class="spcell rev${gut?" gut":""}">
+        <span class="cl">◆ 今週の評価<br>　 感想・対策</span>
+        <span class="ce">Weekly Review</span>
+        <div class="dl" style="height:calc(100% - 30px)"></div></div>`;
+    return dayCell(s, gut);
+  });
+  /* 4列目のMEMO欄。給料日には、ここに記帳が入る */
+  const memo = `<div class="spcell memo" style="grid-column:4;grid-row:1/4">
+    <span class="ml2">MEMO</span>
+    ${pay ? `<div class="kicho">
+      <b>${Math.floor((S.week-1)/PAY_EVERY)+1}回目の給与</b><hr>
+      給与　<span class="kp">+${pay.income}</span><br>
+      生活費 <span class="km">−${pay.living}</span><hr>
+      手元 <span class="${pay.net>=0?"kp":"km"}">${pay.net>=0?"+":""}${pay.net}万</span><br>
+      残高 <b>${pay.after}万</b></div>`
+    : `<div class="kicho" style="color:#b9b0a0">・<br>・<br>・</div>`}
+  </div>`;
   cardbox.className = "gamecard noflip";
   cardbox.style.padding = "0";
-  cardbox.innerHTML = `<div class="wpage pageflip">
-    <div class="whead">
-      <span class="wmon">${first.m}月</span>
-      <span class="wttl">週間行動計画</span>
-      <span class="wen">Activities This Week</span>
+  cardbox.innerHTML = `<div class="spread pageflip">
+    <div class="sphead">
+      <span class="spm">${first.m}月</span>
+      <span class="spt">週間行動計画</span>
+      <span class="spe">Activities This Week</span>
+      <span class="sprange">${first.m}<small>/</small>${first.d}<small> 〜 </small>${last.m}<small>/</small>${last.d}</span>
     </div>
-    <div class="wbig">
-      <div class="wrange">${first.m}<small>/</small>${first.d}<small> 〜 </small>${last.m}<small>/</small>${last.d}</div>
-      <div class="wsub">第${S.week}週　${esc(pl.name)}</div>
-    </div>
-    <div class="wdays">
-      ${days.map(d=>`<div class="wday${d.sat?" sat":""}${d.sun?" sun":""}">
-        <div class="wd">${d.nm}</div><div class="wn">${d.d}</div></div>`).join("")}
-    </div>
-    <div class="wgoal">
-      <span class="wglabel">■ 今週の目標・役割</span>
-      <span class="wgen">Weekly Objective / Results</span>
-      <div id="verdict"></div>
-    </div>
+    <div class="spgrid">${cells.join("")}${memo}</div>
+    <div class="spfoot"><span>◆ 一週間は、日曜の夜に立てておく</span>
+      <span class="pg">${MONTH_NAMES[first.m-1]}　${64+S.week*2} / ${65+S.week*2}</span></div>
+    <div class="stamp" id="verdict"></div>
   </div>`;
   overlay.classList.add("active");
   await wait(FAST?60:640);
@@ -1008,19 +1118,27 @@ async function rollProgress(ak){
 
   const gain = grantProgress(pl, ak, n*10);
   const done = pl.progress[ak].filter(v=>v>=60).length;
+  /* 動かせばお金も動く。分野によって、出ていく側か、入ってくる側かが違う */
+  const mi = pickAreaMoney(ak);
+  const dm = mi ? moveMeterOf(pl, "okane", mi.v) : 0;
   cardbox.innerHTML = `
     <span class="ctype">アクション</span>
     <h3>${ANAME[ak]}　<span style="color:var(--accent2)">＋${gain}%</span></h3>
     <div class="dicebox">${dieHTML(n)}<div class="dicecap">${n} の目 ＝ ${n*10}%</div></div>
     <div class="effects"><span class="up">${ANAME[ak]} の到達度 ${areaPct(pl,ak)}%</span>
       （動いたマスは、その週に手がついたところ）<br>
-      <span style="color:#8a7d64;font-size:.82rem">○（60%）以上のマス：${done} / 8</span></div>
+      <span style="color:#8a7d64;font-size:.82rem">○（60%）以上のマス：${done} / 8</span>
+      ${mi ? `<br><span style="color:#6d6250">${esc(mi.t)}　</span>
+        ${mi.v===0 ? `<span class="mchg" style="color:#8a7d64">お金 ±0</span>`
+                   : `<span class="mchg ${mi.v>0?"up":"down"}">お金 ${mi.v>0?"＋":"−"}${Math.abs(mi.v)}万円</span>`}
+        <span style="color:#8a7d64;font-size:.8rem">→ ${yen(pl.m.okane)}</span>` : ""}</div>
     <div class="insightbox"><span class="il">実践会のことば</span><br>
       10%：はじめの一歩／30%：少しは行動できた／60%：まぁまぁ行動できた／100%：計画どおり／130%：やり過ぎた</div>
     <button class="btn" id="pg-close">次の人へ</button>`;
   document.getElementById("pg-close").onclick = ()=>{
     overlay.classList.remove("active");
     renderAll({[ak]:gain});
+    if(dm) flashMeters({okane:dm});
     nextTurn();
   };
 }
@@ -1326,7 +1444,11 @@ function openReview(q){
         <strong>次の四半期は、8分野の進捗が 0% に戻ります。</strong>
         三か月は三か月で区切って積む——それがOKRの刻みです。
         心・体・お金の持ち点は、そのまま持ち越します。</p>
-        <button class="btn" id="q-go">${QNAME[q+1]}へ進む</button>
+        ${S.players.map(pl=>promptPanel(
+          `🎨 ${esc(pl.name)}さんの、この三か月の一枚をつくる`,
+          "Geminiに貼ると、この三か月から起こした場面が1枚の絵になります。休憩中に各自の端末でどうぞ。",
+          highlightPrompt(pl, q), "Geminiをひらく", "https://gemini.google.com/")).join("")}
+        <button class="btn" id="q-go" style="margin-top:10px">${QNAME[q+1]}へ進む</button>
         <div style="height:8px"></div>
         <button class="btn sub" id="q-pause">ここで一区切りにする（記録を見る）</button>`;
       document.getElementById("q-go").onclick = ()=>{
@@ -1379,6 +1501,126 @@ function openReview(q){
     });
   };
   pickNext();
+}
+
+/* ================= ハイライト（Gemini／Veo 3 のプロンプトを組み立てる） =================
+   生成そのものは会場の各自の端末でやってもらう。ここが作るのは「その人の一年から
+   起こした台本」。同じ盤を回しても、出てくる文章は全員ちがう。 */
+const SEASON = {
+  1:"1月から3月。冬の終わりから、春の入口",
+  2:"4月から6月。新緑がのびる季節",
+  3:"7月から9月。夏の盛りから、初秋へ",
+  4:"10月から12月。秋が深まり、年が暮れていく"
+};
+const ARTSTYLE =
+`画風：和の落ち着いた水彩と淡い線画。写真的ではなく、手描きの温かみ。
+色調：生成りの紙のような背景に、藍・墨・金茶を基調とした配色。
+背景：無地に近い和紙のテクスチャ。人物の背後だけ淡くにじませる。
+文字・ロゴ・透かしは入れない。実在の特定人物には似せない。`;
+function areaRank(pl){
+  return AKEYS.map(k=>({k, v:areaPct(pl,k)})).sort((a,b)=>b.v-a.v);
+}
+function moneyWord(man){
+  if(man < 0) return "借入を抱えている";
+  if(man < 20) return "財布は心もとない";
+  if(man < 60) return "手元はふつう";
+  return "手元に余裕がある";
+}
+/* 四半期ごとの一枚（Gemini の画像生成へ） */
+function highlightPrompt(pl, q){
+  const p = D.profiles[pl.profile];
+  const r = areaRank(pl), top = r[0], low = r[r.length-1];
+  const ins = (pl.insights||[]).slice(-1)[0] || "";
+  return `和の落ち着いた水彩イラストで、次の場面を1枚描いてください。正方形（1:1）。
+
+【人物】${p.name}
+${p.desc}
+
+【季節】${SEASON[q]}
+
+【この三か月に起きたこと】
+・中心に置いた言葉は「${p.centerOptions[pl.center]}」
+・いちばん進んだのは「${ANAME[top.k]}」（到達 ${top.v}%）
+・手が回らなかったのは「${ANAME[low.k]}」（到達 ${low.v}%）
+・心は${pl.m.kokoro>=100?"満ちている":pl.m.kokoro>=60?"やや疲れている":"かなり削れている"}、体は${pl.m.karada>=100?"軽い":pl.m.karada>=60?"重い日がある":"限界に近い"}、${moneyWord(pl.m.okane)}
+${ins?`・手帳に残った一行：「${ins}」`:""}
+
+【描いてほしい場面】
+この人が「${ANAME[top.k]}」に手をかけた三か月の、いちばん象徴的な一瞬。
+仕事場でも、家でも、外でもかまいません。人物の表情と手元が見えるように。
+やり切った顔ではなく、${low.v<=20?`「${ANAME[low.k]}」を置き去りにしてきた自覚がどこかに残る顔`:"静かな手応えのある顔"}にしてください。
+
+${ARTSTYLE}`;
+}
+/* 一年のエンディング（Veo 3 の動画生成へ） */
+function moviePrompt(pl, idx){
+  const p = D.profiles[pl.profile];
+  const qs = (S.qlog||[]).filter(x=>x.players[idx]).map(x=>({q:x.q, d:x.players[idx]}));
+  const cuts = qs.map(({q,d})=>{
+    const rk = AKEYS.map(k=>({k,v:d.pcts[k]})).sort((a,b)=>b.v-a.v);
+    return `【カット${q}／${SEASON[q]}】8秒
+その三か月でいちばん動いたのは「${ANAME[rk[0].k]}」（${rk[0].v}%）、
+置き去りになったのは「${ANAME[rk[rk.length-1].k]}」（${rk[rk.length-1].v}%）。
+心${d.m.kokoro} 体${d.m.karada} ${yen(d.m.okane)}。
+この人が「${ANAME[rk[0].k]}」に向かって動いている場面を、手元と表情で。
+カメラはゆっくり寄る。台詞はなし。環境音のみ。`;
+  }).join("\n\n");
+  return `Veo 3 で、ある一年をたどる短い映像をつくります。
+8秒のカットを4つ、季節の順につないでください。日本語のナレーションや字幕は入れません。
+
+【人物】${p.name}
+${p.desc}
+この一年、手帳の中心に置いていた言葉は「${p.centerOptions[pl.center]}」。
+
+${cuts}
+
+【最後の1カット】8秒
+一年を終えたこの人が、手帳をひらいて次の一年の中心に何を書くか迷っている。
+ペン先は紙に触れているが、まだ動かない。そこで映像は終わる。
+
+【全体の指定】
+実写風。落ち着いた自然光。手持ちではなく、静かな固定かゆっくりしたドリー。
+音楽は入れず、環境音のみ。人物の顔がはっきり見えるように。
+実在の特定人物・企業名・商品名は出さない。`;
+}
+function copyText(t, btn){
+  const done = ()=>{ const o = btn.dataset.o || btn.textContent;
+    btn.dataset.o = o; btn.textContent = "コピーしました"; setTimeout(()=>btn.textContent = o, 1700); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done, ()=>fallback());
+  } else fallback();
+  function fallback(){
+    const ta = document.createElement("textarea");
+    ta.value = t; ta.style.cssText = "position:fixed;left:-9999px";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }
+    catch(e){ btn.textContent = "下の文をそのまま選んでコピーしてください"; }
+    ta.remove();
+  }
+}
+/* プロンプトの表示欄。長いので、たたんだ状態から開く */
+let gpSeq = 0;
+function promptPanel(title, note, text, linkLabel, linkURL){
+  const id = "gp" + (++gpSeq);
+  setTimeout(()=>{
+    const box = document.getElementById(id); if(!box) return;
+    box.querySelector(".gp-open").onclick = ()=>{
+      box.classList.toggle("show");
+      box.querySelector(".gp-open").textContent =
+        box.classList.contains("show") ? "とじる" : title;
+    };
+    box.querySelector(".gp-copy").onclick = e=>copyText(text, e.currentTarget);
+  }, 0);
+  return `<div class="gpanel" id="${id}">
+    <button class="btn sub gp-open">${title}</button>
+    <div class="gp-body">
+      <p class="note" style="margin:6px 0">${note}</p>
+      <textarea class="gp-text" readonly rows="10">${esc(text)}</textarea>
+      <div class="gp-act">
+        <button class="btn gp-copy">プロンプトをコピー</button>
+        <a class="btn sub" href="${linkURL}" target="_blank" rel="noopener">${linkLabel}</a>
+      </div>
+    </div></div>`;
 }
 
 /* ================= 結果のマンダラ＋レーダー ================= */
@@ -1462,6 +1704,12 @@ function endGame(uptoQ){
       ${resultMandala(pl)}
       ${radarSVG(pl)}
       <div class="mentor" style="margin-top:10px"><span class="ml">${full?"年間":QNAME[uptoQ]+"の"}リフレクション</span><br>${mentorFor(pl)}</div>
+      ${promptPanel(`🎨 ${esc(pl.name)}さんの一枚をつくる（Gemini）`,
+        "いまの到達度と持ち点から起こした場面です。Geminiに貼ってください。",
+        highlightPrompt(pl, full?4:uptoQ), "Geminiをひらく", "https://gemini.google.com/")}
+      ${full?promptPanel(`🎬 ${esc(pl.name)}さんの一年を、エンディングムービーにする（Veo 3）`,
+        "四半期ごとの実際の数字から、8秒×5カットの台本を起こしました。Veo 3 に1カットずつ渡してください。",
+        moviePrompt(pl, S.players.indexOf(pl)), "Veo（Gemini）をひらく", "https://gemini.google.com/"):""}
       ${uniq.length?`<p class="note" style="margin-top:10px">手帳に残った気づき：</p>
       <ul style="list-style:none">${uniq.map(s=>`<li style="font-size:.84rem;margin:6px 0;padding-left:1.3em;position:relative"><span style="position:absolute;left:0;color:var(--gold)">✎</span>${esc(s)}</li>`).join("")}</ul>`:""}
     </div>`;
