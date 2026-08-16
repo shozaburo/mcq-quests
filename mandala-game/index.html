@@ -90,12 +90,18 @@
   .wakurail{flex:1;height:8px;background:#eee4d2;border-radius:4px;overflow:hidden}
   .wakurail i{display:block;height:100%;background:linear-gradient(90deg,#e5989b,#d64550);transition:width .4s}
 
-  /* ---- サイコロ ---- */
+  /* ---- マンダラルーレット ---- */
   .dicearea{text-align:center;margin:12px 0}
-  .die{display:inline-block;width:58px;height:58px;background:#fff;border:2px solid var(--ink);
-    border-radius:12px;font-size:1.8rem;line-height:54px;font-weight:bold;box-shadow:var(--shadow);margin-bottom:8px}
-  .die.rolling{animation:roll .1s infinite}
-  @keyframes roll{50%{transform:rotate(8deg) scale(1.08)}}
+  .rwrap{position:relative;width:210px;max-width:70vw;margin:0 auto 10px;aspect-ratio:1}
+  .rwrap svg{width:100%;height:100%;display:block;filter:drop-shadow(0 2px 8px rgba(58,50,38,.18))}
+  #wheel{transition:transform 3.2s cubic-bezier(.16,.72,.12,1)}
+  body.fast #wheel{transition-duration:.35s}
+  .needle{position:absolute;top:-4px;left:50%;transform:translateX(-50%);z-index:2;
+    width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;
+    border-top:20px solid var(--accent);filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+  .rlabel{font-size:9.5px;font-family:inherit;font-weight:bold;fill:#fff}
+  .rhit{font-size:.82rem;color:#8a7d64;min-height:1.6em;margin-bottom:6px}
+  .rhit strong{color:var(--accent);font-size:1rem}
 
   /* ---- カード ---- */
   .overlay{display:none;position:fixed;inset:0;background:rgba(40,32,20,.55);z-index:10;
@@ -188,8 +194,12 @@
     <div id="aview"></div>
     <div id="bview" style="display:none"></div>
     <div class="dicearea">
-      <div class="die" id="die">？</div>
-      <button class="btn" id="btn-roll">今週の賽を振る</button>
+      <div class="rwrap">
+        <div class="needle"></div>
+        <svg viewBox="0 0 200 200" id="wheelsvg"><g id="wheel"></g><g id="wheelhub"></g></svg>
+      </div>
+      <div class="rhit" id="rhit">マンダラルーレットが、今週の出来事を選びます</div>
+      <button class="btn" id="btn-roll">今週のマンダラルーレットを回す</button>
     </div>
     <div class="panel log" id="lastlog" style="display:none"></div>
   </div>
@@ -238,8 +248,11 @@ function weekDate(w){ // 2027-01-04 (月) + 7*(w-1)
   const d = new Date(2027,0,4); d.setDate(d.getDate()+7*(w-1));
   return `${d.getMonth()+1}/${d.getDate()}〜`;
 }
-/* 賽の移動リング: 盤面を時計回り（A→B→C→E→H→G→F→D） */
-const RING = ["A","B","C","E","H","G","F","D"];
+/* マンダラルーレット: 8分野を円に並べる（12時から時計回りにA〜H） */
+const WHEEL_COLORS = {
+  A:"#3e6b48", B:"#3d5a80", C:"#b8912f", D:"#b5657d",
+  E:"#8a6a4a", F:"#6b4f86", G:"#2f7f8c", H:"#c9722c"
+};
 /* ================= 集計 ================= */
 /* 分野の到達度：8マス全部を平均すると実践の手応えと合わないため、
    最も進んだ3マスの平均で測る（実際のOKRも、重点行動が進めばその分野は進む） */
@@ -287,7 +300,7 @@ let selProf = -1;
     const qn = Math.min(4, Math.ceil(sv.week/QWEEKS));
     rb.style.display = "block";
     rb.textContent = `続きから再開する（${esc(sv.profileName)}・第${qn}四半期 第${sv.week}週）`;
-    rb.onclick = ()=>{ S = sv; S.qlog = S.qlog||[]; show("play"); renderAll(); };
+    rb.onclick = ()=>{ S = sv; S.qlog = S.qlog||[]; buildWheel(); show("play"); renderAll(); };
   }
 })();
 document.getElementById("btn-prof").onclick = ()=>{ buildAtypeForm(); show("atype"); };
@@ -330,7 +343,7 @@ document.getElementById("btn-atdone").onclick = ()=>{
   S = {
     profile: selProf, profileName: p.name,
     center: +ct.dataset.i, goals,
-    week: 1, pos: 0, waku: 50,
+    week: 1, lastArea: null, waku: 50,
     progress: startProgress,
     focus: null,             // 重点分野（OKRで選ぶ）
     usedEp: [],              // 使用済みエピソードindex
@@ -361,7 +374,7 @@ function renderAll(){
   document.getElementById("yearrail").style.width = Math.round(100*(S.week-1)/WEEKS)+"%";
   document.getElementById("wakubar").style.width = S.waku+"%";
   document.getElementById("wakuval").textContent = S.waku;
-  renderA(p); renderB(p);
+  renderA(p); renderB(p); renderHub();
 }
 function renderA(p, deltas){
   const cells = new Array(9).fill("");
@@ -369,7 +382,7 @@ function renderA(p, deltas){
     <div class="purpose">${esc(p.centerOptions[S.center])}</div></div>`;
   /* B型と同じ並び: 上段A B C / 中段D 中央 E / 下段F G H */
   const GRID = {A:0,B:1,C:2,D:3,E:5,F:6,G:7,H:8};
-  const hereKey = RING[S.pos];
+  const hereKey = S.lastArea;
   AKEYS.forEach(ak=>{
     const pct = areaPct(S, ak);
     const here = (hereKey===ak)?" here":"";
@@ -410,19 +423,77 @@ function renderB(p){
   document.getElementById("bview").innerHTML = html;
 }
 
-/* ================= 4. 手番 ================= */
-const dieEl = document.getElementById("die");
+/* ================= 4. マンダラルーレット ================= */
+const wheelG = document.getElementById("wheel");
+const rhitEl = document.getElementById("rhit");
+let wheelDeg = 0;
+if(/[?&]fast=1/.test(location.search)) document.body.classList.add("fast");
+const SPIN_MS = document.body.classList.contains("fast") ? 400 : 3300;
+
+function polar(cx,cy,r,deg){ const a=(deg-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
+const WCX=100, WCY=100, WR=94, WR0=30;
+function buildWheel(){
+  let html = "";
+  AKEYS.forEach((ak,i)=>{
+    const s = i*45 - 22.5, e = s + 45;           // 分野iの中心が i*45度（12時基準）
+    const [x1,y1]=polar(WCX,WCY,WR,s), [x2,y2]=polar(WCX,WCY,WR,e);
+    const [x3,y3]=polar(WCX,WCY,WR0,e), [x4,y4]=polar(WCX,WCY,WR0,s);
+    const focused = S && S.focus === ak;
+    html += `<path d="M${x1} ${y1} A${WR} ${WR} 0 0 1 ${x2} ${y2} L${x3} ${y3} A${WR0} ${WR0} 0 0 0 ${x4} ${y4} Z"
+      fill="${WHEEL_COLORS[ak]}" stroke="${focused?"#c9a227":"#fffdf7"}" stroke-width="${focused?3.5:1.5}"/>`;
+    const [tx,ty]=polar(WCX,WCY,(WR+WR0)/2 + 6, i*45);
+    html += `<text class="rlabel" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle"
+      transform="rotate(${i*45} ${tx} ${ty})">${focused?"♦":""}${ak}. ${ANAME[ak]}</text>`;
+  });
+  wheelG.innerHTML = html;
+}
+/* 中心（回転しない）＝いま何週目か。マンダラの中心は動かない */
+function renderHub(){
+  const w = S ? S.week : 1;
+  document.getElementById("wheelhub").innerHTML = `
+    <circle cx="${WCX}" cy="${WCY}" r="${WR0-2}" fill="#fdf6e0" stroke="#c9a227" stroke-width="2"/>
+    <text x="${WCX}" y="${WCY-5}" text-anchor="middle" dominant-baseline="middle"
+      style="font-size:9px;fill:#a08a3c">第</text>
+    <text x="${WCX}" y="${WCY+7}" text-anchor="middle" dominant-baseline="middle"
+      style="font-size:16px;font-weight:bold;fill:#8a6d1f">${w}<tspan style="font-size:9px">週</tspan></text>`;
+}
+buildWheel(); renderHub();
+/* 出る分野を決める：♦重点分野は意識が向く分だけ出来事も集まる（第6原則 主体性）。
+   直前と同じ分野は続きにくくする。 */
+function pickArea(){
+  const w = AKEYS.map(k=>{
+    let x = 1;
+    if(S.focus === k) x *= 2;
+    if(S.lastArea === k) x *= 0.35;
+    return x;
+  });
+  const sum = w.reduce((a,b)=>a+b,0);
+  let r = Math.random()*sum;
+  for(let i=0;i<8;i++){ r -= w[i]; if(r<=0) return i; }
+  return 7;
+}
+function resetWheel(){ rhitEl.innerHTML = "マンダラルーレットが、今週の出来事を選びます"; }
 document.getElementById("btn-roll").onclick = async ()=>{
   if(busy || !S) return; busy = true;
   document.getElementById("btn-roll").disabled = true;
   document.getElementById("lastlog").style.display = "none";
-  dieEl.classList.add("rolling");
-  const n = 1 + Math.floor(Math.random()*6);
-  for(let t=0;t<10;t++){ dieEl.textContent = 1+Math.floor(Math.random()*6); await wait(65); }
-  dieEl.classList.remove("rolling");
-  dieEl.textContent = n;
-  for(let s=0;s<n;s++){ S.pos=(S.pos+1)%8; renderAll(); await wait(180); }
-  const ak = RING[S.pos];
+  rhitEl.innerHTML = "…回っています";
+
+  const t = pickArea();
+  const ak = AKEYS[t];
+  /* 針は12時。分野tを指すには盤を -t*45 度回す（＋セクター内の遊び） */
+  const jitter = Math.random()*30 - 15;
+  const targetMod = ((-t*45 + jitter) % 360 + 360) % 360;
+  const turns = 4 + Math.floor(Math.random()*2);
+  wheelDeg += turns*360 + ((targetMod - (wheelDeg % 360)) % 360 + 360) % 360;
+  wheelG.style.transform = `rotate(${wheelDeg}deg)`;
+  wheelG.style.transformOrigin = "100px 100px";
+  await wait(SPIN_MS);
+
+  S.lastArea = ak;
+  renderAll();
+  rhitEl.innerHTML = `今週は <strong>${ANAME[ak]}</strong> の出来事`;
+  await wait(document.body.classList.contains("fast") ? 60 : 400);
   openEpisode(drawEpisode(ak), ak);
 };
 function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
@@ -516,7 +587,7 @@ function nextWeek(deltas){
   save();
   renderAll();
   if(finishedQ >= 1){ snapshotQ(finishedQ); save(); return openReview(finishedQ); }
-  busy=false; document.getElementById("btn-roll").disabled=false; dieEl.textContent="？";
+  busy=false; document.getElementById("btn-roll").disabled=false; resetWheel();
 }
 function mentorComment(){
   const ps = AKEYS.map(k=>({k, v:areaPct(S,k)})).sort((a,b)=>a.v-b.v);
@@ -583,8 +654,9 @@ function openReview(q){
       /* 重点を決める＝もう動き出している。未着手のマスに「はじめの一歩」を刻む */
       const idx = S.progress[k].findIndex(x=>x===0);
       if(idx >= 0) S.progress[k][idx] = 10;
+      buildWheel();          // ♦の金縁をルーレットに反映
       save(); overlay.classList.remove("active");
-      busy=false; document.getElementById("btn-roll").disabled=false; dieEl.textContent="？"; renderAll();
+      busy=false; document.getElementById("btn-roll").disabled=false; resetWheel(); renderAll();
     };
     fl.appendChild(b);
   });
@@ -662,7 +734,7 @@ function endGame(uptoQ){
     cont.textContent = `第${uptoQ*QWEEKS+1}週から続ける（${QNAME[uptoQ+1]}へ）`;
     cont.onclick = ()=>{
       show("play");
-      busy=false; document.getElementById("btn-roll").disabled=false; dieEl.textContent="？";
+      busy=false; document.getElementById("btn-roll").disabled=false; resetWheel();
       renderAll();
     };
   }
