@@ -235,10 +235,23 @@ const LADDER = [0,10,30,60,100,130];        // 進捗のはしご（実践会準
 const LSTEP = v => LADDER.indexOf(v);
 const PRN = D.principles;                   // {key:{name,hint}}
 const WEEKS = 52, QWEEKS = 13;
-/* B型グリッド: 9x9。ブロック配置（左上から）A B C / D 中央 E / F G H */
-const BLOCK_POS = {A:[0,0],B:[0,3],C:[0,6],D:[3,0],E:[3,6],F:[6,0],G:[6,3],H:[6,6]};
-/* ブロック内: 周囲8マス（左上,上,右上,左,右,左下,下,右下）の順にアクション1-8、中央は分野名 */
-const CELL_OFF = [[0,0],[0,1],[0,2],[1,0],[1,2],[2,0],[2,1],[2,2]];
+/* ---------------------------------------------------------------
+ * マンダラチャートの標準配置。3×3の並びは
+ *      F  C  G
+ *      B 中心 D
+ *      E  A  H
+ * A型・B型のブロック配置・ブロック内の8マス、すべてこの規則で並べる。
+ * --------------------------------------------------------------- */
+const MANDALA_CELL = {F:0, C:1, G:2, B:3, D:5, E:6, A:7, H:8};   // 3×3のどこに置くか
+/* 1〜8番のマスが 3×3 のどこに来るか（A=1番 → 下中央、B=2番 → 左中央 …） */
+const CELL_OFF = AKEYS.map(k=>{ const g = MANDALA_CELL[k]; return [Math.floor(g/3), g%3]; });
+/* B型 9×9：各分野ブロックの左上座標（3×3の並びをそのまま拡大） */
+const BLOCK_POS = Object.fromEntries(AKEYS.map(k=>{
+  const g = MANDALA_CELL[k];
+  return [k, [Math.floor(g/3)*3, (g%3)*3]];
+}));
+/* ルーレット：盤面を時計回りに辿った順（上中央Cから）に円へ並べる */
+const WHEEL_ORDER = ["C","G","D","H","A","E","B","F"];
 
 let S = null;   // 進行状態
 let busy = false;
@@ -380,8 +393,7 @@ function renderA(p, deltas){
   const cells = new Array(9).fill("");
   cells[4] = `<div class="acell center"><div class="plabel">中心の言葉</div>
     <div class="purpose">${esc(p.centerOptions[S.center])}</div></div>`;
-  /* B型と同じ並び: 上段A B C / 中段D 中央 E / 下段F G H */
-  const GRID = {A:0,B:1,C:2,D:3,E:5,F:6,G:7,H:8};
+  const GRID = MANDALA_CELL;
   const hereKey = S.lastArea;
   AKEYS.forEach(ak=>{
     const pct = areaPct(S, ak);
@@ -399,10 +411,12 @@ function renderA(p, deltas){
 function renderB(p){
   const g = [];
   for(let r=0;r<9;r++){ g.push(new Array(9).fill(null)); }
-  // 中央ブロック = A型
-  const cGRID = [[3,3],[3,4],[3,5],[4,3],[4,5],[5,3],[5,4],[5,5]];
+  // 中央ブロック = A型（同じマンダラ配置）
   g[4][4] = {cls:"ctr", text:p.centerOptions[S.center]};
-  AKEYS.forEach((ak,i)=>{ const [r,c]=cGRID[i]; g[r][c]={cls:"head", text:`${ak}.${ANAME[ak]}`}; });
+  AKEYS.forEach(ak=>{
+    const [dr,dc] = CELL_OFF[AKEYS.indexOf(ak)];
+    g[3+dr][3+dc] = {cls:"head", text:`${ak}.${ANAME[ak]}`};
+  });
   // 周囲8ブロック
   AKEYS.forEach(ak=>{
     const [br,bc] = BLOCK_POS[ak];
@@ -434,8 +448,8 @@ function polar(cx,cy,r,deg){ const a=(deg-90)*Math.PI/180; return [cx+r*Math.cos
 const WCX=100, WCY=100, WR=94, WR0=30;
 function buildWheel(){
   let html = "";
-  AKEYS.forEach((ak,i)=>{
-    const s = i*45 - 22.5, e = s + 45;           // 分野iの中心が i*45度（12時基準）
+  WHEEL_ORDER.forEach((ak,i)=>{
+    const s = i*45 - 22.5, e = s + 45;           // 円上i番目の中心が i*45度（12時基準）
     const [x1,y1]=polar(WCX,WCY,WR,s), [x2,y2]=polar(WCX,WCY,WR,e);
     const [x3,y3]=polar(WCX,WCY,WR0,e), [x4,y4]=polar(WCX,WCY,WR0,s);
     const focused = S && S.focus === ak;
@@ -461,7 +475,7 @@ buildWheel(); renderHub();
 /* 出る分野を決める：♦重点分野は意識が向く分だけ出来事も集まる（第6原則 主体性）。
    直前と同じ分野は続きにくくする。 */
 function pickArea(){
-  const w = AKEYS.map(k=>{
+  const w = WHEEL_ORDER.map(k=>{
     let x = 1;
     if(S.focus === k) x *= 2;
     if(S.lastArea === k) x *= 0.35;
@@ -469,7 +483,7 @@ function pickArea(){
   });
   const sum = w.reduce((a,b)=>a+b,0);
   let r = Math.random()*sum;
-  for(let i=0;i<8;i++){ r -= w[i]; if(r<=0) return i; }
+  for(let i=0;i<8;i++){ r -= w[i]; if(r<=0) return i; }   // 円上の位置を返す
   return 7;
 }
 function resetWheel(){ rhitEl.innerHTML = "マンダラルーレットが、今週の出来事を選びます"; }
@@ -480,7 +494,7 @@ document.getElementById("btn-roll").onclick = async ()=>{
   rhitEl.innerHTML = "…回っています";
 
   const t = pickArea();
-  const ak = AKEYS[t];
+  const ak = WHEEL_ORDER[t];
   /* 針は12時。分野tを指すには盤を -t*45 度回す（＋セクター内の遊び） */
   const jitter = Math.random()*30 - 15;
   const targetMod = ((-t*45 + jitter) % 360 + 360) % 360;
