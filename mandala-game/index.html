@@ -329,7 +329,7 @@
   </footer>
 </div>
 
-<script src="data.js?v=4"></script>
+<script src="data.js?v=5"></script>
 <script>
 "use strict";
 const D = window.MANDALA_LIFE;
@@ -380,10 +380,13 @@ function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.fl
 function areaPct(pl, ak){
   return Math.round(pl.progress[ak].reduce((a,b)=>a+Math.min(b,100),0)/8);
 }
+/* 調和の係数：一番低い分野が足を引っ張る。
+   ただし一年の途中（まだ手が回っていない分野がある段階）で
+   すべてが0点に潰れないよう、下駄を10だけ履かせている。 */
 function harmony(pl){
   const ps = AKEYS.map(k=>areaPct(pl,k));
   const avg = ps.reduce((a,b)=>a+b,0)/8, min = Math.min(...ps);
-  return { avg, min, coef: avg>0 ? min/avg : 0 };
+  return { avg, min, coef: (min+10)/(avg+10) };
 }
 function scoreOf(pl){
   const h = harmony(pl);
@@ -496,15 +499,73 @@ document.getElementById("btn-atdone").onclick = ()=>{
   const name = (document.getElementById("plname").value.trim()) || `${setupIdx+1}人目`;
   S.players.push({
     name, profile: selProf, center:+ct.dataset.i, goals,
-    /* B型に行動を書き出した時点で、64マスすべてが「10%：はじめの一歩」。
-       第3原則「あるべき姿」——書くことが、すでに最初の一歩である */
-    progress: Object.fromEntries(AKEYS.map(k=>[k,[10,10,10,10,10,10,10,10]])),
-    m: {kokoro:60, karada:60, okane:60},
+    /* 行動はまだ何も起こしていない。すべて0%から積み上げる */
+    progress: Object.fromEntries(AKEYS.map(k=>[k,[0,0,0,0,0,0,0,0]])),
+    m: {kokoro:0, karada:0, okane:0},
     focus:null, usedEp:[], insights:[], lastArea:null
   });
-  if(S.players.length < nPlayers){ startProfileFor(S.players.length); }
-  else { save(); buildWheel(); show("play"); renderAll(); }
+  rollStartMeters(S.players[S.players.length-1], ()=>{
+    if(S.players.length < nPlayers){ startProfileFor(S.players.length); }
+    else { save(); buildWheel(); show("play"); renderAll(); }
+  });
 };
+
+/* ---- はじまりの賽：心・体・お金の持ち点は人それぞれ ---- */
+function startComment(m){
+  const low = METERS.reduce((a,b)=> m[a.key]<=m[b.key] ? a : b);
+  const high = METERS.reduce((a,b)=> m[a.key]>=m[b.key] ? a : b);
+  const spread = m[high.key] - m[low.key];
+  if(spread <= 10) return "三つとも似た持ち点。平らな地面からの出発です。";
+  const t = {
+    kokoro:{h:"心の張りがある",l:"心の余白が少ない"},
+    karada:{h:"体に恵まれている",l:"体に不安がある"},
+    okane:{h:"手元に余裕がある",l:"財布は心もとない"}
+  };
+  return `${t[high.key].h}が、${t[low.key].l}ところからの出発です。`
+       + "　持ち点は選べません。ここからどう組み立てるかだけが選べます。";
+}
+function rollStartMeters(pl, done){
+  cardbox.className = "gamecard prog";
+  cardbox.innerHTML = `
+    <span class="ctype plain">はじまりの賽</span>
+    <h3>${esc(pl.name)}さんの、いまの持ち点</h3>
+    <p class="situ">人生の出発点は、人によって違います。三つの賽を振ってください。</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin:14px 0" id="startdice">
+      ${METERS.map(mt=>`<div style="text-align:center">
+        <div style="perspective:600px">${dieHTML(1,"sd-"+mt.key)}</div>
+        <div class="dicecap" style="margin-top:5px;color:${mt.color}">${mt.name}</div></div>`).join("")}
+    </div>
+    <div id="startresult"></div>
+    <button class="btn" id="sd-roll">三つの賽を振る</button>`;
+  overlay.classList.add("active");
+  document.getElementById("sd-roll").onclick = async ()=>{
+    const btn = document.getElementById("sd-roll");
+    btn.disabled = true; btn.textContent = "…";
+    const dice = METERS.map(mt=>document.getElementById("sd-"+mt.key));
+    dice.forEach(d=>d.classList.add("rolling"));
+    const res = {};
+    const spins = FAST?3:11;
+    for(let i=0;i<spins;i++){
+      dice.forEach(d=>setDie(d, 1+Math.floor(Math.random()*6)));
+      await wait(FAST?25:(60+i*7));
+    }
+    METERS.forEach((mt,i)=>{
+      const n = 1 + Math.floor(Math.random()*6);
+      res[mt.key] = n;
+      pl.m[mt.key] = n*10 + 20;          // 目1→30 … 目6→80
+      setDie(dice[i], n);
+      dice[i].classList.remove("rolling");
+      dice[i].classList.add("settled");
+    });
+    await wait(FAST?60:600);
+    document.getElementById("startresult").innerHTML = `
+      <div class="meters" style="margin:4px 0 10px">${METERS.map(mt=>meterRow(mt, pl.m[mt.key])).join("")}</div>
+      <div class="insightbox"><span class="il">第6原則「主体性」</span><br>${startComment(pl.m)}</div>`;
+    btn.disabled = false;
+    btn.textContent = "この持ち点ではじめる";
+    btn.onclick = ()=>{ overlay.classList.remove("active"); save(); done(); };
+  };
+}
 
 /* ================= メーター描画 ================= */
 function meterIcon(mt){
@@ -573,7 +634,8 @@ function wheelHTML(pl){
 function pickArea(pl){
   const w = WHEEL_ORDER.map(k=>{
     let x=1;
-    if(pl.focus===k) x*=2;              // ♦重点は出来事も集まる（第6原則）
+    if(pl.focus===k) x*=2;                 // ♦重点は出来事も集まる（第6原則）
+    if(areaPct(pl,k)===0) x*=3;            // 見ていない分野ほど、向こうから訪れる
     if(pl.lastArea===k) x*=0.35;
     return x;
   });
