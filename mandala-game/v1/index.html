@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マンダラチャート®人生とビジネスを豊かにするゲーム</title>
+<style>
+  :root{
+    --ink:#3a3226;
+    --paper:#f7f3ea;
+    --card:#fffdf7;
+    --line:#d9cfba;
+    --accent:#b3541e;
+    --accent2:#3e6b48;
+    --gold:#c9a227;
+    --shadow:0 2px 10px rgba(58,50,38,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Hiragino Mincho ProN","Yu Mincho","BIZ UDMincho",serif;
+    background:var(--paper);color:var(--ink);
+    min-height:100vh;line-height:1.7;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:16px 14px 60px}
+  h1{font-size:1.05rem;text-align:center;letter-spacing:.06em;line-height:1.5;margin:8px 0 2px}
+  h1 .sub{display:block;font-size:.72rem;color:#8a7d64;font-weight:normal;letter-spacing:.2em}
+  .screen{display:none}
+  .screen.active{display:block}
+
+  /* ---- 共通部品 ---- */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);padding:16px;margin:14px 0}
+  .btn{display:block;width:100%;padding:13px;border:none;border-radius:10px;
+    font-family:inherit;font-size:1rem;cursor:pointer;letter-spacing:.08em;
+    background:var(--accent);color:#fff;box-shadow:var(--shadow);transition:transform .1s}
+  .btn:active{transform:scale(.98)}
+  .btn.sub{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.green{background:var(--accent2)}
+  .btn:disabled{opacity:.4;cursor:default}
+  label{font-size:.82rem;color:#8a7d64;display:block;margin:10px 0 3px}
+  input[type=text],select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;
+    font-family:inherit;font-size:1rem;background:#fff}
+  .note{font-size:.78rem;color:#8a7d64;margin-top:8px}
+
+  /* ---- 人数選択 ---- */
+  .pcount{display:flex;gap:8px;margin-top:4px}
+  .pcount button{flex:1;padding:12px 0;border:1px solid var(--line);border-radius:10px;
+    background:#fff;font-family:inherit;font-size:1.05rem;cursor:pointer}
+  .pcount button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  /* ---- 盤面 ---- */
+  .yearbar{display:flex;justify-content:space-between;align-items:baseline;margin:10px 2px 6px}
+  .yearbar .year{font-size:1.2rem;font-weight:bold}
+  .yearbar .pname{font-size:.95rem;color:var(--accent);font-weight:bold}
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+  .cell{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:8px 6px;min-height:86px;text-align:center;position:relative;transition:all .25s}
+  .cell.center{background:linear-gradient(160deg,#fdf6e0,#f5e9c8);border-color:var(--gold);
+    display:flex;flex-direction:column;justify-content:center}
+  .cell.center .purpose{font-size:.92rem;font-weight:bold;line-height:1.4;word-break:break-all}
+  .cell.center .plabel{font-size:.62rem;color:#a08a3c;letter-spacing:.15em;margin-bottom:2px}
+  .cell .fname{font-size:.8rem;letter-spacing:.1em}
+  .cell .fval{font-size:1.3rem;font-weight:bold;line-height:1.2}
+  .cell .bar{height:5px;background:#eee4d2;border-radius:3px;margin-top:4px;overflow:hidden}
+  .cell .bar i{display:block;height:100%;background:var(--accent2);border-radius:3px;transition:width .4s}
+  .cell.here{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);}
+  .cell.here::after{content:"●";position:absolute;top:3px;right:6px;color:var(--accent);font-size:.7rem}
+  .cell.flash{animation:flash .5s 2}
+  @keyframes flash{50%{background:#fff3df}}
+  .cell .delta{position:absolute;top:2px;left:6px;font-size:.72rem;font-weight:bold}
+  .delta.up{color:var(--accent2)} .delta.down{color:#b3341e}
+
+  /* ---- 賽 ---- */
+  .dicearea{text-align:center;margin:14px 0}
+  .die{display:inline-block;width:64px;height:64px;background:#fff;border:2px solid var(--ink);
+    border-radius:12px;font-size:2rem;line-height:60px;font-weight:bold;box-shadow:var(--shadow);
+    margin-bottom:10px}
+  .die.rolling{animation:roll .1s infinite}
+  @keyframes roll{50%{transform:rotate(8deg) scale(1.08)}}
+
+  /* ---- カード ---- */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(40,32,20,.55);z-index:10;
+    padding:20px 14px;overflow-y:auto}
+  .overlay.active{display:flex;align-items:center;justify-content:center}
+  .gamecard{background:var(--card);border-radius:14px;max-width:480px;width:100%;
+    padding:20px 18px;box-shadow:0 8px 30px rgba(0,0,0,.3);border-top:6px solid var(--accent)}
+  .gamecard .tag{display:inline-block;font-size:.72rem;background:var(--accent);color:#fff;
+    border-radius:20px;padding:2px 12px;letter-spacing:.15em;margin-bottom:8px}
+  .gamecard h3{font-size:1.15rem;margin-bottom:6px}
+  .gamecard p.situ{font-size:.92rem;margin-bottom:14px}
+  .choice{display:block;width:100%;text-align:left;padding:12px;margin:8px 0;border-radius:10px;
+    border:1.5px solid var(--line);background:#fff;font-family:inherit;font-size:.95rem;cursor:pointer}
+  .choice:active{background:#faf3e3}
+  .choice .cl{font-weight:bold}
+  .effects{font-size:.85rem;margin:10px 0;line-height:2}
+  .effects .up{color:var(--accent2);font-weight:bold}
+  .effects .down{color:#b3341e;font-weight:bold}
+  .insightbox{background:#f4efdf;border-left:4px solid var(--gold);border-radius:6px;
+    padding:10px 12px;font-size:.88rem;margin:12px 0}
+  .insightbox .il{font-size:.7rem;color:#a08a3c;letter-spacing:.2em}
+
+  /* ---- 結果 ---- */
+  .scorebig{text-align:center;font-size:2.2rem;font-weight:bold;color:var(--accent)}
+  .scoredetail{font-size:.82rem;color:#8a7d64;text-align:center;margin-bottom:8px}
+  .rankrow{display:flex;justify-content:space-between;padding:8px 4px;border-bottom:1px dashed var(--line);font-size:.95rem}
+  .rankrow .medal{width:2em}
+  .growth li{font-size:.9rem;margin:4px 0;list-style:none}
+  .growth .up{color:var(--accent2)} .growth .down{color:#b3341e}
+  .qs{counter-reset:q}
+  .qs li{list-style:none;margin:12px 0;padding-left:2em;position:relative;font-size:.93rem}
+  .qs li::before{counter-increment:q;content:"問" counter(q);position:absolute;left:0;top:0;
+    font-size:.72rem;background:var(--ink);color:#fff;border-radius:4px;padding:1px 5px}
+  .insightlist li{list-style:none;font-size:.86rem;margin:7px 0;padding-left:1.4em;position:relative}
+  .insightlist li::before{content:"✎";position:absolute;left:0;color:var(--gold)}
+
+  footer{text-align:center;font-size:.68rem;color:#a2957c;margin-top:30px;line-height:1.9}
+
+  @media print{
+    body{background:#fff}
+    .btn,.dicearea,footer .noprint{display:none!important}
+    .panel{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>マンダラチャート®<br>人生とビジネスを豊かにするゲーム
+    <span class="sub">— 八つの分野を、十二年かけて満たす —</span>
+  </h1>
+
+  <!-- ============ 開始画面 ============ -->
+  <div id="scr-setup" class="screen active">
+    <div class="panel">
+      <p style="font-size:.9rem">
+        賽（さい）を振って八つの分野をめぐり、出来事のたびに<strong>二つの道</strong>から一つを選びます。
+        どの道も、何かが増えて、何かが減ります。<br>
+        十二年ののち、<strong>合計ではなく調和</strong>で得点が決まります。
+      </p>
+    </div>
+
+    <div class="panel">
+      <div id="deckrow" style="display:none">
+        <label>カードの版</label>
+        <select id="deckselect"></select>
+      </div>
+      <label>遊ぶ人数（研修では交代で）</label>
+      <div class="pcount" id="pcount">
+        <button data-n="1" class="sel">1人</button>
+        <button data-n="2">2人</button>
+        <button data-n="3">3人</button>
+        <button data-n="4">4人</button>
+      </div>
+      <div id="players"></div>
+      <p class="note">中心の言葉＝あなたの人生の目的をひとこと。あとで書き直してかまいません。</p>
+    </div>
+
+    <button class="btn" id="btn-start">はじめる</button>
+  </div>
+
+  <!-- ============ プレイ画面 ============ -->
+  <div id="scr-play" class="screen">
+    <div class="yearbar">
+      <span class="year"><span id="yearnum">1</span>年目 <small style="font-size:.7rem;color:#8a7d64">／12年</small></span>
+      <span class="pname" id="curname"></span>
+    </div>
+    <div class="board" id="board"></div>
+    <div class="dicearea">
+      <div class="die" id="die">？</div>
+      <button class="btn" id="btn-roll">賽を振る</button>
+    </div>
+    <div class="panel" id="lastlog" style="display:none;font-size:.85rem"></div>
+  </div>
+
+  <!-- ============ カード ============ -->
+  <div class="overlay" id="cardoverlay">
+    <div class="gamecard" id="cardbox"></div>
+  </div>
+
+  <!-- ============ 結果画面 ============ -->
+  <div id="scr-end" class="screen">
+    <div id="endcontent"></div>
+    <div class="panel">
+      <h3 style="font-size:1rem;margin-bottom:4px">ここからが研修の本番です</h3>
+      <ol class="qs">
+        <li>ゲームで一番伸びた分野は、<strong>現実のあなた</strong>でも伸びている分野ですか。それとも「ゲームの中でだけ」選べた道ですか。</li>
+        <li>ゲームで痩せた分野を現実で守るために、<strong>明日からできる一手</strong>は何ですか。</li>
+        <li>中央に書いた言葉は、十二年の選択とつながっていましたか。いま書き直すなら、何と書きますか。</li>
+      </ol>
+      <p class="note">この三つの答えを材料に、実際のマンダラチャートを一枚書いてください。</p>
+    </div>
+    <button class="btn sub" onclick="window.print()">この結果を印刷する</button>
+    <div style="height:8px"></div>
+    <button class="btn green" onclick="location.reload()">もう一度はじめから</button>
+  </div>
+
+  <footer>
+    マンダラチャート®は一般社団法人マンダラチャート協会の登録商標です。<br>
+    <span class="noprint">このゲームは端末の中だけで動きます。通信は行いません。</span>
+  </footer>
+</div>
+
+<script src="cards.js"></script>
+<script>
+"use strict";
+/* ================= 基本データ ================= */
+const FIELDS = [
+  {key:"work",     name:"仕事"},
+  {key:"money",    name:"お金"},
+  {key:"health",   name:"健康"},
+  {key:"family",   name:"家庭"},
+  {key:"learn",    name:"学び"},
+  {key:"play",     name:"遊び"},
+  {key:"relation", name:"人間関係"},
+  {key:"social",   name:"社会"}
+];
+const FNAME = Object.fromEntries(FIELDS.map(f=>[f.key,f.name]));
+/* 3×3盤上の並び：輪の位置0..7 → グリッドセル番号（時計回り） */
+const RING_TO_GRID = [0,1,2,5,8,7,6,3];
+const YEARS = 12, START = 5, VMIN = 0, VMAX = 10;
+
+/* ================= 得点計算（純関数） ================= */
+function calcScore(values){
+  const nums = FIELDS.map(f=>values[f.key]);
+  const total = nums.reduce((a,b)=>a+b,0);
+  const avg = total/8;
+  const min = Math.min(...nums);
+  const coef = avg>0 ? min/avg : 0;
+  return { total, avg, min, coef, score: Math.round(total*10*coef) };
+}
+function clamp(v){ return Math.max(VMIN, Math.min(VMAX, v)); }
+
+/* ================= 状態 ================= */
+let deck = null;          // 選択中デッキ
+let piles = {};           // 分野別の山札（シャッフル済み）
+let players = [];         // {name,purpose,values,pos,insights[]}
+let curIdx = 0, year = 1;
+let playerCount = 1;
+let busy = false;
+
+/* ================= デッキ準備 ================= */
+const DECKS = window.MANDALA_DECKS || [];
+(function initDecks(){
+  if(DECKS.length === 0){ alert("cards.js が読み込めていません。index.html と同じ場所に置いてください。"); return; }
+  if(DECKS.length > 1){
+    document.getElementById("deckrow").style.display = "block";
+    const sel = document.getElementById("deckselect");
+    DECKS.forEach((d,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=d.name; sel.appendChild(o); });
+  }
+})();
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function buildPiles(){
+  piles = {};
+  FIELDS.forEach(f=>{ piles[f.key] = shuffle(deck.cards.filter(c=>c.field===f.key)); });
+}
+function drawCard(fieldKey){
+  if(piles[fieldKey].length === 0){
+    piles[fieldKey] = shuffle(deck.cards.filter(c=>c.field===fieldKey));
+  }
+  return piles[fieldKey].pop();
+}
+
+/* ================= 開始画面 ================= */
+const playersDiv = document.getElementById("players");
+function renderPlayerInputs(){
+  playersDiv.innerHTML = "";
+  for(let i=0;i<playerCount;i++){
+    playersDiv.insertAdjacentHTML("beforeend", `
+      <label>${playerCount>1 ? (i+1)+"人目の" : ""}名前</label>
+      <input type="text" id="pn${i}" placeholder="${playerCount>1 ? "例：山田" : "例：山田太郎"}" maxlength="10">
+      <label>中心の言葉（人生の目的をひとこと）</label>
+      <input type="text" id="pp${i}" placeholder="例：家族と仲間と、面白がって生きる" maxlength="20">
+    `);
+  }
+}
+document.getElementById("pcount").addEventListener("click",e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  playerCount = +b.dataset.n;
+  document.querySelectorAll("#pcount button").forEach(x=>x.classList.toggle("sel",x===b));
+  renderPlayerInputs();
+});
+renderPlayerInputs();
+
+document.getElementById("btn-start").addEventListener("click",()=>{
+  deck = DECKS[+(document.getElementById("deckselect")?.value || 0)] || DECKS[0];
+  buildPiles();
+  players = [];
+  for(let i=0;i<playerCount;i++){
+    const name = (document.getElementById("pn"+i).value.trim()) || (playerCount>1 ? `${i+1}人目` : "あなた");
+    const purpose = (document.getElementById("pp"+i).value.trim()) || "（あとで書く）";
+    const values = {}; FIELDS.forEach(f=>values[f.key]=START);
+    players.push({name, purpose, values, pos:0, insights:[]});
+  }
+  curIdx = 0; year = 1;
+  showScreen("play");
+  renderBoard();
+});
+
+/* ================= 画面切替 ================= */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("scr-"+id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+/* ================= 盤面描画 ================= */
+function renderBoard(deltas){
+  const p = players[curIdx];
+  document.getElementById("yearnum").textContent = year;
+  document.getElementById("curname").textContent =
+    (players.length>1 ? p.name + " の番" : p.name);
+
+  const cells = new Array(9).fill("");
+  cells[4] = `<div class="cell center"><div class="plabel">中心の言葉</div><div class="purpose">${esc(p.purpose)}</div></div>`;
+  FIELDS.forEach((f,ri)=>{
+    const g = RING_TO_GRID[ri];
+    const v = p.values[f.key];
+    const here = (p.pos===ri) ? " here" : "";
+    const d = deltas && deltas[f.key];
+    const dHtml = d ? `<span class="delta ${d>0?"up":"down"}">${d>0?"+":""}${d}</span>` : "";
+    const flash = d ? " flash" : "";
+    cells[g] = `<div class="cell${here}${flash}" id="cell-${f.key}">${dHtml}
+      <div class="fname">${f.name}</div>
+      <div class="fval">${v}</div>
+      <div class="bar"><i style="width:${v*10}%"></i></div></div>`;
+  });
+  document.getElementById("board").innerHTML = cells.join("");
+}
+function esc(s){ return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+
+/* ================= 手番 ================= */
+const dieEl = document.getElementById("die");
+document.getElementById("btn-roll").addEventListener("click", async ()=>{
+  if(busy) return; busy = true;
+  document.getElementById("btn-roll").disabled = true;
+  document.getElementById("lastlog").style.display = "none";
+
+  // 賽の演出
+  dieEl.classList.add("rolling");
+  const n = 1 + Math.floor(Math.random()*6);
+  for(let t=0;t<10;t++){ dieEl.textContent = 1+Math.floor(Math.random()*6); await wait(70); }
+  dieEl.classList.remove("rolling");
+  dieEl.textContent = n;
+
+  // 一歩ずつ進む
+  const p = players[curIdx];
+  for(let s=0;s<n;s++){ p.pos = (p.pos+1)%8; renderBoard(); await wait(240); }
+
+  // カードを引く
+  const fieldKey = FIELDS[p.pos].key;
+  openCard(drawCard(fieldKey), fieldKey);
+});
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* ================= カード表示・選択 ================= */
+const overlay = document.getElementById("cardoverlay");
+const cardbox = document.getElementById("cardbox");
+function openCard(card, fieldKey){
+  cardbox.innerHTML = `
+    <span class="tag">${FNAME[fieldKey]} の出来事</span>
+    <h3>${esc(card.title)}</h3>
+    <p class="situ">${esc(card.text)}</p>
+    <button class="choice" id="ch-a"><span class="cl">Ａ　${esc(card.a.label)}</span></button>
+    <button class="choice" id="ch-b"><span class="cl">Ｂ　${esc(card.b.label)}</span></button>
+    <p class="note">どちらを選んでも、何かが増えて何かが減ります。</p>`;
+  overlay.classList.add("active");
+  document.getElementById("ch-a").onclick = ()=>resolveChoice(card, card.a);
+  document.getElementById("ch-b").onclick = ()=>resolveChoice(card, card.b);
+}
+function resolveChoice(card, choice){
+  const p = players[curIdx];
+  const deltas = {};
+  for(const [k,v] of Object.entries(choice.effects)){
+    const before = p.values[k];
+    p.values[k] = clamp(before + v);
+    const real = p.values[k] - before;
+    if(real !== 0) deltas[k] = real;
+  }
+  p.insights.push(card.insight);
+
+  const effHtml = Object.entries(deltas).map(([k,v])=>
+    `<span class="${v>0?"up":"down"}">${FNAME[k]} ${v>0?"+":""}${v}</span>`).join("　");
+
+  cardbox.innerHTML = `
+    <span class="tag">${esc(choice.label)}</span>
+    <div class="effects">${effHtml || "（すでに上限・下限のため変化なし）"}</div>
+    <div class="insightbox"><span class="il">気づき</span><br>${esc(card.insight)}</div>
+    <button class="btn" id="ch-close">次へ</button>`;
+  document.getElementById("ch-close").onclick = ()=>{
+    overlay.classList.remove("active");
+    renderBoard(deltas);
+    logTurn(card, choice, deltas);
+    nextTurn();
+  };
+}
+function logTurn(card, choice, deltas){
+  const p = players[curIdx];
+  const eff = Object.entries(deltas).map(([k,v])=>`${FNAME[k]}${v>0?"+":""}${v}`).join("、") || "変化なし";
+  const el = document.getElementById("lastlog");
+  el.style.display = "block";
+  el.innerHTML = `<strong>${esc(p.name)}</strong>｜${esc(card.title)} → ${esc(choice.label)}（${eff}）`;
+}
+
+/* ================= 進行 ================= */
+function nextTurn(){
+  busy = false;
+  curIdx++;
+  if(curIdx >= players.length){
+    curIdx = 0;
+    year++;
+    if(year > YEARS){ return endGame(); }
+  }
+  document.getElementById("btn-roll").disabled = false;
+  dieEl.textContent = "？";
+  renderBoard();
+}
+
+/* ================= 結果 ================= */
+function endGame(){
+  const results = players.map(p=>({p, r:calcScore(p.values)}))
+                         .sort((a,b)=>b.r.score-a.r.score);
+  let html = "";
+
+  if(players.length > 1){
+    const medals = ["🥇","🥈","🥉","　"];
+    html += `<div class="panel"><h3 style="font-size:1rem;margin-bottom:6px">十二年の結果</h3>` +
+      results.map((x,i)=>`<div class="rankrow"><span class="medal">${medals[i]}</span>
+        <span style="flex:1">${esc(x.p.name)}</span><strong>${x.r.score}点</strong></div>`).join("") +
+      `</div>`;
+  }
+
+  results.forEach(x=>{
+    const {p,r} = x;
+    const growth = FIELDS.map(f=>({name:f.name, d:p.values[f.key]-START}))
+                         .sort((a,b)=>b.d-a.d);
+    const ups = growth.filter(g=>g.d>0);
+    const downs = growth.filter(g=>g.d<0).reverse();
+    const uniqIns = [...new Set(p.insights)];
+
+    html += `<div class="panel">
+      <h3 style="font-size:1.05rem">${esc(p.name)}${players.length>1?"":" の十二年"}</h3>
+      <p class="note" style="margin:2px 0 8px">中心の言葉：「${esc(p.purpose)}」</p>
+      <div class="scorebig">${r.score}<small style="font-size:1rem">点</small></div>
+      <div class="scoredetail">八分野の合計 ${r.total} × 10 × 調和の係数 ${r.coef.toFixed(2)}
+        <br><small>（調和の係数 ＝ 一番低い分野 ${r.min} ÷ 平均 ${r.avg.toFixed(1)}。一つでも痩せた分野があると点が伸びない仕組みです）</small></div>
+      <ul class="growth">
+        ${ups.length? `<li class="up">伸びた分野：${ups.map(g=>`${g.name}+${g.d}`).join("、")}</li>`:""}
+        ${downs.length? `<li class="down">痩せた分野：${downs.map(g=>`${g.name}${g.d}`).join("、")}</li>`:""}
+        ${(!ups.length && !downs.length)? `<li>すべて最初のまま — 珍しい十二年でした。</li>`:""}
+      </ul>
+      ${uniqIns.length? `<p class="note" style="margin-top:10px">この十二年で得た気づき：</p>
+      <ul class="insightlist">${uniqIns.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`:""}
+    </div>`;
+  });
+
+  document.getElementById("endcontent").innerHTML = html;
+  showScreen("end");
+}
+</script>
+</body>
+</html>

@@ -6,455 +6,597 @@
 <title>マンダラチャート®人生とビジネスを豊かにするゲーム</title>
 <style>
   :root{
-    --ink:#3a3226;
-    --paper:#f7f3ea;
-    --card:#fffdf7;
-    --line:#d9cfba;
-    --accent:#b3541e;
-    --accent2:#3e6b48;
-    --gold:#c9a227;
+    --ink:#3a3226; --paper:#f7f3ea; --card:#fffdf7; --line:#d9cfba;
+    --accent:#b3541e; --accent2:#3e6b48; --gold:#c9a227; --blue:#3d5a80;
     --shadow:0 2px 10px rgba(58,50,38,.12);
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{
-    font-family:"Hiragino Mincho ProN","Yu Mincho","BIZ UDMincho",serif;
-    background:var(--paper);color:var(--ink);
-    min-height:100vh;line-height:1.7;
-  }
-  .wrap{max-width:560px;margin:0 auto;padding:16px 14px 60px}
-  h1{font-size:1.05rem;text-align:center;letter-spacing:.06em;line-height:1.5;margin:8px 0 2px}
-  h1 .sub{display:block;font-size:.72rem;color:#8a7d64;font-weight:normal;letter-spacing:.2em}
-  .screen{display:none}
-  .screen.active{display:block}
-
-  /* ---- 共通部品 ---- */
+  body{font-family:"Hiragino Mincho ProN","Yu Mincho","BIZ UDMincho",serif;
+    background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7}
+  .wrap{max-width:600px;margin:0 auto;padding:14px 12px 60px}
+  h1{font-size:1rem;text-align:center;letter-spacing:.05em;line-height:1.5;margin:6px 0 2px}
+  h1 .sub{display:block;font-size:.7rem;color:#8a7d64;letter-spacing:.2em;font-weight:normal}
+  .screen{display:none} .screen.active{display:block}
   .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;
-    box-shadow:var(--shadow);padding:16px;margin:14px 0}
+    box-shadow:var(--shadow);padding:14px;margin:12px 0}
   .btn{display:block;width:100%;padding:13px;border:none;border-radius:10px;
     font-family:inherit;font-size:1rem;cursor:pointer;letter-spacing:.08em;
-    background:var(--accent);color:#fff;box-shadow:var(--shadow);transition:transform .1s}
+    background:var(--accent);color:#fff;box-shadow:var(--shadow)}
   .btn:active{transform:scale(.98)}
   .btn.sub{background:#fff;color:var(--ink);border:1px solid var(--line)}
   .btn.green{background:var(--accent2)}
-  .btn:disabled{opacity:.4;cursor:default}
+  .btn.blue{background:var(--blue)}
+  .btn:disabled{opacity:.4}
+  .note{font-size:.78rem;color:#8a7d64;margin-top:6px}
   label{font-size:.82rem;color:#8a7d64;display:block;margin:10px 0 3px}
-  input[type=text],select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;
-    font-family:inherit;font-size:1rem;background:#fff}
-  .note{font-size:.78rem;color:#8a7d64;margin-top:8px}
 
-  /* ---- 人数選択 ---- */
-  .pcount{display:flex;gap:8px;margin-top:4px}
-  .pcount button{flex:1;padding:12px 0;border:1px solid var(--line);border-radius:10px;
-    background:#fff;font-family:inherit;font-size:1.05rem;cursor:pointer}
-  .pcount button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+  /* ---- プロフィール選択 ---- */
+  .prof{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:12px;
+    margin:10px 0;cursor:pointer;display:block;width:100%;text-align:left;font-family:inherit}
+  .prof.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+  .prof .pname{font-weight:bold;font-size:1rem}
+  .prof .pdesc{font-size:.82rem;color:#6d6least050;margin-top:4px;color:#6d6250}
+  .opt{display:block;width:100%;text-align:left;padding:10px 12px;margin:7px 0;border-radius:10px;
+    border:1.5px solid var(--line);background:#fff;font-family:inherit;font-size:.92rem;cursor:pointer}
+  .opt.sel{border-color:var(--accent2);background:#eef4ee;box-shadow:0 0 0 1.5px var(--accent2)}
+  .areahead{display:flex;align-items:center;gap:8px;margin:16px 0 4px}
+  .areahead .badge{background:var(--ink);color:#fff;border-radius:6px;font-size:.75rem;padding:2px 8px}
 
-  /* ---- 盤面 ---- */
-  .yearbar{display:flex;justify-content:space-between;align-items:baseline;margin:10px 2px 6px}
-  .yearbar .year{font-size:1.2rem;font-weight:bold}
-  .yearbar .pname{font-size:.95rem;color:var(--accent);font-weight:bold}
-  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
-  .cell{background:var(--card);border:1px solid var(--line);border-radius:10px;
-    padding:8px 6px;min-height:86px;text-align:center;position:relative;transition:all .25s}
-  .cell.center{background:linear-gradient(160deg,#fdf6e0,#f5e9c8);border-color:var(--gold);
+  /* ---- 週バー ---- */
+  .weekbar{display:flex;justify-content:space-between;align-items:baseline;margin:8px 2px 2px}
+  .weekbar .wk{font-size:1.05rem;font-weight:bold}
+  .weekbar .qtag{font-size:.72rem;background:var(--blue);color:#fff;border-radius:14px;padding:2px 10px}
+  .progressrail{height:6px;background:#e7ddc9;border-radius:3px;margin:4px 0 10px;overflow:hidden}
+  .progressrail i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--accent2));border-radius:3px;transition:width .4s}
+
+  /* ---- チャート切替 ---- */
+  .tabs{display:flex;gap:6px;margin:8px 0 6px}
+  .tabs button{flex:1;padding:8px;border:1px solid var(--line);border-radius:8px 8px 0 0;
+    background:#efe8d8;font-family:inherit;font-size:.85rem;cursor:pointer;color:#8a7d64}
+  .tabs button.on{background:var(--card);color:var(--ink);font-weight:bold;border-bottom-color:var(--card)}
+
+  /* ---- A型 ---- */
+  .agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+  .acell{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:7px 5px;min-height:92px;text-align:center;position:relative;transition:border .2s}
+  .acell.center{background:linear-gradient(160deg,#fdf6e0,#f5e9c8);border-color:var(--gold);
     display:flex;flex-direction:column;justify-content:center}
-  .cell.center .purpose{font-size:.92rem;font-weight:bold;line-height:1.4;word-break:break-all}
-  .cell.center .plabel{font-size:.62rem;color:#a08a3c;letter-spacing:.15em;margin-bottom:2px}
-  .cell .fname{font-size:.8rem;letter-spacing:.1em}
-  .cell .fval{font-size:1.3rem;font-weight:bold;line-height:1.2}
-  .cell .bar{height:5px;background:#eee4d2;border-radius:3px;margin-top:4px;overflow:hidden}
-  .cell .bar i{display:block;height:100%;background:var(--accent2);border-radius:3px;transition:width .4s}
-  .cell.here{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);}
-  .cell.here::after{content:"●";position:absolute;top:3px;right:6px;color:var(--accent);font-size:.7rem}
-  .cell.flash{animation:flash .5s 2}
-  @keyframes flash{50%{background:#fff3df}}
-  .cell .delta{position:absolute;top:2px;left:6px;font-size:.72rem;font-weight:bold}
-  .delta.up{color:var(--accent2)} .delta.down{color:#b3341e}
+  .acell.center .purpose{font-size:.8rem;font-weight:bold;line-height:1.45}
+  .acell.center .plabel{font-size:.6rem;color:#a08a3c;letter-spacing:.15em}
+  .acell .aname{font-size:.72rem;letter-spacing:.05em;color:#8a7d64}
+  .acell .agoal{font-size:.66rem;line-height:1.35;margin:2px 0;min-height:2.7em;overflow:hidden}
+  .acell .apct{font-size:.95rem;font-weight:bold}
+  .acell .bar{height:4px;background:#eee4d2;border-radius:2px;overflow:hidden}
+  .acell .bar i{display:block;height:100%;background:var(--accent2);transition:width .4s}
+  .acell.here{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+  .acell.here::after{content:"●";position:absolute;top:2px;right:5px;color:var(--accent);font-size:.65rem}
+  .acell .wakumark{position:absolute;top:2px;left:5px;font-size:.65rem}
 
-  /* ---- 賽 ---- */
-  .dicearea{text-align:center;margin:14px 0}
-  .die{display:inline-block;width:64px;height:64px;background:#fff;border:2px solid var(--ink);
-    border-radius:12px;font-size:2rem;line-height:60px;font-weight:bold;box-shadow:var(--shadow);
-    margin-bottom:10px}
+  /* ---- B型 ---- */
+  .bwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:6px}
+  .bgrid{display:grid;grid-template-columns:repeat(9,minmax(58px,1fr));gap:2px;min-width:560px}
+  .bcell{border:1px solid #e5dcc8;border-radius:4px;font-size:.5rem;line-height:1.25;
+    padding:3px 2px;min-height:44px;background:#fff;position:relative;overflow:hidden;text-align:center;
+    display:flex;flex-direction:column;justify-content:center}
+  .bcell.head{background:#f0e9d8;font-weight:bold;font-size:.56rem}
+  .bcell.ctr{background:linear-gradient(160deg,#fdf6e0,#f5e9c8);font-weight:bold;font-size:.55rem}
+  .bcell .lv{position:absolute;left:0;bottom:0;height:3px;background:var(--accent2);transition:width .3s}
+  .bcell.p10{background:#f4f7f2}.bcell.p30{background:#e4efe2}.bcell.p60{background:#c9e0c6}
+  .bcell.p100{background:#a3cc9f}.bcell.p130{background:#e9d67a}
+  .blegend{font-size:.66rem;color:#8a7d64;margin-top:4px}
+
+  /* ---- ワクワクゲージ ---- */
+  .wakurow{display:flex;align-items:center;gap:8px;margin:8px 0 2px;font-size:.8rem}
+  .wakurail{flex:1;height:8px;background:#eee4d2;border-radius:4px;overflow:hidden}
+  .wakurail i{display:block;height:100%;background:linear-gradient(90deg,#e5989b,#d64550);transition:width .4s}
+
+  /* ---- サイコロ ---- */
+  .dicearea{text-align:center;margin:12px 0}
+  .die{display:inline-block;width:58px;height:58px;background:#fff;border:2px solid var(--ink);
+    border-radius:12px;font-size:1.8rem;line-height:54px;font-weight:bold;box-shadow:var(--shadow);margin-bottom:8px}
   .die.rolling{animation:roll .1s infinite}
   @keyframes roll{50%{transform:rotate(8deg) scale(1.08)}}
 
   /* ---- カード ---- */
   .overlay{display:none;position:fixed;inset:0;background:rgba(40,32,20,.55);z-index:10;
-    padding:20px 14px;overflow-y:auto}
-  .overlay.active{display:flex;align-items:center;justify-content:center}
-  .gamecard{background:var(--card);border-radius:14px;max-width:480px;width:100%;
-    padding:20px 18px;box-shadow:0 8px 30px rgba(0,0,0,.3);border-top:6px solid var(--accent)}
-  .gamecard .tag{display:inline-block;font-size:.72rem;background:var(--accent);color:#fff;
-    border-radius:20px;padding:2px 12px;letter-spacing:.15em;margin-bottom:8px}
-  .gamecard h3{font-size:1.15rem;margin-bottom:6px}
-  .gamecard p.situ{font-size:.92rem;margin-bottom:14px}
-  .choice{display:block;width:100%;text-align:left;padding:12px;margin:8px 0;border-radius:10px;
-    border:1.5px solid var(--line);background:#fff;font-family:inherit;font-size:.95rem;cursor:pointer}
+    padding:16px 12px;overflow-y:auto}
+  .overlay.active{display:flex;align-items:flex-start;justify-content:center}
+  .gamecard{background:var(--card);border-radius:14px;max-width:520px;width:100%;margin:auto;
+    padding:18px 16px;box-shadow:0 8px 30px rgba(0,0,0,.3);border-top:6px solid var(--accent)}
+  .gamecard .tag{display:inline-block;font-size:.7rem;background:var(--accent);color:#fff;
+    border-radius:20px;padding:2px 12px;letter-spacing:.12em;margin:0 4px 8px 0}
+  .gamecard .tag.q{background:var(--blue)}
+  .gamecard h3{font-size:1.08rem;margin-bottom:6px;line-height:1.5}
+  .gamecard p.situ{font-size:.9rem;margin-bottom:12px}
+  .choice{display:block;width:100%;text-align:left;padding:11px 12px;margin:8px 0;border-radius:10px;
+    border:1.5px solid var(--line);background:#fff;font-family:inherit;font-size:.92rem;cursor:pointer;line-height:1.55}
   .choice:active{background:#faf3e3}
-  .choice .cl{font-weight:bold}
-  .effects{font-size:.85rem;margin:10px 0;line-height:2}
+  .effects{font-size:.84rem;margin:10px 0;line-height:1.9}
   .effects .up{color:var(--accent2);font-weight:bold}
   .effects .down{color:#b3341e;font-weight:bold}
+  .effects .waku{color:#d64550;font-weight:bold}
   .insightbox{background:#f4efdf;border-left:4px solid var(--gold);border-radius:6px;
-    padding:10px 12px;font-size:.88rem;margin:12px 0}
-  .insightbox .il{font-size:.7rem;color:#a08a3c;letter-spacing:.2em}
+    padding:9px 12px;font-size:.86rem;margin:10px 0;line-height:1.7}
+  .insightbox .il{font-size:.68rem;color:#a08a3c;letter-spacing:.15em}
+  .principlechip{display:inline-block;font-size:.7rem;border:1px solid var(--gold);color:#8a6d1f;
+    border-radius:14px;padding:1px 10px;margin-bottom:6px;background:#fbf6e4}
 
-  /* ---- 結果 ---- */
-  .scorebig{text-align:center;font-size:2.2rem;font-weight:bold;color:var(--accent)}
-  .scoredetail{font-size:.82rem;color:#8a7d64;text-align:center;margin-bottom:8px}
-  .rankrow{display:flex;justify-content:space-between;padding:8px 4px;border-bottom:1px dashed var(--line);font-size:.95rem}
-  .rankrow .medal{width:2em}
-  .growth li{font-size:.9rem;margin:4px 0;list-style:none}
-  .growth .up{color:var(--accent2)} .growth .down{color:#b3341e}
+  /* ---- OKRレビュー・結果 ---- */
+  .mentor{background:#eef2f6;border-left:4px solid var(--blue);border-radius:6px;
+    padding:10px 12px;font-size:.86rem;margin:10px 0;line-height:1.75}
+  .mentor .ml{font-size:.68rem;color:var(--blue);letter-spacing:.15em}
+  .statrow{display:flex;justify-content:space-between;font-size:.88rem;padding:5px 2px;border-bottom:1px dashed var(--line)}
+  .scorebig{text-align:center;font-size:2rem;font-weight:bold;color:var(--accent)}
+  .scoredetail{font-size:.8rem;color:#8a7d64;text-align:center;margin-bottom:6px}
+  .qs li{list-style:none;margin:10px 0;padding-left:2em;position:relative;font-size:.9rem}
   .qs{counter-reset:q}
-  .qs li{list-style:none;margin:12px 0;padding-left:2em;position:relative;font-size:.93rem}
-  .qs li::before{counter-increment:q;content:"問" counter(q);position:absolute;left:0;top:0;
-    font-size:.72rem;background:var(--ink);color:#fff;border-radius:4px;padding:1px 5px}
-  .insightlist li{list-style:none;font-size:.86rem;margin:7px 0;padding-left:1.4em;position:relative}
-  .insightlist li::before{content:"✎";position:absolute;left:0;color:var(--gold)}
-
-  footer{text-align:center;font-size:.68rem;color:#a2957c;margin-top:30px;line-height:1.9}
-
-  @media print{
-    body{background:#fff}
-    .btn,.dicearea,footer .noprint{display:none!important}
-    .panel{box-shadow:none;break-inside:avoid}
-  }
+  .qs li::before{counter-increment:q;content:"問" counter(q);position:absolute;left:0;top:2px;
+    font-size:.68rem;background:var(--ink);color:#fff;border-radius:4px;padding:1px 5px}
+  .log{font-size:.82rem}
+  footer{text-align:center;font-size:.66rem;color:#a2957c;margin-top:26px;line-height:1.9}
+  @media print{ body{background:#fff} .btn,.dicearea,.tabs,footer .noprint{display:none!important}
+    .panel{box-shadow:none;break-inside:avoid} }
 </style>
 </head>
 <body>
 <div class="wrap">
+  <h1>マンダラチャート®人生とビジネスを豊かにするゲーム
+    <span class="sub">— 曼荼羅手帳で辿る、ある人の一年 —</span></h1>
 
-  <h1>マンダラチャート®<br>人生とビジネスを豊かにするゲーム
-    <span class="sub">— 八つの分野を、十二年かけて満たす —</span>
-  </h1>
-
-  <!-- ============ 開始画面 ============ -->
-  <div id="scr-setup" class="screen active">
+  <!-- ============ 1. プロフィール選択 ============ -->
+  <div id="scr-profile" class="screen active">
     <div class="panel">
-      <p style="font-size:.9rem">
-        賽（さい）を振って八つの分野をめぐり、出来事のたびに<strong>二つの道</strong>から一つを選びます。
-        どの道も、何かが増えて、何かが減ります。<br>
-        十二年ののち、<strong>合計ではなく調和</strong>で得点が決まります。
-      </p>
+      <p style="font-size:.88rem">
+        実在のマンダラチャートから生まれた人物の一年を、あなたが生きます。<br>
+        <strong>2027年1月4日の週</strong>から52週間。週に一度、賽を振り、その週の出来事に向き合います。
+        3か月ごとに<strong>OKRの振り返り</strong>があり、選択のたびに人生が変わっていきます。</p>
     </div>
-
     <div class="panel">
-      <div id="deckrow" style="display:none">
-        <label>カードの版</label>
-        <select id="deckselect"></select>
-      </div>
-      <label>遊ぶ人数（研修では交代で）</label>
-      <div class="pcount" id="pcount">
-        <button data-n="1" class="sel">1人</button>
-        <button data-n="2">2人</button>
-        <button data-n="3">3人</button>
-        <button data-n="4">4人</button>
-      </div>
-      <div id="players"></div>
-      <p class="note">中心の言葉＝あなたの人生の目的をひとこと。あとで書き直してかまいません。</p>
+      <label>誰の一年を生きますか</label>
+      <div id="proflist"></div>
     </div>
-
-    <button class="btn" id="btn-start">はじめる</button>
+    <button class="btn" id="btn-prof" disabled>この人で、A型チャートを作る</button>
+    <div style="height:8px"></div>
+    <button class="btn sub" id="btn-resume" style="display:none">前回の続きから再開する</button>
   </div>
 
-  <!-- ============ プレイ画面 ============ -->
-  <div id="scr-play" class="screen">
-    <div class="yearbar">
-      <span class="year"><span id="yearnum">1</span>年目 <small style="font-size:.7rem;color:#8a7d64">／12年</small></span>
-      <span class="pname" id="curname"></span>
+  <!-- ============ 2. A型チャート作成 ============ -->
+  <div id="scr-atype" class="screen">
+    <div class="panel">
+      <p style="font-size:.88rem"><strong id="at-name"></strong><br>
+      まず<strong>A型チャート</strong>（3×3・人生の設計図）を作ります。
+      中心の言葉と、8分野の年間目標を選んでください。
+      これは第3原則<strong>「あるべき姿」</strong>——理想の未来から現在を決める作業です。</p>
     </div>
-    <div class="board" id="board"></div>
+    <div id="at-form"></div>
+    <button class="btn green" id="btn-atdone">A型チャート完成 — 2027年を始める</button>
+  </div>
+
+  <!-- ============ 3. プレイ ============ -->
+  <div id="scr-play" class="screen">
+    <div class="weekbar">
+      <span class="wk">第<span id="weeknum">1</span>週 <small id="weekdate" style="font-size:.68rem;color:#8a7d64"></small></span>
+      <span class="qtag" id="qtag">Q1</span>
+    </div>
+    <div class="progressrail"><i id="yearrail" style="width:0%"></i></div>
+    <div class="wakurow">♥ワクワク度<div class="wakurail"><i id="wakubar" style="width:50%"></i></div><span id="wakuval">50</span></div>
+    <div class="tabs">
+      <button id="tab-a" class="on">A型（設計図）</button>
+      <button id="tab-b">B型（実践64マス）</button>
+    </div>
+    <div id="aview"></div>
+    <div id="bview" style="display:none"></div>
     <div class="dicearea">
       <div class="die" id="die">？</div>
-      <button class="btn" id="btn-roll">賽を振る</button>
+      <button class="btn" id="btn-roll">今週の賽を振る</button>
     </div>
-    <div class="panel" id="lastlog" style="display:none;font-size:.85rem"></div>
+    <div class="panel log" id="lastlog" style="display:none"></div>
   </div>
 
-  <!-- ============ カード ============ -->
-  <div class="overlay" id="cardoverlay">
-    <div class="gamecard" id="cardbox"></div>
-  </div>
+  <!-- ============ カード／レビュー ============ -->
+  <div class="overlay" id="overlay"><div class="gamecard" id="cardbox"></div></div>
 
-  <!-- ============ 結果画面 ============ -->
+  <!-- ============ 4. 結果 ============ -->
   <div id="scr-end" class="screen">
     <div id="endcontent"></div>
     <div class="panel">
-      <h3 style="font-size:1rem;margin-bottom:4px">ここからが研修の本番です</h3>
+      <h3 style="font-size:1rem;margin-bottom:4px">ここからが本番です</h3>
       <ol class="qs">
-        <li>ゲームで一番伸びた分野は、<strong>現実のあなた</strong>でも伸びている分野ですか。それとも「ゲームの中でだけ」選べた道ですか。</li>
-        <li>ゲームで痩せた分野を現実で守るために、<strong>明日からできる一手</strong>は何ですか。</li>
-        <li>中央に書いた言葉は、十二年の選択とつながっていましたか。いま書き直すなら、何と書きますか。</li>
+        <li>この人の一年で、あなたが<strong>一番迷った選択</strong>はどれでしたか。現実のあなたなら、どちらを選びますか。</li>
+        <li>ワクワク度が下がった週、何が起きていましたか。あなたの現実の手帳で、同じことが起きていませんか。</li>
+        <li>いま、<strong>あなた自身のA型チャート</strong>を書くとしたら、中心に何と書きますか。</li>
       </ol>
-      <p class="note">この三つの答えを材料に、実際のマンダラチャートを一枚書いてください。</p>
+      <p class="note">この答えを持って、自分の曼荼羅手帳を開いてください。</p>
     </div>
-    <button class="btn sub" onclick="window.print()">この結果を印刷する</button>
+    <button class="btn sub" onclick="window.print()">この一年の記録を印刷する</button>
     <div style="height:8px"></div>
-    <button class="btn green" onclick="location.reload()">もう一度はじめから</button>
+    <button class="btn green" onclick="localStorage.removeItem('mandala_life_save');location.reload()">別の人生をはじめる</button>
   </div>
 
   <footer>
     マンダラチャート®は一般社団法人マンダラチャート協会の登録商標です。<br>
-    <span class="noprint">このゲームは端末の中だけで動きます。通信は行いません。</span>
+    <span class="noprint">登場人物は実在のマンダラチャートを元にした架空の人物です。このゲームは端末の中だけで動きます。</span>
   </footer>
 </div>
 
-<script src="cards.js"></script>
+<script src="data.js"></script>
 <script>
 "use strict";
-/* ================= 基本データ ================= */
-const FIELDS = [
-  {key:"work",     name:"仕事"},
-  {key:"money",    name:"お金"},
-  {key:"health",   name:"健康"},
-  {key:"family",   name:"家庭"},
-  {key:"learn",    name:"学び"},
-  {key:"play",     name:"遊び"},
-  {key:"relation", name:"人間関係"},
-  {key:"social",   name:"社会"}
-];
-const FNAME = Object.fromEntries(FIELDS.map(f=>[f.key,f.name]));
-/* 3×3盤上の並び：輪の位置0..7 → グリッドセル番号（時計回り） */
-const RING_TO_GRID = [0,1,2,5,8,7,6,3];
-const YEARS = 12, START = 5, VMIN = 0, VMAX = 10;
+const D = window.MANDALA_LIFE;
+const AREAS = D.areas;                      // [{key:"A",name:"健康"},...]
+const AKEYS = AREAS.map(a=>a.key);
+const ANAME = Object.fromEntries(AREAS.map(a=>[a.key,a.name]));
+const LADDER = [0,10,30,60,100,130];        // 進捗のはしご（実践会準拠）
+const LSTEP = v => LADDER.indexOf(v);
+const PRN = D.principles;                   // {key:{name,hint}}
+const WEEKS = 52, QWEEKS = 13;
+/* B型グリッド: 9x9。ブロック配置（左上から）A B C / D 中央 E / F G H */
+const BLOCK_POS = {A:[0,0],B:[0,3],C:[0,6],D:[3,0],E:[3,6],F:[6,0],G:[6,3],H:[6,6]};
+/* ブロック内: 周囲8マス（左上,上,右上,左,右,左下,下,右下）の順にアクション1-8、中央は分野名 */
+const CELL_OFF = [[0,0],[0,1],[0,2],[1,0],[1,2],[2,0],[2,1],[2,2]];
 
-/* ================= 得点計算（純関数） ================= */
-function calcScore(values){
-  const nums = FIELDS.map(f=>values[f.key]);
-  const total = nums.reduce((a,b)=>a+b,0);
-  const avg = total/8;
-  const min = Math.min(...nums);
-  const coef = avg>0 ? min/avg : 0;
-  return { total, avg, min, coef, score: Math.round(total*10*coef) };
-}
-function clamp(v){ return Math.max(VMIN, Math.min(VMAX, v)); }
-
-/* ================= 状態 ================= */
-let deck = null;          // 選択中デッキ
-let piles = {};           // 分野別の山札（シャッフル済み）
-let players = [];         // {name,purpose,values,pos,insights[]}
-let curIdx = 0, year = 1;
-let playerCount = 1;
+let S = null;   // 進行状態
 let busy = false;
 
-/* ================= デッキ準備 ================= */
-const DECKS = window.MANDALA_DECKS || [];
-(function initDecks(){
-  if(DECKS.length === 0){ alert("cards.js が読み込めていません。index.html と同じ場所に置いてください。"); return; }
-  if(DECKS.length > 1){
-    document.getElementById("deckrow").style.display = "block";
-    const sel = document.getElementById("deckselect");
-    DECKS.forEach((d,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=d.name; sel.appendChild(o); });
+/* ================= 日付 ================= */
+function weekDate(w){ // 2027-01-04 (月) + 7*(w-1)
+  const d = new Date(2027,0,4); d.setDate(d.getDate()+7*(w-1));
+  return `${d.getMonth()+1}/${d.getDate()}〜`;
+}
+/* 賽の移動リング: 盤面を時計回り（A→B→C→E→H→G→F→D） */
+const RING = ["A","B","C","E","H","G","F","D"];
+/* ================= 集計 ================= */
+function areaPct(st, ak){
+  const cells = st.progress[ak];
+  const avg = cells.reduce((a,b)=>a+Math.min(b,100),0)/8;
+  return Math.round(avg);
+}
+function harmony(st){
+  const ps = AKEYS.map(k=>areaPct(st,k));
+  const avg = ps.reduce((a,b)=>a+b,0)/8, min = Math.min(...ps);
+  return { avg, min, coef: avg>0 ? min/avg : 0 };
+}
+function finalScore(st){
+  const h = harmony(st);
+  const wakuCoef = 0.5 + st.waku/100;   // 0.5〜1.5
+  return { ...h, waku: st.waku,
+    score: Math.round(h.avg * 10 * h.coef * wakuCoef) };
+}
+
+/* ================= 保存 ================= */
+function save(){ try{ localStorage.setItem("mandala_life_save", JSON.stringify(S)); }catch(e){} }
+function load(){ try{ return JSON.parse(localStorage.getItem("mandala_life_save")); }catch(e){ return null; } }
+
+/* ================= 画面遷移 ================= */
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("scr-"+id).classList.add("active"); window.scrollTo(0,0); }
+function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+
+/* ================= 1. プロフィール選択 ================= */
+let selProf = -1;
+(function initProfiles(){
+  const box = document.getElementById("proflist");
+  D.profiles.forEach((p,i)=>{
+    const b = document.createElement("button");
+    b.className = "prof";
+    b.innerHTML = `<div class="pname">${esc(p.name)}</div><div class="pdesc">${esc(p.desc)}</div>`;
+    b.onclick = ()=>{ selProf = i;
+      document.querySelectorAll(".prof").forEach((x,j)=>x.classList.toggle("sel",j===i));
+      document.getElementById("btn-prof").disabled = false; };
+    box.appendChild(b);
+  });
+  const sv = load();
+  if(sv && sv.week <= WEEKS){
+    const rb = document.getElementById("btn-resume");
+    rb.style.display = "block";
+    rb.textContent = `前回の続きから再開する（${esc(sv.profileName)}・第${sv.week}週）`;
+    rb.onclick = ()=>{ S = sv; show("play"); renderAll(); };
   }
 })();
-function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-function buildPiles(){
-  piles = {};
-  FIELDS.forEach(f=>{ piles[f.key] = shuffle(deck.cards.filter(c=>c.field===f.key)); });
-}
-function drawCard(fieldKey){
-  if(piles[fieldKey].length === 0){
-    piles[fieldKey] = shuffle(deck.cards.filter(c=>c.field===fieldKey));
-  }
-  return piles[fieldKey].pop();
-}
+document.getElementById("btn-prof").onclick = ()=>{ buildAtypeForm(); show("atype"); };
 
-/* ================= 開始画面 ================= */
-const playersDiv = document.getElementById("players");
-function renderPlayerInputs(){
-  playersDiv.innerHTML = "";
-  for(let i=0;i<playerCount;i++){
-    playersDiv.insertAdjacentHTML("beforeend", `
-      <label>${playerCount>1 ? (i+1)+"人目の" : ""}名前</label>
-      <input type="text" id="pn${i}" placeholder="${playerCount>1 ? "例：山田" : "例：山田太郎"}" maxlength="10">
-      <label>中心の言葉（人生の目的をひとこと）</label>
-      <input type="text" id="pp${i}" placeholder="例：家族と仲間と、面白がって生きる" maxlength="20">
-    `);
-  }
-}
-document.getElementById("pcount").addEventListener("click",e=>{
-  const b = e.target.closest("button"); if(!b) return;
-  playerCount = +b.dataset.n;
-  document.querySelectorAll("#pcount button").forEach(x=>x.classList.toggle("sel",x===b));
-  renderPlayerInputs();
-});
-renderPlayerInputs();
-
-document.getElementById("btn-start").addEventListener("click",()=>{
-  deck = DECKS[+(document.getElementById("deckselect")?.value || 0)] || DECKS[0];
-  buildPiles();
-  players = [];
-  for(let i=0;i<playerCount;i++){
-    const name = (document.getElementById("pn"+i).value.trim()) || (playerCount>1 ? `${i+1}人目` : "あなた");
-    const purpose = (document.getElementById("pp"+i).value.trim()) || "（あとで書く）";
-    const values = {}; FIELDS.forEach(f=>values[f.key]=START);
-    players.push({name, purpose, values, pos:0, insights:[]});
-  }
-  curIdx = 0; year = 1;
-  showScreen("play");
-  renderBoard();
-});
-
-/* ================= 画面切替 ================= */
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("scr-"+id).classList.add("active");
-  window.scrollTo(0,0);
-}
-
-/* ================= 盤面描画 ================= */
-function renderBoard(deltas){
-  const p = players[curIdx];
-  document.getElementById("yearnum").textContent = year;
-  document.getElementById("curname").textContent =
-    (players.length>1 ? p.name + " の番" : p.name);
-
-  const cells = new Array(9).fill("");
-  cells[4] = `<div class="cell center"><div class="plabel">中心の言葉</div><div class="purpose">${esc(p.purpose)}</div></div>`;
-  FIELDS.forEach((f,ri)=>{
-    const g = RING_TO_GRID[ri];
-    const v = p.values[f.key];
-    const here = (p.pos===ri) ? " here" : "";
-    const d = deltas && deltas[f.key];
-    const dHtml = d ? `<span class="delta ${d>0?"up":"down"}">${d>0?"+":""}${d}</span>` : "";
-    const flash = d ? " flash" : "";
-    cells[g] = `<div class="cell${here}${flash}" id="cell-${f.key}">${dHtml}
-      <div class="fname">${f.name}</div>
-      <div class="fval">${v}</div>
-      <div class="bar"><i style="width:${v*10}%"></i></div></div>`;
+/* ================= 2. A型チャート作成 ================= */
+function buildAtypeForm(){
+  const p = D.profiles[selProf];
+  document.getElementById("at-name").textContent = p.name;
+  const f = document.getElementById("at-form");
+  let html = `<div class="panel"><div class="areahead"><span class="badge">中心</span><strong>人生の目的のことば</strong></div>`;
+  p.centerOptions.forEach((c,i)=>{ html += `<button class="opt ct" data-i="${i}">${esc(c)}</button>`; });
+  html += `</div>`;
+  AKEYS.forEach(ak=>{
+    const ar = p.areas[ak];
+    html += `<div class="panel"><div class="areahead"><span class="badge">${ak}</span><strong>${ANAME[ak]}</strong>
+      <span class="note" style="margin:0">の年間目標</span></div>`;
+    ar.goalOptions.forEach((g,i)=>{ html += `<button class="opt g${ak}" data-a="${ak}" data-i="${i}">${esc(g)}</button>`; });
+    html += `</div>`;
   });
-  document.getElementById("board").innerHTML = cells.join("");
+  f.innerHTML = html;
+  f.querySelectorAll(".ct").forEach(b=>b.onclick=()=>{ f.querySelectorAll(".ct").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); });
+  AKEYS.forEach(ak=>{
+    f.querySelectorAll(".g"+ak).forEach(b=>b.onclick=()=>{ f.querySelectorAll(".g"+ak).forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); });
+  });
 }
-function esc(s){ return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+document.getElementById("btn-atdone").onclick = ()=>{
+  const f = document.getElementById("at-form");
+  const ct = f.querySelector(".ct.sel");
+  if(!ct){ alert("中心の言葉を選んでください"); return; }
+  const goals = {};
+  for(const ak of AKEYS){
+    const g = f.querySelector(`.g${ak}.sel`);
+    if(!g){ alert(`「${ANAME[ak]}」の年間目標を選んでください`); return; }
+    goals[ak] = +g.dataset.i;
+  }
+  const p = D.profiles[selProf];
+  S = {
+    profile: selProf, profileName: p.name,
+    center: +ct.dataset.i, goals,
+    week: 1, pos: 0, waku: 50,
+    progress: Object.fromEntries(AKEYS.map(k=>[k,[0,0,0,0,0,0,0,0]])),
+    focus: null,             // 重点分野（OKRで選ぶ）
+    usedEp: [],              // 使用済みエピソードindex
+    history: [],             // {week, area, title, choice, effects}
+    insights: []
+  };
+  save(); show("play"); renderAll();
+};
 
-/* ================= 手番 ================= */
+/* ================= 3. 盤面描画 ================= */
+document.getElementById("tab-a").onclick = ()=>{ setTab("a"); };
+document.getElementById("tab-b").onclick = ()=>{ setTab("b"); };
+function setTab(t){
+  document.getElementById("tab-a").classList.toggle("on",t==="a");
+  document.getElementById("tab-b").classList.toggle("on",t==="b");
+  document.getElementById("aview").style.display = t==="a"?"":"none";
+  document.getElementById("bview").style.display = t==="b"?"":"none";
+}
+function renderAll(){
+  const p = D.profiles[S.profile];
+  document.getElementById("weeknum").textContent = S.week;
+  document.getElementById("weekdate").textContent = weekDate(S.week);
+  document.getElementById("qtag").textContent = "Q"+Math.min(4, Math.ceil(S.week/QWEEKS)) +
+    (S.focus ? `・重点:${ANAME[S.focus]}` : "");
+  document.getElementById("yearrail").style.width = Math.round(100*(S.week-1)/WEEKS)+"%";
+  document.getElementById("wakubar").style.width = S.waku+"%";
+  document.getElementById("wakuval").textContent = S.waku;
+  renderA(p); renderB(p);
+}
+function renderA(p, deltas){
+  const cells = new Array(9).fill("");
+  cells[4] = `<div class="acell center"><div class="plabel">中心の言葉</div>
+    <div class="purpose">${esc(p.centerOptions[S.center])}</div></div>`;
+  /* B型と同じ並び: 上段A B C / 中段D 中央 E / 下段F G H */
+  const GRID = {A:0,B:1,C:2,D:3,E:5,F:6,G:7,H:8};
+  const hereKey = RING[S.pos];
+  AKEYS.forEach(ak=>{
+    const pct = areaPct(S, ak);
+    const here = (hereKey===ak)?" here":"";
+    const d = deltas && deltas[ak];
+    const mark = d ? `<span class="wakumark">${d>0?"▲":"▼"}</span>` : "";
+    cells[GRID[ak]] = `<div class="acell${here}">${mark}
+      <div class="aname">${ak}. ${ANAME[ak]}${S.focus===ak?" ♦":""}</div>
+      <div class="agoal">${esc(p.areas[ak].goalOptions[S.goals[ak]])}</div>
+      <div class="apct">${pct}%</div>
+      <div class="bar"><i style="width:${Math.min(pct,100)}%"></i></div></div>`;
+  });
+  document.getElementById("aview").innerHTML = `<div class="agrid">${cells.join("")}</div>`;
+}
+function renderB(p){
+  const g = [];
+  for(let r=0;r<9;r++){ g.push(new Array(9).fill(null)); }
+  // 中央ブロック = A型
+  const cGRID = [[3,3],[3,4],[3,5],[4,3],[4,5],[5,3],[5,4],[5,5]];
+  g[4][4] = {cls:"ctr", text:p.centerOptions[S.center]};
+  AKEYS.forEach((ak,i)=>{ const [r,c]=cGRID[i]; g[r][c]={cls:"head", text:`${ak}.${ANAME[ak]}`}; });
+  // 周囲8ブロック
+  AKEYS.forEach(ak=>{
+    const [br,bc] = BLOCK_POS[ak];
+    g[br+1][bc+1] = {cls:"head", text:`${ak}.${ANAME[ak]}`};
+    p.areas[ak].cells.forEach((txt,ci)=>{
+      const [dr,dc] = CELL_OFF[ci];
+      const lv = S.progress[ak][ci];
+      g[br+dr][bc+dc] = {cls: lv?("p"+lv):"", text:txt, lv};
+    });
+  });
+  let html = `<div class="bwrap"><div class="bgrid">`;
+  for(let r=0;r<9;r++)for(let c=0;c<9;c++){
+    const cell = g[r][c];
+    html += `<div class="bcell ${cell?cell.cls:""}">${cell?esc(cell.text):""}` +
+      (cell&&cell.lv?`<span class="lv" style="width:${Math.min(cell.lv,100)}%"></span>`:"") + `</div>`;
+  }
+  html += `</div></div><div class="blegend">色＝進捗（10%はじめの一歩 → 30%△ → 60%○ → 100%◎ → 130%★）。横にスクロールできます。</div>`;
+  document.getElementById("bview").innerHTML = html;
+}
+
+/* ================= 4. 手番 ================= */
 const dieEl = document.getElementById("die");
-document.getElementById("btn-roll").addEventListener("click", async ()=>{
-  if(busy) return; busy = true;
+document.getElementById("btn-roll").onclick = async ()=>{
+  if(busy || !S) return; busy = true;
   document.getElementById("btn-roll").disabled = true;
   document.getElementById("lastlog").style.display = "none";
-
-  // 賽の演出
   dieEl.classList.add("rolling");
   const n = 1 + Math.floor(Math.random()*6);
-  for(let t=0;t<10;t++){ dieEl.textContent = 1+Math.floor(Math.random()*6); await wait(70); }
+  for(let t=0;t<10;t++){ dieEl.textContent = 1+Math.floor(Math.random()*6); await wait(65); }
   dieEl.classList.remove("rolling");
   dieEl.textContent = n;
-
-  // 一歩ずつ進む
-  const p = players[curIdx];
-  for(let s=0;s<n;s++){ p.pos = (p.pos+1)%8; renderBoard(); await wait(240); }
-
-  // カードを引く
-  const fieldKey = FIELDS[p.pos].key;
-  openCard(drawCard(fieldKey), fieldKey);
-});
+  for(let s=0;s<n;s++){ S.pos=(S.pos+1)%8; renderAll(); await wait(180); }
+  const ak = RING[S.pos];
+  openEpisode(drawEpisode(ak), ak);
+};
 function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
-/* ================= カード表示・選択 ================= */
-const overlay = document.getElementById("cardoverlay");
-const cardbox = document.getElementById("cardbox");
-function openCard(card, fieldKey){
-  cardbox.innerHTML = `
-    <span class="tag">${FNAME[fieldKey]} の出来事</span>
-    <h3>${esc(card.title)}</h3>
-    <p class="situ">${esc(card.text)}</p>
-    <button class="choice" id="ch-a"><span class="cl">Ａ　${esc(card.a.label)}</span></button>
-    <button class="choice" id="ch-b"><span class="cl">Ｂ　${esc(card.b.label)}</span></button>
-    <p class="note">どちらを選んでも、何かが増えて何かが減ります。</p>`;
-  overlay.classList.add("active");
-  document.getElementById("ch-a").onclick = ()=>resolveChoice(card, card.a);
-  document.getElementById("ch-b").onclick = ()=>resolveChoice(card, card.b);
-}
-function resolveChoice(card, choice){
-  const p = players[curIdx];
-  const deltas = {};
-  for(const [k,v] of Object.entries(choice.effects)){
-    const before = p.values[k];
-    p.values[k] = clamp(before + v);
-    const real = p.values[k] - before;
-    if(real !== 0) deltas[k] = real;
+function drawEpisode(ak){
+  const p = D.profiles[S.profile];
+  let pool = p.episodes.map((e,i)=>({e,i})).filter(x=>x.e.area===ak && !S.usedEp.includes(x.i));
+  if(pool.length===0){ // 使い切ったらその分野だけ山を戻す
+    S.usedEp = S.usedEp.filter(i=>p.episodes[i].area!==ak);
+    pool = p.episodes.map((e,i)=>({e,i})).filter(x=>x.e.area===ak);
   }
-  p.insights.push(card.insight);
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  S.usedEp.push(pick.i);
+  return pick.e;
+}
 
-  const effHtml = Object.entries(deltas).map(([k,v])=>
-    `<span class="${v>0?"up":"down"}">${FNAME[k]} ${v>0?"+":""}${v}</span>`).join("　");
-
+/* ================= 5. エピソード ================= */
+const overlay = document.getElementById("overlay");
+const cardbox = document.getElementById("cardbox");
+function openEpisode(ep, ak){
   cardbox.innerHTML = `
-    <span class="tag">${esc(choice.label)}</span>
-    <div class="effects">${effHtml || "（すでに上限・下限のため変化なし）"}</div>
-    <div class="insightbox"><span class="il">気づき</span><br>${esc(card.insight)}</div>
-    <button class="btn" id="ch-close">次へ</button>`;
+    <span class="tag">${weekDate(S.week)}</span><span class="tag">${ANAME[ak]}の出来事</span>
+    <h3>${esc(ep.title)}</h3>
+    <p class="situ">${esc(ep.text)}</p>
+    <button class="choice" id="ch-a"><strong>Ａ</strong>　${esc(ep.a.label)}</button>
+    <button class="choice" id="ch-b"><strong>Ｂ</strong>　${esc(ep.b.label)}</button>
+    <p class="note">どちらにも意味があります。この人になったつもりで。</p>`;
+  overlay.classList.add("active");
+  document.getElementById("ch-a").onclick = ()=>resolve(ep, ep.a, ak);
+  document.getElementById("ch-b").onclick = ()=>resolve(ep, ep.b, ak);
+}
+function stepCell(ak, ci, dir){
+  const cur = S.progress[ak][ci];
+  let idx = LSTEP(cur) + dir;
+  idx = Math.max(0, Math.min(LADDER.length-1, idx));
+  S.progress[ak][ci] = LADDER[idx];
+  return LADDER[idx] - cur;
+}
+function resolve(ep, ch, ak){
+  const areaDeltas = {};
+  const lines = [];
+  // マス進捗: cells:[[area,cellIdx,step],...]
+  (ch.cells||[]).forEach(([a,ci,st])=>{
+    let step = st;
+    if(st>0 && S.focus===a) step += 1;   // 重点分野♦は伸びが速い
+    const d = stepCell(a,ci,step);
+    if(d!==0){
+      areaDeltas[a] = (areaDeltas[a]||0)+d;
+      const p = D.profiles[S.profile];
+      lines.push(`<span class="${d>0?"up":"down"}">${a}.${ANAME[a]}「${esc(p.areas[a].cells[ci])}」 ${d>0?"+":""}${d}%</span>`);
+    }
+  });
+  const wd = ch.waku||0;
+  S.waku = Math.max(0, Math.min(100, S.waku+wd));
+  if(wd) lines.push(`<span class="waku">♥ワクワク度 ${wd>0?"+":""}${wd}</span>`);
+  S.insights.push(ep.insight);
+  S.history.push({week:S.week, area:ak, title:ep.title, choice:ch.label});
+
+  const pr = PRN[ep.principle];
+  cardbox.innerHTML = `
+    <span class="tag">${esc(ch.label)}</span>
+    <p class="situ" style="margin-top:6px">${esc(ch.result)}</p>
+    <div class="effects">${lines.join("<br>")||"（変化なし）"}</div>
+    <div class="insightbox"><span class="principlechip">第${pr.no}原則「${pr.name}」</span><br>
+      <span class="il">気づき</span><br>${esc(ep.insight)}</div>
+    <button class="btn" id="ch-close">手帳を閉じる</button>`;
   document.getElementById("ch-close").onclick = ()=>{
     overlay.classList.remove("active");
-    renderBoard(deltas);
-    logTurn(card, choice, deltas);
-    nextTurn();
+    logTurn(ep, ch, lines);
+    nextWeek(areaDeltas);
   };
 }
-function logTurn(card, choice, deltas){
-  const p = players[curIdx];
-  const eff = Object.entries(deltas).map(([k,v])=>`${FNAME[k]}${v>0?"+":""}${v}`).join("、") || "変化なし";
+function logTurn(ep, ch, lines){
   const el = document.getElementById("lastlog");
   el.style.display = "block";
-  el.innerHTML = `<strong>${esc(p.name)}</strong>｜${esc(card.title)} → ${esc(choice.label)}（${eff}）`;
+  el.innerHTML = `<strong>${weekDate(S.week)}</strong>｜${esc(ep.title)} → ${esc(ch.label)}`;
 }
 
-/* ================= 進行 ================= */
-function nextTurn(){
-  busy = false;
-  curIdx++;
-  if(curIdx >= players.length){
-    curIdx = 0;
-    year++;
-    if(year > YEARS){ return endGame(); }
-  }
-  document.getElementById("btn-roll").disabled = false;
-  dieEl.textContent = "？";
-  renderBoard();
+/* ================= 6. 週送り・OKRレビュー ================= */
+function nextWeek(deltas){
+  const finishedQ = (S.week % QWEEKS === 0) ? S.week/QWEEKS : 0;
+  S.week++;
+  save();
+  if(S.week > WEEKS){ renderAll(); return endGame(); }
+  renderAll();
+  if(finishedQ >= 1 && finishedQ <= 3){ openReview(finishedQ); }
+  else { busy=false; document.getElementById("btn-roll").disabled=false; dieEl.textContent="？"; }
 }
-
-/* ================= 結果 ================= */
-function endGame(){
-  const results = players.map(p=>({p, r:calcScore(p.values)}))
-                         .sort((a,b)=>b.r.score-a.r.score);
-  let html = "";
-
-  if(players.length > 1){
-    const medals = ["🥇","🥈","🥉","　"];
-    html += `<div class="panel"><h3 style="font-size:1rem;margin-bottom:6px">十二年の結果</h3>` +
-      results.map((x,i)=>`<div class="rankrow"><span class="medal">${medals[i]}</span>
-        <span style="flex:1">${esc(x.p.name)}</span><strong>${x.r.score}点</strong></div>`).join("") +
-      `</div>`;
+function mentorComment(){
+  const ps = AKEYS.map(k=>({k, v:areaPct(S,k)})).sort((a,b)=>a.v-b.v);
+  const low = ps[0], high = ps[ps.length-1];
+  const h = harmony(S);
+  const msgs = [];
+  if(h.avg < 15){
+    msgs.push(`どの分野も「10%：はじめの一歩」の段階です。それでいいのです。第5原則「感謝」——ゼロでなく一歩が刻めたことをまず認める。手帳は積み上げた人にだけ、あとで景色を見せてくれます。`);
+  } else if(high.v - low.v >= 25){
+    msgs.push(`「${ANAME[high.k]}」が伸びる一方で「${ANAME[low.k]}」が置き去りです。第4原則「開発力（中道）」——挑戦と安全、量と質のバランス軸を来期の設計に入れましょう。`);
+  } else {
+    msgs.push(`8分野のバランスが取れています。第2原則「統合力」——中心テーマと8要素のつながりが機能している証拠です。`);
   }
-
-  results.forEach(x=>{
-    const {p,r} = x;
-    const growth = FIELDS.map(f=>({name:f.name, d:p.values[f.key]-START}))
-                         .sort((a,b)=>b.d-a.d);
-    const ups = growth.filter(g=>g.d>0);
-    const downs = growth.filter(g=>g.d<0).reverse();
-    const uniqIns = [...new Set(p.insights)];
-
-    html += `<div class="panel">
-      <h3 style="font-size:1.05rem">${esc(p.name)}${players.length>1?"":" の十二年"}</h3>
-      <p class="note" style="margin:2px 0 8px">中心の言葉：「${esc(p.purpose)}」</p>
-      <div class="scorebig">${r.score}<small style="font-size:1rem">点</small></div>
-      <div class="scoredetail">八分野の合計 ${r.total} × 10 × 調和の係数 ${r.coef.toFixed(2)}
-        <br><small>（調和の係数 ＝ 一番低い分野 ${r.min} ÷ 平均 ${r.avg.toFixed(1)}。一つでも痩せた分野があると点が伸びない仕組みです）</small></div>
-      <ul class="growth">
-        ${ups.length? `<li class="up">伸びた分野：${ups.map(g=>`${g.name}+${g.d}`).join("、")}</li>`:""}
-        ${downs.length? `<li class="down">痩せた分野：${downs.map(g=>`${g.name}${g.d}`).join("、")}</li>`:""}
-        ${(!ups.length && !downs.length)? `<li>すべて最初のまま — 珍しい十二年でした。</li>`:""}
-      </ul>
-      ${uniqIns.length? `<p class="note" style="margin-top:10px">この十二年で得た気づき：</p>
-      <ul class="insightlist">${uniqIns.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`:""}
-    </div>`;
+  if(S.waku < 40){
+    msgs.push(`♥ワクワク度が下がっています。第5原則「感謝」——実績が目標に届かなくても「何のおかげでここまで進めたか」を先に書き出すと、心の畑に良い種が戻ります。`);
+  } else if(S.waku >= 70){
+    msgs.push(`♥ワクワク度が高い状態です。第6原則「主体性」——今のうちに自分から縁を作る行動を一つ、来期の計画に足しましょう。`);
+  }
+  msgs.push(`第7原則「仮説検証」——この四半期の計画は仮説でした。ズレは失敗ではなく検証結果です。第8原則「継続改革」で、来期の一手を立て直しましょう。`);
+  return msgs.join("<br><br>");
+}
+function openReview(q){
+  const rows = AKEYS.map(k=>{
+    const v = areaPct(S,k);
+    const warn = v===0 ? ` style="color:#b3341e"` : "";
+    return `<div class="statrow"${warn}><span>${k}. ${ANAME[k]}${v===0?"　← 手つかず":""}</span><strong>${v}%</strong></div>`;
+  }).join("");
+  cardbox.innerHTML = `
+    <span class="tag q">Q${q} リフレクション（第${q*QWEEKS}週）</span>
+    <h3>${q*3}か月がたちました。手帳を見返しましょう。</h3>
+    ${rows}
+    <div class="mentor"><span class="ml">メンターより（マンダラ思考8大原則）</span><br>${mentorComment()}</div>
+    <p class="situ" style="margin-top:10px"><strong>来四半期の重点分野（♦）を一つ選んでください。</strong>
+      決めた時点で「はじめの一歩」が一つ刻まれ、来期はその分野の行動が速く進みます。</p>
+    <div id="focuslist"></div>`;
+  overlay.classList.add("active");
+  const fl = document.getElementById("focuslist");
+  AKEYS.forEach(k=>{
+    const v = areaPct(S,k);
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.innerHTML = `<strong>${k}</strong>　${ANAME[k]}（現在 ${v}%）` +
+      (v===0 ? `<br><span style="font-size:.78rem;color:#b3341e">まだ何も動いていません</span>` : "");
+    b.onclick = ()=>{
+      S.focus = k;
+      /* 重点を決める＝もう動き出している。未着手のマスに「はじめの一歩」を刻む */
+      const idx = S.progress[k].findIndex(x=>x===0);
+      if(idx >= 0) S.progress[k][idx] = 10;
+      save(); overlay.classList.remove("active");
+      busy=false; document.getElementById("btn-roll").disabled=false; dieEl.textContent="？"; renderAll();
+    };
+    fl.appendChild(b);
   });
+}
 
-  document.getElementById("endcontent").innerHTML = html;
-  showScreen("end");
+/* ================= 7. 結果 ================= */
+function rankOf(sc){
+  if(sc>=400) return ["秀","八分野が響き合う、見事な一年でした"];
+  if(sc>=300) return ["優","調和の取れた、確かな一年でした"];
+  if(sc>=200) return ["良","土台のできた一年。来年が楽しみです"];
+  if(sc>=100) return ["可","動き出した一年。置き去りの分野を来年の重点に"];
+  return ["続","結果はこれから。手帳は続けた人に味方します"];
+}
+function endGame(){
+  const p = D.profiles[S.profile];
+  const r = finalScore(S);
+  const [rank, rankMsg] = rankOf(r.score);
+  const growth = AKEYS.map(k=>({name:`${k}.${ANAME[k]}`, v:areaPct(S,k)})).sort((a,b)=>b.v-a.v);
+  const uniq = [...new Set(S.insights)];
+  const hist = S.history.filter(h=>h.week%QWEEKS===1 || h.week%QWEEKS===0).slice(0,8);
+  document.getElementById("endcontent").innerHTML = `
+    <div class="panel">
+      <h3 style="font-size:1.05rem">${esc(p.name)} の一年（2027年）</h3>
+      <p class="note" style="margin:2px 0 8px">中心の言葉：「${esc(p.centerOptions[S.center])}」</p>
+      <div class="scorebig">${r.score}<small style="font-size:.95rem">点</small>
+        <span style="display:inline-block;margin-left:8px;font-size:1.2rem;border:2px solid var(--gold);color:#8a6d1f;border-radius:50%;width:1.7em;height:1.7em;line-height:1.6em;text-align:center;vertical-align:middle">${rank}</span></div>
+      <p style="text-align:center;font-size:.85rem;margin-bottom:6px">${rankMsg}</p>
+      <div class="scoredetail">8分野平均 ${Math.round(r.avg)}% × 調和 ${r.coef.toFixed(2)} × ♥ ${(0.5+r.waku/100).toFixed(2)}<br>
+      <small>（調和＝一番低い分野÷平均。どれかを見捨てると点が伸びません）</small></div>
+      ${growth.map(g=>`<div class="statrow"${g.v===0?' style="color:#b3341e"':''}><span>${g.name}</span><strong>${g.v}%</strong></div>`).join("")}
+      ${growth.some(g=>g.v===0) ? `<p class="note" style="color:#b3341e;margin-top:8px">
+        手つかずのまま一年が終わった分野があります。調和の係数はそこで止まります。
+        マンダラチャートが8分野を並べて見せるのは、この「見落とし」を防ぐためです。</p>` : ""}
+      <div class="mentor" style="margin-top:12px"><span class="ml">年間リフレクション</span><br>${mentorComment()}</div>
+    </div>
+    <div class="panel">
+      <p class="note">この一年で手帳に残った気づき：</p>
+      <ul style="list-style:none">${uniq.map(s=>`<li style="font-size:.85rem;margin:7px 0;padding-left:1.3em;position:relative"><span style="position:absolute;left:0;color:var(--gold)">✎</span>${esc(s)}</li>`).join("")}</ul>
+    </div>`;
+  localStorage.removeItem("mandala_life_save");
+  show("end");
 }
 </script>
 </body>
