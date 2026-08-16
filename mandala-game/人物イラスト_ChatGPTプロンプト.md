@@ -2,13 +2,19 @@
 
 8人分。**正方形・バストアップ**。8枚が同じ絵柄でそろうよう、共通の指定を全プロンプトに入れてある。
 
+> **8人分は生成・組み込み済みです。** このファイルは、研修先ごとの版で人物を差し替えるときや、
+> 絵柄を作り直すときのために残してあります。
+
 ## 使い方
 
 1. ChatGPT に下のプロンプトを**1人ずつ**貼って生成する
-2. 生成された画像を `1024×1024` の正方形で保存し、下記のファイル名でこのフォルダの `img/` に置く
-   - `img/hayato.png` / `img/mio.png` / `img/taiga.png` / `img/sayo.png`
-     `img/riku.png` / `img/hinata.png` / `img/kanata.png` / `img/misora.png`
-3. ファイルを置くだけでゲーム側に出ます（`data.js` の各人物に `img` を追記する形。未設置でも動きます）
+2. 生成された画像を `1024×1024` の正方形で保存し、下記のファイル名で `img/src/` に置く
+   - `src/hayato.png` / `src/mio.png` / `src/taiga.png` / `src/sayo.png`
+     `src/riku.png` / `src/hinata.png` / `src/kanata.png` / `src/misora.png`
+3. それを **512×512のJPEG**（品質0.86ほど・1枚50〜70KB）にして `img/` 直下に `<id>.jpg` で置く
+   - 表示は最大60px。原寸PNGのままだと8枚で14MBあり、会場の回線で待たされます
+4. ファイルを置くだけでゲーム側に出ます（`data.js` の各人物の `"img": "img/<id>.jpg"` を参照。
+   読めない場合は名前の頭文字の丸印になり、遊べなくなることはありません）
 
 **まとめて作りたい場合**：最初の1枚を作ったあと、2枚目以降で
 「**さきほどと同じ画風・同じ照明・同じ背景処理・同じ塗りで、別人を描いてください**」と添えると揃いやすい。
@@ -201,22 +207,22 @@
 
 ## 画像を置いたあとの作業
 
-`data.js` の各人物に1行足すだけです（すでに対応済み。画像が無い場合は自動で頭文字の丸印になります）。
+`data.js` の各人物に1行入っています（対応済み。画像が無い場合は自動で頭文字の丸印になります）。
 
 ```js
-{ id:"hayato", name:"隼人（57）人材ビジネスの統括部長", img:"img/hayato.png", ... }
+{ "id":"hayato", "name":"隼人（57）人材ビジネスの統括部長", "img":"img/hayato.jpg", ... }
 ```
 
-| 人物 | id | ファイル名 |
-|---|---|---|
-| 隼人 | `hayato` | `img/hayato.png` |
-| 美緒 | `mio` | `img/mio.png` |
-| 大河 | `taiga` | `img/taiga.png` |
-| 紗代 | `sayo` | `img/sayo.png` |
-| 陸 | `riku` | `img/riku.png` |
-| ひなた | `hinata` | `img/hinata.png` |
-| 奏太 | `kanata` | `img/kanata.png` |
-| 美空 | `misora` | `img/misora.png` |
+| 人物 | id | ゲームが読むファイル | 原本 |
+|---|---|---|---|
+| 隼人 | `hayato` | `img/hayato.jpg` | `img/src/hayato.png` |
+| 美緒 | `mio` | `img/mio.jpg` | `img/src/mio.png` |
+| 大河 | `taiga` | `img/taiga.jpg` | `img/src/taiga.png` |
+| 紗代 | `sayo` | `img/sayo.jpg` | `img/src/sayo.png` |
+| 陸 | `riku` | `img/riku.jpg` | `img/src/riku.png` |
+| ひなた | `hinata` | `img/hinata.jpg` | `img/src/hinata.png` |
+| 奏太 | `kanata` | `img/kanata.jpg` | `img/src/kanata.png` |
+| 美空 | `misora` | `img/misora.jpg` | `img/src/misora.png` |
 
-推奨サイズ 512×512〜1024×1024 の正方形。1枚 300KB 以下に圧縮しておくと、
-研修会場の回線でも待たされません。
+**512×512・1枚50〜70KBのJPEG**にしてある。表示は最大60pxなので画質は十分で、
+8枚あわせて468KB（原寸PNGのままなら14.4MB）。会場の回線で待たされないための処置。
