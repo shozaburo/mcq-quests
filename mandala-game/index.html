@@ -122,17 +122,70 @@
   .bcell.p100{background:#a3cc9f}.bcell.p130{background:#e9d67a}
   .blegend{font-size:.65rem;color:#8a7d64;margin-top:4px}
 
-  /* ---- 山札 ---- */
+  /* ---- 手帳（マンダラ手帳をモデルにした週間行動計画ページ） ---- */
   .deckarea{text-align:center;margin:14px 0 8px}
-  .deckpile{position:relative;width:120px;height:160px;margin:0 auto 10px;cursor:pointer}
-  .deckpile .bk{position:absolute;inset:0;border-radius:10px;border:2px solid #8a7d64;
-    background:repeating-linear-gradient(45deg,#6b5f4a,#6b5f4a 6px,#7d7059 6px,#7d7059 12px);
-    box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
-  .deckpile .bk:nth-child(1){transform:translate(4px,4px)} .deckpile .bk:nth-child(2){transform:translate(2px,2px)}
-  .deckpile .bk .mk{width:54px;height:54px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-  .deckpile .bk .mk i{background:rgba(255,253,247,.65);border-radius:1px}
-  .deckpile .bk .mk i:nth-child(5){background:var(--gold)}
+  .diarybook{position:relative;width:150px;height:196px;margin:0 auto 10px;cursor:pointer;
+    perspective:900px}
+  .cover{position:absolute;inset:0;border-radius:4px 8px 8px 4px;
+    background:linear-gradient(115deg,#20344f,#2c476b 45%,#1b2c44);
+    box-shadow:0 6px 16px rgba(20,28,44,.45), inset 2px 0 0 rgba(255,255,255,.10);
+    border-left:6px solid #16233a}
+  .cover .gold{position:absolute;right:13px;top:24px;text-align:right;color:#d8b661;
+    font-size:.62rem;letter-spacing:.14em;line-height:1.7;text-shadow:0 1px 1px rgba(0,0,0,.4)}
+  .cover .corner{position:absolute;width:26px;height:26px;border:2px solid #d8b661;opacity:.85}
+  .cover .corner.tr{right:0;top:0;border-left:none;border-bottom:none;border-radius:0 8px 0 0}
+  .cover .corner.br{right:0;bottom:0;border-left:none;border-top:none;border-radius:0 0 8px 0}
+  .diarybook .edge{position:absolute;right:-4px;top:5px;bottom:5px;width:5px;border-radius:0 3px 3px 0;
+    background:repeating-linear-gradient(#fffdf7,#fffdf7 2px,#ded4bd 2px,#ded4bd 3px)}
+  .diarybook.opening .cover{animation:coverOpen .75s cubic-bezier(.3,.7,.3,1) forwards;
+    transform-origin:left center}
+  @keyframes coverOpen{to{transform:rotateY(-155deg);box-shadow:none}}
   .deckcount{font-size:.74rem;color:#8a7d64}
+
+  /* 週間行動計画ページ */
+  .wpage{background:#fffdf7;border:1.5px solid #4a86b8;border-radius:3px;padding:0;
+    overflow:hidden;box-shadow:0 6px 22px rgba(58,50,38,.3)}
+  .wpage .whead{display:flex;align-items:baseline;gap:8px;padding:6px 9px 4px;
+    border-bottom:1.5px solid #4a86b8}
+  .wpage .wmon{font-size:1.05rem;font-weight:bold;color:#1f4e79}
+  .wpage .wttl{font-size:.82rem;font-weight:bold;letter-spacing:.05em;color:#1f4e79}
+  .wpage .wen{font-size:.56rem;color:#7ba3c4;letter-spacing:.04em}
+  .wbig{text-align:center;padding:9px 6px 7px;background:
+    repeating-linear-gradient(#fbfaf3,#fbfaf3 11px,#eef3f7 11px,#eef3f7 12px)}
+  .wbig .wrange{font-size:1.65rem;font-weight:bold;color:#1f4e79;letter-spacing:.02em;line-height:1.15}
+  .wbig .wrange small{font-size:.9rem}
+  .wbig .wsub{font-size:.66rem;color:#6d6250;letter-spacing:.12em;margin-top:2px}
+  .wdays{display:grid;grid-template-columns:repeat(7,1fr);gap:0;border-top:1px solid #b8d0e2}
+  .wday{border-right:1px solid #d6e3ee;padding:3px 1px 4px;text-align:center;
+    background:repeating-linear-gradient(#fff,#fff 6px,#f4f8fb 6px,#f4f8fb 7px)}
+  .wday:last-child{border-right:none}
+  .wday.sat{color:#2f6fa8}.wday.sun{color:#b3341e}
+  .wday .wd{font-size:.55rem;color:#8a7d64}
+  .wday .wn{font-size:.86rem;font-weight:bold;line-height:1.2}
+  .wday.today{background:#fdf6e0;box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .wgoal{margin:0;padding:9px 10px 11px;background:#dbeaf4;border-top:1.5px solid #4a86b8}
+  .wgoal .wglabel{font-size:.62rem;color:#1f4e79;font-weight:bold;letter-spacing:.06em}
+  .wgoal .wgen{font-size:.5rem;color:#6f9ec4}
+  .verdict{margin-top:6px;text-align:center;padding:11px 8px;border-radius:6px;background:#fffdf7;
+    border:2.5px solid var(--accent2);animation:stamp .5s cubic-bezier(.2,1.6,.4,1)}
+  .verdict.risk{border-color:#a33b2e}
+  .verdict .vt{font-size:1.5rem;font-weight:bold;letter-spacing:.1em;color:var(--accent2);line-height:1.25}
+  .verdict.risk .vt{color:#a33b2e}
+  .verdict .vs{font-size:.76rem;color:#5a5040;margin-top:3px;line-height:1.55}
+  @keyframes stamp{0%{transform:scale(2.1) rotate(-9deg);opacity:0}
+    60%{transform:scale(.94) rotate(1.5deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+  .pageflip{animation:pageIn .62s cubic-bezier(.25,.75,.3,1);transform-origin:left center}
+  @keyframes pageIn{0%{transform:rotateY(-108deg);opacity:0}
+    62%{transform:rotateY(7deg);opacity:1}100%{transform:rotateY(0)}}
+
+  /* 盤面から分野を選ぶモード */
+  .acell.pickable{cursor:pointer;border-color:var(--accent2);
+    box-shadow:0 0 0 1.5px var(--accent2);animation:pickPulse 1.7s infinite}
+  @keyframes pickPulse{50%{box-shadow:0 0 0 3px rgba(62,107,72,.34)}}
+  .acell.pickable:active{transform:scale(.97)}
+  .pickbar{background:var(--accent2);color:#fff;border-radius:9px;padding:8px 11px;
+    font-size:.86rem;text-align:center;margin:6px 0;box-shadow:var(--shadow)}
+  .pickbar b{font-size:.95rem}
 
   /* ---- ルーレット ---- */
   .rwrap{position:relative;width:190px;max-width:64vw;margin:0 auto 8px;aspect-ratio:1}
@@ -168,10 +221,6 @@
   .dicecap{font-size:.8rem;color:#8a7d64;letter-spacing:.1em}
 
   /* ---- カードをめくる ---- */
-  .deckpile.dealing .bk:nth-child(3){animation:dealOut .42s ease-in forwards}
-  @keyframes dealOut{
-    to{transform:translate(0,-34px) rotate(-7deg) scale(1.06);opacity:.15}
-  }
   .gamecard{animation:flipIn .52s cubic-bezier(.2,.75,.3,1);transform-origin:50% 55%}
   @keyframes flipIn{
     0%{transform:rotateY(84deg) translateY(18px) scale(.92);opacity:0}
@@ -297,15 +346,19 @@
       <button id="tab-a" class="on">A型（設計図）</button>
       <button id="tab-b">B型（実践64マス）</button>
     </div>
+    <div id="pickbar"></div>
     <div id="aview"></div>
     <div id="bview" style="display:none"></div>
-    <div class="deckarea">
-      <div class="deckpile" id="deckpile">
-        <div class="bk"></div><div class="bk"></div>
-        <div class="bk"><div class="mk"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="deckarea" id="deckarea">
+      <div class="diarybook" id="diarybook">
+        <div class="edge"></div>
+        <div class="cover">
+          <span class="corner tr"></span><span class="corner br"></span>
+          <span class="gold">2027<br>MANDALA<br>DIARY</span>
+        </div>
       </div>
       <div class="deckcount" id="deckcount"></div>
-      <button class="btn" id="btn-draw">カードを引く</button>
+      <button class="btn" id="btn-draw">今週の手帳をめくる</button>
     </div>
     <div class="roster" id="roster"></div>
   </div>
@@ -329,7 +382,7 @@
   </footer>
 </div>
 
-<script src="data.js?v=5"></script>
+<script src="data.js?v=6"></script>
 <script>
 "use strict";
 const D = window.MANDALA_LIFE;
@@ -674,24 +727,30 @@ function renderAll(gains){
   document.getElementById("meta").innerHTML =
     `第${S.week}週 ${weekDate(S.week)}<br>Q${q}（あと${q*QWEEKS-S.week+1}週）${pl.focus?`　♦${ANAME[pl.focus]}`:""}`;
   document.getElementById("yearrail").style.width = Math.round(100*(S.week-1)/WEEKS)+"%";
-  document.getElementById("deckcount").textContent = `山札 残り ${S.deck.length} 枚 / ${DECK_SIZE}`;
+  document.getElementById("deckcount").textContent = `のこりの週 ${S.deck.length} / ${DECK_SIZE}`;
   renderMeters(pl); renderA(pl,p,gains); renderB(pl,p); renderRoster();
 }
 function renderA(pl,p,gains){
   const cells = new Array(9).fill("");
   cells[4] = `<div class="acell center"><div class="plabel">中心の言葉</div>
     <div class="purpose">${esc(p.centerOptions[pl.center])}</div></div>`;
+  const picking = S.picking;
   AKEYS.forEach(ak=>{
     const v = areaPct(pl,ak);
     const g = gains && gains[ak];
-    cells[MANDALA_CELL[ak]] = `<div class="acell${g?" hot":""}">
-      ${g?`<span class="gain">+${g}</span>`:""}
+    cells[MANDALA_CELL[ak]] = `<div class="acell${g?" hot":""}${picking?" pickable":""}"
+      ${picking?`data-pick="${ak}"`:""}>
+      ${g?`<span class="gain">${g>0?"+":""}${g}</span>`:""}
       <div class="aname">${ak}. ${ANAME[ak]}${pl.focus===ak?" ♦":""}</div>
       <div class="agoal">${esc(p.areas[ak].goalOptions[pl.goals[ak]])}</div>
       <div class="apct">${v}%</div>
       <div class="bar"><i style="width:${Math.min(v,100)}%"></i></div></div>`;
   });
-  document.getElementById("aview").innerHTML = `<div class="agrid">${cells.join("")}</div>`;
+  const av = document.getElementById("aview");
+  av.innerHTML = `<div class="agrid">${cells.join("")}</div>`;
+  if(picking) av.querySelectorAll("[data-pick]").forEach(el=>{
+    el.onclick = ()=>{ endAreaPick(); rollProgress(el.dataset.pick); };
+  });
 }
 function renderB(pl,p){
   const g = Array.from({length:9},()=>new Array(9).fill(null));
@@ -749,13 +808,22 @@ function grantProgress(pl, ak, gainPct){
 const overlay = document.getElementById("overlay");
 const cardbox = document.getElementById("cardbox");
 document.getElementById("btn-draw").onclick = drawCard;
-document.getElementById("deckpile").onclick = ()=>{ if(!busy) drawCard(); };
+document.getElementById("diarybook").onclick = ()=>{ if(!busy) drawCard(); };
 /* 手番が詰まらないよう、途中で失敗しても必ずボタンを戻す */
 function unstick(msg){
   busy = false;
   overlay.classList.remove("active");
   document.getElementById("btn-draw").disabled = false;
   if(msg) console.error(msg);
+}
+/* 週の7日ぶんの日付（月曜はじまり） */
+function weekDays(w){
+  const d0 = new Date(2027,0,4); d0.setDate(d0.getDate()+7*(w-1));
+  const names = ["月","火","水","木","金","土","日"];
+  return names.map((nm,i)=>{
+    const d = new Date(d0); d.setDate(d.getDate()+i);
+    return { nm, m:d.getMonth()+1, d:d.getDate(), sat:i===5, sun:i===6 };
+  });
 }
 async function drawCard(){
   if(busy || !S) return; busy = true;
@@ -764,46 +832,88 @@ async function drawCard(){
     if(!Array.isArray(S.deck) || S.deck.length === 0) S.deck = newDeck();
     const type = S.deck.pop();
     S.drawn = (S.drawn||0) + 1;
-    /* 山札から1枚が抜ける演出 */
-    const pile = document.getElementById("deckpile");
-    pile.classList.add("dealing");
-    await wait(FAST?40:380);
-    pile.classList.remove("dealing");
-    document.getElementById("deckcount").textContent = `山札 残り ${S.deck.length} 枚 / ${DECK_SIZE}`;
-    if(type === "progress") openProgressCard();
-    else openRiskCard();
+    /* 手帳の表紙がひらく */
+    const book = document.getElementById("diarybook");
+    book.classList.add("opening");
+    await wait(FAST?60:620);
+    book.classList.remove("opening");
+    document.getElementById("deckcount").textContent = `のこりの週 ${S.deck.length} / ${DECK_SIZE}`;
+    await openDiaryPage(type);
   }catch(e){
     unstick(e);
-    alert("カードの表示でつまずきました。ページを再読み込みすると続きから再開できます。\n（" + e.message + "）");
+    alert("手帳の表示でつまずきました。ページを再読み込みすると続きから再開できます。\n（" + e.message + "）");
+  }
+}
+
+/* ---- 週間行動計画のページをめくる ---- */
+async function openDiaryPage(type){
+  const pl = cur();
+  const days = weekDays(S.week);
+  const first = days[0], last = days[6];
+  cardbox.className = "gamecard noflip";
+  cardbox.style.padding = "0";
+  cardbox.innerHTML = `<div class="wpage pageflip">
+    <div class="whead">
+      <span class="wmon">${first.m}月</span>
+      <span class="wttl">週間行動計画</span>
+      <span class="wen">Activities This Week</span>
+    </div>
+    <div class="wbig">
+      <div class="wrange">${first.m}<small>/</small>${first.d}<small> 〜 </small>${last.m}<small>/</small>${last.d}</div>
+      <div class="wsub">第${S.week}週　${esc(pl.name)}</div>
+    </div>
+    <div class="wdays">
+      ${days.map(d=>`<div class="wday${d.sat?" sat":""}${d.sun?" sun":""}">
+        <div class="wd">${d.nm}</div><div class="wn">${d.d}</div></div>`).join("")}
+    </div>
+    <div class="wgoal">
+      <span class="wglabel">■ 今週の目標・役割</span>
+      <span class="wgen">Weekly Objective / Results</span>
+      <div id="verdict"></div>
+    </div>
+  </div>`;
+  overlay.classList.add("active");
+  await wait(FAST?60:640);
+
+  const v = document.getElementById("verdict");
+  if(type === "progress"){
+    v.innerHTML = `<div class="verdict">
+      <div class="vt">アクション</div>
+      <div class="vs">八分野から、この一週間で動かすものを選ぶ</div></div>`;
+    await wait(FAST?80:1250);
+    overlay.classList.remove("active");
+    cardbox.style.padding = "";
+    startAreaPick();                 // 盤面のマンダラで選ばせる
+  } else {
+    v.innerHTML = `<div class="verdict risk">
+      <div class="vt">リスク発生</div>
+      <div class="vs">突然のトラブル（四苦八苦）か、<br>それとも幸運の縁か</div></div>`;
+    await wait(FAST?80:1450);
+    cardbox.style.padding = "";
+    openRiskCard();
   }
 }
 
 /* ---- 進捗報告カード ---- */
 const FALLBACK_FLAVOR = "「今週、何が動きましたか」——手帳を開いて、進んだ分野をひとつ選ぶ。";
-function openProgressCard(){
+/* アクション：盤面のマンダラを直接タップして分野を選ぶ */
+function startAreaPick(){
   const pl = cur();
   const fl = Array.isArray(D.progressFlavors) && D.progressFlavors.length ? D.progressFlavors : [FALLBACK_FLAVOR];
   const flavor = fl[Math.floor(Math.random()*fl.length)];
-  const areas = AKEYS.map(k=>({k, v:areaPct(pl,k)}));
-  const lowest = Math.min(...areas.map(a=>a.v));
-  cardbox.className = "gamecard prog";
-  cardbox.innerHTML = `
-    <span class="ctype">進捗報告</span><span class="ctype plain">${weekDate(S.week)}</span>
-    <h3>${esc(pl.name)}さんの番です</h3>
-    <div class="flavor">${esc(flavor)}</div>
-    <p class="situ"><strong>伸ばす分野を一つ選んでください。</strong>賽を振り、出た目×10%だけ進みます。</p>
-    <div class="areapick" id="areapick"></div>
-    <p class="note">いちばん低い分野には印がついています。調和の係数は、一番低い分野で決まります。</p>`;
-  overlay.classList.add("active");
-  const ap = document.getElementById("areapick");
-  areas.forEach(a=>{
-    const b=document.createElement("button");
-    if(a.v===lowest) b.classList.add("low");
-    if(pl.focus===a.k) b.classList.add("focus");
-    b.innerHTML = `<b>${a.k}. ${ANAME[a.k]}</b>${a.v}%${pl.focus===a.k?" ♦":""}`;
-    b.onclick = ()=>rollProgress(a.k);
-    ap.appendChild(b);
-  });
+  S.picking = true;
+  setTab("a");
+  document.getElementById("deckarea").style.display = "none";
+  document.getElementById("pickbar").innerHTML =
+    `<div class="pickbar"><b>今週、動かす分野をマンダラから選んでください</b><br>
+      <span style="font-size:.78rem;opacity:.9">${esc(flavor)}</span></div>`;
+  renderAll();
+  document.getElementById("pickbar").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+function endAreaPick(){
+  S.picking = false;
+  document.getElementById("pickbar").innerHTML = "";
+  document.getElementById("deckarea").style.display = "";
 }
 /* 賽の目をドットで（3×3の升目に配置） */
 const DICE_DOTS = {1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
@@ -817,11 +927,12 @@ function setDie(el, n){
 }
 async function rollProgress(ak){
   const pl = cur();
-  cardbox.className = "gamecard prog noflip";
+  cardbox.className = "gamecard prog";
   cardbox.innerHTML = `
-    <span class="ctype">進捗報告</span>
-    <h3>${ANAME[ak]}</h3>
+    <span class="ctype">アクション</span><span class="ctype plain">${ANAME[ak]}</span>
+    <h3>${esc(D.profiles[pl.profile].areas[ak].goalOptions[pl.goals[ak]])}</h3>
     <div class="dicebox">${dieHTML(1,"die")}<div class="dicecap" id="dcap">賽を振っています…</div></div>`;
+  overlay.classList.add("active");
   const die = document.getElementById("die");
   let n = 1 + Math.floor(Math.random()*6);
   if(pl.focus === ak) n = Math.min(6, n+1);       // ♦重点分野はよく進む
@@ -837,7 +948,7 @@ async function rollProgress(ak){
   const gain = grantProgress(pl, ak, n*10);
   const done = pl.progress[ak].filter(v=>v>=60).length;
   cardbox.innerHTML = `
-    <span class="ctype">進捗報告</span>
+    <span class="ctype">アクション</span>
     <h3>${ANAME[ak]}　<span style="color:var(--accent2)">＋${gain}%</span></h3>
     <div class="dicebox">${dieHTML(n)}<div class="dicecap">${n} の目 ＝ ${n*10}%</div></div>
     <div class="effects"><span class="up">${ANAME[ak]} の到達度 ${areaPct(pl,ak)}%</span>
@@ -877,7 +988,96 @@ async function openRiskCard(){
   document.getElementById("rhit").innerHTML = `<strong style="color:var(--accent);font-size:1rem">${ANAME[ak]}</strong> の出来事`;
   await wait(FAST?60:600);
   pl.lastArea = ak;
-  openEpisode(drawEpisode(pl,ak), ak);
+  /* リスクの3回に1回ほどは、賽を振る運命の回（四苦八苦／幸運の縁） */
+  const fates = Array.isArray(D.fateCards) ? D.fateCards : [];
+  if(fates.length && Math.random() < 0.3) openFate(fates[Math.floor(Math.random()*fates.length)], ak);
+  else openEpisode(drawEpisode(pl,ak), ak);
+}
+
+/* ---- 運命の回：賽の目のぶんだけ、劇的に動く ---- */
+function openFate(fc, ak){
+  const pl = cur();
+  const woe = fc.kind === "woe";
+  cardbox.className = "gamecard " + (woe ? "risk" : "prog");
+  cardbox.innerHTML = `
+    <span class="ctype ${woe?"risk":""}">${woe?"四苦八苦":"幸運の縁"}</span>
+    <span class="ctype plain">${ANAME[ak]}</span>
+    <h3>${esc(fc.title)}</h3>
+    <p class="situ">${esc(fc.text)}</p>
+    <div class="dicebox">${dieHTML(1,"fdie")}<div class="dicecap" id="fcap">賽を振ってください</div></div>
+    <button class="btn" id="f-roll">賽を振る</button>`;
+  document.getElementById("f-roll").onclick = ()=>resolveFate(fc, ak);
+}
+async function resolveFate(fc, ak){
+  const pl = cur();
+  const btn = document.getElementById("f-roll");
+  btn.disabled = true; btn.textContent = "…";
+  const die = document.getElementById("fdie");
+  die.classList.add("rolling");
+  const n = 1 + Math.floor(Math.random()*6);
+  for(let i=0;i<(FAST?3:11);i++){ setDie(die, 1+Math.floor(Math.random()*6)); await wait(FAST?25:(60+i*7)); }
+  die.classList.remove("rolling"); setDie(die, n); die.classList.add("settled");
+  document.getElementById("fcap").textContent = `${n} の目`;
+  await wait(FAST?60:650);
+
+  const e = fc.effect, sign = e.sign || 1;
+  const lines = [], mDelta = {}, gains = {};
+  const moveMeter = (key, amt)=>{
+    const before = pl.m[key];
+    pl.m[key] = Math.max(0, Math.min(100, before + amt));
+    const real = pl.m[key] - before;
+    if(real){ mDelta[key] = real;
+      const mt = METERS.find(x=>x.key===key);
+      lines.push(`<span class="mchg" style="color:${real>0?mt.color:"#b3341e"}">${mt.name} ${real>0?"+":""}${real}</span>`);
+    }
+  };
+  if(e.type === "metersDice"){
+    e.targets.forEach(k=>moveMeter(k, sign*n*5));
+  } else if(e.type === "moneyDice"){
+    moveMeter("okane", sign*n*5);
+  } else if(e.type === "areaDice"){
+    const before = areaPct(pl,ak);
+    if(sign > 0) grantProgress(pl, ak, n*10);
+    else loseProgress(pl, ak, n*10);
+    const d = areaPct(pl,ak) - before;
+    gains[ak] = d;
+    lines.push(`<span class="${d>=0?"up":"down"}">${ANAME[ak]} の到達度 ${d>0?"+":""}${d}%（いま ${areaPct(pl,ak)}%）</span>`);
+  } else if(e.type === "areaReset"){
+    const before = areaPct(pl,ak);
+    pl.progress[ak] = [0,0,0,0,0,0,0,0];
+    gains[ak] = -before;
+    lines.push(`<span class="down">${ANAME[ak]} の進捗が 0% に戻りました（${before}% → 0%）</span>`);
+  }
+  pl.insights.push(fc.insight);
+  const pr = PRN[fc.principle] || {no:8,name:"継続改革"};
+  cardbox.innerHTML = `
+    <span class="ctype ${fc.kind==="woe"?"risk":""}">${fc.kind==="woe"?"四苦八苦":"幸運の縁"}</span>
+    <h3>${esc(fc.title)}</h3>
+    <div class="dicebox">${dieHTML(n)}<div class="dicecap">${n} の目</div></div>
+    <div class="effects">${lines.join("<br>")||"（変化なし）"}</div>
+    <div class="insightbox"><span class="principlechip">第${pr.no}原則「${pr.name}」</span><br>
+      <span class="il">気づき</span><br>${esc(fc.insight)}</div>
+    <button class="btn" id="rk-close">次の人へ</button>`;
+  document.getElementById("rk-close").onclick = ()=>{
+    overlay.classList.remove("active");
+    renderAll(gains);
+    flashMeters(mDelta);
+    nextTurn();
+  };
+}
+/* 進捗を減らす（遅れているマスは削れない＝進んだマスから崩れる） */
+function loseProgress(pl, ak, lossPct){
+  let pool = lossPct * 8;
+  const cells = pl.progress[ak];
+  let guard = 0;
+  while(pool > 0 && guard++ < 200){
+    let idx=-1, maxV=-1;
+    for(let i=0;i<8;i++){ if(cells[i]>maxV){ maxV=cells[i]; idx=i; } }
+    if(maxV <= 0) break;
+    const prev = [...LADDER].reverse().find(v=>v<maxV);
+    const cost = maxV - prev;
+    if(pool >= cost){ cells[idx]=prev; pool -= cost; } else break;
+  }
 }
 function drawEpisode(pl, ak){
   const p = D.profiles[pl.profile];
@@ -980,6 +1180,18 @@ function snapshotQ(q){
              pcts:Object.fromEntries(AKEYS.map(k=>[k,areaPct(pl,k)])) };
   })});
 }
+/* 四半期の合計点（各四半期の得点を積み上げる）。心・体・お金は持ち越し、進捗だけリセット */
+function totalScore(pl, idx){
+  const past = (S.qlog||[]).reduce((a,x)=>a + (x.players[idx] ? x.players[idx].score : 0), 0);
+  const nowInQ = (S.week-1) % QWEEKS !== 0 || S.week===1;   // 四半期の途中なら現在分も足す
+  return past + (nowInQ ? scoreOf(pl).score : 0);
+}
+function resetQuarterProgress(){
+  S.players.forEach(pl=>{
+    pl.progress = Object.fromEntries(AKEYS.map(k=>[k,[0,0,0,0,0,0,0,0]]));
+    pl.usedEp = [];
+  });
+}
 function mentorFor(pl){
   const ps = AKEYS.map(k=>({k,v:areaPct(pl,k)})).sort((a,b)=>a.v-b.v);
   const low=ps[0], high=ps[ps.length-1];
@@ -1025,11 +1237,16 @@ function openReview(q){
   let idx = 0;
   const pickNext = ()=>{
     if(idx >= S.players.length){
-      body.innerHTML = `<p class="situ" style="margin-top:10px">全員の重点が決まりました。</p>
+      body.innerHTML = `<p class="situ" style="margin-top:10px">全員の重点が決まりました。<br>
+        <strong>次の四半期は、8分野の進捗が 0% に戻ります。</strong>
+        三か月は三か月で区切って積む——それがOKRの刻みです。
+        心・体・お金の持ち点は、そのまま持ち越します。</p>
         <button class="btn" id="q-go">${QNAME[q+1]}へ進む</button>
         <div style="height:8px"></div>
         <button class="btn sub" id="q-pause">ここで一区切りにする（記録を見る）</button>`;
       document.getElementById("q-go").onclick = ()=>{
+        resetQuarterProgress();            // 進捗は四半期ごとに仕切り直し
+        save();
         overlay.classList.remove("active"); busy=false;
         document.getElementById("btn-draw").disabled=false; renderAll();
       };
@@ -1047,11 +1264,7 @@ function openReview(q){
       const b = document.createElement("button");
       if(v === Math.min(...AKEYS.map(x=>areaPct(pl,x)))) b.classList.add("low");
       b.innerHTML = `<b>${k}. ${ANAME[k]}</b>${v}%`;
-      b.onclick = ()=>{
-        pl.focus = k;
-        grantProgress(pl, k, 10);        // 重点を決める＝もう動き出している
-        idx++; save(); pickNext();
-      };
+      b.onclick = ()=>{ pl.focus = k; idx++; save(); pickNext(); };
       fp.appendChild(b);
     });
   };
@@ -1068,12 +1281,14 @@ function rankOf(sc){
 }
 function endGame(uptoQ){
   const full = (uptoQ===4);
-  const rows = S.players.map((pl,i)=>({pl, r:scoreOf(pl), i})).sort((a,b)=>b.r.score-a.r.score);
+  const rows = S.players.map((pl,i)=>({pl, r:scoreOf(pl), i, tot:totalScore(pl,i)}))
+                        .sort((a,b)=>b.tot-a.tot);
   let html = `<div class="panel">
     <h3 style="font-size:1.02rem">${full?"一年（2027年）の結果":QNAME[uptoQ]+"までの結果"}</h3>
+    <p class="note" style="margin-bottom:6px">得点は四半期ごとの積み上げです（進捗は四半期ごとに0%へ戻り、心・体・お金は持ち越し）。</p>
     ${rows.map((x,ri)=>`<div class="statrow"><span>${["🥇","🥈","🥉"][ri]||"　"} ${esc(x.pl.name)}
-      <br><small style="color:#8a7d64">${esc(D.profiles[x.pl.profile].name.split("（")[0])}／8分野平均 ${Math.round(x.r.avg)}%　調和 ${x.r.coef.toFixed(2)}　心体財 ${Math.round(x.r.mAvg)}</small></span>
-      <strong>${x.r.score}点${full&&ri===0?` <span style="color:var(--gold)">${rankOf(x.r.score)[0]}</span>`:""}</strong></div>`).join("")}
+      <br><small style="color:#8a7d64">${esc(D.profiles[x.pl.profile].name.split("（")[0])}／この四半期 ${Math.round(x.r.avg)}%　調和 ${x.r.coef.toFixed(2)}　心体財 最低${x.r.mMin}</small></span>
+      <strong>${x.tot}点${full&&ri===0?` <span style="color:var(--gold)">${rankOf(x.tot)[0]}</span>`:""}</strong></div>`).join("")}
     </div>`;
   rows.forEach(({pl,r})=>{
     const p = D.profiles[pl.profile];
