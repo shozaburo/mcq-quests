@@ -328,9 +328,9 @@
       <p class="note">山札は81枚。13週＝1四半期で一区切りになります。</p>
     </div>
     <div class="panel">
-      <label>何人で遊びますか</label>
+      <label>何人で遊びますか（1〜8人）</label>
       <div class="pcount" id="pcount"></div>
-      <p class="note">1台を回して交代で遊びます。4〜6人で30〜45分（1四半期）が目安です。</p>
+      <p class="note">1台を回して交代で遊びます。4〜6人で30〜45分（1四半期）が目安です。8人まで遊べます。</p>
     </div>
     <button class="btn" id="btn-players">この人数ではじめる</button>
     <div style="height:8px"></div>
@@ -403,7 +403,7 @@
   </footer>
 </div>
 
-<script src="data.js?v=7"></script>
+<script src="data.js?v=8"></script>
 <script>
 "use strict";
 const D = window.MANDALA_LIFE;
@@ -497,7 +497,7 @@ function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.r
 let nPlayers = 4;
 (function initPlayers(){
   const box = document.getElementById("pcount");
-  for(let n=1;n<=6;n++){
+  for(let n=1;n<=8;n++){
     const b=document.createElement("button");
     b.textContent = n+"人"; b.dataset.n=n;
     if(n===4) b.classList.add("sel");
