@@ -21,7 +21,7 @@
     '🚧 <b>こちらは準備中のステージです。</b>' +
     '<span style="display:block;opacity:.9;margin-top:2px">' +
     '動画・スライド・まとめカードがまだ入っていません。' +
-    'Gemini編は <a href="../google64/map.html" style="color:#ffd700;text-decoration:underline">こちらの盤</a> をお使いください。</span>';
+    'Google編は <a href="../google64/map.html" style="color:#ffd700;text-decoration:underline">こちらの盤</a> をお使いください。</span>';
   function put() { document.body.insertBefore(d, document.body.firstChild); }
   if (document.body) put();
   else document.addEventListener('DOMContentLoaded', put);

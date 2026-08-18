@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-08T09:11:53.125Z",
+ "generated": "2026-08-11T19:36:26.163Z",
  "stages": [
   {
    "key": "google64",
@@ -21,7 +21,7 @@
        "name": "アカウントの整理と2段階認証によるセキュリティ強化",
        "doing": "自分のGoogleアカウントで2段階認証を有効化し、バックアップコードを安全な場所に保存します。",
        "url": {
-        "video": "https://drive.google.com/file/d/12n-8uD8GAHCKhEMNxaUoJkYzxj07U-lz/view",
+        "video": "https://drive.google.com/file/d/video/A1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A1.jpg",
         "archive": "https://drive.google.com/drive/folders/1zHzwKZesZZ759uqvyNjMJLfHhv3W-wHl",
@@ -38,7 +38,7 @@
        "name": "Chromeプロファイル活用による複数アカウントの切り替え",
        "doing": "Chromeに仕事用・個人用など用途の異なるプロファイルをもう1つ作成し、実際に切り替えて使ってみます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1yLQgQGU667eQvntSnyeIkuplXC_lAcDN/view",
+        "video": "https://drive.google.com/file/d/video/A2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A2.jpg",
         "archive": "https://drive.google.com/drive/folders/1qIsGylfqBuo8srdrWbwnARsjVJNYERJM",
@@ -55,7 +55,7 @@
        "name": "「8番」の数字を用いた3階層フォルダ管理術",
        "doing": "自分のGoogleドライブに「01_進行中」「08_アーカイブ」のような番号付きフォルダを3階層以内で作成し、実際のファイルを1つ以上移動して整理します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1IeX4OO8k7zM4qy2CxAdgX_GRgU0ZIbyL/view",
+        "video": "https://drive.google.com/file/d/video/A3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A3.jpg",
         "archive": "https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu",
@@ -72,7 +72,7 @@
        "name": "AI検索最適化（ACO）のためのファイル命名規則",
        "doing": "自分の実務ファイル3件以上を「YYYYMMDD_案件名_書類種別_v01」形式にリネームします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1q63A9VQEPfBtU8j552bzA9q6I0rsQ646/view",
+        "video": "https://drive.google.com/file/d/video/A4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A4.jpg",
         "archive": "https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu",
@@ -89,7 +89,7 @@
        "name": "上位階層への漏洩を防ぐ共有権限の適切な設定",
        "doing": "自分のドライブにある共有フォルダで「親フォルダから権限を継承しない」と「閲覧者は他人と共有できない」の設定を実際に適用します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1Ty17UMdok6vBPWy72cCWUtZDDd0Ysrta/view",
+        "video": "https://drive.google.com/file/d/video/A5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A5.jpg",
         "archive": "https://drive.google.com/drive/folders/1N1blWcYoyncBLD83KUWPJZhXInH1vyhz",
@@ -106,7 +106,7 @@
        "name": "スマホアプリを用いた書類・レシートのダイレクトスキャン",
        "doing": "スマホのGoogleドライブアプリのスキャン機能で、手元の書類やレシートを実際に撮影してPDF化し、命名規則を付けて保存します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1LNX9WsqdBDEGojE3l-MhKSwJbtpqJ4oE/view",
+        "video": "https://drive.google.com/file/d/video/A6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A6.jpg",
         "archive": "https://drive.google.com/drive/folders/1Ka86GJ70bQ0cjRFmFHvohH0aFygVMP6l",
@@ -123,7 +123,7 @@
        "name": "チーム作業を円滑にする共有ドライブの構築と運用",
        "doing": "仲間・同僚と使う共有ドライブを1つ作成し、メンバーを1人以上招待して権限を付与します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1AVcSa1DEqjmswG8KKUWiDHESyN-TaY6i/view",
+        "video": "https://drive.google.com/file/d/video/A7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A7.jpg",
         "archive": "https://drive.google.com/drive/folders/1N1blWcYoyncBLD83KUWPJZhXInH1vyhz",
@@ -140,7 +140,7 @@
        "name": "メール添付に頼らないドライブリンクによる大容量データ共有",
        "doing": "メール添付の代わりに、ファイルを「制限付き（指定ユーザーのみ）」のドライブリンクで仲間・同僚に共有して受け取ってもらいます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ye8OXG5sGzse05hp4MxWQnmu1hmQZU3d/view",
+        "video": "https://drive.google.com/file/d/video/A8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/A8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/A8.jpg",
         "archive": "https://drive.google.com/drive/folders/1PJ7pKoXc9g-2EZZ_Ktd14v_kL1nqN0Xv",
@@ -167,7 +167,7 @@
        "name": "プロンプトエンジニアリングの極意（5W1Hフレームワーク）",
        "doing": "自分の実務で今まさに困っている課題を1つ選び、5W1Hフレームワーク（役割・目的・対象・形式・制約・例）をすべて明示したプロンプトを書いてGeminiに解決させましょう。比較のため、最初に曖昧な一文だけの指示でも同じ課題を聞き、回答の差を体",
        "url": {
-        "video": "https://drive.google.com/file/d/1jpPBY0ZTISDAi4vT23Sh_vIDU1aD8XVN/view",
+        "video": "https://drive.google.com/file/d/video/B1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B1.jpg",
         "archive": "https://drive.google.com/drive/folders/1PJ7pKoXc9g-2EZZ_Ktd14v_kL1nqN0Xv",
@@ -184,7 +184,7 @@
        "name": "ディープリサーチ機能による高度な市場調査と競合分析",
        "doing": "自社の商品・サービス、または自分の業界について、GeminiのDeep Research機能で市場調査か競合分析を実行しましょう。提示された調査計画を確認・承認し、出典URL付きのレポートを完成させてください。テーマは実務で本当に知りたいも",
        "url": {
-        "video": "https://drive.google.com/file/d/1GWI2VF7EcpnKZaFadu_RHMKR9DFWgdt5/view",
+        "video": "https://drive.google.com/file/d/video/B2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B2.jpg",
         "archive": "https://drive.google.com/drive/folders/1qiqweHA55jSvA505vcbCE9kZdMeE4kQh",
@@ -201,7 +201,7 @@
        "name": "マルチモーダル活用（画像解析・手書き資料のデータ化）",
        "doing": "自分の実務で発生した手書きメモ・ホワイトボードの板書・受け取った名刺のいずれかをスマホで撮影し、Geminiに読み込ませてテキスト化（または議事録形式・表形式への変換）を実行しましょう。変換結果が実際に使える精度か、元の画像と見比べて確認し",
        "url": {
-        "video": "https://drive.google.com/file/d/1pmzz84nSj22uQNGLTohIypKj_0v4zGH4/view",
+        "video": "https://drive.google.com/file/d/video/B3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B3.jpg",
         "archive": "https://drive.google.com/drive/folders/1rwjZmdLR0__L0e2nkjRKhPRgg3ZLfTqn",
@@ -218,7 +218,7 @@
        "name": "Gemini Canvasを用いた文書の構成案作成とリライト技術",
        "doing": "自分が実務で作成中（または近々作成予定）の文書を1つ選び、GeminiのCanvasモードで構成案の作成かリライトを実行しましょう。「この段落をもっと柔らかく」「ここに表を追加」など、具体的な編集指示を最低2回出して、目の前で文書が書き換わ",
        "url": {
-        "video": "https://drive.google.com/file/d/14JpGCDG_bnV2QhIUKVSYp0plV-L0VPDL/view",
+        "video": "https://drive.google.com/file/d/video/B4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B4.jpg",
         "archive": "https://drive.google.com/drive/folders/1rwjZmdLR0__L0e2nkjRKhPRgg3ZLfTqn",
@@ -235,7 +235,7 @@
        "name": "多様なソース（PDF/URL/Googleドライブ）のインポートと管理",
        "doing": "自分の業務テーマで新規ノートブックをNotebookLMに作成し、PDF・URL・Googleドキュメント（またはYouTube）など、種類の異なるソースを3つ以上取り込みましょう。実際に業務で参照している資料を使い、取り込み後にソース一覧",
        "url": {
-        "video": "https://drive.google.com/file/d/1gcspzqfoD129kJOSToQZNeWnGHScrvTE/view",
+        "video": "https://drive.google.com/file/d/video/B5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B5.jpg",
         "archive": "https://drive.google.com/drive/folders/1MwqzDPG-K2sB9mHUmpJkXelGVLk5jpAw",
@@ -252,7 +252,7 @@
        "name": "引用（シテーション）を用いた根拠のある正確なQ&A対応",
        "doing": "B5で作成したノートブック（または業務資料を入れた任意のノートブック）に、実務で実際に確認したい質問を投げかけましょう。回答に付いた番号付き引用をクリックして元ソースの該当箇所にジャンプし、回答内容が根拠と一致しているかを自分の目で検証して",
        "url": {
-        "video": "https://drive.google.com/file/d/1xTv_feTsWeGS3BODCrX6fmHTTJk7xS6f/view",
+        "video": "https://drive.google.com/file/d/video/B6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B6.jpg",
         "archive": "https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8",
@@ -269,7 +269,7 @@
        "name": "「第2の脳」構築：膨大な情報をAIに学習させ仕組み化する技術",
        "doing": "自分の発信物（ブログ・SNS投稿・録音の文字起こし）や読書メモ、業務資料など「自分の頭の中」を表すソースを5つ以上、1つのノートブックに集約して「第2の脳」を作りましょう。仕上げに「私の考え方だとこの課題にどう取り組む？」のような自分視点の",
        "url": {
-        "video": "https://drive.google.com/file/d/142CLjo5gSW7fAel65UX6jSKy2jqnmcs7/view",
+        "video": "https://drive.google.com/file/d/video/B7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B7.jpg",
         "archive": "https://drive.google.com/drive/folders/1NyBKoBwNhoZUu1F-Uq33bAhHsZdZjNl-",
@@ -286,7 +286,7 @@
        "name": "カスタムGem（ジェム）作成による業務専用AI開発",
        "doing": "自分の定型業務（日報作成・議事録要約・メール下書きなど）を1つ選び、Gem managerで業務専用Gemを作成しましょう。役割と指示を設定して自分で動作確認したら、同僚や仲間に共有して実際に1回使ってもらい、感想を一言もらってください。",
        "url": {
-        "video": "https://drive.google.com/file/d/1wlRUPmCGy6Rkc7FtbGR8fs5EAckTbL_b/view",
+        "video": "https://drive.google.com/file/d/video/B8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/B8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/B8.jpg",
         "archive": "https://drive.google.com/drive/folders/1NyBKoBwNhoZUu1F-Uq33bAhHsZdZjNl-",
@@ -313,7 +313,7 @@
        "name": "予約スケジュール機能の構築による外部との日程調整効率化",
        "doing": "Googleカレンダーで自分の実際の空き時間をもとに予約スケジュールを作成・公開し、予約ページのリンクを同僚や知人など1名以上に送って、実際に1件予約してもらいましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1RoVDbYCFvCtafJV_XZ45WzrKXufOMLCA/view",
+        "video": "https://drive.google.com/file/d/video/C1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C1.jpg",
         "archive": "https://drive.google.com/drive/folders/1khJv6mZ9xFycc1Do78nwNUxgNAPZYaMN",
@@ -330,7 +330,7 @@
        "name": "CSV・AI連携による予定一括登録",
        "doing": "Geminiに自分の今後の実予定（出張・定例・締切など10件以上）を伝えてGoogleカレンダー用CSVを作成してもらい、カレンダーにインポートして一括登録しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1QhxVaorbKah3SmwUmGfC3RLnVnlttVns/view",
+        "video": "https://drive.google.com/file/d/video/C2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C2.jpg",
         "archive": "https://drive.google.com/drive/folders/1yKcL8hzH92_eqn4ld32-989Ex3Q0Cpwt",
@@ -347,7 +347,7 @@
        "name": "作業時間のブロック（フォーカス時間）とタスク（Tasks）の統合管理",
        "doing": "今週の自分の集中作業をフォーカスタイムでブロックし、あわせてGoogle Tasksに登録した実タスクを1件以上カレンダー上に時間予約として配置しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1KbaOqXuymGOgP9snHNIfrwxyvspdIq0l/view",
+        "video": "https://drive.google.com/file/d/video/C3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C3.jpg",
         "archive": "https://drive.google.com/drive/folders/1u94QJrnS7GJEJbUgbkTsSJJmXUCgCBer",
@@ -364,7 +364,7 @@
        "name": "複数アカウント・共有カレンダーの使い分けと通知設定の最適化",
        "doing": "自分のカレンダーを実際に1名以上に共有し、相手に応じて「予定の詳細を表示」または「予定があることだけ表示」の権限を設定したうえで、複数カレンダーを色分け表示に整理しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1Dza-s9SzZjCi_71EbA4d8pf_-cCD5XJn/view",
+        "video": "https://drive.google.com/file/d/video/C4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C4.jpg",
         "archive": "https://drive.google.com/drive/folders/1yKcL8hzH92_eqn4ld32-989Ex3Q0Cpwt",
@@ -381,7 +381,7 @@
        "name": "会議の自動録画とAI文字起こし設定による議事録作成の自動化",
        "doing": "実際の会議（またはテスト会議）をGoogle Meetで開き、開始時にGeminiのメモ作成をONにして、終了後に自動生成された議事録ドキュメントを確認しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1r9H8klSxs3llKJ6iCJ5K7W8XW5pcNsbs/view",
+        "video": "https://drive.google.com/file/d/video/C5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C5.jpg",
         "archive": "https://drive.google.com/drive/folders/1NyBKoBwNhoZUu1F-Uq33bAhHsZdZjNl-",
@@ -398,7 +398,7 @@
        "name": "コンパニオンモードと画面共有（タブ・ウィンドウ別）の使い分け技術",
        "doing": "同僚や知人と実際にGoogle Meetの会議を開き、コンパニオンモードで参加したうえで、画面共有を「タブのみ」に限定して資料を共有してみましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1dU-Myebr3q9_cic9TwK29F9UpFCCJ7F4/view",
+        "video": "https://drive.google.com/file/d/video/C6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C6.jpg",
         "archive": "https://drive.google.com/drive/folders/1NyBKoBwNhoZUu1F-Uq33bAhHsZdZjNl-",
@@ -415,7 +415,7 @@
        "name": "リアルタイム翻訳字幕とAI背景生成・ノイズ除去の活用",
        "doing": "Google Meetで翻訳字幕（例：英語→日本語）をONにして字幕が表示される状態を作り、あわせてAI背景生成またはノイズ除去（ノイズキャンセル）を設定して会議環境を整えましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1yP_w5ACQ9pBv9EnBDYpfAkXfmBQV2LVM/view",
+        "video": "https://drive.google.com/file/d/video/C7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C7.jpg",
         "archive": "https://drive.google.com/drive/folders/1CuR9yalnyTwOe1j-yp2koAZ9p--_3gW3",
@@ -432,7 +432,7 @@
        "name": "チャットログの保存とNotebookLM解析連携による「会議の資産化」",
        "doing": "実際の会議で残ったチャットログや議事録ドキュメントをNotebookLMにソースとして読み込ませ、「この会議で決まったことは？」など実務の質問に回答させてみましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1VGSQS3dZCwLLWar_iqb-wNv8oYge5Qhj/view",
+        "video": "https://drive.google.com/file/d/video/C8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/C8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/C8.jpg",
         "archive": "https://drive.google.com/drive/folders/1QSz3t216X660CqEHQBpQH9jFsO5QNPkU",
@@ -459,7 +459,7 @@
        "name": "AIメール作成支援（Help me write）：丁寧な断り、日程調整、お詫びメールの瞬時生成",
        "doing": "ご自身の実務で実際にありそうな場面（納期遅延のお詫び・依頼の丁寧な断り・日程再調整のいずれか）を1つ選び、GmailのHelp me writeで下書きを生成。さらに「もっと丁寧に」等のリファイン機能で1回以上調整してください。実際に送信す",
        "url": {
-        "video": "https://drive.google.com/file/d/1tZSOXPySdBhdyn1JmIzOXeTeUWlGOkOR/view",
+        "video": "https://drive.google.com/file/d/video/D1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D1.jpg",
         "archive": "https://drive.google.com/drive/folders/1E13HADsbgpwkON8rJ-bKVWPjCjPVPW2t",
@@ -476,14 +476,14 @@
        "name": "外部発信文書の生成：SEOを意識したブログ記事、魅力的なプレスリリースの構成と執筆",
        "doing": "ご自身の業務・活動に関するテーマを1つ決め、GoogleドキュメントのHelp me write（Gemini）でSEOを意識したブログ記事（またはプレスリリース）を作成。先に見出し構成を作らせてから本文を生成する2段階の手順で仕上げてくだ",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/D2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D2.jpg",
         "archive": "https://drive.google.com/drive/folders/1rwjZmdLR0__L0e2nkjRKhPRgg3ZLfTqn",
         "notes": "https://docs.google.com/document/d/1UBmTUBSyc31PoSbb6oqtxEELmxXUQEDTE_JSn2Kigfc/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -493,14 +493,14 @@
        "name": "社内ナレッジの整備：分かりやすい業務マニュアル、新人研修用の理解度確認クイズ作成",
        "doing": "ご自身の業務手順（引き継ぎメモや作業手順など、簡単なものでOK）をGoogleドキュメントに貼り付け、Geminiに「新人にもわかる表現にリライトし、章ごとに理解度クイズを追加」と指示して、クイズ付きマニュアルを作成してください。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/D3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D3.jpg",
         "archive": "https://drive.google.com/drive/folders/1NyBKoBwNhoZUu1F-Uq33bAhHsZdZjNl-",
         "notes": "https://docs.google.com/document/d/1jE78cHmOv4nUIE03BMDVyrOI51cf7stYA2yFfIXBb84/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -510,7 +510,7 @@
        "name": "高速入力メソッド：音声入力による思考の書き出しと、AIによる誤字脱字・トーンの校正",
        "doing": "Googleドキュメントの音声入力で、今考えていることや今日の業務メモを3分以上話して書き出し、その原文を残したままGeminiに「誤字脱字とトーンを校正し、ビジネス文書として整えて」と指示。校正前と校正後を同じドキュメント内に並べてくださ",
        "url": {
-        "video": "https://drive.google.com/file/d/1oB28Zp8Xek1V0qzT1RowsQI0QSTwXDZ0/view",
+        "video": "https://drive.google.com/file/d/video/D4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D4.jpg",
         "archive": "https://drive.google.com/drive/folders/1J8kBDIuNckPFaLRoP4PFsvfXGU8mv0yU",
@@ -527,14 +527,14 @@
        "name": "チーム共同執筆：スマートチップでの担当割り振りと、提案モードを使った効率的なレビュー",
        "doing": "共同編集するドキュメントを用意し、@メンション（スマートチップ）で相手にタスクを1件以上割り当て、さらに提案モードに切り替えて修正提案を1件以上残してください。相手は同僚でも塾の仲間でもOKです。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/D5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D5.jpg",
         "archive": "https://drive.google.com/drive/folders/1J8kBDIuNckPFaLRoP4PFsvfXGU8mv0yU",
         "notes": "https://docs.google.com/document/d/1bGt8AuDqQnxt-9Mhv_n0xpwXigyYMpX8EY5lrNnT-js/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -544,14 +544,14 @@
        "name": "文書フォーマットの最適化：Web向け「ページ分けなし設定」と、ワンクリック翻訳機能",
        "doing": "ご自身の文書（D2やD3で作ったものの流用OK）を「ファイル→ページ設定→ページなし」でWeb向けレイアウトに変更し、さらに「ツール→ドキュメントを翻訳」で英語など別言語版を生成してください。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/D6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D6.jpg",
         "archive": "https://drive.google.com/drive/folders/1tIMRaSAzu_fGqx_1fc33tcYYfonDL4xU",
         "notes": "https://docs.google.com/document/d/1XHRzc4z_PdPKUEdrCQFIuXPNcNRLkUY7kUs8YoiakSg/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -561,14 +561,14 @@
        "name": "定型業務の効率化：Gmailテンプレート（旧返信定型文）の活用とフィルタによる自動振り分け",
        "doing": "ご自身がよく送る定型メール（お礼・受領確認・定例報告など）を1つGmailのテンプレートとして保存し、さらに特定の差出人や件名のメールに自動でラベルを付けるフィルタを1件作成してください。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/D7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D7.jpg",
         "archive": "https://drive.google.com/drive/folders/1Q87UhE1DaAn9Ba3ulOv1G0aPLQC8X7qd",
         "notes": "https://docs.google.com/document/d/1oxWCtgppT76id4whbBWypLOXwDr162F6Co9oi1hGDAE/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -578,14 +578,14 @@
        "name": "契約・重要書類：Google Workspace標準の電子署名（eSignature）機能によるペーパーレス締結",
        "doing": "テスト用の簡単な合意書や覚書をGoogleドキュメントで作成し、「ツール→電子署名」から署名者の指定と署名フィールドの配置まで設定してください。実際に相手へ送信しなくてもOKです（有料プラン限定機能のため、メニューに表示されない場合は表示さ",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/D8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/D8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/D8.jpg",
         "archive": "https://drive.google.com/drive/folders/1Q87UhE1DaAn9Ba3ulOv1G0aPLQC8X7qd",
         "notes": "https://docs.google.com/document/d/1oxWCtgppT76id4whbBWypLOXwDr162F6Co9oi1hGDAE/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -605,7 +605,7 @@
        "name": "実務に即したアンケート・報告書設計と回答データの自動収集・反映",
        "doing": "実務を想定したアンケートフォーム（質問3問以上・うち1問に分岐ロジックを設定）を作成してスプレッドシート連携をオンにし、仲間・同僚など誰か1人以上に実際に回答してもらいます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1v_CLd5ep21YJbD5rWEp33X-QB7Ltk37n/view",
+        "video": "https://drive.google.com/file/d/video/E1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E1.jpg",
         "archive": "https://drive.google.com/drive/folders/1Q87UhE1DaAn9Ba3ulOv1G0aPLQC8X7qd",
@@ -622,14 +622,14 @@
        "name": "データの入力規則とマスター管理：表記ゆれを防ぎ「AIが解析しやすい」DB構築",
        "doing": "自分の実務データ（なければサンプルの顧客リストでOK）に「データの入力規則」でプルダウンリストを1列以上設定し、リスト外の値を入力すると警告・拒否されることを確認します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/E2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E2.jpg",
         "archive": "https://drive.google.com/drive/folders/1_kd7D5tWTZP1BsARPKMLVSuYhPrBuOjg",
         "notes": "https://docs.google.com/document/d/10brA39kfdtDab-IFgHmQ6uzv9Qgd8DqrtYaI4L90cAY/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -639,14 +639,14 @@
        "name": "XLOOKUP/VLOOKUP関数を用いたフォーム回答と台帳データの紐付け・名寄せ",
        "doing": "自分のデータ（フォーム回答と台帳など2つの表。なければサンプルデータで再現してもOK）を用意し、XLOOKUP（またはVLOOKUP）でキーを基に紐付ける式を実際に組みます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/E3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E3.jpg",
         "archive": "https://drive.google.com/drive/folders/1_kd7D5tWTZP1BsARPKMLVSuYhPrBuOjg",
         "notes": "https://docs.google.com/document/d/10brA39kfdtDab-IFgHmQ6uzv9Qgd8DqrtYaI4L90cAY/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -656,7 +656,7 @@
        "name": "QUERY関数による動的抽出：膨大な回答から必要な条件でレポートを自動生成",
        "doing": "自分のデータ（なければサンプルデータでOK）に対して、WHERE条件とORDER BYを含むQUERY関数を組み、条件に合う行だけを別領域に自動抽出します。式はGeminiに書いてもらってもOKです。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ed5_Eq6S1cPqumLxlsH3-l4_HC38nztk/view",
+        "video": "https://drive.google.com/file/d/video/E4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E4.jpg",
         "archive": "https://drive.google.com/drive/folders/1DW22-P1r6wFZQ5sjYzNMYBbVfPca8P8x",
@@ -673,7 +673,7 @@
        "name": "IMPORTRANGEによるシート間連携：権限を分離した安全な集計環境の構築",
        "doing": "スプレッドシートを2つ用意し（既存の実務シート＋新規集計用シートでOK）、集計用シート側でIMPORTRANGEを組んで「アクセスを許可」を承認し、元シートのデータを参照表示させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1I4CCVgp0x0Nu-nG4FUdPvmA_R5YQnv6s/view",
+        "video": "https://drive.google.com/file/d/video/E5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E5.jpg",
         "archive": "https://drive.google.com/drive/folders/1vqnlBb2bW6xly1XrQtFA0RNvVxPr77fD",
@@ -690,7 +690,7 @@
        "name": "ピボットテーブルを用いたアンケート集計と多角的分析・ダッシュボード化",
        "doing": "アンケート回答や実務データ（なければサンプルデータでOK・10行以上）からピボットテーブルを作成し、行・列・値を自分で設定して2軸以上のクロス集計を行います。余裕があればグラフ化まで。",
        "url": {
-        "video": "https://drive.google.com/file/d/1h02_MvFQRBSEm75OCvWhDGdlUKGUtLXU/view",
+        "video": "https://drive.google.com/file/d/video/E6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E6.jpg",
         "archive": "https://drive.google.com/drive/folders/1vqnlBb2bW6xly1XrQtFA0RNvVxPr77fD",
@@ -707,7 +707,7 @@
        "name": "AI関数（=AI）活用：自由記述コメントの感情分析や要約をセル内で完結",
        "doing": "自由記述コメント5件以上（実データが無ければダミーのコメントでOK）を用意し、=AI関数で感情分類（ポジ/ネガ）または要約をセル内で実行します。=AI関数が使えない環境の場合は、Geminiサイドパネルに同じ分析をさせてもOKです。",
        "url": {
-        "video": "https://drive.google.com/file/d/1k1zsUQzLMPa-zve0TgAjhcRFOvNC_ZV8/view",
+        "video": "https://drive.google.com/file/d/video/E7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E7.jpg",
         "archive": "https://drive.google.com/drive/folders/1vqnlBb2bW6xly1XrQtFA0RNvVxPr77fD",
@@ -724,7 +724,7 @@
        "name": "GAS（Google Apps Script）基礎：フォーム送信後の通知やメール自動配信",
        "doing": "フォームまたはスプレッドシートの「拡張機能 → Apps Script」でGASのコードを作成し（Geminiに書いてもらってOK）、フォーム送信時などに自分宛てへメール通知が届くところまで実際に動かします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1mhm7VJV-rR2aCl-W1dNtIo4eA8TQ-sfd/view",
+        "video": "https://drive.google.com/file/d/video/E8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/E8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/E8.jpg",
         "archive": "https://drive.google.com/drive/folders/1vqnlBb2bW6xly1XrQtFA0RNvVxPr77fD",
@@ -751,14 +751,14 @@
        "name": "NotebookLM スライド生成機能：ボタン一発で膨大な資料をスライド形式へ自動変換",
        "doing": "自分の業務資料（マニュアル・企画書など）をNotebookLMにソースとして投入し、スタジオパネルのスライド生成機能で実際にスライド資料を自動生成します（PPTX書き出しも可能です）。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/F1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F1.jpg",
         "archive": "https://drive.google.com/drive/folders/1xjOnp7UiTi9BEaIn2NvvI4S8Z5UYLxXM",
         "notes": "https://docs.google.com/document/d/1913FvS3XAoxLVKg3vaee3395RnaiNWJThaI9D-HZQco/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -768,7 +768,7 @@
        "name": "AIによるプレゼン構成案の自動生成：AIとの対話で論理的なストーリーを構築",
        "doing": "自分が実際に行う（または想定する）プレゼンについて、Geminiに「テーマ・対象・時間」を伝えて構成案を3パターン提案させ、SCQAやPREPなどの型を指定して1つをブラッシュアップします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1yZV1qY3yG8tTEdLXhENCBh-w3F3_xrZE/view",
+        "video": "https://drive.google.com/file/d/video/F2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F2.jpg",
         "archive": "https://drive.google.com/drive/folders/1xjOnp7UiTi9BEaIn2NvvI4S8Z5UYLxXM",
@@ -785,14 +785,14 @@
        "name": "「見栄えをよくする」AIデザイン機能：プロ品質のレイアウトへ一瞬で整える技術",
        "doing": "自分のスライド資料をGoogleスライドで開き、右下の「データ探索」アイコンから自動レイアウト提案を表示して、実際に1枚以上のスライドに提案デザインを適用します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/F3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F3.jpg",
         "archive": "https://drive.google.com/drive/folders/1xjOnp7UiTi9BEaIn2NvvI4S8Z5UYLxXM",
         "notes": "https://docs.google.com/document/d/1913FvS3XAoxLVKg3vaee3395RnaiNWJThaI9D-HZQco/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -802,14 +802,14 @@
        "name": "スピーカーノート（台本）の自動作成：AIによる発表原稿の生成と構成の整理",
        "doing": "自分のスライド資料をGeminiに読ませて（共有またはPDFで）各スライドのスピーカーノートを生成させ、そのうち1枚以上をGoogleスライドのスピーカーノート欄に実際に貼り付けます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/F4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F4.jpg",
         "archive": "https://drive.google.com/drive/folders/1xjOnp7UiTi9BEaIn2NvvI4S8Z5UYLxXM",
         "notes": "https://docs.google.com/document/d/1913FvS3XAoxLVKg3vaee3395RnaiNWJThaI9D-HZQco/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -819,14 +819,14 @@
        "name": "画像生成AI（Nano Banana）連携：イメージ通りのオリジナル画像を生成し挿入",
        "doing": "Geminiの画像生成モデル「Nano Banana」で、自分の業務・プレゼンに使うオリジナル画像を指示文（雰囲気・色味など）を工夫して生成し、実際にスライドへ挿入します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/F5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F5.jpg",
         "archive": "https://drive.google.com/drive/folders/1DNnCjihwhajUEvRsyjbx6ihZ7SzDXCTn",
         "notes": "https://docs.google.com/document/d/1wieaXT2QxMlbhLqZBu-NUlUBMdRJgRcGoVCXYyBUYhQ/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -836,7 +836,7 @@
        "name": "動画作成（Google Vids）で動画を作成",
        "doing": "Google Vidsで自分の業務に関する短い動画（説明・紹介・報告など、30秒〜1分程度）を1本作成します。テンプレートやAIによる下書き作成機能を使ってOKです。",
        "url": {
-        "video": "https://drive.google.com/file/d/11ynwxTF03SFnfze_c5Dd0nbaQDx6Mmf-/view",
+        "video": "https://drive.google.com/file/d/video/F6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F6.jpg",
         "archive": "https://drive.google.com/drive/folders/1DNnCjihwhajUEvRsyjbx6ihZ7SzDXCTn",
@@ -853,14 +853,14 @@
        "name": "URLリンクによる双方向化：資料からフォームやサイトへスムーズに誘導する設計",
        "doing": "自分のスライドや配布資料にGoogleフォーム（アンケート・申込など）へのリンクを挿入して仲間・同僚に共有し、実際に1人以上にリンクから回答してもらいます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/F7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F7.jpg",
         "archive": "https://drive.google.com/drive/folders/1u3P85xFyJR2cl7st1fs7fik7aYkz8BkV",
         "notes": "https://docs.google.com/document/d/1uilob3Ctci6jvMVAjMnY3mxG-s758TLI3TKlm3yP6JY/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -870,7 +870,7 @@
        "name": "配布資料の最適化（PDF出力）と安全な共有・公開権限の適切な管理",
        "doing": "自分のスライド資料を「ファイル→ダウンロード→PDF」で配布用PDFに出力し、共有権限を「制限付き（指定ユーザーのみ）」や「閲覧者」など適切に設定して仲間・同僚に共有します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1STKmQCVIfxy3KFajXeTZ6lQZaHlcWm5p/view",
+        "video": "https://drive.google.com/file/d/video/F8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/F8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/F8.jpg",
         "archive": "https://drive.google.com/drive/folders/1u3P85xFyJR2cl7st1fs7fik7aYkz8BkV",
@@ -897,14 +897,14 @@
        "name": "PDF/URL/Googleドライブからのインポートと一元管理",
        "doing": "自分の実務資料をPDF・Googleドキュメントやスライドなどのドライブファイル・WebサイトURL（YouTube可）の3種類以上、NotebookLMの1つのノートブックに実際に取り込みます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G1.jpg",
         "archive": "https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8",
         "notes": "https://docs.google.com/document/d/1E2XwiV94CoFxxCvIA0e6j-ThNqXmafUvnKqfKqXJt8U/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -914,14 +914,14 @@
        "name": "ソース（社内資料等）に忠実な高精度Q&Aの実行",
        "doing": "自分の社内資料（規定・マニュアル・提案書など）をソースにしたノートブックで、実務で本当に知りたい質問を1つ投げかけ、引用元つきの回答を得ます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G2.jpg",
         "archive": "https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8",
         "notes": "https://docs.google.com/document/d/1E2XwiV94CoFxxCvIA0e6j-ThNqXmafUvnKqfKqXJt8U/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -931,7 +931,7 @@
        "name": "引用（シテーション）機能を活用した一次情報の即時検証",
        "doing": "自分の資料への質問で得た回答の引用番号を実際にクリックし、元ソースの該当箇所がハイライト表示されることを確認して、回答が正しいか一次情報で検証します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1vpPqZZpu6aBHIvpuTAn8B-X4Di6dNY-I/view",
+        "video": "https://drive.google.com/file/d/video/G3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G3.jpg",
         "archive": "https://drive.google.com/drive/folders/1TMfuE0e1du0z4tr5yCIrx2sVJZOh84n8",
@@ -948,7 +948,7 @@
        "name": "議事録からの主要議題抽出とネクストアクションの整理",
        "doing": "自分が参加した実際の会議の議事録（またはメモ）をソースに取り込み、「主要決定事項」「未解決の論点」「担当者・期限つきアクションアイテム」を段階的に質問して整理させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1LoOPRqEM8AtZbgdJeVxYcU3Ue-fnXOCM/view",
+        "video": "https://drive.google.com/file/d/video/G4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G4.jpg",
         "archive": "https://drive.google.com/drive/folders/137VpDsylQ_MZl1FSoJ8a417FSzjpjnjW",
@@ -965,7 +965,7 @@
        "name": "営業プレイブック（トーク案・反論処理）の自動生成",
        "doing": "自分の商談記録・提案書・成功事例などをソースに取り込み、「よくある反論とその切り返しトーク」を自分の業務向けにNotebookLMで生成させます（営業以外の方は自分の仕事への想定質問と回答例でOK）。",
        "url": {
-        "video": "https://drive.google.com/file/d/1XrYnOZmEtTQqoXbg0gLF-CvqoY0gM2ck/view",
+        "video": "https://drive.google.com/file/d/video/G5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G5.jpg",
         "archive": "https://drive.google.com/drive/folders/137VpDsylQ_MZl1FSoJ8a417FSzjpjnjW",
@@ -982,7 +982,7 @@
        "name": "ビジネスフレームワーク（3C・SWOT）による現状分析",
        "doing": "自社（または自分の事業・部署）に関する資料をソースに取り込み、「3C分析を実施、Customer/Competitor/Companyの順で」または「SWOT分析を作って」とフレームワークを指定して現状分析を生成させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1SY787VgjfPU9e16CEmOgxpvYmPRaNoJS/view",
+        "video": "https://drive.google.com/file/d/video/G6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G6.jpg",
         "archive": "https://drive.google.com/drive/folders/1Sqy7dqUnkwhuwGqqi02xFTDoInDeJ5SA",
@@ -999,7 +999,7 @@
        "name": "ノートブックガイドを用いた要約・FAQ・ブリーフィング資料作成",
        "doing": "自分の実務資料が入ったノートブックで、ノートブックガイド（現行UIではスタジオ／メモの提案機能）から「FAQ」または「ブリーフィング資料」をワンクリックで自動生成します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1CSW2StaKlyt743eNqQJ1GojoTPyjQ8gE/view",
+        "video": "https://drive.google.com/file/d/video/G7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G7.jpg",
         "archive": "https://drive.google.com/drive/folders/1hYEHLUqQ1v5pbt_h8UGh1b2yDHOvNuOa",
@@ -1016,14 +1016,14 @@
        "name": "音声概要（Audio Overview）による「耳で聴く」資料化",
        "doing": "自分の実務資料から音声概要（Audio Overview）を生成して自分で聴き、さらに仲間・同僚に聴いてもらって感想を一言もらいます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/G8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/G8.jpg",
         "archive": "https://drive.google.com/drive/folders/1MfbatORR8bYVo3d9WBuhjM-bUgIDOQ6R",
         "notes": "https://docs.google.com/document/d/14zn1Yg2xMfGhhjxaSf_lWXeJC4XjQMnTgiomcsnsbuA/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -1043,7 +1043,7 @@
        "name": "顧客ごとのNotebookLMとCRMと商談",
        "doing": "顧客1社（ダミー顧客でもOK）につき1つのNotebookLMノートブックを作成し、議事録・メール履歴・提案資料など2種類以上のソースを投入して、「前回までの論点と次回の確認事項は？」と質問します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1T9UeXWmKwKgfvm0bueQXlduwIvX3HEuk/view",
+        "video": "https://drive.google.com/file/d/video/H1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H1.jpg",
         "archive": "https://drive.google.com/drive/folders/1hYEHLUqQ1v5pbt_h8UGh1b2yDHOvNuOa",
@@ -1060,14 +1060,14 @@
        "name": "学習アーカイブからの理解度テスト（クイズ）の自動生成",
        "doing": "自分の学習資料（研修資料・マニュアル・読書メモなど）をNotebookLMにソース投入し、「重要ポイント10問のクイズを作成、4択で解説付き」と指示して理解度テストを自動生成します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H2.jpg",
         "archive": "https://drive.google.com/drive/folders/1osSo8YGMs2TzX0d2KIT5aClqJzSicf7e",
         "notes": "https://docs.google.com/document/d/1I0Tp7-KkmUpBJDcB5SHJQFdgygFDdTezgAIjA4eE-Ig/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -1077,7 +1077,7 @@
        "name": "書籍や資料を元にしたブログ・SNS投稿用ドラフトの作成",
        "doing": "読書メモや手元の資料をNotebookLMにソース投入し、「Xで反応が取れる140字投稿を5本」または「ブログ記事のフック5案」と発信フォーマットを指定してドラフトを生成します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1W6XvYnAV_P9NN5lWzT_fF311UENcPnOo/view",
+        "video": "https://drive.google.com/file/d/video/H3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H3.jpg",
         "archive": "https://drive.google.com/drive/folders/12g_bbueoQMfNAntzkZ-oTO9U2BhsNGLp",
@@ -1094,14 +1094,14 @@
        "name": "ポッドキャストや動画解説用の台本・ストーリー構成案生成",
        "doing": "自分のテーマの資料をNotebookLMにソース投入し、「30分のポッドキャスト台本、ホスト1人、テーマ：〇〇、起承転結で」のように条件指定して台本または構成案を生成します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H4.jpg",
         "archive": "https://drive.google.com/drive/folders/18s0rDxUqrdTtwl-0rsXws0MlnoX0eHG2",
         "notes": "https://docs.google.com/document/d/1XB_tQ1W5VjAfy_0Un2AcI3QSSZke3wKykIPfXnt9IUo/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -1111,7 +1111,7 @@
        "name": "日々の活動記録（ライフログ）の蓄積と自己振り返り術",
        "doing": "日記・SNS投稿・読書メモ・運動記録など自分の活動記録を2種類以上、1つのNotebookLMノートブックに投入し、「今月の私の傾向は？」「成長している分野は？」と質問して振り返ります。",
        "url": {
-        "video": "https://drive.google.com/file/d/1PLlB1wkMQAsKEfHv_6Dbwv-mqBHykDJP/view",
+        "video": "https://drive.google.com/file/d/video/H5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H5.jpg",
         "archive": "https://drive.google.com/drive/folders/18s0rDxUqrdTtwl-0rsXws0MlnoX0eHG2",
@@ -1128,14 +1128,14 @@
        "name": "AI検索最適化（ACO）を意識したファイル命名と整理術",
        "doing": "自分のGoogleドライブの実務ファイル3件以上を「日付_案件_種別」形式にリネームし、そのうち1件以上をNotebookLMまたはGeminiに読み込ませてAIが内容を正しく認識できることを確認します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H6.jpg",
         "archive": "https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu",
         "notes": "https://docs.google.com/document/d/1pUi9DsCXEzjzYT9Nlbc3PbbzVkyVHVqKAMJhTBWfIvg/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -1145,14 +1145,14 @@
        "name": "属人的な知識をチーム共有の「資産（AI賢者）」へ変える仕組み",
        "doing": "自分の知識・ノウハウを集約したNotebookLMノートブックをチームの仲間1人以上に共有し、実際に相手からそのノートブックへ質問してもらいます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H7.jpg",
         "archive": "https://drive.google.com/drive/folders/1N1blWcYoyncBLD83KUWPJZhXInH1vyhz",
         "notes": "https://docs.google.com/document/d/15O48rOzGcU7wC70CiwwfqYg8ChcS_Wz1JrtspY7II-c/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -1162,14 +1162,14 @@
        "name": "共有権限（閲覧・編集）の適切な設定とチームでの共同活用",
        "doing": "自分のNotebookLMノートブックを、仲間1人以上に「閲覧者」（質問のみ可）または「編集者」（ソース追加可）の権限を意図的に使い分けて共有し、相手にアクセスできることを確認してもらいます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/google64/slide/H8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/google64/info/H8.jpg",
         "archive": "https://drive.google.com/drive/folders/1N1blWcYoyncBLD83KUWPJZhXInH1vyhz",
         "notes": "https://docs.google.com/document/d/15O48rOzGcU7wC70CiwwfqYg8ChcS_Wz1JrtspY7II-c/edit"
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -1198,9 +1198,9 @@
        "name": "Claudeアプリ導入（インストール＋ログイン）",
        "doing": "インストールしたClaudeデスクトップアプリを自分のPCで起動し、ログインした状態で最初のプロンプトを1つ送って応答を確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/15N781JshRodJDRArb57zpCSTuB6DDBw8/view",
-        "slide": "https://drive.google.com/file/d/1x-8pELOwcOSd_phRgFJP2UIgP3LnRJYi/view",
-        "info": "https://drive.google.com/file/d/1sLhlsM97MSzNCCUKKyDsPGbuAHdifeol/view",
+        "video": "https://drive.google.com/file/d/video/A1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A1.jpg",
         "archive": "https://sites.google.com/view/bc20260529/",
         "notes": ""
        },
@@ -1215,9 +1215,9 @@
        "name": "初期設定を整える",
        "doing": "自分のClaude設定画面を開き、データ学習OFF・Computer UseのON・作業フォルダの指定の3点を実際に設定します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1m6X4jKdhSz7rxQyvb_Wml6GFpud0HT91/view",
-        "slide": "https://drive.google.com/file/d/1gH9ng0yY0Cy01ztDxBjaIbW1wZZVq2aR/view",
-        "info": "https://drive.google.com/file/d/1pO2OLyLv0wKHvCWCqjPBJA-M3nEncepz/view",
+        "video": "https://drive.google.com/file/d/video/A2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A2.jpg",
         "archive": "https://sites.google.com/view/bc20260529/",
         "notes": ""
        },
@@ -1232,9 +1232,9 @@
        "name": "PDFや画像を読ませて要約させる",
        "doing": "自分の実務で使うPDFか画像を1つClaudeに読み込ませ、要点を3つと重要な数字を抜き出して要約させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/12crEI-75XK5s-TH_HwyIGgEnZjUvPL1f/view",
-        "slide": "https://drive.google.com/file/d/1zsYZJmdPah3JMi44BurtaXs2Teh7f4mi/view",
-        "info": "https://drive.google.com/file/d/1ppPGgWYynMsrqUI_yFfAwJcbSH9GdacQ/view",
+        "video": "https://drive.google.com/file/d/video/A3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A3.jpg",
         "archive": "https://sites.google.com/view/bc20260529/",
         "notes": ""
        },
@@ -1249,9 +1249,9 @@
        "name": "★領収書・名刺をAIに読ませる",
        "doing": "自分の手元にある領収書か名刺の写真を1枚Claudeに読ませ、日付・店舗・金額（または社名・氏名・連絡先）を表にさせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1Ad-DvdUhH8GpB_KBeNSUvSqW90_vnwNE/view",
-        "slide": "https://drive.google.com/file/d/1kefUeX5kNuLBSARxfSk2qK13L_V5vnwK/view",
-        "info": "https://drive.google.com/file/d/1vCv4TEaXyVDAsjpJXhiBvHVQZbDzK4V_/view",
+        "video": "https://drive.google.com/file/d/video/A4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A4.jpg",
         "archive": "https://sites.google.com/view/bc20260529/",
         "notes": ""
        },
@@ -1266,9 +1266,9 @@
        "name": "デスクトップ片付け・ファイル整理",
        "doing": "Computer Useで自分のデスクトップかダウンロードフォルダを見せ、整理の提案を出させたうえで、内容を確認してから1つ実行します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1qkKGEnRU51335FNhjrxsFEeF2euo2Bmv/view",
-        "slide": "https://drive.google.com/file/d/1HsWBI_tw2emRLPphCJsdlZzpNIi1adpP/view",
-        "info": "https://drive.google.com/file/d/1TYftfhSX1kqjCXQoGdrpyEjYSMxHDD_h/view",
+        "video": "https://drive.google.com/file/d/video/A5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A5.jpg",
         "archive": "https://drive.google.com/drive/folders/1M-yVHoZrfQ71D6e9kmbjqtJPT9GFXX40?usp=drive_link",
         "notes": ""
        },
@@ -1283,9 +1283,9 @@
        "name": "フォルダ構造の「型」を学ぶ",
        "doing": "AIと作業しやすいフォルダ構成のテンプレート（例：01_Inbox／02_Active／03_Archive）を提案させ、自分のPCに実際にそのフォルダ一式を作成します。",
        "url": {
-        "video": "https://drive.google.com/file/d/17axBoZxgqhO3vnq3PWOZNwzSRDPqzYnK/view",
-        "slide": "https://drive.google.com/file/d/1oeQ6SibKK52xnQAgd-Y8MRBKpkmccoA9/view",
-        "info": "https://drive.google.com/file/d/1Ia7Pa_fIMfGdvrVAfCIs81T1IGJuJy4U/view",
+        "video": "https://drive.google.com/file/d/video/A6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A6.jpg",
         "archive": "https://drive.google.com/drive/folders/1XhgADutwWbu4_MgD_-8WK7Ky3QBiZwVQ?usp=drive_link",
         "notes": ""
        },
@@ -1300,9 +1300,9 @@
        "name": "★LP作成（プロフィール＋自社サービス紹介）",
        "doing": "自分のサービス紹介LPをArtifactでHTML一発生成してブラウザで確認し、仲間・同僚に共有して感想やフィードバックを1つもらいます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1lCUySTA2Micm2Ih1kgQZI8XQ9plDt4uS/view",
-        "slide": "https://drive.google.com/file/d/16wLaYdVyNhjBEz_U3SlVIcy6RJGKokUB/view",
-        "info": "https://drive.google.com/file/d/1nSzglNxIOh9DrVu3YbX4EvgMmXzIPbVV/view",
+        "video": "https://drive.google.com/file/d/video/A7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A7.jpg",
         "archive": "https://sites.google.com/view/bc20260529/",
         "notes": ""
        },
@@ -1317,9 +1317,9 @@
        "name": "スマホから指示を出す（Dispatch）",
        "doing": "Dispatch機能を設定してスマホとPCをペアリングし、スマホから自分のPCのClaudeへ指示を1つ送って、PC側で結果を確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ATBI9CCSfMiC4LJe_qWfI76MkAbK3GcS/view",
-        "slide": "https://drive.google.com/file/d/1q8EU8yDNAVNiKi_wNk1ZBJqrWDAb2bKw/view",
-        "info": "https://drive.google.com/file/d/1giU_njLfP4ZMeMmvjg8Ir60CUr7LkIOM/view",
+        "video": "https://drive.google.com/file/d/video/A8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/A8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/A8.jpg",
         "archive": "https://sites.google.com/view/bc20260529/",
         "notes": ""
        },
@@ -1344,8 +1344,8 @@
        "name": "ファイル内容を確認",
        "doing": "自分の実務フォルダを1つClaudeに読み込ませ、各ファイルが何の資料かを一覧にまとめさせ、重要そうなものに★で優先順位を付けさせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1SShNdehHKRDInOtetAEwssArPgbtQNw5/view",
-        "slide": "https://drive.google.com/file/d/17alhR3zSz_Oz-Hl7TJPjJ35Azp-EjiTB/view",
+        "video": "https://drive.google.com/file/d/video/B1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B1.jpg",
         "archive": "https://drive.google.com/drive/folders/17p_AZEg0vPONKwg9CuJpQHaXOsrvFEQ0?usp=drive_link",
         "notes": ""
@@ -1361,9 +1361,9 @@
        "name": "ファイルを自動振分",
        "doing": "自分のダウンロードフォルダをClaudeに見せ、PDF／画像／ZIP／その他へ振り分ける提案を出させ、内容を確認してからまずコピーで実行します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1eIFIPdTB9eqGumtp55VXuuGFxNMsK5Jy/view",
-        "slide": "https://drive.google.com/file/d/1EtAqI7LEQ1PZ-poAGH5Dr16l627GO_t7/view",
-        "info": "https://drive.google.com/file/d/1xIO43nSzcBSRQ-qa_t57isllJ0VKkQX1/view",
+        "video": "https://drive.google.com/file/d/video/B2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B2.jpg",
         "archive": "https://drive.google.com/drive/folders/1iKb7vtE4HvXMrhYRIYdZCkPpHmspyKAo?usp=drive_link",
         "notes": ""
        },
@@ -1378,9 +1378,9 @@
        "name": "ファイルをリネーム",
        "doing": "名前が分かりにくい自分のファイルが入ったフォルダをClaudeに読み取らせ、「YYYY-MM-DD_内容.拡張子」形式へリネームさせ、リネーム前後の対応表も残させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1jWySPDnFGgIV_nf7KNoXKHJKyvAQAYUP/view",
-        "slide": "https://drive.google.com/file/d/1dZHpNPv3_R1ZstnjWs8vxaxO2VfSTkaX/view",
-        "info": "https://drive.google.com/file/d/1bZemhUwmVMv7WtIzLGTbF0XN6utx4CtE/view",
+        "video": "https://drive.google.com/file/d/video/B3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B3.jpg",
         "archive": "https://drive.google.com/drive/folders/1igamls-3Q_Ta7Zg6GWzAeQFfpKVugBx2?usp=drive_link",
         "notes": ""
        },
@@ -1395,8 +1395,8 @@
        "name": "重複ファイル削除",
        "doing": "自分のPCの画像やファイルが溜まったフォルダをClaudeに検査させ、名前やサイズが似た重複候補をリスト化させたうえで、内容を確認してから削除を実行します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1YLsnrduwjY44_LEFH_5eRraY2IAWCtyZ/view",
-        "slide": "https://drive.google.com/file/d/1q0MmOHrWR4vcfTFWphW6idtDlq9hf_9R/view",
+        "video": "https://drive.google.com/file/d/video/B4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B4.jpg",
         "archive": "https://drive.google.com/drive/folders/1lxeYdUp5BntGtEH-DIJFgATDZpYcqI2j?usp=drive_link",
         "notes": ""
@@ -1412,8 +1412,8 @@
        "name": "領収書を自動整理",
        "doing": "自分の手元にある領収書・請求書（PDFや画像）のフォルダをClaudeに読み取らせ、日付・店舗・金額・カテゴリでExcelにまとめさせ、月別フォルダに整理させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1WYlbe4phDn1J-fC4De_We9TApqXWlZj-/view",
-        "slide": "https://drive.google.com/file/d/1RCNiuhpxIL7vbV2QuAhvbvf9qxHetZpt/view",
+        "video": "https://drive.google.com/file/d/video/B5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B5.jpg",
         "archive": "https://drive.google.com/drive/folders/1OoaIWEBlJiKTNkCoXvRpEFg0BiI1KRu8?usp=drive_link",
         "notes": ""
@@ -1429,8 +1429,8 @@
        "name": "複数文書を横断要約",
        "doing": "自分の議事録やドキュメントが入ったフォルダをClaudeに横断的に読み込ませ、直近数か月の主な決定事項と未解決課題を時系列でまとめさせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1qHqA96vGhY8lkTuzLHVcxmwAOylD75OL/view",
-        "slide": "https://drive.google.com/file/d/1dsXmbHDDPt_XzYxC0AgS6xo5znH62-8P/view",
+        "video": "https://drive.google.com/file/d/video/B6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B6.jpg",
         "archive": "https://drive.google.com/drive/folders/1jbsa7UI523R0U1sCXTUTcJz3b9CHQNg5?usp=drive_link",
         "notes": ""
@@ -1446,8 +1446,8 @@
        "name": "スクショを自動整理",
        "doing": "自分のデスクトップに散らばったスクリーンショットをClaudeに内容で見分けさせ、「仕事／勉強／参考／その他」フォルダへ振り分け、内容に沿った名前へリネームさせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1BedfOOpqs4FMgxNO8SVQAX7SOJnUVVxX/view",
-        "slide": "https://drive.google.com/file/d/1j0JYCX-l3TTOhU_41CRlQyV-WYEavLdJ/view",
+        "video": "https://drive.google.com/file/d/video/B7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B7.jpg",
         "archive": "https://drive.google.com/drive/folders/1uBNSli36qs3ADvla2iXyJXVOQ1GlJKmP?usp=drive_link",
         "notes": ""
@@ -1463,8 +1463,8 @@
        "name": "マニュアルを壁打ち",
        "doing": "自分の業務マニュアルやPDF（長文）を1つClaudeに読み込ませ、まず章ごとの要約を出させたうえで、分からない点を質問して解説させる壁打ちを実際に行います。",
        "url": {
-        "video": "https://drive.google.com/file/d/1g1gU-GMILWZVY7nbxBVmidndMk9h0U1x/view",
-        "slide": "https://drive.google.com/file/d/15zW7Yd__MNwXlBGIgZHoQ1AqccNcDI7k/view",
+        "video": "https://drive.google.com/file/d/video/B8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/B8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/B8.jpg",
         "archive": "https://drive.google.com/drive/folders/1q3IK-OxLO-fdpwuR8mRgTnwsEa0E0vS9?usp=drive_link",
         "notes": ""
@@ -1490,9 +1490,9 @@
        "name": "CSVデータを分析",
        "doing": "自分の実務のCSV（売上・顧客・在庫などの実データ。数字や氏名はダミー・マスクで構いません）をClaudeに読み込ませ、Code Execution（コード実行）で月別推移とカテゴリ別の比率を分析させ、気になる傾向や異常値を指摘してもらいま",
        "url": {
-        "video": "https://drive.google.com/file/d/1oqb4UXaeWTTTsxpkjWltOMA1IuOfYy0z/view",
-        "slide": "https://drive.google.com/file/d/1WVbHaRTaTt7Kv0KDpbN6Wni1hQYqbBu_/view",
-        "info": "https://drive.google.com/file/d/1tZzbP4abEy9fEvTtvcwetjHrcyzGdVp8/view",
+        "video": "https://drive.google.com/file/d/video/C1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C1.jpg",
         "archive": "https://drive.google.com/drive/folders/1xn6TjSGmbN0F-Bxy0GqSrnMb7_wEecEp?usp=drive_link",
         "notes": ""
        },
@@ -1507,8 +1507,8 @@
        "name": "Excel統一フォーマット化",
        "doing": "自社の統一テンプレートと、フォーマットがバラバラな元データ（取引先ごとの実Excel。社名や金額はダミーで構いません）をClaudeに渡し、xlsxスキルで列名や日付形式を揃えて統一フォーマットに変換したExcelを1ファイル作らせましょう",
        "url": {
-        "video": "https://drive.google.com/file/d/1C88MyX9l1f5ZpcFXZx1s4ciOMckQFWp-/view",
-        "slide": "https://drive.google.com/file/d/17L0xhom398EEK5-rljpB7c8ml1ehdlu3/view",
+        "video": "https://drive.google.com/file/d/video/C2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C2.jpg",
         "archive": "https://drive.google.com/drive/folders/1rL-R-faFQbCFKU7C1YMJDKziaVHaCTRB?usp=drive_link",
         "notes": ""
@@ -1524,9 +1524,9 @@
        "name": "Excelレポート自動生成",
        "doing": "自分の実務データ（数字はダミーで構いません）をもとに、表紙・サマリー・月別グラフ・詳細データの4シート構成のExcelレポートをClaudeにゼロから生成させ、ダウンロードして開いて確認しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1S2JfHeGQCseVu8EcMJWveWfXEel0O6Sw/view",
-        "slide": "https://drive.google.com/file/d/15uayKHuRnnKCnD6Kaqw9gAoHFPorJsUe/view",
-        "info": "https://drive.google.com/file/d/1Op7dVlrzfk4Vkw1ppoWj6WV4wMxshfNY/view",
+        "video": "https://drive.google.com/file/d/video/C3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C3.jpg",
         "archive": "https://drive.google.com/drive/folders/1jr9WDkb3E_cUmBgH35dWuX4r3siWmKo5?usp=drive_link",
         "notes": ""
        },
@@ -1541,8 +1541,8 @@
        "name": "PowerPoint自動作成",
        "doing": "自分の実務データ（売上・企画など。数字はダミーで構いません）を使って、表紙→課題→分析→提案→まとめの流れの経営会議用10スライドのPowerPointを、pptxスキルでグラフ・表付きで作らせましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1b6KkjseeShYBwKILZfv20cjGSlEeMxXR/view",
-        "slide": "https://drive.google.com/file/d/1B84FbMf0UpiH2_jiyhUADNrNzBHmr_bU/view",
+        "video": "https://drive.google.com/file/d/video/C4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C4.jpg",
         "archive": "https://drive.google.com/drive/folders/10e2K8nF1MevoHUh-5bppSKFkGuoyK8uT?usp=drive_link",
         "notes": ""
@@ -1558,9 +1558,9 @@
        "name": "インボイス・請求書チェック",
        "doing": "手元の請求書PDF（実物またはダミー。氏名・金額はマスク可）を複数Claudeに読み込ませ、①登録番号 ②税率別取引額 ③税率別税額 ④適用税率のインボイス適格要件を満たしているか項目別にチェックさせ、問題点をリスト化させましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1YgqRPGzyZnoitMBJGM5YJZgcHCAGBJsQ/view",
-        "slide": "https://drive.google.com/file/d/1uk7s7AX2TW4EGsNIc2NEEddEFPT16BWa/view",
-        "info": "https://drive.google.com/file/d/1pWHl7xvqGxBpr8IEjxW4MvwWLVxs7xB4/view",
+        "video": "https://drive.google.com/file/d/video/C5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C5.jpg",
         "archive": "https://drive.google.com/drive/folders/1uqzImt4G_CYYneYm2ke3yu51MgQmUybs?usp=drive_link",
         "notes": ""
        },
@@ -1575,9 +1575,9 @@
        "name": "月次決算チェック",
        "doing": "自分の試算表または月次PL/BSのExcel（数字はダミーで構いません）をClaudeに読み込ませ、前月比・前年同月比で10%以上変動した科目を洗い出させ、考えられる原因の推測と仕訳ミスの可能性が高い科目への★付けまでさせましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/15uZY05vlgkOrew7vaoke2V87i32kgR0E/view",
-        "slide": "https://drive.google.com/file/d/1LkG7PzHoDU01Kop2cctTIEqxm0xjwRVf/view",
-        "info": "https://drive.google.com/file/d/1f4rU4KjI4gUtagyGnZu91cLbUfnIm_tl/view",
+        "video": "https://drive.google.com/file/d/video/C6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C6.jpg",
         "archive": "https://drive.google.com/drive/folders/1ggOYi86fnDjZs8mz126IIjzUpDHW4g7z?usp=drive_link",
         "notes": ""
        },
@@ -1592,8 +1592,8 @@
        "name": "給与計算サポート",
        "doing": "ダミーの勤怠CSVと社員マスタをClaudeに渡し、今月の残業時間を計算させ、36協定の上限超過者がいないかチェックさせたうえで、各人分の給与明細ドラフトを作成させましょう（氏名・金額はダミー・マスクで構いません）。",
        "url": {
-        "video": "https://drive.google.com/file/d/1lOR_WRZEJ01TeVJfdvj4RJKFREhcOw2o/view",
-        "slide": "https://drive.google.com/file/d/1h91IVXw9_jUYS1AAGF3-j4SAMhflGtV9/view",
+        "video": "https://drive.google.com/file/d/video/C7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C7.jpg",
         "archive": "https://drive.google.com/drive/folders/1Y7D7VsjZIJWds_ACwKQgNnGDni1pscB9?usp=drive_link",
         "notes": ""
@@ -1609,9 +1609,9 @@
        "name": "月次レポートを統合",
        "doing": "自分の実務にある複数のExcelファイル（部門別・拠点別など。数字はダミーで構いません）をClaudeに横断的に読み込ませ、シート1=全社サマリー・シート2以降=部門別の月次サマリーを1ファイルに統合させましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1AuD6P7sO5XldFWTFeIlybrmDCMneXELj/view",
-        "slide": "https://drive.google.com/file/d/13tOwknz15k8TBhNQXR7CoTTREPxdBQJi/view",
-        "info": "https://drive.google.com/file/d/1Xl-N2dasbET4d0BJUYop9_huqo2i7nEX/view",
+        "video": "https://drive.google.com/file/d/video/C8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/C8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/C8.jpg",
         "archive": "https://drive.google.com/drive/folders/13UpvtNnvalCe0Daz1SO_UXxfAwbB3oCT?usp=drive_link",
         "notes": ""
        },
@@ -1636,9 +1636,9 @@
        "name": "ニュースを自動収集",
        "doing": "自分の業界・関心テーマを1つ決めてClaudeのWeb検索機能で過去1週間の日本語ニュースを5件集めさせ、各記事の出典URL・日付・3行要約を1つのメモにまとめさせましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/12-fYCe-obdNfhx9Nhf2ucHG7QgQSmjaZ/view",
-        "slide": "https://drive.google.com/file/d/1BhHMy3wB4KzdxmXufbx2mHc0ozUaevHm/view",
-        "info": "https://drive.google.com/file/d/1Jj2ff4Os67gO_m4zRMgT6fW4WtuVCbyd/view",
+        "video": "https://drive.google.com/file/d/video/D1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D1.jpg",
         "archive": "https://drive.google.com/drive/folders/1tIOKPQVbQ6VsGNlCStBtzVLHugCc_rkQ?usp=drive_link",
         "notes": ""
        },
@@ -1653,9 +1653,9 @@
        "name": "深堀り調査と競合比較",
        "doing": "実在する競合3社のURLをClaudeに渡して各サイトを巡回させ、料金プラン・主要機能・サポート体制を抽出させて1枚の比較表（Markdown表）にまとめさせましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ZqIrZdoPNdIyo62Oasn3Wb0pdPAlPHvs/view",
-        "slide": "https://drive.google.com/file/d/1SlCb5FeJoiTREvS6Z34Y3NxJdKtYYCv3/view",
-        "info": "https://drive.google.com/file/d/1SM1xjDqKWVO7KaQJeTJbViju2UdTbedc/view",
+        "video": "https://drive.google.com/file/d/video/D2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D2.jpg",
         "archive": "https://drive.google.com/drive/folders/1LsbeBvN8N1rTt7pRVGGXzjyguYm1iTDc?usp=drive_link",
         "notes": ""
        },
@@ -1670,9 +1670,9 @@
        "name": "本格的なWEBサイト・LPをつくる",
        "doing": "自社サービスまたは自分のプロフィールを紹介するLPをClaudeにHTMLで生成させ、ヒーロー画像・写真配置・文言を調整したうえでサーバーにアップロードして公開URLを取得しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1AEj-Sl-fcTR6dLUVR9N9umcYOs6uAfYs/view",
-        "slide": "https://drive.google.com/file/d/1749up4g-Ft29c318YLgzAoV8UDLd6cz4/view",
-        "info": "https://drive.google.com/file/d/1mu5Yjfa-r6xxMQe-v0V4T_mX48DdRiRK/view",
+        "video": "https://drive.google.com/file/d/video/D3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D3.jpg",
         "archive": "https://drive.google.com/drive/folders/1nLINGSLxTC2AXWfh6mXyKEeHyOhphvLp?usp=drive_link",
         "notes": ""
        },
@@ -1687,8 +1687,8 @@
        "name": "SNS・ブログ投稿文を生成",
        "doing": "自分のブログ記事や伝えたいテーマをClaudeに渡してX（またはFacebook等）向けの投稿文を3パターン作らせ、最も良い1本を実際に自分のアカウントに投稿しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1aiN25jPltgP3ah3wtVyR0Tq-QU4icNyB/view",
-        "slide": "https://drive.google.com/file/d/17WO9ZoL5Xtlhtk_Ejf0RWozcgmzbot-4/view",
+        "video": "https://drive.google.com/file/d/video/D4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D4.jpg",
         "archive": "https://drive.google.com/drive/folders/1so9Jw8ibkUrpB0hnKNX-KYHSGhHwDF7f?usp=drive_link",
         "notes": ""
@@ -1704,9 +1704,9 @@
        "name": "SNS・ブログ記事をリライト校正",
        "doing": "自分の過去記事1本と手本にしたい文体サンプルをClaudeに渡し、その文体に合わせたリライトと誤字・冗長表現の校正を、修正箇所が分かる形（変更履歴やビフォーアフター）で出力させましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1VdF0z-uGZxw_VVCoKuL7KBdIZ7FnTsUr/view",
-        "slide": "https://drive.google.com/file/d/1zKN9NVsLlh40QP598rYv6uVq5g6-l2Bt/view",
-        "info": "https://drive.google.com/file/d/1WHuorc5yYhzWp-NL3aCc-FyaclqFMDoK/view",
+        "video": "https://drive.google.com/file/d/video/D5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D5.jpg",
         "archive": "https://drive.google.com/drive/folders/14d2uA-6lJd6ERi7iLZcVX1hVjvt0mSmO?usp=drive_link",
         "notes": ""
        },
@@ -1721,9 +1721,9 @@
        "name": "記事にイラストをつける（ChatGPT・nanobanana使用）",
        "doing": "自分の記事1本をClaudeに読ませて内容に合ったアイキャッチ画像のイメージを言語化させ、Claudeが生成できるイラスト（SVG図解など）または画像生成用プロンプトを1点作らせて記事に配置しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1LGX23CLV-0QtDrskDaZqwGuwvLdZfvMl/view",
-        "slide": "https://drive.google.com/file/d/1O4moSqsne-bGKEQtg7f4y2ZFfVOxeQYT/view",
-        "info": "https://drive.google.com/file/d/1XwXIsiPr1OWi4otsUyoNqvMk-r5JFVrQ/view",
+        "video": "https://drive.google.com/file/d/video/D6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D6.jpg",
         "archive": "https://drive.google.com/drive/folders/10Avbq5zK05bZB3O2xab8Hlc7djLxNGVq",
         "notes": ""
        },
@@ -1738,8 +1738,8 @@
        "name": "★メール下書き自動作成",
        "doing": "自分の過去メール数通をClaudeに読ませて文体を学習させ、実際に送る予定のある取引先向けメール（見積送付やお礼など）の下書きを1通、自分の文体で作成させましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1YlqO83co5jpNKwTjTnZRPeHrRFngorvp/view",
-        "slide": "https://drive.google.com/file/d/1K1w5VGgKvKzAdQMw4W76Ll0wIjnYGg1I/view",
+        "video": "https://drive.google.com/file/d/video/D7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D7.jpg",
         "archive": "https://drive.google.com/drive/folders/1inv_GPI0-mnvGlRvfbvJQQw2RaEp_exT?usp=drive_link",
         "notes": ""
@@ -1755,9 +1755,9 @@
        "name": "文字起こし自動でSNS・noteに投稿",
        "doing": "自分のセミナー音声や動画の文字起こしをClaudeに渡し、要点を整理したnote記事1本とSNS告知文を作らせて、実際にnoteとSNSに投稿しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1UiFhe_QyDHjZCzjbkeAJXg_U0Ko9h2ZK/view",
-        "slide": "https://drive.google.com/file/d/1XzHrUDWWghYztPhCgfEZ_cWUs6e9hj8v/view",
-        "info": "https://drive.google.com/file/d/1ojUATS7fLKOe9FG-R4isH28DERu0uqQ2/view",
+        "video": "https://drive.google.com/file/d/video/D8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/D8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/D8.jpg",
         "archive": "https://drive.google.com/drive/folders/1QIXHg71k9aQKaY49sDWyMxJomhq4421h",
         "notes": ""
        },
@@ -1782,9 +1782,9 @@
        "name": "メール自動管理（Gmail / Outlook対応）",
        "doing": "Claudeの設定→コネクタでGmailまたはOutlookを連携・認証し、「未読メールから重要そうな3〜5件を選んで、それぞれ返信の下書きを作って」と依頼し、下書きが実際に作成されるところまで行います（送信は必ず自分の手で）。連携が難しい",
        "url": {
-        "video": "https://drive.google.com/file/d/1Yg31IibLuyfJasinxkiv9w_U0SiYMN8s/view",
-        "slide": "https://drive.google.com/file/d/1h0RlXeFLUnT7JVPilgnJ2DpU_JZegp-x/view",
-        "info": "https://drive.google.com/file/d/1mANvWFGkfao_Qdq7GHy_YVQmfcSHB7Ho/view",
+        "video": "https://drive.google.com/file/d/video/E1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E1.jpg",
         "archive": "https://drive.google.com/drive/folders/1d8ae902Zi72D45xF1vxI0mfCYorGn0Gh?usp=drive_link",
         "notes": ""
        },
@@ -1799,9 +1799,9 @@
        "name": "カレンダー自動設定（Google / Outlook対応）",
        "doing": "GoogleカレンダーまたはOutlookカレンダーをコネクタで連携し、「来週で60分の打ち合わせを入れたい。私の空き時間を3つ提案して」と依頼したうえで、確定した1枠を実際に予定登録（または招待メールの下書き作成）するところまで行います。",
        "url": {
-        "video": "https://drive.google.com/file/d/1rmBBZ0su6HxgC5bajn8num4WlPwagtmF/view",
-        "slide": "https://drive.google.com/file/d/1LU7z5GN3peobz_Y5hQlWD-iljfPTZ8Jt/view",
-        "info": "https://drive.google.com/file/d/18V1QX7WFtoVxIx-3gOUqG1GuO-bZXG2Y/view",
+        "video": "https://drive.google.com/file/d/video/E2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E2.jpg",
         "archive": "https://drive.google.com/drive/folders/1Myw9rrCeODCp6FNXK8MqGZdHrzl6DdtB?usp=drive_link",
         "notes": ""
        },
@@ -1816,9 +1816,9 @@
        "name": "Web会議要約＋議事録Word化（Zoom / Teams / Meet対応）",
        "doing": "Web会議（Zoom / Teams / Google Meet）の文字起こしを用意し（コネクタ連携でも、手元の文字起こしファイルを貼り付ける形でもOK）、「①決定事項 ②宿題（誰が何をいつまで） ③次回アジェンダ の3構成でWordの議事",
        "url": {
-        "video": "https://drive.google.com/file/d/1N4Xn1yDAHPf8GAGgCZ0FJhiBLEZ7us2w/view",
-        "slide": "https://drive.google.com/file/d/1N3Do1WqxBsKp9BeFrTSj9QaPRMd3TFiJ/view",
-        "info": "https://drive.google.com/file/d/1O5XBXzJrQaJlN9artQrjWsiB7f0HiCer/view",
+        "video": "https://drive.google.com/file/d/video/E3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E3.jpg",
         "archive": "https://drive.google.com/drive/folders/1vkAgd4R7bvSiy2AV-prV6NC4Jmojp39U?usp=drive_link",
         "notes": ""
        },
@@ -1833,9 +1833,9 @@
        "name": "チャットツール横断検索（Teams / Chatwork / Slack対応）",
        "doing": "社内で使っているチャットツール（Teams / Slack / Chatwork / LINE WORKS等）をコネクタで連携し、「指定チャンネル/グループの過去1ヶ月のメッセージから、よく出る要望・不満をテーマ別に集計して」と依頼して要約",
        "url": {
-        "video": "https://drive.google.com/file/d/1ay4UBIeM7pDBCD5cPs4BkHFXF-NReM59/view",
-        "slide": "https://drive.google.com/file/d/1vdxiWeJ2dG1DnDysykwIj1cCJoSnDCWW/view",
-        "info": "https://drive.google.com/file/d/1yefeQze9XAHvq_ACKix0nu04upSK98az/view",
+        "video": "https://drive.google.com/file/d/video/E4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E4.jpg",
         "archive": "https://drive.google.com/drive/folders/1ZPMKf2Z1yPvk6r_ZtBDhh2qkq3wemDGx?usp=drive_link",
         "notes": ""
        },
@@ -1850,9 +1850,9 @@
        "name": "チャットツールへ自動通知（Teams / Chatwork / Slack対応）",
        "doing": "チャットツール（Teams / Slack / Chatwork等）をコネクタで連携し、手元のレポートやファイルを指定して「〇〇チャンネルに『今月の売上は前月比+8%でした。詳細は添付参照』のコメントを付けて投稿して」と依頼し、実際にチャン",
        "url": {
-        "video": "https://drive.google.com/file/d/1OBCgWXNVQpK3G2sCE6XEkHWkwg-iR35m/view",
-        "slide": "https://drive.google.com/file/d/1xecNrnxWUxIomvMehbOwYjppTY98fF9R/view",
-        "info": "https://drive.google.com/file/d/1qjWkqxEqXrxV0JYcwpxLJWFYBY_ecJwU/view",
+        "video": "https://drive.google.com/file/d/video/E5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E5.jpg",
         "archive": "https://drive.google.com/drive/folders/15HHyfwL_Yl6HGaAWqvg1aJG3TswZ5vs0?usp=drive_link",
         "notes": ""
        },
@@ -1867,9 +1867,9 @@
        "name": "ノート・DBへ自動記録（OneNote / Notion / Spreadsheet対応）",
        "doing": "OneNote / Notion / Googleスプレッドシートのいずれかをコネクタで連携し、「今日の会議の決定事項とタスクを、指定のシート/ページに新規行/ページとして追加して。タグは『MTG』『〇〇案件』で」と依頼し、実際に書き込まれ",
        "url": {
-        "video": "https://drive.google.com/file/d/1Msoc-XsUN37S4huoWskXL6jUIDKyEq7O/view",
-        "slide": "https://drive.google.com/file/d/1HiA_vok76ZZyZwdFajyJvL5CoK3yHrg_/view",
-        "info": "https://drive.google.com/file/d/10qxL4Slz2PEvqPIqfv4SdgTbatUVfJ80/view",
+        "video": "https://drive.google.com/file/d/video/E6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E6.jpg",
         "archive": "https://drive.google.com/drive/folders/18QwBh_t14VP9hmVGmWVQ5eCL7lYK-aYA?usp=drive_link",
         "notes": ""
        },
@@ -1884,9 +1884,9 @@
        "name": "日本企業ツール起票（kintone / Chatwork / Backlog）",
        "doing": "kintone / Chatwork / Backlog など自社で使う日本製ツールをコネクタで連携し、「〇〇グループの新規メッセージを読んで、それぞれBacklog（またはkintone）のチケットとして起票して。担当者・優先度は内容から",
        "url": {
-        "video": "https://drive.google.com/file/d/1zx7j6KfGqpD9jWR6_4u2YMHyw0YTX-qU/view",
-        "slide": "https://drive.google.com/file/d/1z5dcmU1fOwXNuKEjzDRXnPyLpaVrLlpB/view",
-        "info": "https://drive.google.com/file/d/1qnpkcsA3zOS4C4-TLMxhmt_WgnPrbCsC/view",
+        "video": "https://drive.google.com/file/d/video/E7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E7.jpg",
         "archive": "https://drive.google.com/drive/folders/1IHUS41yP_jkvwJEj2WWxudgnyZ8x1eCu?usp=drive_link",
         "notes": ""
        },
@@ -1901,9 +1901,9 @@
        "name": "ツール横断で集約",
        "doing": "Drive / OneDrive・チャットツール・タスク管理ツールなど2つ以上をコネクタで連携し、「〇〇プロジェクトの今週の進捗を各ツールから集めて、A4 1枚のステータスレポートにまとめて」と依頼し、横断集約レポートが出力されるところまで",
        "url": {
-        "video": "https://drive.google.com/file/d/1AswjCEfdJY7JHoA3eHkmsC3Q7zxdrgpy/view",
-        "slide": "https://drive.google.com/file/d/1RPn3vGH8GRA-Jyf-bXmGLQyK7R-H4OqK/view",
-        "info": "https://drive.google.com/file/d/1OaftA7Wwu9X7BHO1E_l-tpymVefCi163/view",
+        "video": "https://drive.google.com/file/d/video/E8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/E8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/E8.jpg",
         "archive": "https://drive.google.com/drive/folders/1oQCW8mmiDXkzWtnflM2UhtWaosl134b1?usp=drive_link",
         "notes": ""
        },
@@ -1928,9 +1928,9 @@
        "name": "CLAUDE.mdで記憶設定",
        "doing": "自分の作業フォルダに『CLAUDE.md』を作成し、自社の用語集と守るべきルール（『塾長』『朝活』など社内特有の言葉の辞書化を含む）をClaudeにまとめさせ、次回同じフォルダでの作業時に自動で参照されることを確認しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ymAwfHNfx1eXgJD8woIqSdkxSKDra9yM/view",
-        "slide": "https://drive.google.com/file/d/1AViZG3lnfimVLMKkjGaS3Sq2XDz3QfmO/view",
-        "info": "https://drive.google.com/file/d/19dvnDmXqFYy_1-dq7eQ-uFEFhad9aznq/view",
+        "video": "https://drive.google.com/file/d/video/F1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F1.jpg",
         "archive": "https://drive.google.com/drive/folders/1iwh6CePf_EYBCoc1qRO-NGIAiZWiYr9n?usp=drive_link",
         "notes": ""
        },
@@ -1945,9 +1945,9 @@
        "name": "事例をリファレンス化",
        "doing": "自分の作業フォルダに『references』フォルダを作って過去の成功事例や自社のデザインフォーマットを数点格納し、以降の出力時に必ずそのフォルダのスタイルを参考にするようCLAUDE.mdに書き加えましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1dg4hwbKX3M-HLo-MxgYP-lCipONyqzMV/view",
-        "slide": "https://drive.google.com/file/d/1ySL-bmvOTBHE1zN_4Zv93rP88EDf3GpA/view",
-        "info": "https://drive.google.com/file/d/1PBE6vO5g-la4CeQJNuj6oxGzkFn_00hg/view",
+        "video": "https://drive.google.com/file/d/video/F2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F2.jpg",
         "archive": "https://drive.google.com/drive/folders/1Tg2SlA-wseQsTn2pr5Cz7FCy15ak_psS?usp=drive_link",
         "notes": ""
        },
@@ -1962,9 +1962,9 @@
        "name": "定型業務をスキル化",
        "doing": "自分が毎回繰り返している定型業務（毎週のレポート作成や月次処理など）の手順をClaudeに伝えてSKILL.mdとしてスキル化し、次回から一言で呼び出せる状態にしましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1pafzvNT8-3tLS20QyfYIC-e2Qlr3d8t-/view",
-        "slide": "https://drive.google.com/file/d/1X_Nww8rQYJG1L2cWIzFAZIdYkxnicKya/view",
-        "info": "https://drive.google.com/file/d/1_pRV27mSgyUbVsnqCfipD5GuY1RXF191/view",
+        "video": "https://drive.google.com/file/d/video/F3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F3.jpg",
         "archive": "https://drive.google.com/drive/folders/1DcgCsFce4oTRwAfZzbbFH5jjaCH6uJd_?usp=drive_link",
         "notes": ""
        },
@@ -1979,9 +1979,9 @@
        "name": "スキルを自動作成",
        "doing": "skill-creator（スキルクリエイター）を起動し、対話形式の質問に答えながら自分専用の新しいスキルを1つ自動でコード化・作成し、テストまで通しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/15fssvIJETYGiRf1LR_ltUIK9i1-BXHxW/view",
-        "slide": "https://drive.google.com/file/d/1zDxHOdYZv137fAvejS8apRaZJ1v15H8K/view",
-        "info": "https://drive.google.com/file/d/1s7CmM6Hi8hXJA8UN0owgblwydahW2us4/view",
+        "video": "https://drive.google.com/file/d/video/F4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F4.jpg",
         "archive": "https://drive.google.com/drive/folders/1sQHwk3cf8yFZvVoc-jIQnOdOmYZ5Yxuk?usp=drive_link",
         "notes": ""
        },
@@ -1996,9 +1996,9 @@
        "name": "★Web運営更新の体制構築",
        "doing": "自社サイト・LPの更新運営を組織で回すため、①トーンや使ってよい色・NG表現を定めたWebサイト用CLAUDE.md ②軽微／中規模／大改修の3パターンの更新フロー ③権限のAllow/Denyリスト ④更新履歴テンプレート、を一式Clau",
        "url": {
-        "video": "https://drive.google.com/file/d/1kQUpr4Nf_W1b6xgdrQ9qozcKME_Y0PVB/view",
-        "slide": "https://drive.google.com/file/d/1xt8y54b5iX2Fa1hR3HoXaxz0i7tfgWAM/view",
-        "info": "https://drive.google.com/file/d/1wREutXh15Y0UuUJbFEEfgPj1vyJTMxn2/view",
+        "video": "https://drive.google.com/file/d/video/F5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F5.jpg",
         "archive": "https://drive.google.com/drive/folders/1kTAcG56NRg-xx0YFYdx87-HQS5TlD2fO?usp=drive_link",
         "notes": ""
        },
@@ -2013,9 +2013,9 @@
        "name": "AI自己学習の仕組み化",
        "doing": "1回分の作業が終わったタイミングで、Claudeに今回の作業を振り返らせて次回もっとうまくやるためのコツを3つ抽出させ、そのままCLAUDE.mdに追記させる振り返りを実際に1度行いましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1GbQ0t2eP6oDCA9I9g781G6evywKvM3tP/view",
-        "slide": "https://drive.google.com/file/d/1V-A5bRyyYCe501L18ijzElkUohAYHmsV/view",
-        "info": "https://drive.google.com/file/d/1GtNWTEYJY0Kkn--sDSAO3bVaJbIHCgTW/view",
+        "video": "https://drive.google.com/file/d/video/F6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F6.jpg",
         "archive": "https://drive.google.com/drive/folders/1jJHmAFmvzdxAFK8hkhYcX_j8AvB1w6Ts?usp=drive_link",
         "notes": ""
        },
@@ -2030,9 +2030,9 @@
        "name": "★AIマネジメント習得（強化版）",
        "doing": "1つの実務プロジェクトで、①自分の願望をClaudeにヒアリングさせて言語化 ②実行計画を立てさせる ③自分が承認したら実行 ④節目ごとに報告、という流れを実際に回し、願望の言語化・委任の設計・承認の判断を体験しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1tqBI7aZfDUwQi8ndLUUPS39cva9IftYR/view",
-        "slide": "https://drive.google.com/file/d/14K8zSbodzB1KG84NGvmzg7rYW6ND8Jil/view",
-        "info": "https://drive.google.com/file/d/1rCu0cHzaCHKLVy7OUpDq_AhS8m2c41aK/view",
+        "video": "https://drive.google.com/file/d/video/F7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F7.jpg",
         "archive": "https://drive.google.com/drive/folders/1WS4bjYIU2EKvozDIsXUI5PdNz_k1TxqL?usp=drive_link",
         "notes": ""
        },
@@ -2047,9 +2047,9 @@
        "name": "ツール権限を設定",
        "doing": "Claudeの設定（settings JSON／Tools＞Permissions）を開き、『ファイル削除はDeny』『特定フォルダのみAllow』など自分の業務に合わせた権限のAllow／Denyを実際に1つ以上編集しましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ZyD_WQZlq-5RDEUE4pTUkGx45fvgiHPP/view",
-        "slide": "https://drive.google.com/file/d/1MY4QQJb0QQxMD_Bwu8f9_F2WE5deitAp/view",
-        "info": "https://drive.google.com/file/d/1l9GdzAWpP0TxF3-aTzltTNtcYr76iJfg/view",
+        "video": "https://drive.google.com/file/d/video/F8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/F8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/F8.jpg",
         "archive": "https://drive.google.com/drive/folders/18GAfDdRC5iKKKmK-SGvM7wgsrZImV7-W?usp=drive_link",
         "notes": ""
        },
@@ -2074,9 +2074,9 @@
        "name": "ニュースを定期収集",
        "doing": "Claudeのスケジュール機能（Scheduled Tasks）で『毎朝9時に自分の業界の最新ニュースを5件リサーチして要約し、Slackの指定チャンネルに投稿する』タスクを新規作成し、実際に1回実行させて動作を確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1d3Gu0igIK9g5fiIoXUmEEUUWBHUuQIwJ/view",
-        "slide": "https://drive.google.com/file/d/1qeRBaNRCJ5Y5MiDV1-M1NG4d519xnaIf/view",
-        "info": "https://drive.google.com/file/d/1n-RSfUH_2p4IAvrI2ZiYHzcbmn0hXcii/view",
+        "video": "https://drive.google.com/file/d/video/G1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G1.jpg",
         "archive": "https://drive.google.com/drive/folders/1CKK626cKldg_rR-NE29qLFbT3buQ-jOx?usp=drive_link",
         "notes": ""
        },
@@ -2091,9 +2091,9 @@
        "name": "経費・売上を定期集計",
        "doing": "スケジュール機能で『毎週金曜18時に経費・売上データを集計してレポート化し、Googleドライブに保存したうえで自分に通知する』定期タスクを設定し、テスト実行して集計レポートが生成されることを確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1fbMo0j7T5jWRxzKSU_tEk9k9o11lMkIj/view",
-        "slide": "https://drive.google.com/file/d/12AAJDH9f7TSDvwplRURixG1sLGTUrbPM/view",
-        "info": "https://drive.google.com/file/d/1VmyA2bDrrXtIyTNiwCH9cwoFaV_LRbvR/view",
+        "video": "https://drive.google.com/file/d/video/G2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G2.jpg",
         "archive": "https://drive.google.com/drive/folders/102kdk0JlaX5PEWVC3kWWnrSr4tGYwh-7?usp=drive_link",
         "notes": ""
        },
@@ -2108,9 +2108,9 @@
        "name": "非同期タスク処理",
        "doing": "自分の実務でたまっている複数のタスクをリスト化し、Claudeに『優先度順にバックグラウンドで非同期処理し、完了したら通知して』と依頼して、席を外している間に処理を進めさせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1af2iFiJreQLVwTt0cbT5I-IQ0PidQapj/view",
-        "slide": "https://drive.google.com/file/d/1ue9DqO11Z7tUmU7uT39O7isC0zEmQagO/view",
-        "info": "https://drive.google.com/file/d/17lJn0Qy60JXyeISV4CVJsQ20fzPEcMLl/view",
+        "video": "https://drive.google.com/file/d/video/G3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G3.jpg",
         "archive": "https://drive.google.com/drive/folders/14ODVnnJ5OCPp7eH4XOS_MOGVLzZcey9i?usp=drive_link",
         "notes": ""
        },
@@ -2125,9 +2125,9 @@
        "name": "Hooksでトリガー実行",
        "doing": "自分の作業フォルダの .claude/settings.json にHookを設定し、『指定したCSVファイルが更新されたら自動で集計スキルを実行する』など、ファイル変更をトリガーにした自動実行を1つ組んで動作を確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1jmVtikv7k57CNSXkP9dDO3lTl4eNyHgM/view",
-        "slide": "https://drive.google.com/file/d/1JBSIf6hW9zLAh15UsmhPMcTy7fFaq19v/view",
-        "info": "https://drive.google.com/file/d/1wr1fABZ_I9O6HDDZD469cZGIJmt4rYcm/view",
+        "video": "https://drive.google.com/file/d/video/G4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G4.jpg",
         "archive": "https://drive.google.com/drive/folders/1ON8lJQ7j3bhD4sqA3TMOAIRovzBq92yW?usp=drive_link",
         "notes": ""
        },
@@ -2142,9 +2142,9 @@
        "name": "ワークフローを一本化",
        "doing": "複数のスキルとMCPを連結し、『①データ取得→②分析→③PowerPoint作成→④Slackの報告チャンネルへ投稿』という一連のワークフローを1つ組み立て、ワンクリック（または毎月自動）で最後まで通しで実行させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1psNQ_nHLGfR4mBkVDyMed9mYN0Zi3u8N/view",
-        "slide": "https://drive.google.com/file/d/1DXkRbUkp92MxAfUkjQcQLSLsoCjS0d0V/view",
-        "info": "https://drive.google.com/file/d/1fqjrnKpXpfzj_owxPHWKZqx0P8CvTM6P/view",
+        "video": "https://drive.google.com/file/d/video/G5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G5.jpg",
         "archive": "https://drive.google.com/drive/folders/1Hpmksqhg7x0xQBxjERyKAZvtiJJnOsdN?usp=drive_link",
         "notes": ""
        },
@@ -2159,9 +2159,9 @@
        "name": "競合ページを定期監視",
        "doing": "スケジュール機能で『毎朝、競合3社のWebサイトをチェックして前日からの変更点があればSlackのチームチャンネルに通知する』監視タスクを設定し、実際に差分レポートが届くところまで確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1JH4mozbdlZsBImHcI3thFk51rv0fCfkP/view",
-        "slide": "https://drive.google.com/file/d/1vmMJ9iB0qFB51CilaILF1PT0oUNhzMWx/view",
-        "info": "https://drive.google.com/file/d/1d1OolHhtzr6Ii0C-L0gNzvA7TFRIW5zN/view",
+        "video": "https://drive.google.com/file/d/video/G6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G6.jpg",
         "archive": "https://drive.google.com/drive/folders/1uuEOIdv0IPXlsCG4BqqQ8gDQSJGOfoPI?usp=drive_link",
         "notes": ""
        },
@@ -2176,9 +2176,9 @@
        "name": "朝の予定を自動報告",
        "doing": "カレンダー連携とスケジュール機能を組み合わせ、『毎朝8時にカレンダーから今日の予定を、タスク管理ツールから今日のタスクを取得し、今日のブリーフィングとして自分のSlack DMに送る』秘書タスクを設定します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1VjdoQI737m2a3Mdo5RRwQ1xSvqp8NCcl/view",
-        "slide": "https://drive.google.com/file/d/1pe6fcpZXlbJRS6a9XlEw27qZ3o7H3Web/view",
-        "info": "https://drive.google.com/file/d/1JasxLa2P-vSlLRshRC_NLzU98eoLInos/view",
+        "video": "https://drive.google.com/file/d/video/G7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G7.jpg",
         "archive": "https://drive.google.com/drive/folders/1hU5vnijOBIsm_gu1MH78fOARU37duPaQ?usp=drive_link",
         "notes": ""
        },
@@ -2193,9 +2193,9 @@
        "name": "完全自動で走り切る",
        "doing": "削除・送信を含まない信頼できるタスクを1つ選び、Claudeにオートモード（auto mode）で『途中確認なしで最後まで実行し、完了時のみ報告して』と指示して、人が介在せず自動で走り切らせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1q1VGATU-24ksZdGfKSgVgqPWqNTbb6LN/view",
-        "slide": "https://drive.google.com/file/d/1FZLF52PGjaxlGNMXTxN8ZXBBSLQHKf7c/view",
-        "info": "https://drive.google.com/file/d/1XPMiVu0PmvGAUAv75hzau1E3ezVoE2ra/view",
+        "video": "https://drive.google.com/file/d/video/G8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/G8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/G8.jpg",
         "archive": "https://drive.google.com/drive/folders/1_B5B6O3cBMnw5CU-fAcVBk_ZO4lXNYl2?usp=drive_link",
         "notes": ""
        },
@@ -2220,9 +2220,9 @@
        "name": "Planモードで設計",
        "doing": "自分が実際に作りたいシステムや業務改善のテーマを1つ選び、Shift+TabでPlanモードに切り替えて、いきなり作業させず要件定義から実装計画まで提案させ、内容をレビューして承認してから実行に進みます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1TgzDqDcK7sBnyhwwGwGzqGc94eyp9WNx/view",
-        "slide": "https://drive.google.com/file/d/13pW8QaoiJwa_44Q4phUohwDyfHGhGGvk/view",
-        "info": "https://drive.google.com/file/d/1rDR9oJhyv7012-qTH_pukv1JqamYILMc/view",
+        "video": "https://drive.google.com/file/d/video/H1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H1.jpg",
         "archive": "https://drive.google.com/drive/folders/1nzWt2_CaaH29rBCR5NlT5pjWZ0yOVx7A?usp=drive_link",
         "notes": ""
        },
@@ -2237,9 +2237,9 @@
        "name": "戦略壁打ち（マンダラ×SWOT×3C）",
        "doing": "自分の事業や経営課題を1つ選び、マンダラチャートで8視点に展開させたうえでSWOT分析・3C分析で内外環境を整理させ、長老視点（中道・利他）も加えて多面的に『次の一手』を提案させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1yJDRSz-qxXyh9hd8-62IrFgKCRt1SVbs/view",
-        "slide": "https://drive.google.com/file/d/1PXlKEOuWtGNVVDwgKGGnF-Wu8Kc9xH1U/view",
-        "info": "https://drive.google.com/file/d/1emYhv8Hsb9FgzGFyq8RDVojYVqzb_MJq/view",
+        "video": "https://drive.google.com/file/d/video/H2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H2.jpg",
         "archive": "https://drive.google.com/drive/folders/1VHLhwz5ROxLvqZDUO3jevy2P9acpoGUz?usp=drive_link",
         "notes": ""
        },
@@ -2254,9 +2254,9 @@
        "name": "採用面接シミュ（求人票→ロープレ→評価）",
        "doing": "自社で実際に採用したい職種を1つ選び、①魅力的な求人票 ②見極める面接質問10個 ③候補者役とのロープレ ④スコア付き評価レポート、の採用プロセス一連をClaudeにシミュレートさせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ubwmGCUHm9dLrp3h-PZ97KWyinLr9t16/view",
-        "slide": "https://drive.google.com/file/d/1jPtWv03OLgi_GDCLsajUfmpz5QGDA3OH/view",
-        "info": "https://drive.google.com/file/d/1yw9odgRVz3U32VkvJnBrZgwKU8VvW4t9/view",
+        "video": "https://drive.google.com/file/d/video/H3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H3.jpg",
         "archive": "https://drive.google.com/drive/folders/1wnAL-Zn4sDsWZn6JN6kzbOfa_fBGV7CA?usp=drive_link",
         "notes": ""
        },
@@ -2271,9 +2271,9 @@
        "name": "取締役会3視点議論（CEO/CFO/CMO+仏陀の長老）",
        "doing": "自社の実際の経営判断テーマ（新規事業を始めるべきか等）を1つ選び、CEO（攻め）・CFO（守り）・CMO（顧客視点）・仏陀の長老（中道・利他）の4視点で賛成・反対の論点を出させ、最後に統合判断までClaudeに議論させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/12sxESjdYgkHAOtBxrldY-aJkQCiHieQ-/view",
-        "slide": "https://drive.google.com/file/d/1Cd2_HEaVYh3xgfTty_gAMFEgnKxeKtWv/view",
-        "info": "https://drive.google.com/file/d/1PGFOqkQ5VxDlKf9u5HteXi_uLX2OJr5y/view",
+        "video": "https://drive.google.com/file/d/video/H4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H4.jpg",
         "archive": "https://drive.google.com/drive/folders/1OYOFsrx7arwh6Anwdcy3b_FRFEwqqB2q?usp=drive_link",
         "notes": ""
        },
@@ -2288,9 +2288,9 @@
        "name": "AI専門チームで制作",
        "doing": "リサーチ担当・執筆担当・ファクトチェック担当の3体のサブエージェントを起動し、自分のテーマで役割を分担・連携させて、5000字程度の記事や資料を1本、並列のAIチームで制作させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1IcgTlJ09NuZYQAWYurq3HXND7V2nZ3ud/view",
-        "slide": "https://drive.google.com/file/d/1lfGnQgSjJBXG78GFcle5KyAXZJCkM6hx/view",
-        "info": "https://drive.google.com/file/d/12y74dEadAe0n99ISxRsoyEip3QfPv5a3/view",
+        "video": "https://drive.google.com/file/d/video/H5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H5.jpg",
         "archive": "https://drive.google.com/drive/folders/1ihOw_h6aEZMkuhnegNPah4bCdWZQ22UQ?usp=drive_link",
         "notes": ""
        },
@@ -2305,9 +2305,9 @@
        "name": "値決め壁打ち（価格戦略・原価分解・LTV）",
        "doing": "自分の新商品・サービス（または自分の時間単価）を題材に、①原価を分解 ②競合3社の価格と機能を比較 ③LTVを3パターンで試算 ④心理的価格帯を考慮した最終価格3案、をClaudeと壁打ちして詰めます。",
        "url": {
-        "video": "https://drive.google.com/file/d/11PYMNyvVBR6XZfKcvT6FJZnF9xmhJw31/view",
-        "slide": "https://drive.google.com/file/d/1mwFmfiQFFTHxbWM4BwsYwS6FNO-4mnmi/view",
-        "info": "https://drive.google.com/file/d/170t62b5prFoi2lJaFxA-MBoBDh2a5d5h/view",
+        "video": "https://drive.google.com/file/d/video/H6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H6.jpg",
         "archive": "https://drive.google.com/drive/folders/1inGANIde1wxzQqMMbFoKuf-E616GhJZZ?usp=drive_link",
         "notes": ""
        },
@@ -2322,9 +2322,9 @@
        "name": "疑似会社組織を構築",
        "doing": "CEO・CMO・CFO・CTOなど部署を模したフォルダ構造を自分のPCに作り、各フォルダに専門知識・口調・判断基準を書いたCLAUDE.mdを配置して、役員を呼び出すとその人格で応答する疑似会社組織を構築します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1RMDF6FrW5o9cxRf4fFmP-4ZFedzCDfG3/view",
-        "slide": "https://drive.google.com/file/d/1-zwGQe0OSLYgULebIzLsmpy7HTwc9b3f/view",
-        "info": "https://drive.google.com/file/d/13wpGKQAHVjabNBUN1_tp_JfkU2PCbqir/view",
+        "video": "https://drive.google.com/file/d/video/H7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H7.jpg",
         "archive": "https://drive.google.com/drive/folders/1i24kjVZf4NDM7injyzCC8m29W9VkAtZU?usp=drive_link",
         "notes": ""
        },
@@ -2339,9 +2339,9 @@
        "name": "複数AIを並列指揮",
        "doing": "ターミナルを複数に分割して各ペインで別々のClaude Codeを起動し、別々のプロジェクトを同時に走らせ、自分は司令塔として複数のAIを並列に指揮します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1Eaw4BUTONdoEXKVz0TpUkDV89XpH325j/view",
-        "slide": "https://drive.google.com/file/d/1wuJoSj7jCrgHzajP9NoLtKN18m_52qg7/view",
-        "info": "https://drive.google.com/file/d/1zMDO7smqzz-RUoBzHRQTRziOakD8goXv/view",
+        "video": "https://drive.google.com/file/d/video/H8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/claude64/slide/H8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/claude64/info/H8.jpg",
         "archive": "https://drive.google.com/drive/folders/1-Wh1LQZ-_Ac2LOvK69aaDeryGmEiN7vH?usp=drive_link",
         "notes": ""
        },
@@ -2375,9 +2375,9 @@
        "name": "アカウント作成と3つのモードの使い分け",
        "doing": "ChatGPTのアカウントを作成し、ChatモードとWorkモードをそれぞれ1回ずつ実際に使ってみます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ySkZT9jUp2ndNj-s68xCPYAoHApZUBVH/view",
-        "slide": "https://drive.google.com/file/d/17wZ-WrLiRwicOb6pwCN_fyOMLvWMJUf0/view",
-        "info": "https://drive.google.com/file/d/110FxFFQOZ5bS6iwyQsWCBY8ejUWMoyKh/view",
+        "video": "https://drive.google.com/file/d/video/A1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A1.jpg",
         "archive": "https://drive.google.com/drive/folders/1tvDWZVuplWutPPIfPY2tf7TbHgptQ2OZ",
         "notes": ""
        },
@@ -2392,9 +2392,9 @@
        "name": "初めてのプロンプトとハルシネーション対策",
        "doing": "自分の業界についてChatGPTに質問し、回答のうち1つを実際にWeb検索して裏取りします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1hREAmzIE1wZcLB9x69Hs8cqC3Aub56sO/view",
-        "slide": "https://drive.google.com/file/d/198kAb-zI7W6ZKxZlVtrlZRe-GDgasjcu/view",
-        "info": "https://drive.google.com/file/d/1OnL4_6kd1EhTEvD6GJsDOUd13b_Fsv_S/view",
+        "video": "https://drive.google.com/file/d/video/A2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A2.jpg",
         "archive": "https://drive.google.com/drive/folders/1MVOAQHMsJPs4sAM6OODpcGt98ohFteux",
         "notes": ""
        },
@@ -2409,9 +2409,9 @@
        "name": "チャット分岐と会話履歴の整理",
        "doing": "話題の違う2つの相談を、それぞれ別々の新規チャットに分けて実行します。",
        "url": {
-        "video": "https://drive.google.com/file/d/10301iH_1WlqWaBZOc_kyECKpCnqOToGj/view",
-        "slide": "https://drive.google.com/file/d/1QtEN5WQbGMgK8pz_RlE09mk1GR8bSKRg/view",
-        "info": "https://drive.google.com/file/d/1G0INcxlnRNN-JSl1qACTXaFUsOgXetPI/view",
+        "video": "https://drive.google.com/file/d/video/A3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A3.jpg",
         "archive": "https://drive.google.com/drive/folders/1NE4hKGDYuM6-30jbZLRhu9S1TVTTjn18",
         "notes": ""
        },
@@ -2426,9 +2426,9 @@
        "name": "質問の解像度を上げる工夫とカスタム指示",
        "doing": "カスタム指示（自分の職業・前提・好みの口調）を設定し、設定前後で同じ質問をして回答の違いを見比べます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1oCHbPoUaSUUTca6d1kbtnNCajq53jyAB/view",
-        "slide": "https://drive.google.com/file/d/1f6cI06AQdKIP8T3-iqfXnXQMKRYJgzA3/view",
-        "info": "https://drive.google.com/file/d/1Si9wF0qz5Z-PA71Vjk8sZ1C9UImVyYhW/view",
+        "video": "https://drive.google.com/file/d/video/A4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A4.jpg",
         "archive": "https://drive.google.com/drive/folders/1BuN1xQoXCyW1R0LqAz0YNaro7lO6-KRc",
         "notes": ""
        },
@@ -2443,9 +2443,9 @@
        "name": "音声対話「GPT-Live」の基礎と活用",
        "doing": "スマホアプリのGPT-Liveで「聞き役になって」と役割を渡し、5分間、今日の仕事の壁打ちをします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1bTUSAyZoEoyDpmZUrCIoB4yi0VwHVCNi/view",
-        "slide": "https://drive.google.com/file/d/1CzD0Wbt4gYJz2rhWdZZysB3jGqyZb2Uc/view",
-        "info": "https://drive.google.com/file/d/1e9NeBBDeJTEfQ_-E1ejCAdjg-y7p9FO7/view",
+        "video": "https://drive.google.com/file/d/video/A5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A5.jpg",
         "archive": "https://drive.google.com/drive/folders/1uvcruqfAXtvQRM1Z1Ulrt4gKIvfoDbLS",
         "notes": ""
        },
@@ -2460,9 +2460,9 @@
        "name": "GPT-Liveで営業トークのロールプレイ",
        "doing": "GPT-Liveに「厳しい見込み客」を演じてもらい、自社商品で営業ロールプレイを1本行って、100点満点の採点コメントをメモに残します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1xBh6NZZ_xRv8MM5-cbglay1C_N4HB10c/view",
-        "slide": "https://drive.google.com/file/d/1_eCwruR9n2S3nsKo9D2BvtF_5JkxKS2U/view",
-        "info": "https://drive.google.com/file/d/1STxeTIAjN0Hmc8pSSWD8bycDxQaafcWN/view",
+        "video": "https://drive.google.com/file/d/video/A6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A6.jpg",
         "archive": "https://drive.google.com/drive/folders/1565LeIk13uSSwuqokwRJWS1UZs1jju-d",
         "notes": ""
        },
@@ -2477,9 +2477,9 @@
        "name": "GPT-Liveで人事1on1面談のシミュレーション",
        "doing": "GPT-Liveに「元気のない入社2年目の部下」を演じてもらって1on1シミュレーションを1本行い、指摘された改善点3つをメモに残します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1lxe7CMgETKnrJlYch6OljS3pRErtefU_/view",
-        "slide": "https://drive.google.com/file/d/1wRrBMKt5No5TQiO7yT6o294-JOqPORn3/view",
-        "info": "https://drive.google.com/file/d/1FPlvWcsMn0e8Vmnn_xuHe4RIMU7ixqgy/view",
+        "video": "https://drive.google.com/file/d/video/A7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A7.jpg",
         "archive": "https://drive.google.com/drive/folders/1npI_SO-LpxzxxG7XhGWx0NN3-8Wj2Yk5",
         "notes": ""
        },
@@ -2494,9 +2494,9 @@
        "name": "「質問するAI」から「仕事を進めるAI」へ",
        "doing": "普段「検索」で済ませていたことを1つ選び、「調べて、まとめて、作って」の依頼文に書き換えてChatGPTに実行させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1zCYggvVGtAz-8l3LAJR55UXIobh4GHnx/view",
-        "slide": "https://drive.google.com/file/d/150l6DiHVmabJw4kKJ65ajJCnfChIE5je/view",
-        "info": "https://drive.google.com/file/d/1tPPy-nUGFNEuJK8tKSg0q-OqXitvqNSg/view",
+        "video": "https://drive.google.com/file/d/video/A8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/A8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/A8.jpg",
         "archive": "https://drive.google.com/drive/folders/1Ayg7RpwGR7fnADEBsO0bzgG1yBaUmCTu",
         "notes": ""
        },
@@ -2521,9 +2521,9 @@
        "name": "長文の要約・翻訳と情報収集の自動化",
        "doing": "業界ニュースの記事を1本選んでChatGPTに3行要約させ、その要約をそのまま朝礼や社内チャットで共有します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ygoob9J1arYUMI53sxSP-jaoks2VKtWy/view",
-        "slide": "https://drive.google.com/file/d/1gDpHTnzAvt3gFmb-JItW-7_bCupeCtd0/view",
-        "info": "https://drive.google.com/file/d/141sMIDttCyv_AuMyoyDPEMZcuxtTIhb5/view",
+        "video": "https://drive.google.com/file/d/video/B1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B1.jpg",
         "archive": "https://drive.google.com/drive/folders/1XtlZfJGCFvCKm9qbYKRoOdeDTIT6FtUR",
         "notes": ""
        },
@@ -2538,9 +2538,9 @@
        "name": "目的・トーンを指定したビジネスメール作成",
        "doing": "気が重いメールを1通ChatGPTと共作し、送信前に相手役のロールプレイで受け取り方を確認してから、実際に送信します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1fhUrMn5HjMvDgs_cYJHOfP9sCIAqVjgo/view",
-        "slide": "https://drive.google.com/file/d/1nZBVtsTBB1LK3qNHKUtIDVVLYN5wzQkG/view",
-        "info": "https://drive.google.com/file/d/1oKavOslCMhK4W_4wlPk4trEKpLbmRFt8/view",
+        "video": "https://drive.google.com/file/d/video/B2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B2.jpg",
         "archive": "https://drive.google.com/drive/folders/1c2STnbGv8Napm6WC2uzS9vFZ26vo8oU_",
         "notes": ""
        },
@@ -2555,9 +2555,9 @@
        "name": "ファイル読み込みと資料に基づくQ&A",
        "doing": "手元の規程・契約書・マニュアルを1つChatGPTに読み込ませ、内容について3つ質問して、原本と答え合わせをします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1zcfA1osYIeLTE3KrsFbK4aAbOAWF_-Mo/view",
-        "slide": "https://drive.google.com/file/d/1kougS0Fw-zyfQh043YcLETA3NJFgU3dN/view",
-        "info": "https://drive.google.com/file/d/17Ackv2SE6VxaYfHsqvgAdtmqJEoQpm7T/view",
+        "video": "https://drive.google.com/file/d/video/B3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B3.jpg",
         "archive": "https://drive.google.com/drive/folders/1h19IZYXGVVGVqwB5maAjxyqfE1COskLY",
         "notes": ""
        },
@@ -2572,9 +2572,9 @@
        "name": "バラバラの情報を表に整理・抽出する",
        "doing": "直近のメール5通の文面をChatGPTに渡し、案件名・相手・金額・期日・次のアクションの5項目で案件一覧表を作らせます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1GQTcraP9jSyVLiMsDpczXg8nK9EsWGhV/view",
-        "slide": "https://drive.google.com/file/d/1J4cpls8GR4AoGFbQCIbQaMfKenHV42hh/view",
-        "info": "https://drive.google.com/file/d/1-kaVyHGAIrruK5jJb9mh92F71vkLSymU/view",
+        "video": "https://drive.google.com/file/d/video/B4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B4.jpg",
         "archive": "https://drive.google.com/drive/folders/160s_RUCpXKjgAUI0CjQN-H2BZncN2PJZ",
         "notes": ""
        },
@@ -2589,9 +2589,9 @@
        "name": "Workで複数Excel/CSVを統合・集計・分析",
        "doing": "自社の売上・経費などのExcel/CSVを2ファイル以上Workモードに渡して統合・集計させ、そこから気づきを1つ書き留めます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1bh54S2ln3CSAZ-Ci_8OHHfkHKTDKXMWO/view",
-        "slide": "https://drive.google.com/file/d/13d3vSd1PXaen_FVCaKtezCus-uPjhmmf/view",
-        "info": "https://drive.google.com/file/d/1jnapr_9X4-v5znu58b6wQnbXNqmhm9Xn/view",
+        "video": "https://drive.google.com/file/d/video/B5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B5.jpg",
         "archive": "https://drive.google.com/drive/folders/1YEjXghNXtXcPJ9t1rSbCIOpLmW0iAW42",
         "notes": ""
        },
@@ -2606,9 +2606,9 @@
        "name": "Pulseで毎朝のリサーチを自動化",
        "doing": "Pulseで毎朝の業界ニュース・競合リサーチを1本設定し、3日間受け取って指示文を調整します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1hatcKBiFJRTLlV9KWcf4ycygtYa588tn/view",
-        "slide": "https://drive.google.com/file/d/1Zl_MwLKU100B3ieN9wjszwvzVqkPQ3Ml/view",
-        "info": "https://drive.google.com/file/d/1D6yzN4Q8tjq8oS6g8BH8cbfEJ8Xk_WHo/view",
+        "video": "https://drive.google.com/file/d/video/B6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B6.jpg",
         "archive": "https://drive.google.com/drive/folders/1UQwnjKMIlBp6a3Z2f-bP9iMp5XxMHyPX",
         "notes": ""
        },
@@ -2623,9 +2623,9 @@
        "name": "複雑なタスクをステップ分割してWorkで完走",
        "doing": "3ステップ以上の実務タスクを1つ設計し、手順を番号つきで明示したプロンプトでWorkモードに最後まで完走させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/14fFnsnpKPUQizSdI3kPKw0SPRSX3Ojbq/view",
-        "slide": "https://drive.google.com/file/d/1E8FUMe3szMcg3sFcTrPqnc4JpVO3HZcV/view",
-        "info": "https://drive.google.com/file/d/1Rr7O2IDXg-8TwpPZhRIck_8f5_70_jju/view",
+        "video": "https://drive.google.com/file/d/video/B7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B7.jpg",
         "archive": "https://drive.google.com/drive/folders/1wf0JkftZwayI3cN6TlG5QLbbUkNz7zyR",
         "notes": ""
        },
@@ -2640,9 +2640,9 @@
        "name": "Workで最終成果物ファイルを直接生成・保存",
        "doing": "実務の報告書を1本、WorkモードでWordファイルとして直接生成・ダウンロードし、手直しにかかった時間をメモします。",
        "url": {
-        "video": "https://drive.google.com/file/d/12qFAbQEEffPn9XyedLDGEEIn_sXYXVUV/view",
-        "slide": "https://drive.google.com/file/d/1KyniH-piTeTtIbLUWgnVXIrDh1NgfNbA/view",
-        "info": "https://drive.google.com/file/d/1pxxH4iVZ34YnwJ3jwkTEjCFSA0p85lyW/view",
+        "video": "https://drive.google.com/file/d/video/B8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/B8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/B8.jpg",
         "archive": "https://drive.google.com/drive/folders/11EXtrQwy1Mu7nHno36gSqplmr8x3aGl7",
         "notes": ""
        },
@@ -2667,9 +2667,9 @@
        "name": "画像生成の基礎と文字入り画像・ロゴの作成",
        "doing": "GPT-Image 2.0で、自分の事業の告知バナーを1枚、入れたい文字列を「」で明示して文字入りで完成させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1n_qDF1hDbsVF8CHX9FX6oS5bhyfjlfs0/view",
-        "slide": "https://drive.google.com/file/d/1ueUZVZkKYYRGP7ZTjFHPM--j2sOAfp-x/view",
-        "info": "https://drive.google.com/file/d/1om4um_DtYa-Nyx1yJHkpTnzoUSqIDid2/view",
+        "video": "https://drive.google.com/file/d/video/C1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C1.jpg",
         "archive": "https://drive.google.com/drive/folders/14YDSQs87pyU9Va1AQM1g3-XUuR6jyhED",
         "notes": ""
        },
@@ -2684,9 +2684,9 @@
        "name": "画像デザインの微調整・テイストの統一",
        "doing": "生成した画像1枚に対して「変えたい要素＋他は維持して」の修正指示を3回重ね、狙い通りの1枚に仕上げます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1jx12dXJnyIsLX_kVdxlRCkRE2yr4P709/view",
-        "slide": "https://drive.google.com/file/d/1Sz-OWTNTQLFEX_QrvLPFe_p9XhYD2ryQ/view",
-        "info": "https://drive.google.com/file/d/1Uw2RqbGjhdYpH1hGMmz5ILHK_3d_qiEw/view",
+        "video": "https://drive.google.com/file/d/video/C2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C2.jpg",
         "archive": "https://drive.google.com/drive/folders/15VzMJs5f43mBCzolrPC7VcimAXM3EA82",
         "notes": ""
        },
@@ -2701,9 +2701,9 @@
        "name": "一貫性のあるSNS・ブログ用画像の量産法",
        "doing": "自分のSNS用のプロンプトテンプレート（差し替え箇所つきの型文）を1本作り、差し替えだけで同じテイストのアイキャッチを3枚量産します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1fr1p3J_nNJdOtctCz3qHGU9uLG_wJ7JF/view",
-        "slide": "https://drive.google.com/file/d/1JU8cEI9QjNMXYJJ3vLfqIHq2A4Bvu0cw/view",
-        "info": "https://drive.google.com/file/d/1RCKfLa2hYpdbY1iNodZURsMI5cH4M5MF/view",
+        "video": "https://drive.google.com/file/d/video/C3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C3.jpg",
         "archive": "https://drive.google.com/drive/folders/1jPDspJBcAyCB3ohs85CkMRgOCxQKZxUU",
         "notes": ""
        },
@@ -2718,9 +2718,9 @@
        "name": "画像入力（Vision）からのテキスト生成",
        "doing": "会議のホワイトボード（または手書きメモ）を撮影してChatGPTに読み取らせ、決定事項とTODOに分けた議事メモに変換させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1CFeRiP_VahA7Pr4Dgud78R85quy8CDJe/view",
-        "slide": "https://drive.google.com/file/d/1eSnXobUwZCZ8Su67S06pNeAY_yDX2Dpv/view",
-        "info": "https://drive.google.com/file/d/1zYgh4KcsCq4ZNoUQcWcr-EYSWvq42p0I/view",
+        "video": "https://drive.google.com/file/d/video/C4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C4.jpg",
         "archive": "https://drive.google.com/drive/folders/1TlhU7ym74lVubfo-e163RWcnwihJHqod",
         "notes": ""
        },
@@ -2735,9 +2735,9 @@
        "name": "SNS投稿ネタ出しとアイキャッチの並行生成",
        "doing": "ターゲットを決めて投稿ネタを20個出させ、採用した1本の本文とアイキャッチを30分以内に完成させて、実際にSNSへ投稿します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1YpjyLRW2f3_eglqypIO2yIIJkS3hSNTm/view",
-        "slide": "https://drive.google.com/file/d/1xkjYzSNGtwQuaKaMakwkf6svp2pOtxGP/view",
-        "info": "https://drive.google.com/file/d/1WbxFAJ-eWvW4ITZCUy0xZqch-SW61IKR/view",
+        "video": "https://drive.google.com/file/d/video/C5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C5.jpg",
         "archive": "https://drive.google.com/drive/folders/1yKiQZqajj7hu4DazgUbZxJH0LzYoK_G-",
         "notes": ""
        },
@@ -2752,9 +2752,9 @@
        "name": "売れるLPの構成案とコピー作成",
        "doing": "ChatGPT Workで「悩みの洗い出し→売れるLPの型で構成案→見出しコピー3案→本文」の順に進めさせ、自社サービスのLP構成案とメインコピーを完成させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1qmS-a52Q5_xX1bWRANHa0OK-Q1fHNeII/view",
-        "slide": "https://drive.google.com/file/d/1cqDMNFbZaFCyspeGvuiRUovy-0V0l89v/view",
-        "info": "https://drive.google.com/file/d/15gQoXpx_YhII9vzBA0GX2uZa8A83ou0-/view",
+        "video": "https://drive.google.com/file/d/video/C6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C6.jpg",
         "archive": "https://drive.google.com/drive/folders/1ENnfHdcbjID68Ksd1ExLD_NHKMN4SCNB",
         "notes": ""
        },
@@ -2769,9 +2769,9 @@
        "name": "図版入りPowerPointの直接自動生成",
        "doing": "実務のプレゼン1本を「1スライド1メッセージ」の条件付きで、イラスト入りPowerPointファイルとして直接生成させ、仕上げだけ自分で行います。",
        "url": {
-        "video": "https://drive.google.com/file/d/1WaDrvkrnALyH_kaHlcBInwmwZhLrgOlU/view",
-        "slide": "https://drive.google.com/file/d/1EnflCa0f8IhZE1-2dxpQcCzzaJ9M7VcZ/view",
-        "info": "https://drive.google.com/file/d/1nawn4ZkYzZNS1oGC5mR2AY7BHbKkzg2s/view",
+        "video": "https://drive.google.com/file/d/video/C7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C7.jpg",
         "archive": "https://drive.google.com/drive/folders/1PcLUoiVyJIQwKPTbm-8pu7wbePOUWW1D",
         "notes": ""
        },
@@ -2786,9 +2786,9 @@
        "name": "Sitesで作るWebサイト・LPの即時公開",
        "doing": "Sites機能で1ページのLP（サイト）を公開し、発行されたURLを知人1人に送って感想をもらい、その感想を1つ反映して再公開します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1gp-qYoULQpJwvWjj1ZrGUaT1Ks5XVtiU/view",
-        "slide": "https://drive.google.com/file/d/1sxAuW6JQ3073c4XmHQNxDu5PgCdsMNfH/view",
-        "info": "https://drive.google.com/file/d/1MZZq5x7jpZ8LQTumplmw5tT0LZcS_wJK/view",
+        "video": "https://drive.google.com/file/d/video/C8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/C8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/C8.jpg",
         "archive": "https://drive.google.com/drive/folders/1o5cv53wOj9o27d3ipK8cK0cB1fwXnQT9",
         "notes": ""
        },
@@ -2813,9 +2813,9 @@
        "name": "GPTs（自分専用AI）の概念と作成準備",
        "doing": "自分の業務の中からGPTs化したい定型業務を1つ選び、作りたいGPTsの企画を「名前＋やること」の1行で書き出します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1R6ZYdQgqEieUBKBDJkYSl2gfPlAS4ODB/view",
-        "slide": "https://drive.google.com/file/d/1LC0T0bUJmSLMpBKPvAsVOzCJeydioyo5/view",
-        "info": "https://drive.google.com/file/d/1vQqy8zOoCVBAqORPX_P30agsauECsp1Q/view",
+        "video": "https://drive.google.com/file/d/video/D1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D1.jpg",
         "archive": "https://drive.google.com/drive/folders/1aPURbVTuE_rmdVgmeCc53lpPiOwal54W",
         "notes": ""
        },
@@ -2830,9 +2830,9 @@
        "name": "GPTsへのナレッジ（過去資料）の付与",
        "doing": "D1で企画したGPTsに、自分の過去資料・SNS投稿・マニュアルなどを3つ以上ナレッジとして登録します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1SDv2Ui38V6EE3JFY-cqeyvowev5ynXo5/view",
-        "slide": "https://drive.google.com/file/d/1Yzs7smX3SORNjcwmSZYFYYHf6Oouod4H/view",
-        "info": "https://drive.google.com/file/d/1Cmw96hqybcK6gBL7uUDrRItYMTB0XeMv/view",
+        "video": "https://drive.google.com/file/d/video/D2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D2.jpg",
         "archive": "https://drive.google.com/drive/folders/1k87Mm4VI-Qdxuiq8yZt5LS983Y7Plnxm",
         "notes": ""
        },
@@ -2847,9 +2847,9 @@
        "name": "インストラクション（行動ルール）の調整とテスト",
        "doing": "GPTsのインストラクション（役割・手順・出力形式・禁止事項）を書いて完成させ、実務の入力3パターンでテストして2回以上改良します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1H_3krWSFJZfwLiNrokoJN_PYlQGM2OgZ/view",
-        "slide": "https://drive.google.com/file/d/1Zff5eryaX4Cp2jy2_NYseUucw1CLJQVy/view",
-        "info": "https://drive.google.com/file/d/1WF2pgnlJqGxcYQAYkR7eyj6i4mEIN5ke/view",
+        "video": "https://drive.google.com/file/d/video/D3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D3.jpg",
         "archive": "https://drive.google.com/drive/folders/1wgZ1BMXaAGOLpGEQ2u5MK36TTfA9W2KE",
         "notes": ""
        },
@@ -2864,9 +2864,9 @@
        "name": "チームでのGPTs共有とアクセス管理",
        "doing": "社外秘が含まれていないかを確認したうえで、作ったGPTsを1体チーム（または家族・知人）に共有し、実際に使ってもらいます。",
        "url": {
-        "video": "https://drive.google.com/file/d/13Xi7zgsT_NOPwVId3r0lcUVsqlCjUQlb/view",
-        "slide": "https://drive.google.com/file/d/1gvjtIYawAmWL9w1iY6cOxTj9iNEMa6r-/view",
-        "info": "https://drive.google.com/file/d/1hQ-TPq0hs6bgNwhzIBc0IaU6AkE5x3bb/view",
+        "video": "https://drive.google.com/file/d/video/D4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D4.jpg",
         "archive": "https://drive.google.com/drive/folders/1iaH2y0iLrhLxUE8eAPZfnFm3JWmYMpiz",
         "notes": ""
        },
@@ -2881,9 +2881,9 @@
        "name": "Skill（手順書）の概念と作り方",
        "doing": "毎週やっている定型業務を1つ選び、AIに手順を聞き取らせて、Skill（手順・判断基準・注意点を含む手順書）として書き起こします。",
        "url": {
-        "video": "https://drive.google.com/file/d/19wRk_-E7y3d6Wk7Na95GWz1Z4IHDosR1/view",
-        "slide": "https://drive.google.com/file/d/10_s8egkp6E6J-6zHrdwdUtRczyNxwJn6/view",
-        "info": "https://drive.google.com/file/d/1PAVPaZJLiktCBQdWCCrNo-keReTEmFx-/view",
+        "video": "https://drive.google.com/file/d/video/D5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D5.jpg",
         "archive": "https://drive.google.com/drive/folders/1Ivlk-2YQoGUIv6mDlYRjRNsKUSOlvY6r",
         "notes": ""
        },
@@ -2898,9 +2898,9 @@
        "name": "Skillで定型タスク（Excel集計・資料作成）を自動化",
        "doing": "D5で作ったSkillを実際のファイルで1回実行して定型タスクを完走させ、手作業でやった場合と比べた短縮時間を記録します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1zlJBViutbe5UcnZ2vGthH7Y7VseC4T8L/view",
-        "slide": "https://drive.google.com/file/d/1jrlALqIpwWbNqVLsXpW0g_6XPY3ShzlO/view",
-        "info": "https://drive.google.com/file/d/1LlNkhGBdFRcM0VhN3jH2K6mwmQOvTkyq/view",
+        "video": "https://drive.google.com/file/d/video/D6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D6.jpg",
         "archive": "https://drive.google.com/drive/folders/1AKM-0371k5E37aiCz4a7UOKarmGqBK_g",
         "notes": ""
        },
@@ -2915,9 +2915,9 @@
        "name": "複数Skillを組み合わせた連続タスクの実行",
        "doing": "2つ以上のSkillをつないだ連続タスク（例：調査→分析→資料化）を、前のSkillの成果物を次のSkillの入力にして1本完走させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1c-oJdQomdbShtuery5NxzzKemqL0TZXT/view",
-        "slide": "https://drive.google.com/file/d/1ovhdf4VBS7iyQQkdbL2_Y8EURgn7zKEA/view",
-        "info": "https://drive.google.com/file/d/1sCrtQe3bqFCVALEjRidzt9iewxIBLn69/view",
+        "video": "https://drive.google.com/file/d/video/D7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D7.jpg",
         "archive": "https://drive.google.com/drive/folders/18FvQAwONG7jwDBC24jAMmew2UNkDcn3E",
         "notes": ""
        },
@@ -2932,9 +2932,9 @@
        "name": "専門特化型AI（右腕AI）の完成",
        "doing": "ナレッジ・インストラクション・Skillを統合した自分の専門特化AIを完成させ、毎日の業務動線に置いて1週間毎日1回は実務で使います。",
        "url": {
-        "video": "https://drive.google.com/file/d/1ekwA99T8KG5l4LOrps3SZTOsMGO4fKd0/view",
-        "slide": "https://drive.google.com/file/d/1iFUTqVCUoyPj6x41qy89toXMuX6iH9AZ/view",
-        "info": "https://drive.google.com/file/d/10XYqEmdoyewuD1sJ8UhJjqYjnCbCtmgf/view",
+        "video": "https://drive.google.com/file/d/video/D8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/D8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/D8.jpg",
         "archive": "https://drive.google.com/drive/folders/1kdVl8sqqLrbmUXDn_LWyjmdu7SHUsh5E",
         "notes": ""
        },
@@ -2959,9 +2959,9 @@
        "name": "Codexの概要とGPT-5.6モデルの使い分け",
        "doing": "自分の業務を3つ選び、それぞれSol（高速・軽作業）／Terra（バランス・日常業務）／Luna（深い思考・難問）のどれ向きかを仕分けして、メモに書き残します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1nFQ6TdYU-182SmXVmzR4sNETCngC1lsb/view",
-        "slide": "https://drive.google.com/file/d/11lGeQuy5SItUwlUacPvgFHaRCCN1O9cS/view",
-        "info": "https://drive.google.com/file/d/1RnDjN71x89EOWYZEYTvZPuiGA19kRfSe/view",
+        "video": "https://drive.google.com/file/d/video/E1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E1.jpg",
         "archive": "https://drive.google.com/drive/folders/1lSm28VwjTb-WQXivlNKD9DoZvHw6asvg",
         "notes": ""
        },
@@ -2976,9 +2976,9 @@
        "name": "デスクトップアプリ導入とワークスペース作成",
        "doing": "Codex用のワークスペース（専用の作業フォルダ）を1つ作成し、「中を見て、どんなファイルがあるか一覧にして。まだ何も変更しないで」とCodexに頼んで、読み取りのみで中身を一覧させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1roiyw9e-nMd8-uSgzJ88cwarJfU_weTW/view",
-        "slide": "https://drive.google.com/file/d/1lDrstVfhJeqEVdJswC7txyBe99aorFv-/view",
-        "info": "https://drive.google.com/file/d/1E9yX82M1i1C9m4UU77AHh_F1OYze_aCA/view",
+        "video": "https://drive.google.com/file/d/video/E2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E2.jpg",
         "archive": "https://drive.google.com/drive/folders/1umHTI3cE4JCIV7Bg0xgzLThMmRREMHGu",
         "notes": ""
        },
@@ -2993,9 +2993,9 @@
        "name": "基本設定と権限管理（サンドボックス・承認）",
        "doing": "Codexの承認モードを安全寄り（1回ずつ確認する都度承認）に設定し、ファイル操作を1回、自分で内容を確認して「承認して」から実行します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1SK5L01vvIxaBaK2r_E-52TLwTncVLSGx/view",
-        "slide": "https://drive.google.com/file/d/1eaVpJJqcTX7uNo3fivk-vf8pOq6fExsA/view",
-        "info": "https://drive.google.com/file/d/1VpCc5XsyvopUPXgyJc0O_SWqY3O7YIAm/view",
+        "video": "https://drive.google.com/file/d/video/E3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E3.jpg",
         "archive": "https://drive.google.com/drive/folders/1unvB5-MTeszo-borU9rypBGfAW2kdT_4",
         "notes": ""
        },
@@ -3010,9 +3010,9 @@
        "name": "インテリジェンス（思考の深さ）の調整",
        "doing": "同じ依頼を「浅い設定」と「深い設定」の両方で実行し、結果の質とかかった時間の違いを見比べて、気づいたことを一言メモします。",
        "url": {
-        "video": "https://drive.google.com/file/d/1VVjZyXYjy2u0oLYlOoA7UlwkOYTb1zl6/view",
-        "slide": "https://drive.google.com/file/d/10TOTCMw2vfGULKbFuatfmUhtU7XvBy6X/view",
-        "info": "https://drive.google.com/file/d/1l0GvUj2MHtrMeAOWCKIi9OBpaW0fyOZ8/view",
+        "video": "https://drive.google.com/file/d/video/E4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E4.jpg",
         "archive": "https://drive.google.com/drive/folders/1Iu5ALdSSYPd0UA7XZZ_DmxYIcGrP9xcc",
         "notes": ""
        },
@@ -3027,9 +3027,9 @@
        "name": "Codex Pets（ペット機能）の設定と活用",
        "doing": "Codex Petsを設定し、タスクを1つ走らせて、ペット表示で進行状況を確認しながら完了通知を受け取ります。",
        "url": {
-        "video": "https://drive.google.com/file/d/197fAfD-ymCVdCgmvMBO0S6j3yYWp56Nv/view",
-        "slide": "https://drive.google.com/file/d/1rt3KqEEopoS9P8Radq8yaQbqGvBnWbE9/view",
-        "info": "https://drive.google.com/file/d/1dXfXf1AwqZdh49rB_B_AYa09UnLsFmNk/view",
+        "video": "https://drive.google.com/file/d/video/E5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E5.jpg",
         "archive": "https://drive.google.com/drive/folders/11jV4j2e2-KhuP-YpPYtfOGuUERRPnCq-",
         "notes": ""
        },
@@ -3044,9 +3044,9 @@
        "name": "スラッシュコマンドの基本とショートカット",
        "doing": "スラッシュコマンドを3種類実際に使ってみて、その中から自分の定番にする1つを決めます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1Tqm8Zaq6MDV-k3ZwZScCbARa3CDTpVQ8/view",
-        "slide": "https://drive.google.com/file/d/1ua-51ULa5CE8-7HyQy0gfpFbTbJOr9te/view",
-        "info": "https://drive.google.com/file/d/1DsmNl_TEPuAWW_B6EUT8FRK7ThB-gNRh/view",
+        "video": "https://drive.google.com/file/d/video/E6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E6.jpg",
         "archive": "https://drive.google.com/drive/folders/1HU8enbEmIDip51cSmezcwo63V5j2rShJ",
         "notes": ""
        },
@@ -3061,9 +3061,9 @@
        "name": "AGENTS.md（ルール・引継ぎ書）の書き方",
        "doing": "Codexに質問してもらいながらAGENTS.mdの初版（ルール5個以内のシンプル版）を作ってワークスペースに配置し、ルールが守られるかを1タスク実行して確認します。",
        "url": {
-        "video": "https://drive.google.com/file/d/1YgQKsHkCrMD_M7iAbfT3njMqSPo_QBd_/view",
-        "slide": "https://drive.google.com/file/d/1PMoJJK6MI55w7-Obpg4NQ-b1wHMo5lqY/view",
-        "info": "https://drive.google.com/file/d/1aDIC_IgSXmYSAf1viWSfAFdIN2sVxTwg/view",
+        "video": "https://drive.google.com/file/d/video/E7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E7.jpg",
         "archive": "https://drive.google.com/drive/folders/1QCkJrlgnKx3AGTj3MERQ9yvpHcdtfwMs",
         "notes": ""
        },
@@ -3078,9 +3078,9 @@
        "name": "初めての自律作業（ファイル整理・要約）",
        "doing": "大事なフォルダをコピーした練習用フォルダを用意し、「分類する案を出して。私がOKしたら実行して、最後に何をどう動かしたか報告書を書いて」と頼んで、提案→承認→実行→報告の流れを完走させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1t5NMr5J17-HnFx9kSTRhFaHDvUyzuGTr/view",
-        "slide": "https://drive.google.com/file/d/1kY5TuYWtghaZH_9gg5QqD8JJ80XfsVLi/view",
-        "info": "https://drive.google.com/file/d/1jADUs6oF_T4Nrs7b-V-UknkYc3QVWjgp/view",
+        "video": "https://drive.google.com/file/d/video/E8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/E8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/E8.jpg",
         "archive": "https://drive.google.com/drive/folders/144anjXUVXgALGkNJbSPrAPZayNxr275u",
         "notes": ""
        },
@@ -3105,9 +3105,9 @@
        "name": "Appshotsで画面を瞬間共有してUI修正",
        "doing": "自分が気になっている画面（アプリやWebページなど）を1つAppshotsでCodexに共有し、修正または解説をしてもらいます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1jm1LNWzkvy9y2ioTBe8IViaCpbl9EWtK/view",
-        "slide": "https://drive.google.com/file/d/1zrsFz7uDKfJo86YRUcE2XrqNFRB_PG9Z/view",
-        "info": "https://drive.google.com/file/d/109CqvcLkAnp0mPxtM1dO6R9rfO4o9dd4/view",
+        "video": "https://drive.google.com/file/d/video/F1.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F1.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F1.jpg",
         "archive": "https://drive.google.com/drive/folders/16TJ5jSxU1TualvkIwXDLZMmvRulfLS2p",
         "notes": ""
        },
@@ -3122,9 +3122,9 @@
        "name": "組み込みブラウザでUI確認と自動修正",
        "doing": "C8で作ったページまたは自作のWebページを1つ、Codexに組み込みブラウザで自己確認させ、崩れがあれば修正まで任せて「直った状態」を報告させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1unJ4kuy_v3ynmuaAy5l7hR3ItPR2liis/view",
-        "slide": "https://drive.google.com/file/d/1ySzxzQl8MPF5aPtlzXFT-1Yg47oX3XDX/view",
-        "info": "https://drive.google.com/file/d/1KQoILoMt2z9IOK7dZQPeg6Kare4erF-A/view",
+        "video": "https://drive.google.com/file/d/video/F2.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F2.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F2.jpg",
         "archive": "https://drive.google.com/drive/folders/1qJNJzp_MEgXxheyX-OzLR3yO9YJzoLny",
         "notes": ""
        },
@@ -3139,9 +3139,9 @@
        "name": "LP・プロトタイプをCodexに構築させる",
        "doing": "フォーム・計算・診断などの動く仕掛けが付いたページを1つ、日本語の要望だけでCodexに構築させます。まず動く最小版から作らせましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/17fJpwIL8uDmrIbPE89cX5IfBQCCt9NiZ/view",
-        "slide": "https://drive.google.com/file/d/1mKHSLFvhrcD9EBEVOFDLB6qMfeZzc0fJ/view",
-        "info": "https://drive.google.com/file/d/1hAmxnbJXcB-DQgREskcgwRCbJCkqtNm8/view",
+        "video": "https://drive.google.com/file/d/video/F3.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F3.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F3.jpg",
         "archive": "https://drive.google.com/drive/folders/1s68soE74iUq3ednrVULqi0idwsH1ICnX",
         "notes": ""
        },
@@ -3156,9 +3156,9 @@
        "name": "複数タスクの並列処理アプローチ",
        "doing": "自分の実務に関わるタスクを2〜3本、Codexに並列で走らせ、「終わったものから報告して」の形で全部受け取ります。",
        "url": {
-        "video": "https://drive.google.com/file/d/1Tuqh7hEa3YBz8s7KZGK8XuM6YJlZ8FlE/view",
-        "slide": "https://drive.google.com/file/d/1zVw0Vn9MaQ5rFuy1xwrvMZeII9yYHfsa/view",
-        "info": "https://drive.google.com/file/d/1j6UCbeUBnLeq2ZZhDrq8p5I6OxzaerQy/view",
+        "video": "https://drive.google.com/file/d/video/F4.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F4.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F4.jpg",
         "archive": "https://drive.google.com/drive/folders/1cGEIBJe8mOPk13X6HNryK3pgxN0tNDd_",
         "notes": ""
        },
@@ -3173,9 +3173,9 @@
        "name": "エラー対処とデバッグの指示出し",
        "doing": "実際に出たエラーを1つ、エラーメッセージをそのままCodexに渡して自己解決させます。「試したことと結果を順に報告して。3回試してダメなら相談して」の形で頼みましょう。",
        "url": {
-        "video": "https://drive.google.com/file/d/1sBltXfh-RWF4f7A8aINz5J0gyRuSreeg/view",
-        "slide": "https://drive.google.com/file/d/1PoWbVsE4WP2ee-kQUE59g53TTyAkc0GC/view",
-        "info": "https://drive.google.com/file/d/143WdiSNPtRl-aVjtq00g2iRFE7QyhUBJ/view",
+        "video": "https://drive.google.com/file/d/video/F5.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F5.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F5.jpg",
         "archive": "https://drive.google.com/drive/folders/1yGyomGTDlhbsL_sN8BZG01ycNZSa-2MH",
         "notes": ""
        },
@@ -3190,9 +3190,9 @@
        "name": "作業履歴を活用した引き継ぎの仕組み",
        "doing": "作業を1つわざと途中で切り、「到達点と次回やることを引き継ぎメモに残して」と頼んでから終了し、翌日「メモを読んで続きから」で再開させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/1_LnDopsEKl7FxRwQmlRY9m1UGWovL88J/view",
-        "slide": "https://drive.google.com/file/d/1P7RJ73vK3cvuMKVnAGdtJV7xcNfM7X5d/view",
-        "info": "https://drive.google.com/file/d/1NCHj6o1znOD83BWjUOEVrI8bmG828D1t/view",
+        "video": "https://drive.google.com/file/d/video/F6.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F6.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F6.jpg",
         "archive": "https://drive.google.com/drive/folders/1NuLLO4tJIWJmLNMusCvBWCoFG-IFzpsp",
         "notes": ""
        },
@@ -3207,9 +3207,9 @@
        "name": "方針・ゴールを渡して任せる依頼術",
        "doing": "自分の実務のタスクを1つ選び、手順を書かずに「ゴール・制約・判断基準」だけを渡してCodexに任せ、完走させます。",
        "url": {
-        "video": "https://drive.google.com/file/d/14uiBYbR4GGjyN5NkPrA7OmExUFYvpiP6/view",
-        "slide": "https://drive.google.com/file/d/1Chrp0ExW6kBSrLT248g2Ip8L96S9f4vH/view",
-        "info": "https://drive.google.com/file/d/1pkq0d1LBo9FR0VhrCxPU8ZpBsHy_cClp/view",
+        "video": "https://drive.google.com/file/d/video/F7.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F7.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F7.jpg",
         "archive": "https://drive.google.com/drive/folders/1Tk6s5F_9FQDul1kbSrnU999tE-7ptBu3",
         "notes": ""
        },
@@ -3224,9 +3224,9 @@
        "name": "CodexとClaude Codeの併用・分業",
        "doing": "1つの成果物を「片方のAIに作らせ、もう片方にレビューさせる」流れで仕上げます。例：Codexに実装させ、Claude（Claude Code）に検品させる。",
        "url": {
-        "video": "https://drive.google.com/file/d/16d1IpMVpuWqNqf14mExItYeb0F9QJGXY/view",
-        "slide": "https://drive.google.com/file/d/19tnMI_yw1seTMf2xRgJ9monS1C1DCZYj/view",
-        "info": "https://drive.google.com/file/d/1FmbqigcjYID7Je9wqlYTPWIV9NxspEz7/view",
+        "video": "https://drive.google.com/file/d/video/F8.mp4/view",
+        "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/F8.pdf",
+        "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/F8.jpg",
         "archive": "https://drive.google.com/drive/folders/1PcoI9txpi3bAIO_P01D-fpIjpk6Te6I-",
         "notes": ""
        },
@@ -3251,14 +3251,14 @@
        "name": "MCPの基礎知識と概念",
        "doing": "自分が日常で使っているツール（メール・チャット・クラウドストレージなど）のうち、MCP連携できるものをAIに調べてもらいながら3つ挙げてリストにします。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G1.jpg",
         "archive": "https://drive.google.com/drive/folders/1Lc0DXBXnyfw71lc_N-Ya1FaH-VsE4XqF",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3268,14 +3268,14 @@
        "name": "外部ツールとのMCP連携設定",
        "doing": "Google Drive・Slack・Gmailなどの外部ツールを1つMCPで接続し、「一覧して」「抽出して」などの読み取り系の依頼を1回成功させます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G2.jpg",
         "archive": "https://drive.google.com/drive/folders/1dw_v82Mebi8kkLgwF5URyagSGb1wZArV",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3285,14 +3285,14 @@
        "name": "外部データの自動集計・レポート化",
        "doing": "MCPで接続した外部ツールのデータ（メール・Driveのファイルなど）から、月次レポートを1本自動生成させます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G3.jpg",
         "archive": "https://drive.google.com/drive/folders/177JLgGGWFjcnruwPqxLSPTTIfAeRKjK-",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3302,14 +3302,14 @@
        "name": "n8n×Codexでワークフロー構築",
        "doing": "n8nなどの自動化ツールで「トリガー→AI処理→通知」のノード3つの最小ワークフローを1本組み、実際に動かします。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G4.jpg",
         "archive": "https://drive.google.com/drive/folders/1cxW5R68UPY9MVdqFdbb0b5UKsY-ssqcn",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3319,14 +3319,14 @@
        "name": "SNS完全自動運用システムの構築",
        "doing": "「リサーチ→本文・画像生成→人間の承認→予約投稿」の承認フロー付きSNS自動投稿ラインを1本構築し、1週間運用します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G5.jpg",
         "archive": "https://drive.google.com/drive/folders/1rntqBx2P_kZCu7qVhFsXsP_RwSJjHGP2",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3336,14 +3336,14 @@
        "name": "定期実行タスクで毎日の業務を自動化",
        "doing": "毎日の定期実行タスク（毎朝の集計・整理・通知など）を「失敗したら必ず通知」の設定とセットで1本設定し、3日連続で成功させます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G6.jpg",
         "archive": "https://drive.google.com/drive/folders/1m2PRF1FQbJijUnUocEzvr-3VIG8JSWYO",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3353,14 +3353,14 @@
        "name": "チームでのプラグイン・MCP共有と管理",
        "doing": "自分の自動化1本について、AIにセットアップ手順書（つまずきポイントの注意書き入り）を作らせ、チームの他の1人に共有して再現してもらいます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G7.jpg",
         "archive": "https://drive.google.com/drive/folders/1XiJALnCrfWwM6pidPFFQYTD9-jLxMtVB",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3370,14 +3370,14 @@
        "name": "ブラウザ操作自動化で競合調査",
        "doing": "競合サイトの規約やアクセス頻度のマナーを確認したうえで、競合ウォッチの自動巡回を1本作り、週次の差分レポートを1回受け取ります。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/G8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/G8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/G8.jpg",
         "archive": "https://drive.google.com/drive/folders/1I5GgYPqv4-H8dNJfsryz26IE1coiwq9w",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3397,14 +3397,14 @@
        "name": "/goalで長時間の無監督自律作業",
        "doing": "小さめのゴール（例：特定フォルダ内の資料の分類と目次化）を「削除は禁止、迷ったら保留フォルダへ」などの制約つきで/goalに渡し、無監督で完遂させます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H1.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H1.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H1.jpg",
         "archive": "https://drive.google.com/drive/folders/1aU-19RRSKdhpvdAONTu1Oqls957_k5As",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3414,14 +3414,14 @@
        "name": "PLAN.mdで中長期計画を進める",
        "doing": "進行中の中期案件を1つ選んでフェーズ分け・完了条件・現在地チェック欄入りのPLAN.mdをAIと作り、2回のセッションでPLAN.mdを読ませてから続きを進めます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H2.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H2.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H2.jpg",
         "archive": "https://drive.google.com/drive/folders/1EYvrlfrmkWsps1M8mq2CW4LzC_zaGwpn",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3431,14 +3431,14 @@
        "name": "Computer UseでGUI操作を自動化",
        "doing": "普段使うアプリの定型操作を1つ選び、「各操作の前に何をするか宣言してから動いて」と添えてComputer Useに実行させます（お金・送信・削除が絡む画面は避けます）。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H3.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H3.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H3.jpg",
         "archive": "https://drive.google.com/drive/folders/18jExAfmnqA4b1_9AXhw2n_UK8QY6pmAi",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3448,14 +3448,14 @@
        "name": "社内システムの転記を自動化",
        "doing": "転記系の手作業（例：Excelの一覧から社内システムへの入力）を1つ選び、「1件ごとに結果を記録」「失敗時は飛ばして続行し最後にまとめて報告」の指示つきで自動化して完走させます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H4.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H4.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H4.jpg",
         "archive": "https://drive.google.com/drive/folders/1nvs_3g-mEuYazMkpWAmaB6ZHI_Nt1DaX",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3465,14 +3465,14 @@
        "name": "Codex Mobileで外出先から監視・承認",
        "doing": "PCのスリープ設定を常時稼働できるよう整えたうえで、外出先からCodex Mobileでタスクの承認または新規指示を1回行い、PC側で結果を確認します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H5.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H5.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H5.jpg",
         "archive": "https://drive.google.com/drive/folders/1XtHCaDm7pTB8L92PHSpNQzYKeSNZUUgT",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3482,14 +3482,14 @@
        "name": "複数エージェントをスマホで統括",
        "doing": "2つ以上のエージェント（またはタスク系統）を動かし、スマホから「それぞれの状況をまとめて報告、異常があるものだけ詳しく」の形式で統括報告をさせます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H6.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H6.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H6.jpg",
         "archive": "https://drive.google.com/drive/folders/1zTaHVf3FblHU-naACD1utjtK7lgitCNU",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3499,14 +3499,14 @@
        "name": "自分専用Business OSの構築",
        "doing": "自分の業務全体をAIに棚卸しさせて「AI化済み／すぐAI化できる／人間がやるべき」に分類し、Business OS構成図を完成させたうえで、未実装の「次の1本」を決めて着手します。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H7.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H7.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H7.jpg",
         "archive": "https://drive.google.com/drive/folders/1_dapsV5rxEFDcfq5SQP9rQdqas3ICq64",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }
@@ -3516,14 +3516,14 @@
        "name": "最終課題：完全自動運用システム",
        "doing": "題材を1つ選び（SNS運用・レポート業務など自由）、「公開・送信前は必ず承認を取る」制約つきの週次自動運用システムを完成させて、1週間の運用実績を報告書にまとめます。",
        "url": {
-        "video": "",
+        "video": "https://drive.google.com/file/d/video/H8.mp4/view",
         "slide": "https://re-gi.jp/mcq-site/stages/chatgpt64/slide/H8.pdf",
         "info": "https://re-gi.jp/mcq-site/stages/chatgpt64/info/H8.jpg",
         "archive": "https://drive.google.com/drive/folders/1Z1cQ1WB7fqHOkyHg2q9Thst17tgX8glo",
         "notes": ""
        },
        "has": {
-        "video": false,
+        "video": true,
         "slide": true,
         "info": true
        }

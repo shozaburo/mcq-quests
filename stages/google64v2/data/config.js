@@ -5,7 +5,7 @@
 window.MCQ_CONFIG = {
   goalId: "β2",
   evidenceUpload: true,   // v28: 証拠はスクショ画像を直接添付（貼り付け・写真OK）
-  goalName: "Gemini編",
+  goalName: "Google編",
 
   // マンダラボードの見た目
   board: {

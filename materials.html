@@ -129,7 +129,7 @@ tr:hover td{background:rgba(255,255,255,.03)}
     el('copy').textContent = '📋 表示中のリンクをコピー（'+links.length+'）';
   }
 
-  fetch('assets/catalog.json?v=2').then(function(r){return r.json();}).then(function(j){
+  fetch('assets/catalog.json?v=3').then(function(r){return r.json();}).then(function(j){
     CAT=j;
     var t={video:0,slide:0,info:0,mass:0};
     j.stages.forEach(function(s){

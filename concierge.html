@@ -85,7 +85,7 @@ header p{color:var(--dim);font-size:.82rem;margin-top:4px}
 
   <div class="foot">
     <a href="index.html?start=1">🏠 トップへ</a>
-    <a href="stages/google64/map.html?skipintro=1">🔍 Gemini編</a>
+    <a href="stages/google64/map.html?skipintro=1">🔍 Google編</a>
     <a href="stages/claude64/map.html?skipintro=1">🤖 Claude編</a>
     <a href="stages/chatgpt64/map.html?skipintro=1">🐕 ChatGPT編</a>
   </div>
@@ -215,7 +215,7 @@ header p{color:var(--dim);font-size:.82rem;margin-top:4px}
   el('q').addEventListener('keydown', function(e){
     if(e.key === 'Enter'){ ask(el('q').value); el('q').value = ''; } });
 
-  fetch('assets/catalog.json?v=1')
+  fetch('assets/catalog.json?v=2')
     .then(function(r){ return r.json(); })
     .then(function(j){
       CAT = j;
