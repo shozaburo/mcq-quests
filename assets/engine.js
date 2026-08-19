@@ -1111,8 +1111,13 @@
     var html = '<div class="qcount">問題 ' + (qi+1) + ' / ' + ORD.length + (ORDER ? '（にがて集中）' : '') + '　✨ 正解でなかよし度アップ！</div>'
       + '<div style="font-weight:800;font-size:1.02rem;line-height:1.85;margin:4px 2px 12px">'
       +   '<span style="color:var(--chara,#f57c00)">第' + (KANJI.charAt(qn) || (qn+1)) + '問</span>　' + esc(item.q) + '</div>';
+    /* 選択肢に 1〜4 の番号を振る。口頭で「3番だと思う」と言い合えるようにするため。
+       データ側には番号を入れない（入れると解説やシャッフルとズレる）。表示のときだけ付ける。 */
     item.choices.forEach(function(c, ci){
-      html += '<div class="choice" data-ci="' + ci + '">' + esc(c) + '<span class="mark"></span></div>';
+      html += '<div class="choice" data-ci="' + ci + '">'
+            +   '<span class="num">' + (ci + 1) + '</span>'
+            +   '<span class="ctx">' + esc(c) + '</span>'
+            +   '<span class="mark"></span></div>';
     });
     html += '<div id="qExplain" style="display:none;border-radius:10px;padding:10px 13px;margin-top:10px;font-size:.88rem;line-height:1.75"></div>'
       + '<button class="btn btn-primary" id="nextQ" disabled>選択肢を選ぼう</button>';
@@ -1242,8 +1247,8 @@
         html += '<div style="padding:8px 0;border-top:1px dashed rgba(128,128,128,.3)">'
           + '<div style="font-weight:800;font-size:.86rem;line-height:1.7">第' + (KANJI.charAt(m.i) || (m.i+1)) + '問　' + esc(m.q) + '</div>'
           + '<div style="font-size:.82rem;line-height:1.8;margin-top:5px">'
-          +   '<div style="color:#c62828">✕ あなた：' + esc(m.choices[m.picked] || '') + '</div>'
-          +   '<div style="color:#2e7d32">◯ 正解　：' + esc(m.choices[m.answer] || '') + '</div>'
+          +   '<div style="color:#c62828">✕ あなた：' + (m.picked + 1) + '. ' + esc(m.choices[m.picked] || '') + '</div>'
+          +   '<div style="color:#2e7d32">◯ 正解　：' + (m.answer + 1) + '. ' + esc(m.choices[m.answer] || '') + '</div>'
           + '</div>'
           + (m.explain ? '<div style="font-size:.8rem;line-height:1.75;margin-top:5px;color:var(--muted)">💡 ' + esc(m.explain) + '</div>' : '')
           + '</div>';

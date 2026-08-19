@@ -95,6 +95,12 @@ body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
 .choice:hover{background:#fdf6ee;}
 .choice.correct{background:#e8f5e9; border-color:#66bb6a;}
 .choice.wrong{background:#ffebee; border-color:#ef5350;}
+.choice .num{flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--chara,#f57c00); color:#fff; font-weight:900; font-size:.86rem;}
+.choice .ctx{flex:1; min-width:0;}
+.choice.correct .num{background:#43a047;}
+.choice.wrong .num{background:#e53935;}
 .choice .mark{margin-left:auto; font-weight:800; flex-shrink:0;}
 
 /* スコア */
