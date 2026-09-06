@@ -220,7 +220,9 @@
   function endCard(b){
     done=true;
     var e=$('#endcard');
-    e.innerHTML='<a class="btn" href="'+esc(b.href||'#')+'">'+esc(b.label||'つづける')+'</a>';
+    var h='<a class="btn" href="'+esc(b.href||'#')+'">'+esc(b.label||'つづける')+'</a>';
+    if(b.href2) h+='<a class="btn ghost" href="'+esc(b.href2)+'">'+esc(b.label2||'もどる')+'</a>';
+    e.innerHTML=h;
     e.classList.add('show');
     $('#tapHint').style.display='none';
     $('#replayBtn').style.display='inline-block';

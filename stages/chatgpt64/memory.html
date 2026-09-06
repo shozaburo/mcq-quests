@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>記念写真 | ChatGPT編 | みんなのAI実践塾</title>
+<style>
+  :root{--gold:#10a37f; --muted:#9aa3b5; --cream:#f2f0ea;}
+  *{box-sizing:border-box;}
+  body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:#14101c; margin:0; color:var(--cream); line-height:1.7;
+    padding:18px 10px 70px; display:flex; flex-direction:column; align-items:center;}
+  .wrap{width:100%; max-width:860px;}
+  header{text-align:center; margin-bottom:14px;}
+  header .goal{display:inline-block; background:rgba(16,163,127,.14); border:1px solid rgba(16,163,127,.5);
+    color:var(--gold); border-radius:999px; padding:2px 16px; font-weight:800; letter-spacing:.12em; font-size:.78rem;}
+  header h1{margin:8px 0 4px; font-size:1.4rem; font-weight:900;}
+  header p{margin:0; font-size:.83rem; color:var(--muted);}
+
+  .card{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.15);
+    border-radius:16px; padding:16px; margin:12px 0;}
+  .card h2{margin:0 0 4px; font-size:1rem; color:var(--gold);}
+  .card .sub{font-size:.78rem; color:var(--muted); margin-bottom:12px;}
+
+  .stamps{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  @media(max-width:520px){ .stamps{grid-template-columns:repeat(2,1fr);} }
+  .st{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14);
+    border-radius:12px; padding:10px; text-align:center;}
+  .st img{width:56px; height:56px; border-radius:50%; object-fit:cover; background:rgba(0,0,0,.3);}
+  .st .nm{font-size:.74rem; font-weight:800; margin-top:6px;}
+  .st .pc{font-size:.68rem; color:var(--muted);}
+  .st.off{opacity:.35;}
+  .st.on{border-color:rgba(16,163,127,.6); box-shadow:0 0 12px rgba(16,163,127,.18);}
+
+  .notes{display:grid; gap:10px;}
+  .note{background:rgba(255,255,255,.04); border-left:3px solid rgba(16,163,127,.7);
+    border-radius:0 10px 10px 0; padding:9px 12px;}
+  .note .h{font-size:.72rem; color:var(--gold); font-weight:800;}
+  .note .b{font-size:.86rem; white-space:pre-wrap;}
+  .note .pic{font-size:.72rem; color:var(--muted); margin-top:2px;}
+
+  textarea#prompt{width:100%; min-height:230px; padding:12px; border-radius:12px;
+    border:1.5px solid rgba(255,255,255,.2); background:rgba(0,0,0,.35); color:var(--cream);
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.8rem; line-height:1.6;}
+  .btn{display:inline-block; background:linear-gradient(180deg,#13c194,#0b8064); color:#06231c;
+    font-weight:900; border:none; border-radius:12px; padding:12px 22px; font-size:.95rem;
+    cursor:pointer; font-family:inherit; text-decoration:none; margin:6px 6px 0 0;}
+  .btn.ghost{background:rgba(255,255,255,.08); color:var(--cream); border:1px solid rgba(255,255,255,.3);}
+  .steps{counter-reset:s; padding:0; margin:10px 0 0; list-style:none;}
+  .steps li{counter-increment:s; position:relative; padding-left:32px; margin-bottom:10px; font-size:.87rem;}
+  .steps li::before{content:counter(s); position:absolute; left:0; top:1px; width:22px; height:22px;
+    border-radius:50%; background:var(--gold); color:#06231c; font-weight:900; font-size:.78rem;
+    display:flex; align-items:center; justify-content:center;}
+  .msg{text-align:center; color:var(--muted); font-size:.85rem; padding:20px 0;}
+  .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:rgba(0,0,0,.85);
+    border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:9px 20px; font-size:.83rem;
+    opacity:0; transition:opacity .3s; pointer-events:none; z-index:99;}
+  .toast.on{opacity:1;}
+  a.home{position:fixed; left:10px; top:10px; z-index:98; background:rgba(255,255,255,.9);
+    color:#0b8064; font-weight:800; font-size:.8rem; text-decoration:none; border-radius:999px;
+    padding:6px 14px; box-shadow:0 2px 8px rgba(0,0,0,.35);}
+</style>
+</head>
+<body>
+<a class="home" href="index.html">🏠 ボードへ</a>
+<div class="wrap">
+  <header>
+    <span class="goal">CHATGPT編 ─ ラスト</span>
+    <h1>世界にひとつの記念写真</h1>
+    <p>あなたが書いたことばを、そのまま絵にします</p>
+  </header>
+
+  <div id="body"><div class="msg">読み込み中…</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="data/config.js"></script>
+<script src="data/characters.js"></script>
+<script>
+(function(){
+  var CFG   = window.MCQ_CONFIG || {};
+  var CHARS = window.MCQ_CHARS  || {};
+  var API   = CFG.questApiUrl || '';
+  var GOAL  = CFG.goalId || 'θ';
+  var MYPAGE= 'https://script.google.com/macros/s/AKfycbwcWQkVDos5Jky6GCDqZk9ZBbgIz0FqAFmTOAeigLCoPCz6yl_P84GgXbHzGXacmBhp/exec';
+  var AREAS = 'ABCDEFGH'.split('');
+  var $ = function(s){ return document.querySelector(s); };
+
+  var TOKEN = '';
+  try{
+    var q = new URLSearchParams(location.search);
+    TOKEN = (q.get('token')||'').trim() || localStorage.getItem('mcq_member_token') || '';
+    if(TOKEN) localStorage.setItem('mcq_member_token', TOKEN);
+  }catch(e){}
+
+  function toast(t){
+    var el=$('#toast'); el.textContent=t; el.classList.add('on');
+    setTimeout(function(){ el.classList.remove('on'); }, 2200);
+  }
+  function esc(s){ return String(s||'').replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function trim(s, n){ s=String(s||'').replace(/\s+/g,' ').trim();
+    return s.length>n ? s.slice(0,n)+'…' : s; }
+
+  if(!TOKEN){
+    $('#body').innerHTML = '<div class="card"><h2>ログインが必要です</h2>'
+      + '<div class="sub">マイページのリンクからこの街に入ると、あなたの記録が読み込まれます。</div>'
+      + '<a class="btn" href="'+MYPAGE+'">マイページをひらく</a></div>';
+    return;
+  }
+
+  fetch(API + '?action=myNotes&goalId=' + encodeURIComponent(GOAL) + '&token=' + encodeURIComponent(TOKEN))
+    .then(function(r){ return r.json(); })
+    .then(render)
+    .catch(function(e){
+      $('#body').innerHTML = '<div class="msg">読み込みに失敗しました（'+esc(e.message)+'）<br>'
+        + '通信の調子がわるいだけかもしれません。もう一度ひらいてみてください。</div>';
+    });
+
+  function render(d){
+    if(!d || !d.ok){
+      $('#body').innerHTML = '<div class="msg">'+esc((d&&d.error)||'読み込めませんでした')+'</div>';
+      return;
+    }
+    var byArea = {};
+    (d.areas||[]).forEach(function(a){ byArea[a.area] = a; });
+
+    // --- 8つのスタンプ ---
+    var done = 0, html = '';
+    AREAS.forEach(function(a){
+      var c = CHARS[a] || {};
+      var rec = byArea[a];
+      var got = rec && rec.quests.some(function(q){ return q.pct >= 100; });
+      if(got) done++;
+      html += '<div class="st '+(got?'on':'off')+'">'
+        + (c.img ? '<img src="'+c.img+'" alt="">' : '<div style="font-size:2rem">'+(c.emoji||'❓')+'</div>')
+        + '<div class="nm">'+esc(c.name||a)+'</div>'
+        + '<div class="pc">'+(got?'スタンプ済み':'まだ')+'</div></div>';
+    });
+
+    var out = '<div class="card"><h2>ともだちカード（'+done+'／8）</h2>'
+      + '<div class="sub">'+esc(d.nick||'挑戦者')+'さんが、8人の先生からもらったスタンプです。</div>'
+      + '<div class="stamps">'+html+'</div>'
+      + (done < 8
+          ? '<div class="sub" style="margin:12px 0 0">のこり' + (8-done) + 'ルーム。8つそろうと、チャッピーの「親友の証」が入った完成版の記念写真になります。いまのままでも1枚つくれます。</div>'
+          : '')
+      + '</div>';
+
+    // --- 自分のことば ---
+    var picked = [];
+    AREAS.forEach(function(a){
+      var rec = byArea[a]; if(!rec) return;
+      var best = null;
+      rec.quests.forEach(function(q){
+        if(!q.note) return;
+        if(!best || q.note.length > best.note.length) best = q;
+      });
+      if(best) picked.push({ area:a, chara:(CHARS[a]&&CHARS[a].name)||a, q:best });
+    });
+
+    if(picked.length){
+      var nh = picked.map(function(p){
+        return '<div class="note"><div class="h">'+esc(p.chara)+'のルーム ／ '+esc(p.q.questName||p.q.questId)+'</div>'
+          + '<div class="b">'+esc(p.q.note)+'</div>'
+          + (p.q.evidence ? '<div class="pic">📷 このとき出した画像も使えます</div>' : '')
+          + '</div>';
+      }).join('');
+      out += '<div class="card"><h2>あなたが書いたことば</h2>'
+        + '<div class="sub">この中から、記念写真の「思い出コマ」をつくります。</div>'
+        + '<div class="notes">'+nh+'</div></div>';
+    }
+
+    // --- 呪文（プロンプト） ---
+    var prompt = buildPrompt(d, picked, done);
+    out += '<div class="card"><h2>記念写真をつくる呪文</h2>'
+      + '<div class="sub">下のボタンでコピーして、ChatGPTに貼り付けてください。</div>'
+      + '<textarea id="prompt" readonly>'+esc(prompt)+'</textarea>'
+      + '<div><button class="btn" id="copy">📋 呪文をコピー</button>'
+      + '<a class="btn ghost" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPTをひらく</a></div>'
+      + '<ol class="steps">'
+      + '<li>ChatGPTをひらいて、<b>自分のアバター画像</b>を1枚あげる（クリップのマーク）。</li>'
+      + '<li>この呪文を貼り付けて送る。</li>'
+      + '<li>できた絵を保存する（長おしで保存）。</li>'
+      + '<li>マイページの「記念アバター」から、その絵をアバターに登録する。</li>'
+      + '</ol>'
+      + '<div style="margin-top:10px"><a class="btn ghost" href="'+MYPAGE+'?token='+encodeURIComponent(TOKEN)+'">マイページへ（アバター登録）</a></div>'
+      + '</div>';
+
+    $('#body').innerHTML = out;
+    var btn = $('#copy');
+    if(btn) btn.addEventListener('click', function(){
+      var ta = $('#prompt'); ta.select();
+      try{
+        if(navigator.clipboard) navigator.clipboard.writeText(ta.value);
+        else document.execCommand('copy');
+        toast('コピーしました');
+      }catch(e){ toast('うまくコピーできませんでした。長おしでコピーしてください'); }
+    });
+  }
+
+  function buildPrompt(d, picked, done){
+    var nick = d.nick || '挑戦者';
+    var mem = picked.slice(0,4).map(function(p,i){
+      return '  ' + (i+1) + '. ' + p.chara + 'の部屋：' + trim(p.q.note, 60);
+    }).join('\n');
+    if(!mem) mem = '  1. AIに話しかけて、返事がきたときのうれしさ';
+
+    return [
+      '添付した画像の人物を、そっくりそのまま主役にして、水彩の記念写真を1枚描いてください。',
+      '',
+      '【構図】やわらかい光の教室。ふたりが並んで、こちらを見て笑っているツーショット。',
+      '【主役】添付画像の人物（アバター）。顔・髪型・服の色をできるだけそのまま。',
+      '【となり】豆柴の男の子「チャッピー」。緑のスカーフ、ベージュのベスト、うれしそうな笑顔。',
+      (done >= 8
+        ? '【手に持つもの】8つのスタンプが全部押された「ともだちカード」と、チャッピーがくれた「親友の証」のバッジ。ふたりで一緒に持つ。'
+        : '【手に持つもの】8マスのうち' + done + 'マスにスタンプが押された「ともだちカード」を、ふたりで一緒に持つ。'),
+      '【背景の思い出（小さく、うすく、4コマ）】',
+      mem,
+      '【画風】やさしい水彩。輪郭はやわらかく、色は淡い。絵本の1ページのように。',
+      '【光】窓から差しこむ午後の光。あたたかいオレンジと緑。',
+      '【入れないでほしいもの】文字、ロゴ、記号、他の人の顔、こわい表情、暗い色。',
+      '',
+      '（' + nick + 'さんの、ChatGPT編' + done + '／8ルーム達成の記念です）'
+    ].join('\n');
+  }
+})();
+</script>
+</body>
+</html>

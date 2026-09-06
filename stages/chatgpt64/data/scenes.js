@@ -745,8 +745,10 @@ window.CUTSCENES = {
       },
       {
         "t": "end",
-        "label": "🏅 マンダラボードへ（完全制覇！）",
-        "href": "index.html"
+        "label": "📸 記念写真をつくる",
+        "href": "memory.html",
+        "label2": "🏅 マンダラボードへ",
+        "href2": "index.html"
       }
     ]
   }
