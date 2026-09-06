@@ -8,7 +8,7 @@
 <style>
 /* ============================================================
    📦 教材ぜんぶ一覧（関係者向け）
-   全5コース320マスの 動画／スライド／まとめ／アーカイブ を1枚に。
+   公開中コース（catalog.json に入っている分）の 動画／スライド／まとめ／アーカイブ を1枚に。
    ・販売代理店に「何があるか」を見せる
    ・AI講師が教材をすぐ取り出す
    トップからは目立たない位置にリンクを置く。検索エンジンには載せない。
@@ -56,7 +56,7 @@ tr:hover td{background:rgba(255,255,255,.03)}
 <body>
 <div class="wrap">
   <h1>📦 教材ぜんぶ一覧</h1>
-  <div class="sub">全5コース・320マスの 動画／スライド／まとめ（インフォグラ）／アーカイブ。関係者向けページです。</div>
+  <div class="sub" id="lead">動画／スライド／まとめ（インフォグラ）／アーカイブの一覧。関係者向けページです。</div>
 
   <div class="sum" id="sum"></div>
 
@@ -137,6 +137,9 @@ tr:hover td{background:rgba(255,255,255,.03)}
       s.areas.forEach(function(a){ a.masses.forEach(function(m){
         t.mass++; if(m.has.video)t.video++; if(m.has.slide)t.slide++; if(m.has.info)t.info++; }); });
     });
+    var lead = el('lead');
+    if (lead) lead.textContent = '全' + j.stages.length + 'コース・' + t.mass
+      + 'マスの 動画／スライド／まとめ（インフォグラ）／アーカイブ。関係者向けページです。';
     el('sum').innerHTML =
        '<div class="box"><b>'+t.mass+'</b><span>マス（全コース）</span></div>'
       +'<div class="box"><b>'+t.video+' / '+t.mass+'</b><span>🎬 動画</span></div>'

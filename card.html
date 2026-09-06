@@ -108,9 +108,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--gold)}
       <img src="assets/chara/reika_icon.png?v=2" alt="れいか">
       <div>
         <div class="who">大塚れいか（案内役）</div>
-        <p>ようこそ、レジスタンスへ。まずは<b>あなたの「挑戦者カード」</b>を作るわよ。
-        AIと少し話すだけで、あなたの<b>3つのパワー</b>と<b>必殺技</b>をAIが見抜いてくれるの。
-        このカードとアバターは、この先<b>ボス討伐の映像</b>にも登場するから、ちゃんと作っておいてね。</p>
+        <p>ようこそ。まずは<b>あなたの「挑戦者カード」</b>を作るわよ。
+        AIと少し話すだけで、あなたの<b>3つのパワー</b>と<b>必殺技</b>をAIが見つけてくれるの。
+        このカードとアバターは、この先<b>エンディングの記念の1枚</b>にも登場するから、ちゃんと作っておいてね。</p>
       </div>
     </div>
     <div class="powers mt">
@@ -208,7 +208,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--gold)}
           <button class="btn green" onclick="cmSaveAll()">💾 カードを保存</button>
           <button class="btn cyan" onclick="cmExport(2)">🖼 画像で保存(PNG)</button>
         </div>
-        <p class="lead center mt" id="saveHint">保存すると、討伐ED動画のプロンプトにこのカードが使われます</p>
+        <p class="lead center mt" id="saveHint">ほぞんすると、エンディングの記念の1枚をつくるときに、このカードが使われます</p>
       </div>
     </div>
   </section>
@@ -232,7 +232,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--gold)}
    挑戦者カード（トレカ①ロジック移植・β大人向け）
    ============================================================ */
 const CM_KEY   = 'mcq_card_beta';
-const AV_KEY   = 'mcq_avatar_beta';   // アバター画像dataURL（討伐ED動画で使用）
+const AV_KEY   = 'mcq_avatar_beta';   // アバター画像dataURL（エンディングの記念画像で使用）
 const CM_TOTAL = 20;
 
 const cm = {
@@ -298,7 +298,7 @@ STEP1の答え方（具体的さ・熱量）から、3つのパワーを整数�
 
 【仕上げ】
 最後に必ず伝える：
-「世界に1枚だけの挑戦者カード完成！🎉 文章とアバター絵がそろったら、サイトの『🃏挑戦者カード』の入力欄に文章を貼って、絵をのせて保存しよう。あなたのアバターは、ボス討伐の映像にも登場するよ！」
+「世界に1枚だけの挑戦者カード完成！🎉 文章とアバター絵がそろったら、サイトの『🃏挑戦者カード』の入力欄に文章を貼って、絵をのせて保存しよう。あなたのアバターは、エンディングの記念の1枚にも登場するよ！」
 
 まずは、あいさつと STEP0 の最初の1問だけを送ってください。`;
 
