@@ -232,10 +232,13 @@
   function applyBeatArt(b){
     if(b.img) setChara(b.img);
     if(b.bg)  $('#bg').style.backgroundImage = "url('"+b.bg+"')";
+    /* dim=背景の暗さ、quiet=降ってくる粒の有無。ふだんは連動、
+       黒板のように「絵は見せたいが粒は消したい」場面だけ quiet を単独で指定する */
     if(typeof b.dim !== 'undefined'){
       $('#bg').classList.toggle('dim', !!b.dim);
-      $('#stage').classList.toggle('quiet', !!b.dim);
+      if(typeof b.quiet === 'undefined') $('#stage').classList.toggle('quiet', !!b.dim);
     }
+    if(typeof b.quiet !== 'undefined') $('#stage').classList.toggle('quiet', !!b.quiet);
   }
 
   function next(){
