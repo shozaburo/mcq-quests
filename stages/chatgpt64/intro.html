@@ -11,7 +11,7 @@ html,body{height:100%}
 body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.75;overflow:hidden}
 .stage{height:100dvh;max-width:720px;margin:0 auto;display:flex;flex-direction:column;position:relative;
   background:#1a1426 center top/cover no-repeat;}
-.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.35),rgba(10,8,18,.82) 70%);pointer-events:none}
+.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.18),rgba(10,8,18,.55) 70%);pointer-events:none}
 .inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
 .chip{position:absolute;top:12px;left:14px;background:rgba(255,255,255,.92);color:#7a5a08;font-weight:900;
   font-size:13px;border-radius:999px;padding:5px 16px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
@@ -105,7 +105,9 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
     var myGen = ++faceGen;   // 世代トークン：古い非同期プリロードが後から上書きするのを防ぐ
     // ボス（チャッピー）は透過立ち絵で大きく表示
     if(b.who==='boss'){
-      if(sp.img){ el.style.display=''; el.src = sp.img; el.classList.add('tachie'); }
+      /* b.img があればその絵（打ち明ける顔など）。無ければいつもの立ち絵 */
+      var bossSrc = b.img || sp.img;
+      if(bossSrc){ el.style.display=''; el.src = bossSrc; el.classList.add('tachie'); }
       else { el.style.display='none'; }
       return;
     }

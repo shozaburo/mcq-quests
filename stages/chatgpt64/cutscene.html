@@ -12,9 +12,19 @@
 
   /* 背景（賢者イラスト・暗く沈める） */
   #bg{position:absolute; inset:0; background-size:cover; background-position:center;
-    filter:brightness(.35) saturate(.8); transform:scale(1.08);
+    filter:brightness(.62) saturate(.95); transform:scale(1.08);
     transition:filter 1.6s, transform 12s linear;}
-  #bg.reveal{filter:brightness(.95) saturate(1.05); transform:scale(1.0);}
+  #bg.reveal{filter:brightness(1) saturate(1.05); transform:scale(1.0);}
+  /* 打ち明ける場面：背景だけ青く沈める（夜の絵を別に描かなくて済む） */
+  #bg.dim{filter:brightness(.3) saturate(.55) hue-rotate(-10deg)!important;}
+  #chara{transition:opacity .18s, transform .9s;}
+  /* 立ち絵表示：_icon 以外の絵は、枠なしで大きく出す（サウンドノベルの見え方） */
+  #chara.tachie{width:auto;bottom:17vh}
+  /* 静かにする場面では粒を消す */
+  #stage.quiet .snow{opacity:0;transition:opacity .7s}
+  #chara.tachie img{width:auto;max-width:78vw;height:min(50vh,400px);object-fit:contain;
+    object-position:bottom;border:none;border-radius:0;background:none;
+    box-shadow:none;filter:drop-shadow(2px 5px 9px rgba(0,0,0,.5))}
   #vignette{position:absolute; inset:0; box-shadow:inset 0 0 200px rgba(0,0,0,.9);
     background:radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);}
 
@@ -136,19 +146,22 @@
   document.documentElement.style.setProperty('--c', CH.color||'#4db6ac');
 
   // 背景・キャラ・雪
-  $('#bg').style.backgroundImage = "url('"+(data.bg||'')+"')";
+  /* 背景は scenes.js の bg があればそれ、無ければその部屋の絵（bg/A.jpg 等）を使う */
+  var DEFAULT_BG = data.bg || ('bg/' + AREA + '.jpg');
+  $('#bg').style.backgroundImage = "url('"+DEFAULT_BG+"')";
   var chara=$('#chara');
+  chara.classList.toggle('tachie', String(CH.img||'').indexOf('_icon') < 0);
   chara.innerHTML = CH.img
     ? '<img src="'+CH.img+'" alt="'+esc(CH.name)+'" onerror="this.outerHTML=\'<div class=&quot;emoji&quot;>'+(CH.emoji||'✨')+'</div>\'">'
     : '<div class="emoji">'+(CH.emoji||'✨')+'</div>';
   (function snow(){
     var s=$('#stage');
     var pc=data.particle||'❄';
-    for(var i=0;i<44;i++){
+    for(var i=0;i<26;i++){
       var f=document.createElement('div'); f.className='snow';
       f.textContent=pc;
       f.style.left=(Math.random()*100)+'vw';
-      f.style.fontSize=(8+Math.random()*14)+'px';
+      f.style.fontSize=(7+Math.random()*9)+'px';
       f.style.animationDuration=(6+Math.random()*8)+'s';
       f.style.animationDelay=(-Math.random()*10)+'s';
       s.appendChild(f);
@@ -162,7 +175,7 @@
 
   // オーディオ基盤ロード（BGM＋喋り音・エリアBGMはassets/bgm/{area}.mp3）
   (function(){ var t=document.createElement('script'); t.src='../../assets/bgm.js?v=9';
-    t.onload=function(){ if(window.MCQBgm && area) MCQBgm.play(area, 'bgm/'); };
+    t.onload=function(){ if(window.MCQBgm && AREA) MCQBgm.play(AREA, 'bgm/'); };
     document.head.appendChild(t); })();
 
   function typeLine(text, isNar, isReika, cb){
@@ -204,17 +217,39 @@
     dbox.classList.remove('show');
   }
 
+  /* ── ビートごとの絵の切り替え ──
+     b.img  … 立ち絵の差し替え（例：chara/A_talk.png＝打ち明ける顔）
+     b.bg   … 背景の差し替え（例：bg/blackboard.png）
+     b.dim  … true で背景を青く沈める（音を止める場面で使う）        */
+  function setChara(src){
+    chara.classList.toggle('tachie', src.indexOf('_icon') < 0);
+    var el = chara.querySelector('img');
+    if(!el){ chara.innerHTML = '<img src="'+esc(src)+'" alt="">'; return; }
+    if(el.getAttribute('src') === src) return;
+    chara.style.opacity = '0';
+    setTimeout(function(){ el.src = src; chara.style.opacity = ''; }, 180);
+  }
+  function applyBeatArt(b){
+    if(b.img) setChara(b.img);
+    if(b.bg)  $('#bg').style.backgroundImage = "url('"+b.bg+"')";
+    if(typeof b.dim !== 'undefined'){
+      $('#bg').classList.toggle('dim', !!b.dim);
+      $('#stage').classList.toggle('quiet', !!b.dim);
+    }
+  }
+
   function next(){
     if(done) return;
     idx++;
     if(idx>=beats.length){ return; }
     var b=beats[idx];
+    applyBeatArt(b);
     if(b.t==='title'){ dbox.classList.remove('show'); showTitle(b, next); }
     else if(b.t==='say'){
       dbox.classList.add('show');
       var isReika = (b.who === 'reika');
       who.className = 'who' + (isReika ? ' reika' : ''); who.style.display='inline-block';
-      who.textContent = isReika ? '大塚麗夏' : (b.tag ? CH.name+'（'+b.tag+'）' : CH.name);
+      who.textContent = isReika ? '大塚麗夏' : (b.tag ? b.tag : CH.name);
       typeLine(b.text, false, isReika);
     }
     else if(b.t==='nar'){
