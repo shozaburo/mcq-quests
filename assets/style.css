@@ -21,6 +21,8 @@ body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
 
 /* ヘッダー */
 .head{display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-shrink:0;}
+/* スマホ：左上の「トップ」と右上のスコア表示に見出しが隠れるので、その分だけ下げる */
+@media(max-width:560px){ .head{margin-top:46px;} }
 .badge{background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
   border-radius:8px; padding:2px 11px; font-weight:800; font-size:.95rem; flex-shrink:0;}
 .head h1{font-size:.88rem; font-weight:800; margin:0; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.5);
@@ -64,7 +66,8 @@ body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
   body{padding:8px 8px;}
   .chara,.chara-emoji{width:82px;height:82px;}
   .chara-emoji{font-size:2.5rem;}
-  .dlg{font-size:.86rem; line-height:1.6; min-height:66px; max-height:110px; padding:9px 12px 10px; margin-left:9px;}
+  /* スマホ：セリフが3行で切れて読めなかったので、高さを広げる（縦が短い端末は従来どおり） */
+  .dlg{font-size:.86rem; line-height:1.6; min-height:66px; max-height:190px; padding:9px 12px 10px; margin-left:9px;}
   .nameplate{font-size:.72rem;}
   .nameplate small{display:none;}
   .head h1{font-size:.8rem;}

@@ -50,7 +50,9 @@
       + 'background:rgba(245,197,66,.2);border:2px dashed #f5c542;font-size:.9rem}'
       + '#mcqMyHud .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:9em}'
       + '#mcqMyHud .mk{color:#ffd54f}'
-      + '@media(max-width:520px){#mcqMyHud .nm{max-width:5.5em}}';
+      + '@media(max-width:520px){#mcqMyHud .nm{max-width:5.5em}}'
+      /* スマホでは画面のいちばん上に重なるので、本文をHUDのぶんだけ下げる */
+      + '@media(max-width:560px){body{padding-top:46px}}';
     document.head.appendChild(s);
   }
 

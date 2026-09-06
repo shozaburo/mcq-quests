@@ -151,10 +151,10 @@
   <header>
     <span class="goal">GOAL</span>
     <h1 id="centerCatch">Google賢者になろう</h1>
-    <p>動画で学び、クイズで試し、実践で「こうげき」。みんなの力でボスのHPを削り、64の封印を解け！</p>
+    <p>動画で見て、クイズでためして、じっさいに使ってみる。みんなの実践で8人の先生となかよしになって、64マスをぜんぶ開けよう！</p>
     <!-- CROSS-LINK: 別サイトに分離するときはこの1行を消す -->
     <a href="../../index.html?start=1" title="トップへ" style="position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.9);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.35)">🏠 トップ</a>
-    <a href="../claude64/index.html" style="display:inline-block;margin-top:8px;font-size:.76rem;color:#b39ddb;text-decoration:none;border:1px solid rgba(179,157,219,.4);border-radius:999px;padding:2px 12px">⚔️ 第2部・西日本編（Claude64）へ →</a>
+    <a href="../claude64/index.html" style="display:inline-block;margin-top:8px;font-size:.76rem;color:#b39ddb;text-decoration:none;border:1px solid rgba(179,157,219,.4);border-radius:999px;padding:2px 12px">🤖 Claude編（西日本編）もみる →</a>
   </header>
 
   <!-- ===== HUD ===== -->
@@ -215,7 +215,7 @@
     </div>
     <div class="item"><span class="sw" style="background:rgba(34,24,51,.95);border:1px solid rgba(255,255,255,.2)"></span>未開放（暗いタイル）</div>
     <div class="item"><span class="sw" style="background:linear-gradient(135deg,rgba(255,215,0,.5),rgba(34,24,51,.3));border:1px solid #ffd700"></span>チーム累積<b id="thLabel">400</b>%で開放✨</div>
-    <div class="item"><span class="sw" style="background:linear-gradient(90deg,#ff3d6e,#ff6f86)"></span>ボスHP（8マス合計で討伐）</div>
+    <div class="item"><span class="sw" style="background:linear-gradient(90deg,#ff3d6e,#ff6f86)"></span>なかよし度（8マス合計でMAX）</div>
   </div>
 
   <footer>みんなのAI実践塾 ｜ マンダラチャートクエスト</footer>
@@ -254,6 +254,7 @@
   var TH     = PROG.threshold || (CFG.board && CFG.board.threshold) || 400;
   var CUM    = PROG.cumPct || {};
   var API    = CFG.questApiUrl || '';
+  var SOFT   = !!CFG.soft;   // やさしい世界観（討伐→なかよし度）
 
   document.getElementById('centerCatch').textContent = CENTER.catch;
   document.getElementById('thLabel').textContent = TH;
@@ -470,12 +471,14 @@
         var gc=ch.color||'#607d8b';
         var bh=bossHp(cell.area);
         var hpPct=Math.round(bh.hp/bh.max*100);
-        html+='<div class="cell gate'+(bh.defeated?' defeated':'')+'" style="background:linear-gradient(155deg,'+gc+'cc,rgba(10,6,18,.9));border-color:'+gc+'" title="エリア'+cell.area+' ボス：'+esc(ch.name||'')+'（HP '+bh.hp+'/'+bh.max+'）">'
+        html+='<div class="cell gate'+(bh.defeated?' defeated':'')+'" style="background:linear-gradient(155deg,'+gc+'cc,rgba(10,6,18,.9));border-color:'+gc+'" title="エリア'+cell.area+' '+(SOFT?'先生':'ボス')+'：'+esc(ch.name||'')+'">'
             +'<span class="astamp">'+cell.area+'</span>'
             +(ch.img?'<img src="'+esc(ch.img)+'" alt="'+esc(ch.name||'')+'" style="border-color:'+gc+'">':'<div style="font-size:1.6rem">'+(ch.emoji||'👾')+'</div>')
             +'<span class="ttl">'+esc(ar.title||cell.area)+'</span>'
-            +'<span class="hpbar"><i style="width:'+hpPct+'%"></i></span>'
-            +'<span class="hptx">'+(bh.defeated?'🎉 討伐完了！':'HP '+hpPct+'%')+'</span>'
+            +'<span class="hpbar"><i style="width:'+(SOFT?(100-hpPct):hpPct)+'%"></i></span>'
+            +'<span class="hptx">'+(bh.defeated
+                ? (SOFT?'🎉 なかよし度MAX！':'🎉 討伐完了！')
+                : (SOFT?'なかよし度 '+(100-hpPct)+'%':'HP '+hpPct+'%'))+'</span>'
             +'</div>';
       }
       else if(cell.t==='alabel'){
