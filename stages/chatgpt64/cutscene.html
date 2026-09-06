@@ -47,7 +47,8 @@
   /* タイトルカード */
   #title{position:absolute; inset:0; display:flex; flex-direction:column;
     align-items:center; justify-content:center; z-index:9; text-align:center;
-    opacity:0; transition:opacity 1s; pointer-events:none;}
+    opacity:0; transition:opacity 1s; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.72) 0%, rgba(0,0,0,.42) 55%, rgba(0,0,0,0) 80%);}
   #title.show{opacity:1;}
   #title .main{color:#ffe08a; font-size:clamp(1.4rem,5vw,2.6rem); font-weight:900;
     text-shadow:0 2px 18px rgba(0,0,0,.9),0 0 30px rgba(255,200,80,.35); letter-spacing:.04em;}
@@ -169,6 +170,15 @@
   })();
   // タイル（ED reveal用）
   (function(){ var t=$('#tiles'); for(var i=0;i<24;i++){ var d=document.createElement('div'); d.className='tl'; t.appendChild(d);} })();
+  // reveal を使わない場面（OPなど）は最初から背景を見せる
+  (function(){
+    var hasReveal = false;
+    for(var i=0;i<beats.length;i++){ if(beats[i] && beats[i].t==='fx' && beats[i].fx==='reveal'){ hasReveal=true; break; } }
+    if(!hasReveal){
+      document.querySelectorAll('#tiles .tl').forEach(function(el){ el.classList.add('gone'); });
+      $('#bg').classList.add('reveal');
+    }
+  })();
 
   var dbox=$('#dbox'), who=dbox.querySelector('.who'), tx=dbox.querySelector('.tx'), cue=dbox.querySelector('.cue');
   var idx=-1, typing=null, typingText='', done=false;
