@@ -83,6 +83,10 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   // セリフ解決：キャラ別×言語別のテキストリストから引く（旧 b.text はそのまま使う）
   function resolveText(b){
     if(b.text) return b.text;                              // 旧形式フォールバック
+    if(b.who==='nar'){                                     // ナレーション（語り）
+      var nr = (I.narLines && (I.narLines[LANG] || I.narLines.ja)) || {};
+      return nr[b.id] || '';
+    }
     if(b.who==='boss'){
       var bl = (I.bossLines && (I.bossLines[LANG] || I.bossLines.ja)) || {};
       return bl[b.id] || '';
@@ -123,10 +127,20 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
     i = n;
     var b = STEPS[i]; if(!b){ finish(); return; }
     var sp = speaker(b.who);
-    setFace(b, sp);
-    $('who').textContent = sp.name + (b.who==='boss' && I.boss.title ? '｜'+I.boss.title : '');
-    $('who').style.borderColor = sp.color;
-    $('dlg').style.borderColor = sp.color;
+    if(b.who==='nar'){
+      /* 語りのときは、だれの絵も名前も出さない */
+      $('faceImg').style.display='none';
+      $('who').style.display='none';
+      $('dlg').style.borderColor = '#8a7fa8';
+      $('tx').style.fontStyle = 'italic';
+    } else {
+      $('who').style.display='';
+      $('tx').style.fontStyle = '';
+      setFace(b, sp);
+      $('who').textContent = sp.name + (b.who==='boss' && I.boss.title ? '｜'+I.boss.title : '');
+      $('who').style.borderColor = sp.color;
+      $('dlg').style.borderColor = sp.color;
+    }
     // ドット
     var h=''; for(var k=0;k<STEPS.length;k++) h+='<span class="'+(k<=i?'on':'')+'"></span>';
     $('dots').innerHTML = h;
