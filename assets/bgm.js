@@ -13,6 +13,7 @@
   'use strict';
   if(window.MCQBgm) return;
 
+  var BGM_VER = 3;      // 曲を差し替えたら増やす（ブラウザのキャッシュ対策）
   var VOL_CAP = 0.20;  // 実際の最大音量（スライダー100%でもこの値まで＝うるさくなりすぎない）
 
   // on=マスターのオン/オフ（🔇で全部停止）。vol=スライダー(0〜1)。
@@ -43,7 +44,9 @@
       audio.loop = true;
       audio.addEventListener('error', function(){ /* ファイル未配置なら黙ってスキップ */ });
     }
-    audio.src = (dir || (BASE + 'bgm/')) + curKey + '.mp3';
+    // ?v= を付けるのは、曲を差し替えたときにブラウザが古い音を鳴らし続けるのを防ぐため。
+    // 曲を入れ替えたら BGM_VER の数字を1つ増やす。
+    audio.src = (dir || (BASE + 'bgm/')) + curKey + '.mp3?v=' + BGM_VER;
     audio.volume = actualVol();
     if(ST.on){
       var p = audio.play();
