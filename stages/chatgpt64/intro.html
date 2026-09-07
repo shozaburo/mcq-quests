@@ -10,7 +10,10 @@
 html,body{height:100%}
 body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",sans-serif;line-height:1.75;overflow:hidden}
 .stage{height:100dvh;max-width:720px;margin:0 auto;display:flex;flex-direction:column;position:relative;
-  background:#1a1426 center top/cover no-repeat;}
+  background:#1a1426 center center/cover no-repeat;}
+/* スマホの縦画面では横長の絵が左右に大きく切り取られ、真ん中の白板だけになる。
+   窓と机が見える位置（左寄り）に寄せて、教室らしさが残るようにする。 */
+@media (max-aspect-ratio: 4/5){ .stage{background-position:22% center;} }
 .stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,18,.18),rgba(10,8,18,.55) 70%);pointer-events:none}
 .inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
 .chip{position:absolute;top:12px;left:14px;background:rgba(255,255,255,.92);color:#7a5a08;font-weight:900;
