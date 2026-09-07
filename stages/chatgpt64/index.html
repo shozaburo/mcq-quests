@@ -165,6 +165,7 @@
     <a class="hbtn" href="../../nyumon.html">🏫 パソコン教室</a>
     <a class="hbtn" href="../../card.html">🃏 挑戦者カード</a>
     <a class="hbtn" href="memory.html">📸 記念写真</a>
+    <a class="hbtn" id="dbgLink" href="debug.html" style="display:none">🛠 見本市</a>
     <button class="hbtn" data-panel="panelRewards">🎁 お土産</button>
     <button class="hbtn" data-panel="panelThanks">🍙 サンクスUP!</button>
     <button class="hbtn" id="evolveBtn">🧬 アバター進化</button>
@@ -255,6 +256,13 @@
   var CUM    = PROG.cumPct || {};
   var API    = CFG.questApiUrl || '';
   var SOFT   = !!CFG.soft;   // やさしい世界観（討伐→なかよし度）
+  /* 🛠 見本市（関係者用）へのリンクは、?dev=1 を付けたときだけ出す */
+  try{
+    if(new URLSearchParams(location.search).get('dev')==='1' ||
+       sessionStorage.getItem('mcq_devmode')==='1'){
+      var _dl=document.getElementById('dbgLink'); if(_dl) _dl.style.display='';
+    }
+  }catch(e){}
 
   document.getElementById('centerCatch').textContent = CENTER.catch;
   document.getElementById('thLabel').textContent = TH;

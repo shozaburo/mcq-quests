@@ -87,12 +87,32 @@
   var AREAS = 'ABCDEFGH'.split('');
   var $ = function(s){ return document.querySelector(s); };
 
-  var TOKEN = '';
+  var TOKEN = '', DEMO = false;
   try{
     var q = new URLSearchParams(location.search);
+    DEMO  = q.get('demo') === '1';
     TOKEN = (q.get('token')||'').trim() || localStorage.getItem('mcq_member_token') || '';
-    if(TOKEN) localStorage.setItem('mcq_member_token', TOKEN);
+    if(TOKEN && TOKEN.indexOf('DEMO') !== 0) localStorage.setItem('mcq_member_token', TOKEN);
   }catch(e){}
+
+  /* 見本データ（?demo=1）。サーバーがまだ新しい取り出し口に対応していなくても、
+     このページの見た目と呪文の中身を確かめられるようにしておく。 */
+  var DEMO_DATA = { ok:true, goalId:GOAL, nick:'見本', avatarUrl:'', areas:
+    ['メールの返事を書いてもらった。ふつうの言葉でいいと分かって気が楽になった。',
+     '長い議事録を3行にしてもらえた。会議のあとが早く終わるようになった。',
+     'チラシの絵を自分でつくれた。文字の入れ方でつまずいたが、聞き直したら直った。',
+     '自分の口ぐせを覚えさせた。返事が急に「自分の言葉」になった。',
+     'ちがう答えが返ってきたので、出典を聞き返したら直った。うのみにしない。',
+     '表を並べかえる小さな道具をつくった。毎朝の10分がゼロになった。',
+     'GmailとDriveをつないで、請求書の整理を任せた。',
+     '妻に教えたら、買い物メモに使いはじめた。人に教えるのがいちばん覚える。'
+    ].map(function(note, i){
+      var a = 'ABCDEFGH'.charAt(i);
+      return { area:a, withNote:1, withPic:(i%3===0?1:0), quests:[{
+        questId:a+'1', questName:'見本のクエスト', pct:(i<6?125:100),
+        note:note, evidence:(i%3===0 ? 'https://example.com/evidence.png' : ''),
+        date:'2026-08-0'+(i+1) }] };
+    }) };
 
   function toast(t){
     var el=$('#toast'); el.textContent=t; el.classList.add('on');
@@ -102,6 +122,11 @@
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function trim(s, n){ s=String(s||'').replace(/\s+/g,' ').trim();
     return s.length>n ? s.slice(0,n)+'…' : s; }
+
+  if(DEMO){
+    render(DEMO_DATA);
+    return;
+  }
 
   if(!TOKEN){
     $('#body').innerHTML = '<div class="card"><h2>ログインが必要です</h2>'
@@ -139,7 +164,11 @@
         + '<div class="pc">'+(got?'スタンプ済み':'まだ')+'</div></div>';
     });
 
-    var out = '<div class="card"><h2>ともだちカード（'+done+'／8）</h2>'
+    var out = '';
+    if(DEMO) out += '<div class="card" style="border-color:rgba(255,193,7,.5);background:rgba(255,193,7,.1)">'
+      + '<h2 style="color:#ffe082">これは見本です</h2>'
+      + '<div class="sub" style="margin:0">ことばは仮のものです。本番では、あなたが報告に書いた文がそのまま並びます。</div></div>';
+    out += '<div class="card"><h2>ともだちカード（'+done+'／8）</h2>'
       + '<div class="sub">'+esc(d.nick||'挑戦者')+'さんが、8人の先生からもらったスタンプです。</div>'
       + '<div class="stamps">'+html+'</div>'
       + (done < 8
