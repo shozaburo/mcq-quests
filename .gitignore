@@ -11,3 +11,5 @@ stages/*/slide/_backup_別案/
 
 # urls.js などの日付つきバックアップ
 *.bak_*
+__pycache__/
+*.pyc
