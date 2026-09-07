@@ -21,7 +21,7 @@ import argparse, glob, os, sys
 from PIL import Image, ImageFilter
 
 
-def soften(im, erode=0.0, feather=0.9):
+def soften(im, erode=0.0, feather=0.9, solid=False):
     """切り抜きのふちに、半透明のなめらかなふちを作る。
 
     ・feather … 不透明度をこの半径でぼかす（ギザギザが消える）
@@ -41,6 +41,19 @@ def soften(im, erode=0.0, feather=0.9):
     else:
         base = a
     soft = base.filter(ImageFilter.GaussianBlur(feather)) if feather > 0 else base
+
+    if solid:
+        # 中が透けるのを止める。絵の内側（ふちより内)は必ず不透明にする。
+        # 手足のあいだの「外につながっているすき間」は塗らない（穴だけ埋める）。
+        from scipy import ndimage
+        av = np.asarray(a).astype(np.float32) / 255.0
+        mask = av > 0.30
+        filled = ndimage.binary_fill_holes(mask)
+        interior = ndimage.binary_erosion(filled, iterations=2)
+        edge = Image.fromarray((filled * 255).astype(np.uint8), 'L')
+        edge = edge.filter(ImageFilter.GaussianBlur(feather)) if feather > 0 else edge
+        out = np.maximum(np.asarray(edge).astype(np.float32) / 255.0, interior.astype(np.float32))
+        soft = Image.fromarray((out * 255).astype(np.uint8), 'L')
 
     alpha = np.asarray(a).astype(np.float32) / 255.0
     rgb = arr[..., :3].astype(np.float32) / 255.0
@@ -92,11 +105,11 @@ def trim_and_resize(im, maxside=0, trim=False):
     return im
 
 
-def convert(src, dst, erode, feather, quality, maxside, trim=False, upscale=0):
+def convert(src, dst, erode, feather, quality, maxside, trim=False, upscale=0, solid=False):
     im = Image.open(src).convert('RGBA')
     if upscale:
         im = rescale(im, upscale)      # 先に大きくしてから、ふちをなめらかにする
-    im = soften(im, erode, feather)
+    im = soften(im, erode, feather, solid)
     im = trim_and_resize(im, maxside, trim)
     im.save(dst, 'WEBP', quality=quality, method=6, alpha_quality=100)
     return im.size, os.path.getsize(dst)
@@ -112,17 +125,18 @@ def main():
     ap.add_argument('--maxside', type=int, default=1000)
     ap.add_argument('--trim', action='store_true', help='まわりの透明な余白を切り詰める')
     ap.add_argument('--upscale', type=int, default=0, help='長い辺をこの大きさにそろえる（拡大も縮小もする）')
+    ap.add_argument('--solid', action='store_true', help='中が透けないように、内側を必ず不透明にする')
     a = ap.parse_args()
     if a.batch:
         os.makedirs(a.dst, exist_ok=True)
         files = sorted(glob.glob(os.path.join(a.src, '*.png')))
         for f in files:
             out = os.path.join(a.dst, os.path.splitext(os.path.basename(f))[0] + '.webp')
-            size, n = convert(f, out, a.erode, a.feather, a.quality, a.maxside, a.trim, a.upscale)
+            size, n = convert(f, out, a.erode, a.feather, a.quality, a.maxside, a.trim, a.upscale, a.solid)
             print('  %-18s → %-18s %sx%s %6.1fKB' % (os.path.basename(f), os.path.basename(out),
                                                      size[0], size[1], n / 1024))
     else:
-        size, n = convert(a.src, a.dst, a.erode, a.feather, a.quality, a.maxside, a.trim, a.upscale)
+        size, n = convert(a.src, a.dst, a.erode, a.feather, a.quality, a.maxside, a.trim, a.upscale, a.solid)
         print('%s → %s %sx%s %.1fKB' % (a.src, a.dst, size[0], size[1], n / 1024))
 
 

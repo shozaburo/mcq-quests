@@ -57,8 +57,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、肉球のスタンプがぽん。（1／8）"
+        "t": "stamp",
+        "mark": "🐾",
+        "label": "1／8",
+        "cap": "スタンプ 1／8 ゲット！"
       },
       {
         "t": "say",
@@ -141,8 +143,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、丸太のスタンプがぽん。（2／8）"
+        "t": "stamp",
+        "mark": "🪵",
+        "label": "2／8",
+        "cap": "スタンプ 2／8 ゲット！"
       },
       {
         "t": "say",
@@ -226,8 +230,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、羽根のスタンプがぽん。（3／8）"
+        "t": "stamp",
+        "mark": "🪶",
+        "label": "3／8",
+        "cap": "スタンプ 3／8 ゲット！"
       },
       {
         "t": "say",
@@ -310,8 +316,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、鉛筆のスタンプがぽん。（4／8）"
+        "t": "stamp",
+        "mark": "✏️",
+        "label": "4／8",
+        "cap": "スタンプ 4／8 ゲット！"
       },
       {
         "t": "say",
@@ -390,8 +398,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、鈴のスタンプがぽん。（5／8）"
+        "t": "stamp",
+        "mark": "🔔",
+        "label": "5／8",
+        "cap": "スタンプ 5／8 ゲット！"
       },
       {
         "t": "say",
@@ -513,8 +523,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、スパナのスタンプがぽん。（6／8）"
+        "t": "stamp",
+        "mark": "🔧",
+        "label": "6／8",
+        "cap": "スタンプ 6／8 ゲット！"
       },
       {
         "t": "say",
@@ -593,8 +605,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、吸盤のスタンプがぽん。（7／8）"
+        "t": "stamp",
+        "mark": "🫧",
+        "label": "7／8",
+        "cap": "スタンプ 7／8 ゲット！"
       },
       {
         "t": "say",
@@ -677,8 +691,10 @@ window.CUTSCENES = {
         "fx": "reveal"
       },
       {
-        "t": "nar",
-        "text": "カードに、星のスタンプがぽん。——8個、そろった。"
+        "t": "stamp",
+        "mark": "⭐",
+        "label": "8／8",
+        "cap": "8個ぜんぶ そろった！"
       },
       {
         "t": "say",
