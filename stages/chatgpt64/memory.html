@@ -85,12 +85,25 @@
   var GOAL  = CFG.goalId || 'θ';
   var MYPAGE= 'https://script.google.com/macros/s/AKfycbwcWQkVDos5Jky6GCDqZk9ZBbgIz0FqAFmTOAeigLCoPCz6yl_P84GgXbHzGXacmBhp/exec';
   var AREAS = 'ABCDEFGH'.split('');
+  /* 呪文に書く「先生の見た目」。ChatGPT に絵を描かせるときに必要 */
+  var LOOK = {
+    A:'緑のスカーフとベージュのベストを着た、笑顔の豆柴の男の子「チャッピー」',
+    B:'作業エプロンをつけた、おだやかなビーバーの女の子「ワーク」。書類を抱えている',
+    C:'虹色の羽をひろげた、はなやかなクジャクの先生「イメジ」',
+    D:'丸いメガネをかけ、うすむらさきのジャケットを着たオウムの先生「ジピ」。鉛筆とメモ帳を持つ',
+    E:'黒いスーツの黒猫「コデ」。ノートパソコンを抱えている',
+    F:'つなぎを着たカワウソの職人「アプショ」。スパナを持っている',
+    G:'ピンクのベストを着た8本足のタコ「エムシー」。手をひろげている',
+    H:'星空色のマントをはおったフクロウの先生「ゴール」。金の懐中時計を持つ'
+  };
   var $ = function(s){ return document.querySelector(s); };
 
-  var TOKEN = '', DEMO = false;
+  var TOKEN = '', DEMO = false, ONE = '';
   try{
     var q = new URLSearchParams(location.search);
     DEMO  = q.get('demo') === '1';
+    ONE   = (q.get('area')||'').trim().toUpperCase();
+    if(AREAS.indexOf(ONE) < 0) ONE = '';
     TOKEN = (q.get('token')||'').trim() || localStorage.getItem('mcq_member_token') || '';
     if(TOKEN && TOKEN.indexOf('DEMO') !== 0) localStorage.setItem('mcq_member_token', TOKEN);
   }catch(e){}
@@ -144,16 +157,24 @@
     });
 
   function render(d){
+    if(ONE){
+      var c0 = CHARS[ONE] || {};
+      document.querySelector('header h1').textContent = (c0.name||ONE) + 'との記念写真';
+      document.querySelector('header p').textContent = 'この部屋であなたが書いたことばを、そのまま絵にします';
+      document.querySelector('header .goal').textContent = 'CHATGPT編 ─ ' + (c0.name||ONE) + 'のルーム';
+      document.title = (c0.name||ONE) + 'との記念写真 | ChatGPT編';
+    }
     if(!d || !d.ok){
       $('#body').innerHTML = '<div class="msg">'+esc((d&&d.error)||'読み込めませんでした')+'</div>';
       return;
     }
     var byArea = {};
     (d.areas||[]).forEach(function(a){ byArea[a.area] = a; });
+    var LIST = ONE ? [ONE] : AREAS;
 
     // --- 8つのスタンプ ---
     var done = 0, html = '';
-    AREAS.forEach(function(a){
+    LIST.forEach(function(a){
       var c = CHARS[a] || {};
       var rec = byArea[a];
       var got = rec && rec.quests.some(function(q){ return q.pct >= 100; });
@@ -171,14 +192,14 @@
     out += '<div class="card"><h2>ともだちカード（'+done+'／8）</h2>'
       + '<div class="sub">'+esc(d.nick||'挑戦者')+'さんが、8人の先生からもらったスタンプです。</div>'
       + '<div class="stamps">'+html+'</div>'
-      + (done < 8
+      + (!ONE && done < 8
           ? '<div class="sub" style="margin:12px 0 0">のこり' + (8-done) + 'ルーム。8つそろうと、チャッピーの「親友の証」が入った完成版の記念写真になります。いまのままでも1枚つくれます。</div>'
           : '')
       + '</div>';
 
     // --- 自分のことば ---
     var picked = [];
-    AREAS.forEach(function(a){
+    LIST.forEach(function(a){
       var rec = byArea[a]; if(!rec) return;
       var best = null;
       rec.quests.forEach(function(q){
@@ -230,22 +251,47 @@
 
   function buildPrompt(d, picked, done){
     var nick = d.nick || '挑戦者';
-    var mem = picked.slice(0,4).map(function(p,i){
+
+    /* 部屋ごとの1枚（道のりの途中で「ここまでやった」を残すための写真） */
+    if(ONE){
+      var c = CHARS[ONE] || {};
+      var mem = picked.slice(0,2).map(function(p, i){
+        return '  ' + (i+1) + '. ' + trim(p.q.note, 60);
+      }).join('\n') || '  1. この部屋で、はじめてうまくいったこと';
+      return [
+        '添付した画像の人物を、そっくりそのまま主役にして、水彩の記念写真を1枚描いてください。',
+        '',
+        '【構図】やわらかい光の部屋。ふたりが並んで、こちらを見て笑っているツーショット。',
+        '【主役】添付画像の人物（アバター）。顔・髪型・服の色をできるだけそのまま。',
+        '【となり】' + (LOOK[ONE] || (c.name || '先生')) + '。うれしそうな笑顔。',
+        '【手に持つもの】スタンプが1つ押された「ともだちカード」を、ふたりで一緒に持つ。',
+        '【背景の思い出（小さく、うすく）】',
+        mem,
+        '【画風】やさしい水彩。輪郭はやわらかく、色は淡い。絵本の1ページのように。',
+        '【光】窓から差しこむ午後の光。あたたかい色。',
+        '【入れないでほしいもの】文字、ロゴ、記号、他の人の顔、こわい表情、暗い色。',
+        '',
+        '（' + nick + 'さんの、' + (c.name || ONE) + 'のルーム クリア記念です）'
+      ].join('\n');
+    }
+
+    /* 8個そろったときの1枚 */
+    var mem8 = picked.slice(0,4).map(function(p,i){
       return '  ' + (i+1) + '. ' + p.chara + 'の部屋：' + trim(p.q.note, 60);
     }).join('\n');
-    if(!mem) mem = '  1. AIに話しかけて、返事がきたときのうれしさ';
+    if(!mem8) mem8 = '  1. AIに話しかけて、返事がきたときのうれしさ';
 
     return [
       '添付した画像の人物を、そっくりそのまま主役にして、水彩の記念写真を1枚描いてください。',
       '',
       '【構図】やわらかい光の教室。ふたりが並んで、こちらを見て笑っているツーショット。',
       '【主役】添付画像の人物（アバター）。顔・髪型・服の色をできるだけそのまま。',
-      '【となり】豆柴の男の子「チャッピー」。緑のスカーフ、ベージュのベスト、うれしそうな笑顔。',
+      '【となり】' + LOOK.A + '。',
       (done >= 8
         ? '【手に持つもの】8つのスタンプが全部押された「ともだちカード」と、チャッピーがくれた「親友の証」のバッジ。ふたりで一緒に持つ。'
         : '【手に持つもの】8マスのうち' + done + 'マスにスタンプが押された「ともだちカード」を、ふたりで一緒に持つ。'),
       '【背景の思い出（小さく、うすく、4コマ）】',
-      mem,
+      mem8,
       '【画風】やさしい水彩。輪郭はやわらかく、色は淡い。絵本の1ページのように。',
       '【光】窓から差しこむ午後の光。あたたかいオレンジと緑。',
       '【入れないでほしいもの】文字、ロゴ、記号、他の人の顔、こわい表情、暗い色。',
