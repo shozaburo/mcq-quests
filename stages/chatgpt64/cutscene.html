@@ -175,7 +175,7 @@
 </div>
 <a href="../../index.html" title="トップ（ボードへ）" style="position:fixed;left:10px;top:10px;z-index:9998;background:rgba(255,255,255,.9);color:#9c6f08;font-weight:800;font-size:.8rem;text-decoration:none;border-radius:999px;padding:6px 14px;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:'Yu Gothic',sans-serif">🏠 トップ</a>
 
-<script src="data/scenes.js?v=4"></script>
+<script src="data/scenes.js?v=20260907"></script>
 <script>
 (function(){
   function $(s){ return document.querySelector(s); }
@@ -352,7 +352,10 @@
       dbox.classList.add('show');
       var isReika = (b.who === 'reika');
       who.className = 'who' + (isReika ? ' reika' : ''); who.style.display='inline-block';
-      who.textContent = isReika ? '大塚麗夏' : (b.tag ? b.tag : CH.name);
+      /* as=別のキャラが話す（例：チャッピー） ／ tag=同じキャラの中の呼び分け（例：兄・弟） */
+      who.textContent = isReika ? '大塚麗夏'
+                      : (b.as ? b.as
+                      : (b.tag ? CH.name + '（' + b.tag + '）' : CH.name));
       typeLine(b.text, false, isReika);
     }
     else if(b.t==='nar'){

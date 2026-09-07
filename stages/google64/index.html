@@ -31,6 +31,20 @@
     text-decoration:none; font-family:inherit;}
   .hud .hbtn:hover{border-color:var(--gold); color:var(--gold);}
 
+  /* 記念写真のおさそい（制覇したのに絵にしていない人へ、ずっと出す） */
+  .memo{max-width:860px; margin:10px auto; display:none; padding:14px 16px; border-radius:16px;
+    background:linear-gradient(160deg,rgba(19,193,148,.16),rgba(255,215,0,.10));
+    border:2px solid rgba(19,193,148,.55); box-shadow:0 6px 20px rgba(0,0,0,.35);}
+  .memo.on{display:block;}
+  .memo .mh{display:flex; align-items:center; gap:10px;}
+  .memo .mh .ic{font-size:1.7rem; line-height:1;}
+  .memo .mh b{display:block; font-size:1rem;}
+  .memo .mh span{display:block; font-size:.78rem; color:var(--muted);}
+  .memo .mbtns{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .memo .mb{flex:1 1 46%; text-align:center; text-decoration:none; font-weight:800; font-size:.86rem;
+    border-radius:12px; padding:11px 8px; background:linear-gradient(180deg,#13c194,#0b8064); color:#06231c;}
+  .memo .mb.ghost{background:rgba(255,255,255,.08); color:#f2f0ea; border:1px solid rgba(255,255,255,.3);}
+
   /* パネル（お土産・サンクス・案内） */
   .panel{max-width:860px; margin:10px auto; background:rgba(255,255,255,.05);
     border:1px solid rgba(255,255,255,.15); border-radius:14px; padding:14px 16px; display:none;}
@@ -172,6 +186,9 @@
     <button class="hbtn" id="evolveBtn">🧬 アバター進化</button>
     <button class="hbtn" data-panel="panelGuide">📖 コース案内</button>
   </div>
+
+  <!-- ===== 記念写真のおさそい ===== -->
+  <div class="memo" id="memoCard"></div>
 
   <!-- ===== パネル：コース案内（素の説明・物語なし） ===== -->
   <div class="panel" id="panelGuide">
@@ -317,6 +334,50 @@
   $('guideList').innerHTML=gl;
 
   /* me取得 → HUD・お土産 */
+  /* 記念写真のおさそい
+     ・エリアを1つでも走り切った人（称号を持っている人）に出す
+     ・アバターの更新日は、保存ファイル名 avatar_{id}_{yyyyMMddHHmmss}.png から読む
+     ・まだ絵にしていない／30日以上そのまま なら、強めに誘う */
+  var MEMO_STALE_DAYS = 30;
+  function avatarUpdatedAt(url){
+    var m = String(url||'').match(/avatar_[^_\/]+_(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\./);
+    if(!m) return null;
+    return new Date(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]);
+  }
+  function renderMemo(j){
+    var el = document.getElementById('memoCard');
+    if(!el) return;
+    var titles = (j && j.titles) || [];
+    if(!titles.length){ el.classList.remove('on'); return; }   // まだ1エリアも走り切っていない
+    var url = (j.member && j.member.avatarUrl) || '';
+    var at  = avatarUpdatedAt(url);
+    var days = at ? Math.floor((Date.now() - at.getTime())/86400000) : null;
+    var head, sub;
+    if(!url){
+      head = '記念写真をつくりませんか';
+      sub  = 'エリアを走り切った人だけの1枚です。先生とのツーショットになります';
+    }else if(days === null){
+      head = '記念写真をつくりませんか';
+      sub  = 'あなたの感想がそのまま絵になります';
+    }else if(days >= MEMO_STALE_DAYS){
+      head = 'そろそろアバターを変えませんか';
+      sub  = '前に変えてから ' + days + ' 日たちました。育った自分を見せましょう';
+    }else{
+      head = '記念写真をつくりませんか';
+      sub  = 'クリアした部屋の分だけ、何枚でもつくれます';
+    }
+    var last = titles[titles.length-1] || {};
+    var area = String(last.area||'').toUpperCase();
+    var one  = /^[A-H]$/.test(area) ? ('memory.html?area=' + area) : 'memory.html';
+    el.innerHTML = '<div class="mh"><span class="ic">🏅</span><span><b>' + esc(head) + '</b>'
+      + '<span>' + esc(sub) + '</span></span></div>'
+      + '<div class="mbtns">'
+      +   '<a class="mb" href="' + one + '">📸 記念写真をつくる</a>'
+      +   '<a class="mb ghost" href="../../card.html">🎨 アバターを新しくする</a>'
+      + '</div>';
+    el.classList.add('on');
+  }
+
   var ME=null;
   function renderMe(j){
     if(!j||!j.ok||!j.member) return;
@@ -326,6 +387,7 @@
       +'<div><div class="nm">'+esc(m.nick||'挑戦者')+'</div>'
       +'<div class="st">⭐'+(m.exp||0)+' EXP　🍙'+(m.thanksPt||0)+' Pt'
       +(j.titles&&j.titles.length?'　👑'+j.titles.length:'')+'</div></div>';
+    renderMemo(j);
     // お土産グリッド
     var rewards=j.rewards||[];
     var have={};

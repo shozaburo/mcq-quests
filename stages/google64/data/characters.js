@@ -9,7 +9,7 @@ window.MCQ_CHARS = {
 
   A: { /* CH14 */
     name: "コロポックル兄弟", title: "カギノ門の主｜アイヌ伝承の小人",
-    img: "https://re-gi.jp/mcq/img/chara_CH14_________.png", emoji: "🌿", color: "#4db6ac",
+    img: "chara/A_icon.webp", tachie: "chara/A.webp", emoji: "🌿", color: "#4db6ac",
     openingVideo: "cutscene.html?area=A&scene=op",
     endingVideo:  "cutscene.html?area=A&scene=ed",
     lines: {
@@ -30,7 +30,7 @@ window.MCQ_CHARS = {
 
   B: { /* CH15 */
     name: "ナマハーゲ・ゴブリン", title: "プロンプト横丁の主｜秋田なまはげ×ゴブリン",
-    img: "https://re-gi.jp/mcq/img/chara_CH15___________.png", emoji: "👹", color: "#e53935",
+    img: "chara/B_icon.webp", tachie: "chara/B.webp", emoji: "👹", color: "#e53935",
     openingVideo: "cutscene.html?area=B&scene=op",
     endingVideo:  "cutscene.html?area=B&scene=ed",
     lines: {
@@ -51,7 +51,7 @@ window.MCQ_CHARS = {
 
   C: { /* CH16 */
     name: "ズンダ・マンドラゴラ", title: "トキノ台の主｜仙台ずんだの植物ゴーレム",
-    img: "https://re-gi.jp/mcq/img/chara_CH16___________.png", emoji: "🌱", color: "#7cb342",
+    img: "chara/C_icon.webp", tachie: "chara/C.webp", emoji: "🌱", color: "#7cb342",
     openingVideo: "cutscene.html?area=C&scene=op",
     endingVideo:  "cutscene.html?area=C&scene=ed",
     lines: {
@@ -72,7 +72,7 @@ window.MCQ_CHARS = {
 
   D: { /* CH17 */
     name: "ダルマ・ゴーレム", title: "フミノ辻の主｜高崎だるまの錬金生命体",
-    img: "https://re-gi.jp/mcq/img/chara_CH17_________.png", emoji: "🔴", color: "#d84315",
+    img: "chara/D_icon.webp", tachie: "chara/D.webp", emoji: "🔴", color: "#d84315",
     openingVideo: "cutscene.html?area=D&scene=op",
     endingVideo:  "cutscene.html?area=D&scene=ed",
     lines: {
@@ -93,7 +93,7 @@ window.MCQ_CHARS = {
 
   E: { /* CH18 */
     name: "ガーゴイル・キング", title: "カズノ蔵の主｜鎌倉鳩×バターの帝国本家",
-    img: "https://re-gi.jp/mcq/img/chara_CH18__________.png", emoji: "🕊️", color: "#8d6e63",
+    img: "chara/E_icon.webp", tachie: "chara/E.webp", emoji: "🕊️", color: "#8d6e63",
     openingVideo: "cutscene.html?area=E&scene=op",
     endingVideo:  "cutscene.html?area=E&scene=ed",
     lines: {
@@ -114,7 +114,7 @@ window.MCQ_CHARS = {
 
   F: { /* CH19 */
     name: "シレーヌ・オブ・銀座", title: "ミセル座の主｜銀座のセイレーン",
-    img: "https://re-gi.jp/mcq/img/chara_CH19____________.png", emoji: "🧜‍♀️", color: "#ab47bc",
+    img: "chara/F_icon.webp", tachie: "chara/F.webp", emoji: "🧜‍♀️", color: "#ab47bc",
     openingVideo: "cutscene.html?area=F&scene=op",
     endingVideo:  "cutscene.html?area=F&scene=ed",
     lines: {
@@ -135,7 +135,7 @@ window.MCQ_CHARS = {
 
   G: { /* CH20 */
     name: "サーベルタイガー", title: "シオリの森の主｜武田信玄×甲斐の虎",
-    img: "https://re-gi.jp/mcq/img/chara_CH20_________.png", emoji: "🐯", color: "#f9a825",
+    img: "chara/G_icon.webp", tachie: "chara/G.webp", emoji: "🐯", color: "#f9a825",
     openingVideo: "cutscene.html?area=G&scene=op",
     endingVideo:  "cutscene.html?area=G&scene=ed",
     lines: {
@@ -156,7 +156,7 @@ window.MCQ_CHARS = {
 
   H: { /* CH21 */
     name: "エンシェント・ドラゴン", title: "タカラノ峰の主｜福井恐竜×西洋古龍",
-    img: "https://re-gi.jp/mcq/img/chara_CH21____________.png", emoji: "🐲", color: "#00897b",
+    img: "chara/H_icon.webp", tachie: "chara/H.webp", emoji: "🐲", color: "#00897b",
     openingVideo: "cutscene.html?area=H&scene=op",
     endingVideo:  "cutscene.html?area=H&scene=ed",
     lines: {
