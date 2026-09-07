@@ -1,0 +1,79 @@
+name: Xserverへ公開
+
+# main に入った変更を、本番（https://re-gi.jp/mcq-site/）へ送る。
+# 動画（*.mp4／合計2.8GB）は送らない。もともとサーバーに置いてあり、
+# 毎回送ると時間もお金もかかるため。動画を差し替えたいときは手で上げる。
+#
+# 必要な秘密設定（Settings > Secrets and variables > Actions）
+#   XSERVER_SSH_KEY … サーバーにログインするための秘密鍵（-----BEGIN ... の全文）
+#   XSERVER_HOST    … サーバーのアドレス（例 sv1234.xserver.jp）
+#   XSERVER_USER    … サーバーのユーザー名
+#   XSERVER_PATH    … 置き場所（例 /home/ユーザー名/re-gi.jp/public_html/mcq-site/）
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.mp4'
+      - 'README.md'
+  workflow_dispatch:
+    inputs:
+      dryrun:
+        description: 'true と書くと、実際には送らず「何が変わるか」だけ出す'
+        required: false
+        default: 'false'
+
+concurrency:
+  group: xserver-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ソースを取得
+        uses: actions/checkout@v4
+
+      - name: 秘密設定があるか確かめる
+        env:
+          KEY:  ${{ secrets.XSERVER_SSH_KEY }}
+          HOST: ${{ secrets.XSERVER_HOST }}
+          USER: ${{ secrets.XSERVER_USER }}
+          PATHV: ${{ secrets.XSERVER_PATH }}
+        run: |
+          MISS=""
+          [ -z "$KEY" ]   && MISS="$MISS XSERVER_SSH_KEY"
+          [ -z "$HOST" ]  && MISS="$MISS XSERVER_HOST"
+          [ -z "$USER" ]  && MISS="$MISS XSERVER_USER"
+          [ -z "$PATHV" ] && MISS="$MISS XSERVER_PATH"
+          if [ -n "$MISS" ]; then
+            echo "::error::つぎの秘密設定が登録されていません:$MISS"
+            exit 1
+          fi
+
+      - name: 鍵を用意する
+        env:
+          KEY:  ${{ secrets.XSERVER_SSH_KEY }}
+          HOST: ${{ secrets.XSERVER_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: 送る
+        env:
+          HOST: ${{ secrets.XSERVER_HOST }}
+          USER: ${{ secrets.XSERVER_USER }}
+          PATHV: ${{ secrets.XSERVER_PATH }}
+        run: |
+          set -e
+          DRY=""
+          if [ "${{ github.event.inputs.dryrun }}" = "true" ]; then DRY="--dry-run"; echo "※ためし実行（送りません）"; fi
+          rsync -rlvz --delete-after $DRY \
+            --exclude '.git/' --exclude '.github/' --exclude '.gitignore' \
+            --exclude 'tools/' --exclude '**/__pycache__/' \
+            --exclude '*.mp4' --exclude '*.md' \
+            -e "ssh -i ~/.ssh/id_deploy -p 10022 -o StrictHostKeyChecking=accept-new" \
+            ./ "$USER@$HOST:$PATHV"
+          echo "送信おわり。"
