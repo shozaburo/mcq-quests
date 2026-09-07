@@ -21,31 +21,39 @@ import argparse, glob, os, sys
 from PIL import Image, ImageFilter
 
 
-def soften(im, erode=1.2, feather=1.0):
-    """透明・不透明の2段階しかない切り抜きに、半透明のなめらかなふちを作る。
+def soften(im, erode=0.0, feather=0.9):
+    """切り抜きのふちに、半透明のなめらかなふちを作る。
 
-    1) ふちを内側に削る（切り抜きに残った元の背景の色を捨てる）
-    2) 削ったふちをぼかす（半透明のふちができる＝ギザギザが消える）
-    3) 透明な部分の色を中の色でにじませる（ぼかしたふちが白くならない）
+    ・feather … 不透明度をこの半径でぼかす（ギザギザが消える）
+    ・erode   … 0より大きいときだけ、ふちを内側に削る。
+                ただし削ると、絵の中のうすい部分（レースや半透明の羽など）まで
+                消えてしまうので、既定は 0（削らない）。
+    ・透明な所（不透明度8未満）の色だけ、中の色でにじませる。
+      うすく描かれている部分の色は、いっさい触らない。
     """
     import numpy as np
     im = im.convert('RGBA')
     arr = np.asarray(im)
     a = Image.fromarray(arr[..., 3], 'L')
 
-    shrunk = a.filter(ImageFilter.GaussianBlur(erode)).point(lambda v: 255 if v >= 200 else 0)
-    soft = shrunk.filter(ImageFilter.GaussianBlur(feather))
+    if erode > 0:
+        base = a.filter(ImageFilter.GaussianBlur(erode)).point(lambda v: 255 if v >= 200 else 0)
+    else:
+        base = a
+    soft = base.filter(ImageFilter.GaussianBlur(feather)) if feather > 0 else base
 
-    hard = np.asarray(a).astype(np.float32) / 255.0
-    hard = (hard >= 0.5).astype(np.float32)
+    alpha = np.asarray(a).astype(np.float32) / 255.0
     rgb = arr[..., :3].astype(np.float32) / 255.0
-    prem = Image.fromarray((np.clip(rgb * hard[..., None], 0, 1) * 255).astype(np.uint8), 'RGB')
-    wimg = Image.fromarray((hard * 255).astype(np.uint8), 'L')
-    R = max(3.0, feather * 3)
+    core = (alpha >= 0.5).astype(np.float32)          # 色をにじませる材料（しっかり不透明な所）
+    keep = (alpha >= 0.03)                            # 少しでも色がある所は元の色をそのまま使う
+
+    prem = Image.fromarray((np.clip(rgb * core[..., None], 0, 1) * 255).astype(np.uint8), 'RGB')
+    wimg = Image.fromarray((core * 255).astype(np.uint8), 'L')
+    R = max(3.0, (feather if feather > 0 else 1.0) * 3)
     pb = np.asarray(prem.filter(ImageFilter.GaussianBlur(R))).astype(np.float32) / 255.0
     wb = np.asarray(wimg.filter(ImageFilter.GaussianBlur(R))).astype(np.float32) / 255.0
     spread = np.where(wb[..., None] > 0.03, pb / np.maximum(wb[..., None], 1e-6), rgb)
-    outrgb = np.where(hard[..., None] > 0.5, rgb, np.clip(spread, 0, 1))
+    outrgb = np.where(keep[..., None], rgb, np.clip(spread, 0, 1))
     out = np.concatenate([outrgb, (np.asarray(soft).astype(np.float32) / 255.0)[..., None]], axis=2)
     return Image.fromarray((out * 255).astype(np.uint8), 'RGBA')
 
@@ -98,8 +106,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('src'); ap.add_argument('dst')
     ap.add_argument('--batch', action='store_true')
-    ap.add_argument('--erode', type=float, default=1.2)
-    ap.add_argument('--feather', type=float, default=1.0)
+    ap.add_argument('--erode', type=float, default=0.0)
+    ap.add_argument('--feather', type=float, default=0.9)
     ap.add_argument('--quality', type=int, default=90)
     ap.add_argument('--maxside', type=int, default=1000)
     ap.add_argument('--trim', action='store_true', help='まわりの透明な余白を切り詰める')
