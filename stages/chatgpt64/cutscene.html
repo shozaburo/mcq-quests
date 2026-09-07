@@ -14,7 +14,7 @@
   #bg{position:absolute; inset:0; background-size:cover; background-position:center;
     filter:brightness(.62) saturate(.95); transform:scale(1.08);
     transition:filter 1.6s, transform 12s linear;}
-  #bg.pre{filter:brightness(.34) saturate(.7) !important;}          /* 幕が開く前：暗い部屋 */
+  #bg.pre{filter:brightness(.58) saturate(.88) !important;}         /* ふだん：少し暗い部屋（キャラを立たせる） */
   #bg.reveal{filter:brightness(1.14) saturate(1.1); transform:scale(1.0);}  /* 開いた瞬間：ぱっと明るく */
   /* 幕が開いた瞬間の光 */
   #burst{position:absolute; inset:0; z-index:7; pointer-events:none; opacity:0; background:#fff;}
@@ -232,8 +232,11 @@
       document.querySelectorAll('#tiles .tl').forEach(function(el){ el.classList.add('gone'); });
       $('#bg').classList.add('reveal');
     } else {
-      $('#bg').classList.add('pre');          // 幕が開く前は暗い部屋
-      $('#stage').classList.add('quiet');     // 粒を止める
+      // 黒いブロックは使わない（せっかくの背景を隠さない）。
+      // ふだんは少し暗くしておき、最後にぱっと明るくする演出だけ残す。
+      document.querySelectorAll('#tiles .tl').forEach(function(el){ el.classList.add('gone'); });
+      $('#bg').classList.add('pre');
+      $('#stage').classList.add('quiet');     // 粒は最後まで止める
     }
   })();
 
