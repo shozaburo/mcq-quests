@@ -19,10 +19,11 @@
   #bg.dim{filter:brightness(.3) saturate(.55) hue-rotate(-10deg)!important;}
   #chara{transition:opacity .18s, transform .9s;}
   /* 立ち絵表示：_icon 以外の絵は、枠なしで大きく出す（サウンドノベルの見え方） */
-  #chara.tachie{width:auto;bottom:17vh}
+  /* 立ち絵は下げて大きく。足もとはセリフ枠の裏に入れる（浮いて見えないように） */
+  #chara.tachie{width:auto;bottom:14vh}
   /* 静かにする場面では粒を消す */
   #stage.quiet .snow{opacity:0;transition:opacity .7s}
-  #chara.tachie img{width:auto;max-width:78vw;height:min(50vh,400px);object-fit:contain;
+  #chara.tachie img{width:auto;max-width:88vw;height:min(58vh,460px);object-fit:contain;
     object-position:bottom;border:none;border-radius:0;background:none;
     box-shadow:none;filter:drop-shadow(2px 5px 9px rgba(0,0,0,.5))}
   #vignette{position:absolute; inset:0; box-shadow:inset 0 0 200px rgba(0,0,0,.9);
