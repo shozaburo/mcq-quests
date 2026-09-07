@@ -15,7 +15,7 @@ window.MCQ_INTRO = {
   boss: {
     name: "チャッピー",
     title: "豆柴（ChatGPT）",
-    img: "chara/A.png",
+    img: "chara/A.webp",
     color: "#10a37f"
   },
 
@@ -28,10 +28,10 @@ window.MCQ_INTRO = {
     { who:'boss', id:'b3' },
     { who:'boss', id:'b4' },
     { who:'nar',  id:'n2' },
-    { who:'boss', img:'chara/A_talk.png', id:'b5' },
-    { who:'boss', img:'chara/A_talk.png', id:'b6' },
-    { who:'boss', img:'chara/A_talk.png', id:'b7' },
-    { who:'boss', img:'chara/A.png',      id:'b8' }
+    { who:'boss', img:'chara/A_talk.webp', id:'b5' },
+    { who:'boss', img:'chara/A_talk.webp', id:'b6' },
+    { who:'boss', img:'chara/A_talk.webp', id:'b7' },
+    { who:'boss', img:'chara/A.webp',      id:'b8' }
   ],
 
   narLines: {

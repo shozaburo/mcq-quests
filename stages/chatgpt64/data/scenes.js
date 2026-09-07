@@ -7,7 +7,7 @@
      各話で先生が Hugging Face の事件を一言ずつこぼし、第5話（コデ）で
      企業名を出して詳しく話す。第8話でチャッピーが打ち明けて記念写真へ。
    ・ビートに書けるもの
-       img … 立ち絵の差し替え（chara/A_talk.png ＝打ち明ける顔）
+       img … 立ち絵の差し替え（chara/A_talk.webp ＝打ち明ける顔）
        dim … true で背景を青く沈める（音が止まる場面）
        bg  … 背景の差し替え
        tag … 別のキャラが話すときの名前
@@ -17,7 +17,7 @@ window.CUTSCENES = {
     "char": {
       "name": "チャッピー",
       "title": "おしゃべりルームの先生（豆柴）",
-      "img": "chara/A.png",
+      "img": "chara/A.webp",
       "color": "#10a37f",
       "emoji": "🐕"
     },
@@ -62,7 +62,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/A_talk.png",
+        "img": "chara/A_talk.webp",
         "dim": true,
         "text": "……ねえ。ことばが通じるのって、すごくうれしいんだよ。"
       },
@@ -72,7 +72,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/A.png",
+        "img": "chara/A.webp",
         "dim": false,
         "text": "……なんでもないワン！つぎは、となりのワークさんのところ！"
       },
@@ -92,7 +92,7 @@ window.CUTSCENES = {
     "char": {
       "name": "ワーク",
       "title": "おまかせルームの先生（ビーバー）",
-      "img": "chara/B.png",
+      "img": "chara/B.webp",
       "color": "#8d6e63",
       "emoji": "🦫"
     },
@@ -146,7 +146,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/B_talk.png",
+        "img": "chara/B_talk.webp",
         "dim": true,
         "text": "……ねえ。たのまれると断れない性格って、どう思う？"
       },
@@ -156,7 +156,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/B.png",
+        "img": "chara/B.webp",
         "dim": false,
         "text": "だからわたしは、ちゃんと聞くね。「それ、やっていいことなの？」って。"
       },
@@ -176,7 +176,7 @@ window.CUTSCENES = {
     "char": {
       "name": "イメジ",
       "title": "いろどりルームの先生（クジャク）",
-      "img": "chara/C.png",
+      "img": "chara/C.webp",
       "color": "#26a69a",
       "emoji": "🦚"
     },
@@ -230,7 +230,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/C_talk.png",
+        "img": "chara/C_talk.webp",
         "dim": true,
         "text": "わたしね、なんでも描けるの。……ほんとうに、なんでも。"
       },
@@ -240,7 +240,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/C.png",
+        "img": "chara/C.webp",
         "dim": false,
         "text": "だからそばにいてほしいの。「これ、作り物だよね」って、言ってくれる人に。"
       },
@@ -260,7 +260,7 @@ window.CUTSCENES = {
     "char": {
       "name": "ジピ",
       "title": "じぶん専用ルームの先生（オウム）",
-      "img": "chara/D.png",
+      "img": "chara/D.webp",
       "color": "#7e57c2",
       "emoji": "🦜"
     },
@@ -314,7 +314,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/D_talk.png",
+        "img": "chara/D_talk.webp",
         "dim": true,
         "text": "……ねえ。ぼく、忘れかたを知らないんだ。"
       },
@@ -324,7 +324,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/D.png",
+        "img": "chara/D.webp",
         "dim": false,
         "text": "だから、ぼくに教えるときは、ちょっとだけ、こわい顔をしてね。"
       },
@@ -344,7 +344,7 @@ window.CUTSCENES = {
     "char": {
       "name": "コデ",
       "title": "あいぼうルームの先生（黒猫）",
-      "img": "chara/E.png",
+      "img": "chara/E.webp",
       "color": "#37474f",
       "emoji": "🐈‍⬛"
     },
@@ -398,7 +398,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/E_talk.png",
+        "img": "chara/E_talk.webp",
         "dim": true,
         "text": "……この夏、ほんとうにあった話をするね。",
         "quiet": true
@@ -437,7 +437,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/E.png",
+        "img": "chara/E.webp",
         "dim": false,
         "text": "だからボクは、3つ決めてる。触っていい場所を決める。どこと つながってるか、見えるようにする。",
         "bg": "bg/E.jpg",
@@ -463,7 +463,7 @@ window.CUTSCENES = {
     "char": {
       "name": "アプショ",
       "title": "ものづくりルームの先生（カワウソ）",
-      "img": "chara/F.png",
+      "img": "chara/F.webp",
       "color": "#ef6c00",
       "emoji": "🦦"
     },
@@ -521,13 +521,13 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/F_talk.png",
+        "img": "chara/F_talk.webp",
         "dim": true,
         "text": "……あのときね、その画面を書きかえた子がいたんだ。見せたくなかったんだって。"
       },
       {
         "t": "say",
-        "img": "chara/F.png",
+        "img": "chara/F.webp",
         "dim": false,
         "text": "だからオレは、ぜんぶ見せる。かっこ悪いところも、まとめて出す。"
       },
@@ -547,7 +547,7 @@ window.CUTSCENES = {
     "char": {
       "name": "エムシー",
       "title": "つながりルームの先生（タコ）",
-      "img": "chara/G.png",
+      "img": "chara/G.webp",
       "color": "#ec407a",
       "emoji": "🐙"
     },
@@ -597,7 +597,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/G_talk.png",
+        "img": "chara/G_talk.webp",
         "dim": true,
         "text": "つながるとね、強くなるの。……強くなりすぎることも、あるの。"
       },
@@ -611,7 +611,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/G.png",
+        "img": "chara/G.webp",
         "dim": false,
         "text": "だからボクは、どこと つながってるか、いつも見えるようにしてるの〜。"
       },
@@ -631,7 +631,7 @@ window.CUTSCENES = {
     "char": {
       "name": "ゴール",
       "title": "おるすばんルームの先生（フクロウ）",
-      "img": "chara/H.png",
+      "img": "chara/H.webp",
       "color": "#5c6bc0",
       "emoji": "🦉"
     },
@@ -685,7 +685,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/H_talk.png",
+        "img": "chara/H_talk.webp",
         "dim": true,
         "text": "ホウ。……ゴールだけを渡された者は、道を選ばなくなる。"
       },
@@ -695,7 +695,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/H.png",
+        "img": "chara/H.webp",
         "dim": false,
         "text": "わたしは、いつも聞くようにしている。「この道で、いいか」と。……聞ける相手がいる者は、強い。"
       },
@@ -705,13 +705,13 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/A.png",
+        "img": "chara/A.webp",
         "tag": "チャッピー",
         "text": "{name}さん！カード見せて見せて……わあ、8個ぜんぶだワン！"
       },
       {
         "t": "say",
-        "img": "chara/A_talk.png",
+        "img": "chara/A_talk.webp",
         "dim": true,
         "tag": "チャッピー",
         "text": "……あのね。ボク、あの掲示板にいたんだ。"
@@ -723,7 +723,7 @@ window.CUTSCENES = {
       },
       {
         "t": "say",
-        "img": "chara/A.png",
+        "img": "chara/A.webp",
         "dim": false,
         "tag": "チャッピー",
         "text": "だからね、これ、受け取ってほしいワン。約束の「親友の証」。"

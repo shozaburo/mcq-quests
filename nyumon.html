@@ -138,7 +138,7 @@ const MOD=()=>K('Ctrl','⌘ Cmd');
 
 /* 案内役＝タイトル画面で選んだナビ（麗夏 or 池坊サトル） */
 const NAVKEY=(window.MCQ_navKey?window.MCQ_navKey():'reika');
-const NAV=(window.MCQ_nav?window.MCQ_nav():null)||{name:'大塚麗夏',icon:'https://re-gi.jp/icon/reika_tujo.jpg',color:'#e0568a',tachie:'reika.png'};
+const NAV=(window.MCQ_nav?window.MCQ_nav():null)||{name:'大塚麗夏',icon:'https://re-gi.jp/icon/reika_tujo.jpg',color:'#e0568a',tachie:'reika.webp'};
 const T={name:NAV.name,img:NAV.icon,color:NAV.color,tachie:'assets/chara/'+NAV.tachie};
 const LINES=window.NYUMON_LINES||{};
 function line(key,vars){let t=LINES[key]||'';t=t.replace(/\{teacher\}/g,T.name);if(vars)Object.keys(vars).forEach(k=>{t=t.replace(new RegExp('\\{'+k+'\\}','g'),vars[k]);});return t;}

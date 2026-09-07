@@ -67,7 +67,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 <script>
 (function(){
   var I = window.MCQ_INTRO || {steps:[]};
-  var REIKA = {name:'大塚麗夏', img:'../../assets/chara/reika_icon.png?v=2', color:'#e0568a'};
+  var REIKA = {name:'大塚麗夏', img:'../../assets/chara/reika_icon.webp?v=2', color:'#e0568a'};
   var stageKey = (location.pathname.match(/\/stages\/([^\/]+)\//)||[])[1] || 'google64';
   var $ = function(id){ return document.getElementById(id); };
 
@@ -84,9 +84,9 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   function setFace(b, sp){
     var el = $('faceImg');
     var tachie = (b.who==='boss') ? 'chara/A.png'
-               : (b.pose==='joy' ? '../../assets/chara/reika_joy.png'
-                  : b.pose==='point' ? '../../assets/chara/reika_point.png'
-                  : '../../assets/chara/reika.png');
+               : (b.pose==='joy' ? '../../assets/chara/reika_joy.webp'
+                  : b.pose==='point' ? '../../assets/chara/reika_point.webp'
+                  : '../../assets/chara/reika.webp');
     var probe = new Image();
     probe.onload = function(){ el.src = tachie; el.classList.add('tachie'); };
     probe.onerror = function(){ el.src = sp.img; el.classList.remove('tachie'); };

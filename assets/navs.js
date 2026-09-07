@@ -9,8 +9,8 @@ window.MCQ_NAVS = {
     name: "大塚麗夏",
     tagline: "AI実践塾ガイド",
     color: "#e0568a",
-    icon: "assets/chara/reika_icon.png?v=2",
-    tachie: "reika.png?v=2", point: "reika_point.png?v=2", joy: "reika_joy.png?v=2",
+    icon: "assets/chara/reika_icon.webp?v=2",
+    tachie: "reika.webp?v=2", point: "reika_point.webp?v=2", joy: "reika_joy.webp?v=2",
     intro: "頼れるお姉さん系。テキパキ導いてくれる。"
   },
   satoru: {
