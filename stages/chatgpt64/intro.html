@@ -72,8 +72,11 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
 <script>
 (function(){
   var I = window.MCQ_INTRO || {steps:[]};
-  // 案内役＝タイトルで選んだナビ（麗夏 or 池坊サトル）
-  var NAV = (window.MCQ_nav ? window.MCQ_nav() : null) || {name:'大塚麗夏', icon:'../../assets/chara/reika_icon.webp?v=2', color:'#e0568a', tachie:'reika.webp', point:'reika_point.webp', joy:'reika_joy.webp'};
+  // 案内役はChatGPT編では必ず大塚麗夏（ステージ全体を通じての案内役のため、
+  // タイトルでサトルを選んでいる人でも、ここは麗夏で固定する）
+  var NAV = (window.MCQ_NAVS && window.MCQ_NAVS.reika)
+            || {name:'大塚麗夏', icon:'assets/chara/reika_icon.webp?v=2', color:'#e0568a',
+                tachie:'reika.webp', point:'reika_point.webp', joy:'reika_joy.webp'};
   var REIKA = {name:NAV.name, img:(/^http/.test(NAV.icon)?NAV.icon:"../../"+NAV.icon), color:NAV.color};
   var stageKey = 'chatgpt64';
   var $ = function(id){ return document.getElementById(id); };
@@ -82,7 +85,7 @@ body{background:#14101c;color:var(--ink);font-family:"Yu Gothic","Hiragino Sans"
   var STEPS = I.script || I.steps || [];
   // 言語（将来 localStorage 'mcq_lang' で切替。既定は intro.js の lang → 'ja'）
   var LANG = (function(){ try{ return localStorage.getItem('mcq_lang') || I.lang || 'ja'; }catch(e){ return I.lang || 'ja'; } })();
-  var NAVKEY = (window.MCQ_navKey ? window.MCQ_navKey() : 'reika');
+  var NAVKEY = 'reika';   // セリフも麗夏のものを使う
   // セリフ解決：キャラ別×言語別のテキストリストから引く（旧 b.text はそのまま使う）
   function resolveText(b){
     if(b.text) return b.text;                              // 旧形式フォールバック

@@ -46,6 +46,7 @@
       <button id="bClear">64マス全部クリアずみに</button>
       <button class="ghost" id="bIntro">導入シーンを未読にもどす</button>
       <button id="bSound">音をオンにする</button>
+      <button class="ghost" id="bNav">案内役を麗夏さんにもどす</button>
       <button class="warnbtn" id="bReset">ぜんぶ元にもどす</button>
     </div>
     <div class="msg" id="msg"></div>
@@ -133,7 +134,8 @@
         '<div>ログイン：<b>'+(token ? (token.indexOf('DEMO')===0 ? 'にせログイン中' : '本物のトークンあり') : 'なし')+'</b></div>'
       + '<div>導入シーン：<b>'+(intro ? '見たことになっている' : 'まだ見ていない（開くと再生される）')+'</b></div>'
       + '<div>クリアずみのマス：<b>'+cleared+' / 64</b>　まとめカード：<b>'+loot+' / 64</b></div>'
-      + '<div>音：<b>'+(audio.on ? 'オン' : 'オフ')+'</b></div>';
+      + '<div>音：<b>'+(audio.on ? 'オン' : 'オフ')+'</b></div>'
+      + '<div>案内役：<b>'+((function(){ try{ return localStorage.getItem('mcq_nav')==='satoru' ? '池坊サトル' : '大塚麗夏'; }catch(e){ return '大塚麗夏'; } })())+'</b></div>';
     $('bSound').textContent = audio.on ? '音をオフにする' : '音をオンにする';
   }
 
@@ -163,6 +165,11 @@
     a.on = !a.on; if(!a.vol) a.vol = 0.3; a.__a7 = true;
     jset('mcq_audio', a);
     say(a.on ? '音をオンにしました。お話の画面でBGMが鳴ります。' : '音をオフにしました。'); refresh();
+  };
+  $('bNav').onclick = function(){
+    try{ localStorage.setItem('mcq_nav','reika'); }catch(e){}
+    say('案内役を大塚麗夏さんにしました。ほかのコースの案内役も麗夏さんになります。');
+    refresh();
   };
   $('bReset').onclick = function(){
     var del = [];

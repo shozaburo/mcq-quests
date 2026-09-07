@@ -19,14 +19,14 @@ import argparse, glob, json, os, random, re, subprocess, sys
 
 # 部屋ごとの目標テンポ（指示文で指定した値）と、曲名に出そうなことば
 AREAS = {
-    'A': {'bpm': 92,  'room': 'おしゃべりルーム',   'words': ['acoustic', 'folk', 'classroom', 'sunlight', 'ukulele', 'storybook', 'guitar', 'afternoon', '教室']},
-    'B': {'bpm': 85,  'room': 'おまかせルーム',     'words': ['bossa', 'office', 'workflow', 'rhodes', 'tidy', 'desk', 'paper', 'productive']},
-    'C': {'bpm': 100, 'room': 'いろどりルーム',     'words': ['marimba', 'colorful', 'color', 'art', 'studio', 'indie', 'pop', 'playful', 'palette', 'canvas']},
-    'D': {'bpm': 72,  'room': 'じぶん専用ルーム',   'words': ['piano', 'felt', 'neo', 'classical', 'private', 'quiet room', 'cello', 'thoughtful', 'personal']},
-    'E': {'bpm': 80,  'room': 'あいぼうルーム',     'words': ['jazz', 'hop', 'rain', 'trumpet', 'dusty', 'evening', 'serious', '雨', '电脳', '電脳']},
+    'A': {'bpm': 92,  'room': 'おしゃべりルーム',   'words': ['acoustic', 'folk', 'classroom', 'sunlight', 'ukulele', 'storybook', 'guitar', 'afternoon', '教室', 'sunlit', 'crayon']},
+    'B': {'bpm': 85,  'room': 'おまかせルーム',     'words': ['bossa', 'office', 'workflow', 'rhodes', 'tidy', 'desk', 'paper', 'productive', 'produtiva', 'tarde', 'produtivo']},
+    'C': {'bpm': 100, 'room': 'いろどりルーム',     'words': ['marimba', 'colorful', 'color', 'art', 'studio', 'indie', 'pop', 'playful', 'palette', 'canvas', 'estudio', 'arte']},
+    'D': {'bpm': 72,  'room': 'じぶん専用ルーム',   'words': ['piano', 'felt', 'neo', 'classical', 'private', 'quiet room', 'cello', 'thoughtful', 'personal', 'minor', 'resolves']},
+    'E': {'bpm': 80,  'room': 'あいぼうルーム',     'words': ['jazz', 'hop', 'rain', 'trumpet', 'dusty', 'evening', 'serious', '雨', '电脳', '電脳', '电脑', '雨夜', '电脳室']},
     'F': {'bpm': 108, 'room': 'ものづくりルーム',   'words': ['workshop', 'tinkering', 'tools', 'prototype', 'pizzicato', 'wood', 'cheerful', 'busy']},
     'G': {'bpm': 96,  'room': 'つながりルーム',     'words': ['electronica', 'synth', 'arpeggio', 'connection', 'connections', 'glowing', 'cable', 'network']},
-    'H': {'bpm': 66,  'room': 'おるすばんルーム',   'words': ['lullaby', 'midnight', 'music box', 'celesta', 'night', 'sleeping', 'city', 'starlight']},
+    'H': {'bpm': 66,  'room': 'おるすばんルーム',   'words': ['lullaby', 'midnight', 'music box', 'celesta', 'night', 'sleeping', 'city', 'starlight', 'midnight']},
 }
 KEYS = list('ABCDEFGH')
 WORD_BONUS = 30.0   # 曲名のことばが1つ当たるごとに、BPM差30ぶんの重みで有利にする
