@@ -1,6 +1,6 @@
 name: Xserverへ公開
 
-# main に入った変更を、本番（https://re-gi.jp/mcq-site/）へ送る。
+# 手動実行時だけ本番（https://re-gi.jp/mcq-site/）へ送る。
 # 動画（*.mp4／合計2.8GB）は送らない。もともとサーバーに置いてあり、
 # 毎回送ると時間もお金もかかるため。動画を差し替えたいときは手で上げる。
 #
@@ -11,11 +11,6 @@ name: Xserverへ公開
 #   XSERVER_PATH    … 置き場所（例 /home/ユーザー名/re-gi.jp/public_html/mcq-site/）
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - '**/*.mp4'
-      - 'README.md'
   workflow_dispatch:
     inputs:
       dryrun:
@@ -70,7 +65,7 @@ jobs:
           set -e
           DRY=""
           if [ "${{ github.event.inputs.dryrun }}" = "true" ]; then DRY="--dry-run"; echo "※ためし実行（送りません）"; fi
-          rsync -rlvz --delete-after $DRY \
+          rsync -rlvz $DRY \
             --exclude '.git/' --exclude '.github/' --exclude '.gitignore' \
             --exclude 'tools/' --exclude '**/__pycache__/' \
             --exclude '*.mp4' --exclude '*.md' \
