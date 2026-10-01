@@ -21,7 +21,14 @@
   var CH    = (window.MCQ_CHARS  || {})[AREA];
   var QUEST = (window.MCQ_QUESTS || {})[QID];
   var URLS  = (window.MCQ_URLS   || {})[QID] || {};
+  var PRACTICE = (window.MCQ_PRACTICE || {})[QID] || null;
   var API   = CFG.questApiUrl || '';
+  /* Google編固有の改訂を、同じQIDを持つChatGPT編・Claude編へ波及させない。 */
+  var IS_GOOGLE64 = CFG.goalId === 'β' && CFG.goalName === 'Google編';
+  var IS_GOOGLE64_B1 = IS_GOOGLE64 && QID === 'B1';
+  var IS_GOOGLE64_REVIEWED_EVIDENCE = IS_GOOGLE64 && (QID === 'B1' || QID === 'A8');
+  var B1_EVIDENCE_API = IS_GOOGLE64_REVIEWED_EVIDENCE
+    ? (CFG.reviewEvidenceApiUrl || (IS_GOOGLE64_B1 ? CFG.b1EvidenceApiUrl : '')) : '';
   var AB    = CFG.stageAssetBase || '';   // 背景/BGMを他ステージと共用する時のベース（β2→google64）
   var FORM  = CFG.reportFormUrl || '';    // v18: 実践報告フォーム（画像アップ＋Gemini判定＋Chat通知）。空なら従来どおり
 
@@ -438,7 +445,8 @@
        ここが 'uploadEvidence' / 'dataUrl' のままだったため、
        画像添付は一度も成立していなかった（サーバーが常に unknown action を返す）。
        GASに合わせて送る。data:〜 のプレフィックスはGAS側で外してくれる。 */
-    return fetch(API, {
+    var endpoint = B1_EVIDENCE_API || API;
+    return fetch(endpoint, {
       method:'POST',
       headers:{'Content-Type':'text/plain;charset=UTF-8'},  // preflight回避（GASはこれで応答が読める）
       body: JSON.stringify({
@@ -859,6 +867,31 @@
      相対パスは本番の同じパスへフォールバックする（PDFは重くGitHubに置けないため）。 */
   function slideHtml(){
     if(!slideId) return '';
+    if(IS_GOOGLE64_B1){
+      var pages = '';
+      for(var pi=1; pi<=12; pi++){
+        var pn = ('0' + pi).slice(-2);
+        pages += '<img src="slide/B1-pages/page-' + pn + '.jpg" alt="B1改訂NotebookLMスライド ' + pi + 'ページ" loading="lazy" '
+          + 'style="width:100%;display:block;border-radius:10px;border:1px solid rgba(128,128,128,.28);margin:8px 0;background:#fff">';
+      }
+      return '<section style="text-align:left;border:2px solid #4d83c2;border-radius:14px;padding:14px;background:rgba(77,131,194,.08);margin-bottom:12px">'
+        + '<div style="font-size:.75rem;font-weight:900;color:#2f659f;margin-bottom:4px">2026-10-15 改訂要点</div>'
+        + '<h2 style="font-size:1.05rem;margin:0 0 10px">AIに仕事を頼み、会話で仕上げる</h2>'
+        + '<ol style="line-height:1.9;margin:0;padding-left:1.5em">'
+        + '<li><b>自然な一文で目的を伝える</b>―最初から型を埋め切らなくてよい</li>'
+        + '<li><b>実際の見本を渡す</b>―個人情報・機密情報は伏せる</li>'
+        + '<li><b>不足情報を先に質問させる</b>―推測で埋めさせない</li>'
+        + '<li><b>具体的に修正する</b>―長さ、調子、構成を会話で整える</li>'
+        + '<li><b>人が最終確認する</b>―相手名、日時、数字、約束、事実にない追加</li>'
+        + '</ol></section>'
+        + '<details open style="text-align:left;margin:10px 0">'
+        + '<summary style="cursor:pointer;font-weight:900;padding:10px;border-radius:10px;background:rgba(77,131,194,.13)">📚 B1改訂NotebookLMスライド（最新版・12ページ）</summary>'
+        + '<div style="font-size:.8rem;line-height:1.7;color:var(--muted);padding:10px 2px 2px">'
+        + '講座で順番に解説できる企業共通版です。自然な依頼、見本の共有、確認質問、対話での修正、人による送信前確認を、架空商事の日程変更メールで練習します。'
+        + '</div>' + pages
+        + '<a class="btn btn-ghost" href="slide/B1.pdf" target="_blank" rel="noopener">最新版PDFを別画面で開く</a>'
+        + '</details>';
+    }
     var isPdf = /\.pdf(\?.*)?$/i.test(slideId);
     var src = !isPdf ? ('https://drive.google.com/file/d/' + slideId + '/preview')
       : /^https?:/i.test(slideId) ? slideId
@@ -918,7 +951,11 @@
     }
     /* v30: この画面は動画だけ。スライドは次の画面（sceneSlide）、
        インフォグラフィックは最後の報酬（sceneLoot）に移した。 */
-    render(
+    var videoNotice = IS_GOOGLE64_B1
+      ? '<div style="text-align:left;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:.8rem;line-height:1.7;color:#6d5310">'
+        + '<b>B1企業共通版</b><br>このNotebookLM動画は、特定の受講企業名を含めない共通教材です。自然な依頼、見本の共有、AIからの確認質問、対話での修正、人による送信前確認の5段階を学びます。'
+        + '</div>' : '';
+    render(videoNotice +
       '<video id="qVideo" controls playsinline preload="metadata" '
       +   'style="display:none;width:100%;aspect-ratio:16/9;max-height:62vh;height:auto;border-radius:12px;background:#000;margin-bottom:4px"></video>'
       + '<div id="extWrap">' + extHtml + '</div>'
@@ -1046,17 +1083,82 @@
         + '<div style="margin-top:8px">' + h + '</div></details>'
       : '';
 
+    var summary = URLS.summaryPage
+      ? '<a class="btn btn-blue" href="' + esc(URLS.summaryPage) + '">'
+        + '🎬 朝活の要点と切り抜き動画を見る</a>'
+      : '';
     var sl = slideHtml();
     render((sl || '<button class="btn btn-blue" disabled>📑 スライド（準備中）</button>')
+      + summary
       + arc
       + deep
-      + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → クイズへ</button>'
-      + '<button class="btn btn-ghost" id="aSkip">クイズは飛ばして報告する</button>');
-    $('aWatched').onclick = function(){ bump(50); answered = 0; sceneQuiz(0); };
-    $('aSkip').onclick = function(){ bump(50); sceneReport(false); };
+      + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → 5問クイズへ</button>'
+      + '<button class="btn btn-ghost" id="aSkip">'
+      + (PRACTICE ? '🔥 クイズを飛ばして実践へ（125%）' : 'クイズは飛ばして報告する') + '</button>');
+    $('aWatched').onclick = function(){
+      bump(50); answered = 0; ORDER = null; MISSED = []; sceneQuiz(0);
+    };
+    $('aSkip').onclick = function(){ bump(50); PRACTICE ? scenePractice() : sceneReport(false); };
   }
   /* 旧名。他所から呼ばれても動くように残す */
   function sceneArchive(){ return sceneSlide(); }
+
+  /* ── 対象マスだけの操作練習（2026-10-15研修対応）────────────
+     クイズ理解と操作習得を分ける。完了は端末内の自己確認として保存し、
+     既存の75/100/125%採点やサーバー報告は変更しない。 */
+  function practiceKey(){ return 'mcq_practice_' + (CFG.goalId || 'x') + '_' + QID; }
+  function practiceDone(){ try{ return localStorage.getItem(practiceKey()) === '1'; }catch(e){ return false; } }
+  function listHtml(items, ordered){
+    if(!items || !items.length) return '';
+    var tag = ordered ? 'ol' : 'ul';
+    return '<' + tag + ' style="text-align:left;line-height:1.8;margin:7px 0 12px;padding-left:1.4em">'
+      + items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</' + tag + '>';
+  }
+  function scenePractice(){
+    setStep(2);
+    showStage(true); stageHero(false);
+    say('ここからは操作練習だ。完成見本を先に見て、同じ状態まで手を動かそう。');
+    var p = PRACTICE || {}, files = p.files || [], h = '';
+    h += '<div style="text-align:left;border:1.5px solid var(--gold,#ffd54f);border-radius:12px;padding:13px;background:rgba(255,255,255,.06)">'
+      + '<b>🎯 学習目標</b><div style="line-height:1.8;margin:5px 0 12px">' + esc(p.goal || '') + '</div>'
+      + '<b>✅ 完成見本</b><div style="line-height:1.8;margin:5px 0 12px">' + esc(p.sample || '') + '</div>'
+      + '<b>💡 短い要点</b>' + listHtml(p.points, false)
+      + '<b>🖱 操作手順</b>' + listHtml(p.steps, true)
+      + '<b>🧪 練習</b><div style="line-height:1.8;margin:5px 0 8px">' + esc(p.exercise || '') + '</div>';
+    files.forEach(function(f){
+      h += '<a class="btn btn-ghost" href="' + esc(f.href || '#') + '" target="_blank" rel="noopener">'
+        + esc(f.label || '練習ファイル') + '</a>';
+    });
+    h += '<b style="display:block;margin-top:13px">🔎 完成確認</b>' + listHtml(p.checks, false)
+      + '<b>🔁 応用・復習</b><div style="line-height:1.8;margin:5px 0">' + esc(p.review || '') + '</div>'
+      + (IS_GOOGLE64_B1
+        ? '<div style="background:#eef5ff;border:1.5px solid #8cb6e8;border-radius:12px;padding:11px 12px;margin-top:12px;font-size:.8rem;line-height:1.75">'
+          + '<b>📷 操作習得の証跡</b><br>この画面の自己チェックだけでは完了になりません。「実践を報告する（125%）」から、<b>自分の会話画面</b>のスクリーンショットを提出してください。提出直後は「未判定／判定中」で、画像を付けただけでは合格になりません。'
+          + '<div style="margin-top:7px">状態：<b>未提出 → 未判定／判定中 → 確認済み・要再提出・講師確認</b></div></div>'
+        : '<div style="font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:10px">この完了チェックは端末内の自己確認です。次のクイズ（理解度）や125%以上の実践報告とは別に扱います。</div>')
+      + '</div>';
+    if(IS_GOOGLE64_B1){
+      h += '<button class="btn btn-primary" id="practiceReport">🔥 実践を報告する（125%）→</button>'
+        + '<button class="btn btn-ghost" id="practiceNext">5問クイズにも挑戦する</button>'
+        + '<button class="btn btn-ghost" id="practiceBack">スライドへ戻る</button>';
+    } else {
+      h += '<label class="opt' + (practiceDone() ? ' sel' : '') + '" id="practiceDoneLabel" style="margin-top:12px">'
+        + '<input type="checkbox" id="practiceDone"' + (practiceDone() ? ' checked' : '') + '>'
+        + '<div><b>練習課題を完成した</b><small>上の完成条件を自分で確認しました</small></div></label>'
+        + '<button class="btn btn-primary" id="practiceReport"' + (practiceDone() ? '' : ' disabled') + '>🔥 実践を報告する（125%）→</button>'
+        + '<button class="btn btn-ghost" id="practiceNext">5問クイズにも挑戦する</button>'
+        + '<button class="btn btn-ghost" id="practiceBack">スライドへ戻る</button>';
+    }
+    render(h);
+    if($('practiceDone')) $('practiceDone').onchange = function(){
+        try{ localStorage.setItem(practiceKey(), this.checked ? '1' : '0'); }catch(e){}
+        $('practiceReport').disabled = !this.checked;
+        $('practiceDoneLabel').classList.toggle('sel', this.checked);
+      };
+    $('practiceReport').onclick = function(){ sceneReportPractice(true); };
+    $('practiceNext').onclick = function(){ answered = 0; ORDER = null; MISSED = []; sceneQuiz(0); };
+    $('practiceBack').onclick = sceneSlide;
+  }
 
   /* ── STEP4 まとめカード獲得（v30・新規）──
      クイズを終えると、このマスのインフォグラフィックが手に入る。
@@ -1294,9 +1396,9 @@
     say(L.ladder);
 
     // いまの学習到達（動画→アーカイブ→クイズ）を1つだけ提示する。選ばせる必要はない。
-    var lv = (achieved >= 100) ? {pct:100, cls:'pct-100', t:'クイズに全問正解した',     d:'完璧な理解！'}
+    var lv = (achieved >= 100) ? {pct:100, cls:'pct-100', t:'クイズに全問正解した',     d:'確認問題を全問正解'}
            : (achieved >= 75)  ? {pct:75,  cls:'pct-75',  t:'クイズに合格した',         d:'半分以上正解！'}
-           : (achieved >= 50)  ? {pct:50,  cls:'pct-50',  t:'動画とアーカイブを見た',   d:'学びの土台ができた'}
+           : (achieved >= 50)  ? {pct:50,  cls:'pct-50',  t:'動画と解説を見た',         d:'学びの土台ができた'}
            :                     {pct:25,  cls:'pct-25',  t:'動画を見た',               d:'第一歩！'};
 
     var html = routeHtml() + memberFieldsHtml()
@@ -1304,6 +1406,9 @@
       +   '<input type="radio" name="lv" value="' + lv.pct + '" checked>'
       +   '<div><b>' + esc(lv.t) + ' <span class="pct ' + lv.cls + '">' + lv.pct + '%</span></b>'
       +   '<small>' + esc(lv.d) + '</small></div></label>'
+      + (PRACTICE ? '<div style="font-size:.8rem;line-height:1.7;margin:7px 0;color:var(--muted)">操作練習：<b>'
+        + (IS_GOOGLE64_B1 ? '未判定（証跡提出が必要）' : (practiceDone() ? '自己確認済み' : '未確認'))
+        + '</b> ／ 理解度クイズ：<b>' + lv.pct + '%</b></div>' : '')
       + '<div class="field-label">' + (SOFT ? 'きょうの気づき（みんなにも届きます）' : '感想・気づき（チャットにも共有されます）') + '</div>'
       + '<textarea id="rP" rows="2" placeholder="'
       +   (SOFT ? '例：ここが分かってスッキリした／さっそく使ってみたい'
@@ -1332,6 +1437,7 @@
     setStep(5);
     showStage(true); stageHero(false);
     say(L.ladder);
+    var reviewedEvidence = IS_GOOGLE64_REVIEWED_EVIDENCE;
     var levels = [];
     // 実践ラダー（この画面は125%以上だけ。すべて証拠が要る）
     // v9: ルート別ミッション（routes[route].m125/evidence があれば上書き）
@@ -1345,8 +1451,10 @@
       d: MIS ? MIS.m125 : '学んだことを自分の資料・業務で実際に使った',
       needEv:true, social: !!(MIS && MIS.social)
     });
-    levels.push({pct:150, cls:'pct-150', t:'仲間と勉強会をした', d:'このテーマで仲間に教えた・一緒に学んだ', needEv:true});
-    levels.push({pct:200, cls:'pct-200', t:'飛躍的な成果が出た', d:'売上UP・大幅時短・新商品などの大きな成果', needEv:true});
+    if(!IS_GOOGLE64_B1){
+      levels.push({pct:150, cls:'pct-150', t:'仲間と勉強会をした', d:'このテーマで仲間に教えた・一緒に学んだ', needEv:true});
+      levels.push({pct:200, cls:'pct-200', t:'飛躍的な成果が出た', d:'売上UP・大幅時短・新商品などの大きな成果', needEv:true});
+    }
 
     var html = routeHtml() + memberFieldsHtml();
     html += '<div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;line-height:1.7">'
@@ -1366,10 +1474,18 @@
       html += '<div style="font-size:.82rem;background:#fff8e1;border:1px dashed #f0c36d;border-radius:10px;padding:8px 12px;margin:2px 0 6px">'
             + '🍙 <b>サンクスUP!の試練</b>：このミッションは仲間を巻き込むと完了。助けてくれた仲間には、ボードの「🍙サンクスUP!」で感謝を送ろう（相手に+3Pt・あなたに+8EXP）。</div>';
     }
+    if(IS_GOOGLE64_B1){
+      html += '<div style="background:#eef5ff;border:1.5px solid #8cb6e8;border-radius:12px;padding:11px 12px;margin:8px 0;font-size:.8rem;line-height:1.75">'
+        + '<b>📷 B1で提出する画面</b><ol style="margin:5px 0;padding-left:1.5em">'
+        + '<li>最初の自然な依頼と、AIの確認質問</li><li>見本を渡したことと、質問への回答</li>'
+        + '<li>1回以上の具体的な修正指示</li><li>完成版と、相手名・日時・数字・約束を確認したこと</li></ol>'
+        + '文字が読める大きさで、自分の会話画面を撮ってください。完成見本そのもの、不鮮明な画像、必要部分が切れた画像は「要再提出」の対象です。個人情報・機密情報は必ず伏せてください。'
+        + '<div style="margin-top:7px"><b>提出状態：</b>画像選択前は未提出。送信後も自動合格せず、判定機能が接続されるまでは未判定のままです。</div></div>';
+    }
     var UP = !!(CFG.evidenceUpload && API);   // v10: 画像添付が使えるステージか
-    html += '<div class="field-label">実践したこと・感想（チャットにも共有されます）</div>'
-          + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
-          + '<div class="field-label">証拠（スクショ' + (UP ? 'の画像添付 or ' : (FORM ? 'の写真 or ' : '・')) + 'URL）<span id="evReq" style="color:#c62828"></span></div>';
+    html += '<div class="field-label">' + (reviewedEvidence ? '実践したこと（活動記録に保存）' : '実践したこと・感想（チャットにも共有されます）') + '</div>'
+      + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
+      + '<div class="field-label">' + (reviewedEvidence ? '証拠（スクリーンショット画像）' : ('証拠（スクショ' + (UP ? 'の画像添付 or ' : (FORM ? 'の写真 or ' : '・')) + 'URL）')) + '<span id="evReq" style="color:#c62828"></span></div>';
     if(MIS && MIS.evidence){
       html += '<div style="font-size:.8rem;color:var(--muted);margin-top:2px">📎 証拠の例：' + esc(MIS.evidence) + '</div>';
     }
@@ -1404,12 +1520,12 @@
             +     (SOFT ? '🔄 べつの画像にする' : '🗑 この画像をはずす') + '</button>'
             + '</div>'
             + '<div id="rImgInfo" style="font-size:.8rem;color:var(--muted);text-align:center"></div>'
-            + '<details style="margin:4px 0 2px"><summary style="font-size:.78rem;color:var(--muted);cursor:pointer">'
-            +   (SOFT ? 'URLで出したい人はこちら（画像をつけたならいらないよ）'
-                      : 'URLで出したい人はこちら（画像を付けたなら不要）') + '</summary>';
+            + (reviewedEvidence ? '' : '<details style="margin:4px 0 2px"><summary style="font-size:.78rem;color:var(--muted);cursor:pointer">'
+              + (SOFT ? 'URLで出したい人はこちら（画像をつけたならいらないよ）'
+                      : 'URLで出したい人はこちら（画像を付けたなら不要）') + '</summary>');
     }
-    html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">';
-    if(UP) html += '</details>';
+    if(!reviewedEvidence) html += '<input type="url" id="rE" placeholder="https://...' + (UP ? '（画像を添付した場合は空欄でOK）' : '（実践報告は必須）') + '">';
+    if(UP && !reviewedEvidence) html += '</details>';
     html += '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') + '</button>'
           + '<button class="btn btn-ghost" id="backBasic">'
           +   (SOFT ? '← まなびの報告にもどる' : '← 学習の報告にもどる') + '</button>';
@@ -1515,7 +1631,20 @@
       var lv = root.querySelector('input[name="lv"]:checked');
       var pct = lv ? lv.value : '125';
       var practice = $('rP').value.trim();
-      var evidence = $('rE').value.trim();
+      var evidence = $('rE') ? $('rE').value.trim() : '';
+      if(IS_GOOGLE64_B1 && !MEMBER.token){
+        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ B1の証跡は受講者用リンクからログインした状態で提出してください。現在は未提出です。';
+        return;
+      }
+      if(reviewedEvidence && !pendingImg){
+        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ この実践は画像そのものの提出が必須です。URLや自己申告だけでは完了になりません。';
+        if($('rDrop')){ $('rDrop').style.borderColor = '#ef5350'; $('rDrop').scrollIntoView({block:'center', behavior:'smooth'}); }
+        return;
+      }
+      if(reviewedEvidence && !B1_EVIDENCE_API){
+        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ 証跡の提出は本番のクエストサイトで行ってください。現在は未提出です。';
+        return;
+      }
       // 不正抑止：実践125%以上は証拠（画像添付 or URL）必須。
       // ただしフォーム運用時は写真をフォーム側で受けるため、ここでは必須にしない。
       if(need && !FORM && !/^https?:\/\/.+/.test(evidence) && !pendingImg){
@@ -1543,13 +1672,24 @@
       // v16: 添付画像があれば先にアップロードして証拠URLに変換。
       //   ただしアップロードに失敗しても報告は止めない（サーバー未対応でも前に進める）。
       var imgFailed = false;
+      var evidenceResult = null;
       var pre = Promise.resolve(evidence);
       if(pendingImg){
         btn.textContent = '📷 画像をアップロード中…';
         pre = uploadEvidence(pendingImg.dataUrl, pendingImg.name).then(function(j){
+          if(B1_EVIDENCE_API && IS_GOOGLE64_REVIEWED_EVIDENCE){
+            if(j && j.ok){ evidenceResult = j; return evidence; }
+            throw new Error('evidence_judgement_failed');
+          }
           if(j && j.ok && j.url) return evidence ? evidence + ' ' + j.url : j.url;
-          imgFailed = true; return evidence;           // 失敗→画像なし（URL欄があればそれ）で続行
-        }).catch(function(){ imgFailed = true; return evidence; });
+          imgFailed = true;
+          if(IS_GOOGLE64_REVIEWED_EVIDENCE && Number(pct) >= 125) throw new Error('evidence_upload_failed');
+          return evidence;
+        }).catch(function(err){
+          imgFailed = true;
+          if(IS_GOOGLE64_REVIEWED_EVIDENCE && Number(pct) >= 125) throw err;
+          return evidence;
+        });
       }
       pre.then(function(ev){
         btn.textContent = '送信中…';
@@ -1557,7 +1697,20 @@
           MCQTrack('report_sent', (CFG.goalId||'?') + ':' + QID + ':' + pct);
           if(imgFailed) MCQTrack('evidence_upload_fail', (CFG.goalId||'?') + ':' + QID);
         }
-        return postReport(pct, practice, ev, kindOf(pct), score).then(function(res){
+        var isReviewedEvidence = IS_GOOGLE64_REVIEWED_EVIDENCE && Number(pct) >= 125;
+        var reportPct = isReviewedEvidence ? '0' : pct;
+        var reportKind = isReviewedEvidence ? 'evidence_pending' : kindOf(pct);
+        if(isReviewedEvidence && B1_EVIDENCE_API){
+          if(!evidenceResult || !evidenceResult.ok) throw new Error('evidence_report_failed');
+          sceneEvidenceResult(evidenceResult);
+          return null;
+        }
+        return postReport(reportPct, practice, ev, reportKind, score).then(function(res){
+          if(isReviewedEvidence){
+            if(!res || !res.ok) throw new Error('evidence_report_failed');
+            sceneEvidencePending(ev, res);
+            return;
+          }
           if(imgFailed && res) res.__imgFailed = true;   // 完了画面で軽く知らせる
           else if(imgFailed) res = { __imgFailed: true };
           sceneDone(pct, practice, res);
@@ -1565,9 +1718,47 @@
       }).catch(function(){
         // ここに来るのは通信断など。報告自体が送れなかったときだけ再試行を促す。
         btn.disabled = false; btn.textContent = o.label || '報告する';
-        if($('rImgInfo')) $('rImgInfo').textContent = '⚠ 送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。';
+        if($('rImgInfo')) $('rImgInfo').textContent = (IS_GOOGLE64_B1 && Number(pct) >= 125)
+          ? '⚠ 証跡をサーバーへ保存できなかったため、未提出のままです。完了・合格にはしていません。通信環境を確認して再提出してください。'
+          : '⚠ 送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。';
       });
     }
+  }
+
+  function sceneEvidencePending(evidenceUrl, res){
+    var lecturerReview = !!(res && res.status === 'lecturer_review');
+    var heading = lecturerReview ? '提出済み・講師確認待ち' : '提出済み・未判定';
+    var description = lecturerReview
+      ? esc(res.reason || '画像の基本品質は確認できました。会話内容は講師確認待ちです。')
+      : 'スクリーンショットはサーバーへ保存されました。現在この課題には自動判定サービスが接続されていないため、<b>確認済み・合格・125%達成にはしていません</b>。講師または判定機能の確認後に、次のいずれかへ更新します。';
+    setStep(5);
+    showStage(true); stageHero(false);
+    say('証跡は受け付けた。だが、画像を付けただけでは合格ではない。判定結果を待とう。');
+    render('<div style="text-align:center;border:2px solid #8cb6e8;border-radius:14px;padding:16px;background:#eef5ff">'
+      + '<div style="font-size:2rem">🕒</div><h2 style="font-size:1.12rem;margin:6px 0">' + heading + '</h2>'
+      + '<div style="font-size:.86rem;line-height:1.8;text-align:left">' + description + '</div>'
+      + (lecturerReview ? '<div style="font-size:.78rem;line-height:1.7;text-align:left;margin-top:8px"><b>この時点では合格・125%達成にはなりません。</b></div>' : '')
+      + '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:12px 0;font-size:.78rem">'
+      + '<div style="padding:8px;border-radius:9px;background:#fff">✅ 確認済み</div><div style="padding:8px;border-radius:9px;background:#fff">🔁 要再提出</div>'
+      + '<div style="padding:8px;border-radius:9px;background:#fff">👩‍🏫 講師確認</div><div style="padding:8px;border-radius:9px;background:#fff">🕒 判定中</div></div>'
+      + '<div style="font-size:.76rem;color:#456;line-height:1.7;text-align:left">完成見本そのもの、不鮮明、必要な会話が写っていない場合は要再提出です。クイズ点数とは別に管理します。</div>'
+      + '</div><a class="btn btn-primary" href="town.html?a=' + AREA + '" style="margin-top:14px">🏘 街にもどる</a>');
+  }
+
+  function sceneEvidenceResult(res){
+    if(res.status !== 'resubmit'){
+      sceneEvidencePending('', res);
+      return;
+    }
+    setStep(5);
+    showStage(true); stageHero(false);
+    say('証跡は保存したが、このままでは確認できない。再提出しよう。');
+    render('<div style="text-align:center;border:2px solid #e4a43a;border-radius:14px;padding:16px;background:#fff8e8">'
+      + '<div style="font-size:2rem">🔁</div><h2 style="font-size:1.12rem;margin:6px 0">要再提出</h2>'
+      + '<div style="font-size:.86rem;line-height:1.8;text-align:left">' + esc(res.reason || '画像を確認できませんでした。') + '</div>'
+      + '<div style="font-size:.76rem;color:#654;line-height:1.7;text-align:left;margin-top:8px">完成見本ではなく、自分の会話画面で、依頼・確認質問・修正指示・完成版が読める画像を用意してください。</div>'
+      + '</div><button class="btn btn-primary" id="retryEvidence" style="margin-top:14px">📷 別の画像で再提出</button>');
+    $('retryEvidence').onclick = function(){ sceneReportPractice(false); };
   }
 
   // v3: 討伐演出（EXP・ご褒美・称号・討伐ムービープロンプト・記録タイム）
@@ -1871,6 +2062,11 @@
     $('again').onclick = function(){ answered = 0; quizPct = 0; achieved = 0; sceneIntro(); };
   }
 
-  sceneIntro();
+  /* 要点ページを見終えた場合だけ、説明を重ねず5問クイズから再開する。 */
+  if(new URLSearchParams(location.search).get('start') === 'quiz' && URLS.summaryPage){
+    achieved = 50; answered = 0; ORDER = null; MISSED = []; sceneQuiz(0);
+  } else {
+    sceneIntro();
+  }
   if(window.MCQTrack) MCQTrack('quest_view', (CFG.goalId||'?') + ':' + QID);
 })();

@@ -29,18 +29,16 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/1qIsGylfqBuo8srdrWbwnARsjVJNYERJM", info:"info/A2.jpg", mp4:"video/A2.mp4"},
 
   "A3": { digest:"1IeX4OO8k7zM4qy2CxAdgX_GRgU0ZIbyL", slide:"slide/A3.pdf", drive:"1IeX4OO8k7zM4qy2CxAdgX_GRgU0ZIbyL",
-    archives:[{date:"2025-12-11", id:"1n7wRmi-XcDbwZ_4d-S3VNu-ugce43P4Y"}],
-    notes:"1pUi9DsCXEzjzYT9Nlbc3PbbzVkyVHVqKAMJhTBWfIvg", docs:[],
+    archives:[], summaryPage:"practice/20261015/A3/archive-summary.html",
+    notes:"", docs:[],
     related:"https://notebooklm.google.com/notebook/fded3be0-fd87-4c6c-b99f-c25fdd39bf4e", check:"",
-    folder:"https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu",
-    archive:"https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu", info:"info/A3.jpg", mp4:"video/A3.mp4"},
+    folder:"", archive:"", info:"info/A3.jpg", mp4:"video/A3.mp4"},
 
   "A4": { digest:"1q63A9VQEPfBtU8j552bzA9q6I0rsQ646", slide:"slide/A4.pdf", drive:"1q63A9VQEPfBtU8j552bzA9q6I0rsQ646",
-    archives:[{date:"2025-12-11", id:"1n7wRmi-XcDbwZ_4d-S3VNu-ugce43P4Y"}],
-    notes:"1pUi9DsCXEzjzYT9Nlbc3PbbzVkyVHVqKAMJhTBWfIvg", docs:[],
+    archives:[], summaryPage:"practice/20261015/A4/archive-summary.html",
+    notes:"", docs:[],
     related:"https://notebooklm.google.com/notebook/80155e85-9705-453f-8282-722eff9ae98a", check:"",
-    folder:"https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu",
-    archive:"https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu", info:"info/A4.jpg", mp4:"video/A4.mp4"},
+    folder:"", archive:"", info:"info/A4.jpg", mp4:"video/A4.mp4"},
 
   "A5": { digest:"1Ty17UMdok6vBPWy72cCWUtZDDd0Ysrta", slide:"slide/A5.pdf", drive:"1Ty17UMdok6vBPWy72cCWUtZDDd0Ysrta",
     archives:[{date:"2025-12-07", id:"1109TfWZgEAOlOfugwdaSnmaCGxJACrtJ"}],
@@ -65,18 +63,16 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/1N1blWcYoyncBLD83KUWPJZhXInH1vyhz", info:"info/A7.jpg", mp4:"video/A7.mp4"},
 
   "A8": { digest:"1ye8OXG5sGzse05hp4MxWQnmu1hmQZU3d", slide:"slide/A8.pdf", drive:"1ye8OXG5sGzse05hp4MxWQnmu1hmQZU3d",
-    archives:[{date:"2025-11-13", id:"16G96kE_Leeyjm35-ZNbRzULdvQEuAMZL"}],
-    notes:"1vmQlfYq-2rLriYsQx2UpZu5nqfpZirXYz85jF8dcPPA", docs:[],
+    /* 46分のGmail録画は主導線から外し、A8に一致する2区間だけを要点ページで扱う。 */
+    archives:[], summaryPage:"practice/20261015/A8/archive-summary.html", notes:"", docs:[],
     related:"https://notebooklm.google.com/notebook/33905a5d-227e-4cfd-8d1f-0ea6e3c58038", check:"",
-    folder:"https://drive.google.com/drive/folders/1PJ7pKoXc9g-2EZZ_Ktd14v_kL1nqN0Xv",
-    archive:"https://drive.google.com/drive/folders/1PJ7pKoXc9g-2EZZ_Ktd14v_kL1nqN0Xv", info:"info/A8.jpg", mp4:"video/A8.mp4"},
+    folder:"", archive:"", info:"info/A8.jpg", mp4:"video/A8.mp4"},
 
   "B1": { digest:"1jpPBY0ZTISDAi4vT23Sh_vIDU1aD8XVN", slide:"slide/B1.pdf", drive:"1jpPBY0ZTISDAi4vT23Sh_vIDU1aD8XVN",
-    archives:[{date:"2025-11-13", id:"16G96kE_Leeyjm35-ZNbRzULdvQEuAMZL"}],
-    notes:"1vmQlfYq-2rLriYsQx2UpZu5nqfpZirXYz85jF8dcPPA", docs:[],
+    /* 2025-11-13録画は文字起こし確認の結果Gmail講座で、B1とは内容が異なるため掲載しない。 */
+    archives:[], notes:"", docs:[],
     related:"https://notebooklm.google.com/notebook/6331688c-9311-4942-810b-ac1d4b944199", check:"",
-    folder:"https://drive.google.com/drive/folders/1PJ7pKoXc9g-2EZZ_Ktd14v_kL1nqN0Xv",
-    archive:"https://drive.google.com/drive/folders/1PJ7pKoXc9g-2EZZ_Ktd14v_kL1nqN0Xv", info:"info/B1.jpg", mp4:"video/B1.mp4"},
+    folder:"", archive:"", info:"info/B1.jpg", mp4:"video/B1.mp4"},
 
   "B2": { digest:"1GWI2VF7EcpnKZaFadu_RHMKR9DFWgdt5", slide:"slide/B2.pdf", drive:"1GWI2VF7EcpnKZaFadu_RHMKR9DFWgdt5",
     archives:[{date:"2025-09-24", id:"1ru16D2aK_AnfULg0MQVWKqvSg6cYFf60"}],
@@ -461,11 +457,10 @@ window.MCQ_URLS = {
     archive:"https://drive.google.com/drive/folders/18s0rDxUqrdTtwl-0rsXws0MlnoX0eHG2", info:"info/H5.jpg", mp4:"video/H5.mp4"},
 
   "H6": { digest:"", drive:"",
-    archives:[{date:"2025-12-11", id:"1n7wRmi-XcDbwZ_4d-S3VNu-ugce43P4Y"}],
-    notes:"1pUi9DsCXEzjzYT9Nlbc3PbbzVkyVHVqKAMJhTBWfIvg", docs:[],
+    archives:[], summaryPage:"practice/20261015/H6/archive-summary.html",
+    notes:"", docs:[],
     related:"", check:NB+"b987d00e-609e-4ac8-87ee-87c52cf97f82",
-    folder:"https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu",
-    archive:"https://drive.google.com/drive/folders/1ofLCkV8NSy0rDw5yW7d01GsDc4Hgpemu", info:"info/H6.jpg", slide:"slide/H6.pdf", mp4:"video/H6.mp4"},
+    folder:"", archive:"", info:"info/H6.jpg", slide:"slide/H6.pdf", mp4:"video/H6.mp4"},
 
   "H7": { digest:"", drive:"",
     archives:[{date:"2025-12-07", id:"1109TfWZgEAOlOfugwdaSnmaCGxJACrtJ"}],

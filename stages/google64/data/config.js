@@ -19,6 +19,10 @@ window.MCQ_CONFIG = {
   //   サンクスUP!／アバター進化 がすべて本体スプレッドシートと繋がる。
   questApiUrl: "https://script.google.com/macros/s/AKfycbzIpwPd49mlcRpuPa43fdg9P4n8mN2wEXFy2IcbrM87r5E90VjTHg1nhzVHn2b2Wxro/exec",
 
+  // B1の判定改修は本番未配備。localhostでのみ、非公開保存と分離テスト用APIに接続する。
+  b1EvidenceApiUrl: /^(127\.0\.0\.1|localhost)$/.test(location.hostname) ? "/api/b1-evidence" : "",
+  reviewEvidenceApiUrl: location.hostname === "re-gi.jp" ? "/mcq-site/api/evidence.php" : "",
+
   // （旧）クエスト活動ログ専用スプレッドシートのGAS Web App URL（questApiUrl未設定時の予備）
   logApiUrl: "",
 

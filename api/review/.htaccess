@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName "MCQ Evidence Review"
+AuthUserFile /home/xs579028/mcq-private-evidence/.htpasswd
+Require valid-user
+Options -Indexes
