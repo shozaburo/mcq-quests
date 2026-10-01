@@ -1,0 +1,15 @@
+# 2026-09-30 入場券（~/re-gi.jp/public_html/mcq-site/gate/）
+# クエスト本文・ミッション・動画・スライド・図は、入場券がある人にだけ出す。2マス体験（ChatGPT編 A1・A2）は誰でも。
+# 戻すときはこのファイルを消す。
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/mcq-site/stages/
+RewriteRule ^(.+/(video|slide|info)/.+)$ /mcq-site/gate/serve.php?f=stages/$1 [L,B]
+# 動画の隠しフォルダ（_m…、このフォルダへの実体リンク）経由のときは何もしない
+RewriteCond %{REQUEST_URI} ^/mcq-site/stages/
+RewriteCond %{QUERY_STRING} (^|&)token=
+RewriteCond %{HTTP_COOKIE} !(^|;\s*)mcq_pass=
+RewriteRule ^[^/]+/[^/]+\.html$ /mcq-site/gate/enter.php [L]
+RewriteCond %{REQUEST_URI} ^/mcq-site/stages/
+RewriteRule ^(.+/(data/(quests|missions)|video|slide|info)/[^/]+)$ /mcq-site/gate/serve.php?f=stages/$1 [L,B]
+</IfModule>
