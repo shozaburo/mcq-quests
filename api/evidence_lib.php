@@ -27,9 +27,11 @@ function ev_json($value) {
 }
 function ev_private_dir() {
   $root = MCQ_EVIDENCE_ROOT;
+  // Apache needs to traverse the root to read .htpasswd; submitted images and records stay private.
   foreach (array($root, $root.'/images', $root.'/records') as $dir) {
-    if (!is_dir($dir) && !mkdir($dir, 0700, true)) ev_error('保存領域を利用できません。', 503);
-    @chmod($dir, 0700);
+    $mode = $dir === $root ? 0711 : 0700;
+    if (!is_dir($dir) && !mkdir($dir, $mode, true)) ev_error('保存領域を利用できません。', 503);
+    @chmod($dir, $mode);
   }
   return $root;
 }
