@@ -1,0 +1,17 @@
+{
+  "files": [
+    "stages\\google64\\data\\areas.js",
+    "stages\\google64\\data\\missions\\C.js",
+    "stages\\google64\\data\\quests\\C.js",
+    "stages\\google64\\data\\revision-20261015.js",
+    "stages\\google64\\data\\urls.js",
+    "stages\\google64\\index.html",
+    "stages\\google64\\map.html",
+    "stages\\google64\\quest.html",
+    "stages\\google64\\town.html"
+  ],
+  "testRepo": "H:\\共有ドライブ\\Yg_マンダラ櫓（共有）\\Yg8_システム・開発\\mcq-quests-C-review",
+  "uploadCopy": "H:\\マイドライブ\\M_みんなのAI実践塾\\M8_MCQ（マンダラチャートクエスト）\\mcq-site_本番アップ用",
+  "productionDeployed": false,
+  "html": "C-only loader delta applied to each existing target; other existing differences preserved"
+}

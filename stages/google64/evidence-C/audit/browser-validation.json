@@ -1,0 +1,114 @@
+[
+  {
+    "id": "C1",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 71.51746,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C1-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C2",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 75.139773,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C2-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C3",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 69.938503,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C3-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C4",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 76.277551,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C4-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C5",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 85.635193,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C5-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C6",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 78.576327,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C6-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C7",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 79.923084,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C7-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C8",
+    "headTop": 62,
+    "scrollWidth": 375,
+    "video": [
+      {
+        "duration": 74.141315,
+        "paused": true,
+        "ready": 4,
+        "src": "http://127.0.0.1:8877/stages/google64/video/C8-20261112.mp4"
+      }
+    ],
+    "width": 375
+  }
+]
