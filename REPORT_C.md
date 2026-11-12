@@ -2,11 +2,11 @@
 古い言い方：ソース32行（NotebookLM 8行、その他の表記・正式名24行）。画像内の文字は別に点検しました。
 古いバージョン：本文・設定は0か所。アーカイブには旧モデル・旧プランの説明が3場面ありました。
 直した数：8マスの本文・実践・40問と街1件に加え、約6分動画8本、新スライド8冊106ページ、図解8枚、C4の正式名4行を更新しました。
-残り：テスト公開の完了確認1件。教材更新・録画点検は完了。本番への反映はしていません。
+残り：0。テスト公開と表示確認まで完了。本番への反映はしていません。
 
 # Cエリア 更新報告
 
-更新日：2026-11-12（日本時間）。テストサイトで確認するための更新です。
+教材更新日：2026-11-12。テスト公開の最終確認日：2026-11-13（日本時間）。
 
 [テストサイト：Cの街](https://shozaburo.github.io/mcq-quests/stages/google64/town.html?a=C)
 
@@ -33,14 +33,14 @@
 
 | マス | 変更前 | 変更後 | 学ぶ内容・直した点 | 画面 |
 |---|---|---|---|---|
-| [C1](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C1) | 予約スケジュール機能の構築による外部との日程調整効率化 | 予約スケジュールで日程調整の往復を減らす | 予約ページ、準備時間、利用条件を学ぶ。 | [375px](evidence-C/screenshots-long/C1-375.jpg)・[図解](evidence-C/screenshots/C1-info-browser.jpg) |
-| [C2](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C2) | CSV・AI連携による予定一括登録 | GeminiでCSVを作り、予定をまとめて登録する | CSVの列・日時を確認し、試験用カレンダーで1件試す。 | [375px](evidence-C/screenshots-long/C2-375.jpg)・[図解](evidence-C/screenshots/C2-info-browser.jpg) |
-| [C3](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C3) | 作業時間のブロック（フォーカス時間）とタスク（Tasks）の統合管理 | サイレント モードとタスクで作業時間を守る | サイレント モードとタスクを分け、使えない環境の代替手順も示す。 | [375px](evidence-C/screenshots-long/C3-375.jpg)・[図解](evidence-C/screenshots/C3-info-browser.jpg) |
-| [C4](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C4) | 複数アカウント・共有カレンダーの使い分けと通知設定の最適化 | カレンダーの色分け・共有・通知を整える | 色分け・共有範囲・通知を確認し、予定の見落としを減らす。 | [375px](evidence-C/screenshots-long/C4-375.jpg)・[図解](evidence-C/screenshots/C4-info-browser.jpg) |
-| [C5](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C5) | Meetの記録から決定事項・担当・期限を整理する | Meetの記録から決定事項・担当・期限を整理する | 録画・文字起こし・メモ作成を分け、決定事項・担当・期限・要確認を整理する。 | [375px](evidence-C/screenshots-long/C5-375.jpg)・[図解](evidence-C/screenshots/C5-info-browser.jpg) |
-| [C6](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C6) | コンパニオンモードと画面共有（タブ・ウィンドウ別）の使い分け技術 | コンパニオン モードと画面共有を使い分ける | 会議室の音声は1台にまとめ、共有するタブと停止操作を確認する。 | [375px](evidence-C/screenshots-long/C6-375.jpg)・[図解](evidence-C/screenshots/C6-info-browser.jpg) |
-| [C7](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C7) | リアルタイム翻訳字幕とAI背景生成・ノイズ除去の活用 | 翻訳字幕・背景生成・ノイズ キャンセルを使う | 翻訳字幕の誤りと、ノイズ キャンセルで人の声は消えないことを学ぶ。 | [375px](evidence-C/screenshots-long/C7-375.jpg)・[図解](evidence-C/screenshots/C7-info-browser.jpg) |
-| [C8](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C8) | 会議記録を報告・保存し、次の仕事につなげる | 会議記録をGemini Notebookで確かめ、報告・保存する | Gemini Notebookで原文を確かめ、報告と保存・共有を確認する。 | [375px](evidence-C/screenshots-long/C8-375.jpg)・[図解](evidence-C/screenshots/C8-info-browser.jpg) |
+| [C1](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C1) | 予約スケジュール機能の構築による外部との日程調整効率化 | 予約スケジュールで日程調整の往復を減らす | 予約ページ、準備時間、利用条件を学ぶ。 | [375px](evidence-C/public-20261113/C1-375.jpg)・[図解](evidence-C/screenshots/C1-info-browser.jpg) |
+| [C2](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C2) | CSV・AI連携による予定一括登録 | GeminiでCSVを作り、予定をまとめて登録する | CSVの列・日時を確認し、試験用カレンダーで1件試す。 | [375px](evidence-C/public-20261113/C2-375.jpg)・[図解](evidence-C/screenshots/C2-info-browser.jpg) |
+| [C3](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C3) | 作業時間のブロック（フォーカス時間）とタスク（Tasks）の統合管理 | サイレント モードとタスクで作業時間を守る | サイレント モードとタスクを分け、使えない環境の代替手順も示す。 | [375px](evidence-C/public-20261113/C3-375.jpg)・[図解](evidence-C/screenshots/C3-info-browser.jpg) |
+| [C4](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C4) | 複数アカウント・共有カレンダーの使い分けと通知設定の最適化 | カレンダーの色分け・共有・通知を整える | 色分け・共有範囲・通知を確認し、予定の見落としを減らす。 | [375px](evidence-C/public-20261113/C4-375.jpg)・[図解](evidence-C/screenshots/C4-info-browser.jpg) |
+| [C5](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C5) | Meetの記録から決定事項・担当・期限を整理する | Meetの記録から決定事項・担当・期限を整理する | 録画・文字起こし・メモ作成を分け、決定事項・担当・期限・要確認を整理する。 | [375px](evidence-C/public-20261113/C5-375.jpg)・[図解](evidence-C/screenshots/C5-info-browser.jpg) |
+| [C6](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C6) | コンパニオンモードと画面共有（タブ・ウィンドウ別）の使い分け技術 | コンパニオン モードと画面共有を使い分ける | 会議室の音声は1台にまとめ、共有するタブと停止操作を確認する。 | [375px](evidence-C/public-20261113/C6-375.jpg)・[図解](evidence-C/screenshots/C6-info-browser.jpg) |
+| [C7](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C7) | リアルタイム翻訳字幕とAI背景生成・ノイズ除去の活用 | 翻訳字幕・背景生成・ノイズ キャンセルを使う | 翻訳字幕の誤りと、ノイズ キャンセルで人の声は消えないことを学ぶ。 | [375px](evidence-C/public-20261113/C7-375.jpg)・[図解](evidence-C/screenshots/C7-info-browser.jpg) |
+| [C8](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C8) | 会議記録を報告・保存し、次の仕事につなげる | 会議記録をGemini Notebookで確かめ、報告・保存する | Gemini Notebookで原文を確かめ、報告と保存・共有を確認する。 | [375px](evidence-C/public-20261113/C8-375.jpg)・[図解](evidence-C/screenshots/C8-info-browser.jpg) |
 
 
 C5・C8の追加改訂もそろえ、以前の文章に戻らないようにしました。セリフは学ぶ内容と理由から始まり、自己紹介やHTMLタグはありません。Cの主・サイドストーリーは旧名がなく、変更していません。
@@ -87,9 +87,9 @@ C5・C8の追加改訂もそろえ、以前の文章に戻らないようにし�
 
 Cの街とC1〜C8をローカルで開き、375pxで横にはみ出さないこと、新動画8本の読み込み、新PDFの接続、図解8枚の実画像表示を確認しました。新PDFも実際に開けることを確認しています。
 
-[街の画面](evidence-C/screenshots-long/town-375.jpg) ／ [ローカル確認記録](evidence-C/browser-long-validation.json)
+[公開された街の画面](evidence-C/public-20261113/town-375.jpg) ／ [公開先の確認記録](evidence-C/public-20261113/browser-validation.json) ／ [ローカル確認記録](evidence-C/browser-long-validation.json)
 
-![C5の約6分動画を375pxで表示](evidence-C/screenshots-long/C5-375.jpg)
+![公開先のC5動画を375pxで実再生](evidence-C/public-20261113/C5-playing-375.jpg)
 
 JSの読み込み番号を増やしました。quest.html内の動的なC本文・実践の読み込みも更新済みです。engine.jsはCのデータを動的に読み込んでおらず、今回は変更していません。40問の選択肢・正解番号と、C以外のデータが変わっていないことを比較確認しました。各コピーに以前からあるHTMLの違いは残し、Cに関係する変更だけを反映しました。
 
@@ -97,7 +97,7 @@ JSの読み込み番号を増やしました。quest.html内の動的なC本文�
 
 ## 作り直しが必要な教材と残り
 
-旧スライド8冊は新しい8冊に置き換え済みです。旧動画と今回作った短い動画も、新しい約6分の8本に置き換え済みです。学習内容と違う録画は導線を外しました。教材更新・録画点検は完了しています。テスト公開の完了確認が1件残っています。本番への反映は塾長の確認後です。
+旧スライド8冊は新しい8冊に置き換え済みです。旧動画と今回作った短い動画も、新しい約6分の8本に置き換え済みです。学習内容と違う録画は導線を外しました。教材更新・録画点検は完了しています。テスト公開と表示確認まで完了しました。本番への反映は塾長の確認後です。
 
 「自動メモ生成」は現在もGoogle公式で使われる名称です。前回の報告にあった旧教材C5の問題は、その名称自体ではなく、古い画面と、録画・文字起こし・メモ・Notebookの区別が不明確な点です。
 
@@ -117,8 +117,23 @@ JSの読み込み番号を増やしました。quest.html内の動的なC本文�
 - [ノイズ キャンセル](https://support.google.com/meet/answer/9919960?hl=ja)
 - [会議チャット](https://support.google.com/meet/answer/9308979?hl=ja)
 
-## テスト公開の状況
+## テスト公開と2026-11-13の最終確認
 
-教材・本文・報告はテスト用mainへ送信済みです（840881c）。ただし、[公開処理](https://github.com/shozaburo/mcq-quests/actions/runs/43231757870)が10分の時間切れで失敗しました。再試行も時間切れで失敗しました。公開用ファイル全体は3,770,487,284バイト（約3.51GiB）で、GitHubの1GBの公開上限を超えている警告が出ました。現在の公開ページにはまだ前の教材が表示されるため、「テスト公開まで完了」とはしていません。
+最初の公開処理は2回、10分の時間切れになりました。公開ファイル全体が約3.51GiBで、GitHubの1GB上限を超える警告も出ていました。その後、前回最後の送信（187367f）に対する[後続の公開処理](https://github.com/shozaburo/mcq-quests/actions/runs/43236461422)が成功し、2026-11-12 23:27（日本時間）に完了していました。2026-11-13に、新しい教材が実際に公開されていることを再確認しました。
 
-[GitHub公式の公開制限](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)を確認しました。新しいC動画8本と動画以外のファイルなら約720MiBです。旧ファイルを削除せず、公開対象だけを絞る案を用意しています。ただし他エリアのテスト表示にも影響するため、「C以外は変更禁止」の条件を広げる確認が必要です。公開方法の変更はまだ実行していません。本番の自動公開は手動実行専用であり、起動していません。
+公開方法の調整について許可を受けましたが、他エリアの教材と再生方法をそのまま維持できるため、準備した公開方式の変更・既存動画の再圧縮は適用していません。C以外の本文・問題・教材原本・公開設定は変更していません。旧ファイルは削除していません。本番re-gi.jpへの反映、メール・Chatの送信も行っていません。
+
+公開先で、次を確認しました。
+
+- Cの街からC1〜C8の8マスへ進める。375pxで横はみ出しなし。
+- 新動画8本すべてが横型16:9で読み込み完了。長さは5分35秒〜6分17秒。C5は再生時間が進むことも確認。
+- 新PDF8冊への接続と、ブラウザーでのPDF表示を確認。
+- 図解8枚すべてが1536×2752の実画像として表示。
+- 動画・PDF・図解の24ファイルがHTTP 200。新しい動画8本とPDF8冊の容量は正本と一致。
+- C1の以前の録画には、旧画面・旧料金の注意書きが表示される。
+
+[公開先の動画・レイアウト確認](evidence-C/public-20261113/browser-validation.json) ／ [図解の表示確認](evidence-C/public-20261113/info-validation.json) ／ [24ファイルの取得確認](evidence-C/public-20261113/http-validation.json) ／ [実再生の確認](evidence-C/public-20261113/playback-validation.json)
+
+![公開先のC5スライド表示](evidence-C/public-20261113/C5-slides-375.jpg)
+
+残りは0です。旧画面が見える場合は、Ctrl+F5で再読み込みしてください。容量の大きさによる公開処理の不安定さは、今回の教材更新とは別の今後の運用課題として残します。[GitHub公式の公開制限](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)も確認しています。

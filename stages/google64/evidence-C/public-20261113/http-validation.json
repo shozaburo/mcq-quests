@@ -1,0 +1,150 @@
+{
+  "checkedDate": "2026-11-13",
+  "allPassed": true,
+  "rows": [
+    {
+      "file": "video/C1-20261112-long.mp4",
+      "status": 200,
+      "bytes": 10557642,
+      "expectedBytes": 10557642
+    },
+    {
+      "file": "slide/C1-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 10936198,
+      "expectedBytes": 10936198
+    },
+    {
+      "file": "video/C2-20261112-long.mp4",
+      "status": 200,
+      "bytes": 12856699,
+      "expectedBytes": 12856699
+    },
+    {
+      "file": "slide/C2-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 16356716,
+      "expectedBytes": 16356716
+    },
+    {
+      "file": "video/C3-20261112-long.mp4",
+      "status": 200,
+      "bytes": 11568111,
+      "expectedBytes": 11568111
+    },
+    {
+      "file": "slide/C3-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 11406729,
+      "expectedBytes": 11406729
+    },
+    {
+      "file": "video/C4-20261112-long.mp4",
+      "status": 200,
+      "bytes": 11809838,
+      "expectedBytes": 11809838
+    },
+    {
+      "file": "slide/C4-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 15682301,
+      "expectedBytes": 15682301
+    },
+    {
+      "file": "video/C5-20261112-long.mp4",
+      "status": 200,
+      "bytes": 10619179,
+      "expectedBytes": 10619179
+    },
+    {
+      "file": "slide/C5-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 12287274,
+      "expectedBytes": 12287274
+    },
+    {
+      "file": "video/C6-20261112-long.mp4",
+      "status": 200,
+      "bytes": 9478789,
+      "expectedBytes": 9478789
+    },
+    {
+      "file": "slide/C6-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 9291981,
+      "expectedBytes": 9291981
+    },
+    {
+      "file": "video/C7-20261112-long.mp4",
+      "status": 200,
+      "bytes": 10071793,
+      "expectedBytes": 10071793
+    },
+    {
+      "file": "slide/C7-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 11025401,
+      "expectedBytes": 11025401
+    },
+    {
+      "file": "video/C8-20261112-long.mp4",
+      "status": 200,
+      "bytes": 10423157,
+      "expectedBytes": 10423157
+    },
+    {
+      "file": "slide/C8-20261112-v2.pdf",
+      "status": 200,
+      "bytes": 9652351,
+      "expectedBytes": 9652351
+    },
+    {
+      "file": "info/C1-20261112.png",
+      "status": 200,
+      "bytes": 5788106,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C2-20261112.png",
+      "status": 200,
+      "bytes": 5395829,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C3-20261112.png",
+      "status": 200,
+      "bytes": 5549456,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C4-20261112.png",
+      "status": 200,
+      "bytes": 5275541,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C5-20261112.png",
+      "status": 200,
+      "bytes": 4813525,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C6-20261112.png",
+      "status": 200,
+      "bytes": 5759724,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C7-20261112.png",
+      "status": 200,
+      "bytes": 5490283,
+      "expectedBytes": null
+    },
+    {
+      "file": "info/C8-20261112.png",
+      "status": 200,
+      "bytes": 5599005,
+      "expectedBytes": null
+    }
+  ]
+}
