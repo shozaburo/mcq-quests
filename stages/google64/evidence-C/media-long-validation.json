@@ -1,0 +1,114 @@
+[
+  {
+    "quest": "C1",
+    "file": "video/C1-20261112-long.mp4",
+    "bytes": 10557642,
+    "sha256": "13e7119061fa1362fb3afe5b1ca09ea2a51bf4fc3fe38e24b704513723759f06",
+    "seconds": 345.606009
+  },
+  {
+    "quest": "C1",
+    "file": "slide/C1-20261112-v2.pdf",
+    "bytes": 10936198,
+    "sha256": "dd7530fca6715c90ebbb8f29fd9d134ba58f40bb86c1bf9fec37e1da6458150f",
+    "pages": 12
+  },
+  {
+    "quest": "C2",
+    "file": "video/C2-20261112-long.mp4",
+    "bytes": 12856699,
+    "sha256": "098f6b3af3a8c7a12aa54eef6aabc4c8600d7f6fafaff805b43aeaacb8e29cfe",
+    "seconds": 364.0
+  },
+  {
+    "quest": "C2",
+    "file": "slide/C2-20261112-v2.pdf",
+    "bytes": 16356716,
+    "sha256": "d772e56f48bc093f6e2c6699bc18c02f91487f685fa1d0923b096a53345d8b68",
+    "pages": 13
+  },
+  {
+    "quest": "C3",
+    "file": "video/C3-20261112-long.mp4",
+    "bytes": 11568111,
+    "sha256": "1f3104fcb345434303dabf4d69ae87ef77503e18a3fd1117f554a21668023c1f",
+    "seconds": 377.0
+  },
+  {
+    "quest": "C3",
+    "file": "slide/C3-20261112-v2.pdf",
+    "bytes": 11406729,
+    "sha256": "ff0cafa68ae48a9b725d8fb4e75957762efb4d7604bc1a9900956bb9c0283619",
+    "pages": 14
+  },
+  {
+    "quest": "C4",
+    "file": "video/C4-20261112-long.mp4",
+    "bytes": 11809838,
+    "sha256": "634742bf8495edf22855be8a2ea54c66794f70f83e15fe31d6e6ae6e610b8e1e",
+    "seconds": 375.0
+  },
+  {
+    "quest": "C4",
+    "file": "slide/C4-20261112-v2.pdf",
+    "bytes": 15682301,
+    "sha256": "a6f0faf897cf3f61d1d0fe4f151c6a5b5a38572eafb81667ab0f90ad981aac9b",
+    "pages": 15
+  },
+  {
+    "quest": "C5",
+    "file": "video/C5-20261112-long.mp4",
+    "bytes": 10619179,
+    "sha256": "002fe446621d56cf8250969dc207f7a37adf0e73ed8e13543a3013b99a398ba3",
+    "seconds": 349.0
+  },
+  {
+    "quest": "C5",
+    "file": "slide/C5-20261112-v2.pdf",
+    "bytes": 12287274,
+    "sha256": "19e9626b768fa16128183696aa3cb31932c0b7bf56599da8c001d8dc89453de1",
+    "pages": 13
+  },
+  {
+    "quest": "C6",
+    "file": "video/C6-20261112-long.mp4",
+    "bytes": 9478789,
+    "sha256": "9b88a526a2cbc7b049a035ab6b850729ac11ef13cc4d47dd98a29098edf02fa0",
+    "seconds": 334.916667
+  },
+  {
+    "quest": "C6",
+    "file": "slide/C6-20261112-v2.pdf",
+    "bytes": 9291981,
+    "sha256": "d853c54433f3149444d3b511d28d0f88a7e06033c9c69543f3c933ba29bab500",
+    "pages": 13
+  },
+  {
+    "quest": "C7",
+    "file": "video/C7-20261112-long.mp4",
+    "bytes": 10071793,
+    "sha256": "869c1b09e24c70955ffac7dc07135a402a098fc065b98eb215d2fd4bb96042c5",
+    "seconds": 344.211995
+  },
+  {
+    "quest": "C7",
+    "file": "slide/C7-20261112-v2.pdf",
+    "bytes": 11025401,
+    "sha256": "41b914b1520679829f5c3ae6bbb2415ec7de9800d7d78276ea321b4e3fd34966",
+    "pages": 13
+  },
+  {
+    "quest": "C8",
+    "file": "video/C8-20261112-long.mp4",
+    "bytes": 10423157,
+    "sha256": "ad11981d29811725a9e900f59fe222345bf24f18ab819e2192c69caf8a7077cd",
+    "seconds": 355.858005
+  },
+  {
+    "quest": "C8",
+    "file": "slide/C8-20261112-v2.pdf",
+    "bytes": 9652351,
+    "sha256": "cafeb4c8a0b5ef58d04610f123d30b0ac2a13df39ed86ab741fac2bcfbab1685",
+    "pages": 13
+  }
+]

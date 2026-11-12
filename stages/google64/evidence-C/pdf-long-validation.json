@@ -1,0 +1,50 @@
+[
+  {
+    "quest": "C1",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C1-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C2",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C2-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C3",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C3-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C4",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C4-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C5",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C5-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C6",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C6-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C7",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C7-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  },
+  {
+    "quest": "C8",
+    "url": "http://127.0.0.1:8877/stages/google64/slide/C8-20261112-v2.pdf",
+    "httpStatus": 200,
+    "pdfHeaderValid": true
+  }
+]

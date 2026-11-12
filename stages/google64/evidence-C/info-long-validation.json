@@ -1,0 +1,90 @@
+[
+  {
+    "id": "C1",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C1-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C2",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C2-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C3",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C3-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C4",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C4-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C5",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C5-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C6",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C6-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C7",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C7-20261112.png",
+        "width": 1536
+      }
+    ]
+  },
+  {
+    "id": "C8",
+    "images": [
+      {
+        "height": 2752,
+        "loaded": true,
+        "src": "http://127.0.0.1:8877/stages/google64/info/C8-20261112.png",
+        "width": 1536
+      }
+    ]
+  }
+]

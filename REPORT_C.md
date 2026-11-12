@@ -1,96 +1,118 @@
 更新前：本文は2026-07-12、街は07-17、URL一覧は09-21。C5・C8には10-01の追加改訂がありました。
-古い言い方：ソース28行（NotebookLM 8行、その他20行）。教材内の旧名は別に数えています。
-古いバージョン：Cの本文・設定で旧モデル名・旧プラン名は0か所。長い録画の全編は未確認です。
-直した数：8マスの本文・実践・40問、街の説明1件、動画8本、図解8枚、教材リンク16件。
-残り：既存スライド8冊の作り直し、アーカイブ動画6本の全編確認。本番反映はしていません。
+古い言い方：ソース32行（NotebookLM 8行、その他の表記・正式名24行）。画像内の文字は別に点検しました。
+古いバージョン：本文・設定は0か所。アーカイブには旧モデル・旧プランの説明が3場面ありました。
+直した数：8マスの本文・実践・40問と街1件に加え、約6分動画8本、新スライド8冊106ページ、図解8枚、C4の正式名4行を更新しました。
+残り：依頼された教材更新・録画点検の残りは0。本番への反映は、塾長の確認待ちです。
 
 # Cエリア 更新報告
 
-更新日：2026-11-12（日本時間）。塾長確認前のテスト公開です。
+更新日：2026-11-12（日本時間）。テストサイトで確認するための更新です。
 
 [テストサイト：Cの街](https://shozaburo.github.io/mcq-quests/stages/google64/town.html?a=C)
 
-先に修正前の [点検報告](REPORT_C_audit.md) をコミットしました（0790965）。その後、正本を編集し、robocopyでテスト用コピーと本番アップ用コピーへそろえました。指定PCの C:\Users\matsu は存在せず作成権限もないため、利用者の承認どおり、作業フォルダー内の mcq-quests-C-review を使いました。
+修正前の点検を先に保存しました。最初の点検は0790965、録画全編と追加の正式名点検は7448da9です。指定のC:\Users\matsuがないため、承認どおり作業フォルダー内のmcq-quests-C-reviewをテスト用に使っています。
 
-## マスごとの変更
+## 元素材と最近の資料を追加したか
+
+追加済みです。Gemini編のメインノートブックへ、次の6件を取り込みました。今回の動画8本とスライド8冊では、この6件を選択して生成しました。
+
+| 種類 | 追加した資料 | 公開日・確認できた表示 |
+|---|---|---|
+| 元素材 | C1〜C8の旧スライド8冊をまとめたPDF（101ページ） | 旧教材であることを明記して追加 |
+| 改訂の基準 | C1〜C8の現在の本文・実践と、Google公式確認メモ | 2026-11-12作成 |
+| YouTube | [AIヲタク通信：Gemini×Googleカレンダーの活用5選](https://www.youtube.com/watch?v=A_D6OeCcd2Q) | 画面表示「1か月前」 |
+| YouTube | [mikimikiwebスクール：Gemini×Googleカレンダー連携](https://www.youtube.com/watch?v=c9OB_j9Vxbg) | 画面表示「2か月前」 |
+| note | [ふく：予約スケジュールを作り、共有前に確認する方法](https://note.com/fuku_create/n/n57c16e3d42a3) | 2026-11-07 09:01 |
+| note | [モノプロしながわ：AIで議事録作成](https://note.com/monopro/n/n95c1122254a2) | 2026-11-10 10:50 |
+
+「最近の関連資料」を確認して追加したもので、インターネット全体で最も新しい記事だと断定したものではありません。YouTubeの日付は相対表示のため、正確な公開日には置き換えていません。別の新しい動画1本は字幕が取得できず、今回の生成ソースには採用していません。元のノートブックにあった資料は削除していません。
+
+ノートブック内部の確認画面とソース記録は、公開サイトへ載せず手元に保存しています。学習ページから私的なノートブックへ誘導するリンクも外しました。
+
+## マスごとの変更前と変更後
 
 | マス | 変更前 | 変更後 | 学ぶ内容・直した点 | 画面 |
 |---|---|---|---|---|
-| [C1](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C1) | 予約スケジュール機能の構築による外部との日程調整効率化 | 予約スケジュールで日程調整の往復を減らす | 予約ページ、準備時間、利用条件を学ぶ。 | [375px](stages/google64/evidence-C/screenshots/C1-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C1-info-browser.jpg) |
-| [C2](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C2) | CSV・AI連携による予定一括登録 | GeminiでCSVを作り、予定をまとめて登録する | CSVの列・日時を確認し、試験用カレンダーで1件試す。 | [375px](stages/google64/evidence-C/screenshots/C2-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C2-info-browser.jpg) |
-| [C3](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C3) | 作業時間のブロック（フォーカス時間）とタスク（Tasks）の統合管理 | サイレント モードとタスクで作業時間を守る | サイレント モードとタスクを分け、使えない環境の代替手順も示す。 | [375px](stages/google64/evidence-C/screenshots/C3-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C3-info-browser.jpg) |
-| [C4](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C4) | 複数アカウント・共有カレンダーの使い分けと通知設定の最適化 | カレンダーの色分け・共有・通知を整える | 色分け・共有範囲・通知を確認し、予定の見落としを減らす。 | [375px](stages/google64/evidence-C/screenshots/C4-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C4-info-browser.jpg) |
-| [C5](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C5) | Meetの記録から決定事項・担当・期限を整理する | Meetの記録から決定事項・担当・期限を整理する | 録画・文字起こし・メモ作成を分け、決定事項・担当・期限・要確認を整理する。 | [375px](stages/google64/evidence-C/screenshots/C5-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C5-info-browser.jpg) |
-| [C6](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C6) | コンパニオンモードと画面共有（タブ・ウィンドウ別）の使い分け技術 | コンパニオン モードと画面共有を使い分ける | 会議室の音声は1台にまとめ、共有するタブと停止操作を確認する。 | [375px](stages/google64/evidence-C/screenshots/C6-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C6-info-browser.jpg) |
-| [C7](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C7) | リアルタイム翻訳字幕とAI背景生成・ノイズ除去の活用 | 翻訳字幕・背景生成・ノイズ キャンセルを使う | 翻訳字幕の誤りと、ノイズ キャンセルで人の声は消えないことを学ぶ。 | [375px](stages/google64/evidence-C/screenshots/C7-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C7-info-browser.jpg) |
-| [C8](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C8) | 会議記録を報告・保存し、次の仕事につなげる | 会議記録をGemini Notebookで確かめ、報告・保存する | Gemini Notebookで原文を確かめ、報告と保存・共有を確認する。 | [375px](stages/google64/evidence-C/screenshots/C8-video-mobile-final.jpg)・[図解](stages/google64/evidence-C/screenshots/C8-info-browser.jpg) |
+| [C1](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C1) | 予約スケジュール機能の構築による外部との日程調整効率化 | 予約スケジュールで日程調整の往復を減らす | 予約ページ、準備時間、利用条件を学ぶ。 | [375px](evidence-C/screenshots-long/C1-375.jpg)・[図解](evidence-C/screenshots/C1-info-browser.jpg) |
+| [C2](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C2) | CSV・AI連携による予定一括登録 | GeminiでCSVを作り、予定をまとめて登録する | CSVの列・日時を確認し、試験用カレンダーで1件試す。 | [375px](evidence-C/screenshots-long/C2-375.jpg)・[図解](evidence-C/screenshots/C2-info-browser.jpg) |
+| [C3](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C3) | 作業時間のブロック（フォーカス時間）とタスク（Tasks）の統合管理 | サイレント モードとタスクで作業時間を守る | サイレント モードとタスクを分け、使えない環境の代替手順も示す。 | [375px](evidence-C/screenshots-long/C3-375.jpg)・[図解](evidence-C/screenshots/C3-info-browser.jpg) |
+| [C4](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C4) | 複数アカウント・共有カレンダーの使い分けと通知設定の最適化 | カレンダーの色分け・共有・通知を整える | 色分け・共有範囲・通知を確認し、予定の見落としを減らす。 | [375px](evidence-C/screenshots-long/C4-375.jpg)・[図解](evidence-C/screenshots/C4-info-browser.jpg) |
+| [C5](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C5) | Meetの記録から決定事項・担当・期限を整理する | Meetの記録から決定事項・担当・期限を整理する | 録画・文字起こし・メモ作成を分け、決定事項・担当・期限・要確認を整理する。 | [375px](evidence-C/screenshots-long/C5-375.jpg)・[図解](evidence-C/screenshots/C5-info-browser.jpg) |
+| [C6](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C6) | コンパニオンモードと画面共有（タブ・ウィンドウ別）の使い分け技術 | コンパニオン モードと画面共有を使い分ける | 会議室の音声は1台にまとめ、共有するタブと停止操作を確認する。 | [375px](evidence-C/screenshots-long/C6-375.jpg)・[図解](evidence-C/screenshots/C6-info-browser.jpg) |
+| [C7](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C7) | リアルタイム翻訳字幕とAI背景生成・ノイズ除去の活用 | 翻訳字幕・背景生成・ノイズ キャンセルを使う | 翻訳字幕の誤りと、ノイズ キャンセルで人の声は消えないことを学ぶ。 | [375px](evidence-C/screenshots-long/C7-375.jpg)・[図解](evidence-C/screenshots/C7-info-browser.jpg) |
+| [C8](https://shozaburo.github.io/mcq-quests/stages/google64/quest.html?id=C8) | 会議記録を報告・保存し、次の仕事につなげる | 会議記録をGemini Notebookで確かめ、報告・保存する | Gemini Notebookで原文を確かめ、報告と保存・共有を確認する。 | [375px](evidence-C/screenshots-long/C8-375.jpg)・[図解](evidence-C/screenshots/C8-info-browser.jpg) |
 
-C5・C8は追加改訂による上書きも直し、前の文章に戻らないようにしました。セリフは学ぶ内容と理由から始め、自己紹介やHTMLタグを入れていません。Cの主とCのサイドストーリーは旧名がなく、変更していません。
 
-## 教材を作り直した結果
+C5・C8の追加改訂もそろえ、以前の文章に戻らないようにしました。セリフは学ぶ内容と理由から始まり、自己紹介やHTMLタグはありません。Cの主・サイドストーリーは旧名がなく、変更していません。
 
-[Gemini編のメインノートブック](https://notebook.google.com/notebook/809d99c3-1d05-405d-abf7-b2a0ebb48aae?authuser=0) から、マスごとの指示で再生成しました。採用した動画8本は音声の全文と5秒ごとの画像、図解8枚は画像全体を確認しました。動画は約70〜86秒の縦型です。旧ファイルは残しています。
+## 動画8本とスライド8冊
 
-| マス | 動画 | 図解 | 旧教材で見つけた問題 |
+前回の約70〜86秒の動画を、今回はすべて約6分の横型動画へ差し替えました。メインノートブックで生成した解説音声から、長い前置き、管理用の名前、誤った断定を取り除き、新しく生成したスライドを説明に合わせて表示しています。短い動画を引き延ばしたものではありません。
+
+| マス | 今回の変更前 | 今回の変更後 | 重点的に直した点 |
 |---|---|---|---|
-| C1 | 作り直し・接続済み | 作り直し・接続済み | 旧名の透かし、利用条件の説明を見直し |
-| C2 | 作り直し・接続済み | 作り直し・接続済み | 旧動画はCSVの学習と合っていない |
-| C3 | 作り直し・接続済み | 作り直し・接続済み | 旧画面名、内容が広すぎる |
-| C4 | 作り直し・接続済み | 作り直し・接続済み | 旧名の透かし |
-| C5 | 作り直し・接続済み | 作り直し・接続済み | メモ・録画・文字起こしの区別が必要 |
-| C6 | 作り直し・接続済み | 作り直し・接続済み | 旧名の透かし |
-| C7 | 作り直し・接続済み | 作り直し・接続済み | ノイズ対策の範囲を誤解する問題 |
-| C8 | 作り直し・接続済み | 作り直し・接続済み | NotebookLMの旧名、チャット保存条件の説明 |
+| C1 | 約70〜86秒の縦型動画・旧PDF | [5:46の横型動画](video/C1-20261112-long.mp4)・[新スライド12ページ](slide/C1-20261112-v2.pdf) | 予約ページ・利用条件・準備時間。共同主催者とゲストを一律に禁止しない。 |
+| C2 | 約70〜86秒の縦型動画・旧PDF | [6:04の横型動画](video/C2-20261112-long.mp4)・[新スライド13ページ](slide/C2-20261112-v2.pdf) | CSVの必須列、公式例の日時形式、試験用へ1件登録。 |
+| C3 | 約70〜86秒の縦型動画・旧PDF | [6:17の横型動画](video/C3-20261112-long.mp4)・[新スライド14ページ](slide/C3-20261112-v2.pdf) | Chat通知の停止と会議の辞退を区別。タスクの開始・終了を設定。 |
+| C4 | 約70〜86秒の縦型動画・旧PDF | [6:15の横型動画](video/C4-20261112-long.mp4)・[新スライド15ページ](slide/C4-20261112-v2.pdf) | 公式の共有権限名。カレンダー閲覧とMeet画面共有を区別。 |
+| C5 | 約70〜86秒の縦型動画・旧PDF | [5:49の横型動画](video/C5-20261112-long.mp4)・[新スライド13ページ](slide/C5-20261112-v2.pdf) | Meetの記録とNotebookへの手動追加を区別。4項目と原文を照合。 |
+| C6 | 約70〜86秒の縦型動画・旧PDF | [5:35の横型動画](video/C6-20261112-long.mp4)・[新スライド13ページ](slide/C6-20261112-v2.pdf) | 音声を1台にまとめ、タブ・ウィンドウを選び、プレビューと停止を練習。 |
+| C7 | 約70〜86秒の縦型動画・旧PDF | [5:44の横型動画](video/C7-20261112-long.mp4)・[新スライド13ページ](slide/C7-20261112-v2.pdf) | 翻訳字幕の照合、背景の限界、人の声は消えないことを確認。 |
+| C8 | 約70〜86秒の縦型動画・旧PDF | [5:56の横型動画](video/C8-20261112-long.mp4)・[新スライド13ページ](slide/C8-20261112-v2.pdf) | 許可された資料を手動追加し、抽出・照合・承認・保存・権限確認。 |
 
-新教材の画面は説明用の模式図です。実画面そのものではなく、小さな文字に生成画像の乱れがあります。C4・C6の結びには「漏れない」「完全遮断」など強い表現があるため、実際の運用では本文どおり人が確認してください。C8の図解の「期限を設定」は、AIに期限を創作させる意味ではありません。本文・問題・実践では、原文にない担当・期限は「要確認」としています。本番前に塾長による最終確認が必要です。
+生成したままでは誤りが残ったため、Google公式と照合して編集しました。たとえば「厳格な1対1専用」「MeetからNotebookへ自動追加」「共有権限でMeet画面上の文字も隠れる」「録画ONがチャット保存の必須条件」といった誤解につながる説明を取り除きました。C1の復習の3項目目は、誤った読み上げを除き、正しい説明を画面で示しています。
 
-## 残り・作り直しが必要な教材
+動画の音声全文、新スライド106ページ、切替付近の画面を点検しました。さらに、6秒ごとの画像474枚を新スライドと照合し、古い画像や黒い画面に戻っていないことを確認しました。図は説明用の模式図で、実画面の完全な再現ではありません。契約・管理者設定・実際の画面の確認を、全冊に明記しています。新しいPDFと動画の長さ・ページ数・ハッシュは[教材の確認記録](evidence-C/media-long-validation.json)に残しました。
 
-既存スライドは全101ページの一覧を目視しました。全8冊に旧名NotebookLMの透かしがあります。細かな画面表示と各機能の契約条件まで全項目を再検証したものではありません。今回は指定された動画とインフォグラフィックを優先して更新し、既存PDFは残しました。
+図解8枚は前回作り直したものを引き続き使います。C8の図解にある「期限を設定」は、AIに期限を創作させる意味ではありません。本文・新動画・スライド・クイズでは、原文にない担当・期限は「要確認」としています。
 
-| 教材 | ページ・問題 | 残り |
-|---|---|---|
-| C1 slide/C1.pdf | 全12ページの旧名透かし、6ページにバッファ表記 | 再生成が必要 |
-| C2 slide/C2.pdf | 全15ページの旧名透かし、CSV教材とのずれ | 再生成が必要 |
-| C3 slide/C3.pdf | 全15ページの旧名透かし、4・15ページ本文にもNotebookLM | 再生成が必要 |
-| C4 slide/C4.pdf | 全9ページの旧名透かし | 再生成が必要 |
-| C5 slide/C5.pdf | 全14ページの旧名透かし、6〜12ページの旧設定画面・自動メモ生成表記 | 再生成が必要 |
-| C6 slide/C6.pdf | 全10ページの旧名透かし、4ページにJamboard | 再生成が必要 |
-| C7 slide/C7.pdf | 全12ページの旧名透かし、5ページの言語設定説明、9ページのノイズ除去表記 | 再生成が必要 |
-| C8 slide/C8.pdf | 全14ページの旧名透かし、1・3・5・13ページなど本文にもNotebookLM | 再生成が必要 |
-| アーカイブ動画 | 重複を除く6本。題名とリンク情報を確認。全編の音声・画面は未確認 | 全編点検が必要。旧画面があれば補足または作り直し |
-| C7アーカイブ資料 | マンダラチャート関連の題名で、C7との適合を断定できない | 内容・リンク先の再確認が必要 |
+## アーカイブ6本の全編点検
 
-この一覧は、追加で見つかった残りです。修正前の点検報告の28行には、画像内の文字を含めていません。G・Hエリア、共通intro内のC以外の説明、過去の利用者コメントには手を入れていません。
+重複を除く6本、合計6時間58分12秒の音声を全文で点検し、45秒ごとの画面559枚を時間順に確認しました。全フレームを連続で目視したという意味ではありません。個人情報が含まれる文字起こしや画面一覧は公開していません。
 
-## 表示と読み込みの確認
+詳しい時間・該当場面・旧名・古いバージョンは[アーカイブ点検報告](REPORT_C_archives.md)にまとめています。
 
-Cの街とC1〜C8をローカルで開きました。375pxで横はみ出しなし。動画8本は新しいファイルを読み込み、図解8枚も実画像が開きました。上部ボタンと見出しの重なりをCページだけ修正し、縦型動画の枠も調整しました。
+| 録画 | 長さ | 内容との一致 | 学習ページでの扱い |
+|---|---|---|---|
+| C1 | 43:55 | 予約スケジュールの復習に使える | 旧画面・旧料金の注意を付け、[見る前の説明](materials/C1-archive-notes.html)を追加 |
+| C2・C4共通 | 79:19 | 予約・Gmail・Gemの話が中心。CSVや色分け・共有設定と不一致 | C2・C4の録画・関連メモ・旧フォルダーの導線を外した |
+| C3 | 44:57 | Gemini入門などが中心。サイレント モード・Tasksと不一致 | 古い録画への導線を外した |
+| C5・C6共通 | 67:25 | デジタルツインやApps Scriptが中心。Meet操作と不一致 | C5・C6の古い録画への導線を外した |
+| C7 | 112:13 | Canva・マンダラ・Gemなどが中心。Meetの3機能と不一致 | 録画とマンダラ関連資料2件への導線を外した |
+| C8 | 70:22 | AIニュースやマンダラOKRが中心。会議記録の報告・保存と不一致 | 古い録画への導線を外した |
 
-[街の画面](stages/google64/evidence-C/screenshots/town-mobile-final.jpg) ／ [確認記録](stages/google64/evidence-C/audit/browser-validation.json)
+不一致の5録画を切り貼りして今回の教材に見せることはせず、新動画・新PDFで学べるようにしました。古い録画や旧ファイルは削除せず、点検報告に記録を残しました。古いモデルは2.5 Pro／2.5 Flashの説明2場面、旧プランはGemini Advancedの説明1場面です。現在の機能はGoogle AIの公式プランと自分の環境で確認します。
 
-![C5のスマホ表示](stages/google64/evidence-C/screenshots/C5-video-mobile-final.jpg)
+## 表示と保存先の確認
 
-変更したJSの読み込み番号を増やしました。quest.html内の動的なC本文・実践の読み込みも更新しました。engine.jsはCのデータを動的に読み込んでおらず、今回は変更していません。C以外のデータが変わっていないことも比較しました。各コピーで以前から違うHTMLは、C関連の変更だけ反映しています。旧GitHubのboard.htmlやquests/は削除していません。
+Cの街とC1〜C8をローカルで開き、375pxで横にはみ出さないこと、新動画8本の読み込み、新PDFの接続、図解8枚の実画像表示を確認しました。新PDFも実際に開けることを確認しています。
 
-## 正式名を確かめたGoogle公式ページ
+[街の画面](evidence-C/screenshots-long/town-375.jpg) ／ [ローカル確認記録](evidence-C/browser-long-validation.json)
 
-確認日：2026-11-12。モデル名を固定していないC教材へ、不要なモデル番号は追加していません。
+![C5の約6分動画を375pxで表示](evidence-C/screenshots-long/C5-375.jpg)
+
+JSの読み込み番号を増やしました。quest.html内の動的なC本文・実践の読み込みも更新済みです。engine.jsはCのデータを動的に読み込んでおらず、今回は変更していません。40問の選択肢・正解番号と、C以外のデータが変わっていないことを比較確認しました。各コピーに以前からあるHTMLの違いは残し、Cに関係する変更だけを反映しました。
+
+正本から、テスト用と本番アップ用の2か所へ、対象のファイルをrobocopyでそろえました。大きい教材は4回に分けてコミット・pushしました（97cc8dd、05e00ab、c58cd67、d43ff35）。旧GitHubのboard.html・quests/は削除していません。本番アップ用コピーは準備のみで、re-gi.jpへは送っていません。メール・Chatの送信もしていません。
+
+## 作り直しが必要な教材と残り
+
+旧スライド8冊は新しい8冊に置き換え済みです。旧動画と今回作った短い動画も、新しい約6分の8本に置き換え済みです。学習内容と違う録画は導線を外しました。依頼された作業の残りは、テスト公開後の確認を終えた時点で0です。本番への反映は塾長の確認後です。
+
+「自動メモ生成」は現在もGoogle公式で使われる名称です。前回の報告にあった旧教材C5の問題は、その名称自体ではなく、古い画面と、録画・文字起こし・メモ・Notebookの区別が不明確な点です。
+
+## 正式名と利用条件を確かめたGoogle公式ページ
+
+確認日：2026-11-12。C教材に不要なモデル番号は追加していません。
 
 - [NotebookLMからGemini Notebookへの名称変更](https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/)
-- [現在のGoogle AIプラン・モデル](https://one.google.com/about/google-ai-plans/)：Google AI Plus / Pro / Ultra、3.6 Flash、4 Argon、4 Carbon。利用できる機能は契約や管理者設定で異なります。
-- [カレンダーのサイレント モード](https://support.google.com/calendar/answer/11190973?hl=ja)
-- [予約スケジュール・準備時間](https://support.google.com/calendar/answer/10729749?hl=ja)
-- [Meetのメモ作成](https://support.google.com/meet/answer/14754931?hl=ja)
-- [Meetのノイズ キャンセル](https://support.google.com/meet/answer/9919960?hl=ja)
-- [Meetのチャット](https://support.google.com/meet/answer/9308979?hl=ja)
-
-メール・Chatの送信、本番re-gi.jpへのアップロードは行っていません。
-
-## テスト公開後の確認
-
-mainへpush済み。修正前の点検は0790965、本文・報告は8b023cd、図解は768133a、動画は8e415c9と583de3dに分けて保存しました。
-
-公開先でもC1〜C8を375pxで開き、8本すべて新動画の読み込み完了（約70〜86秒）を確認しました。図解8枚も開き、1536×2752の実画像が表示されました。全16ファイルのHTTP応答は200です。
-
-[公開先の動画確認記録](stages/google64/evidence-C/audit/test-site-validation.json) ／ [公開先の図解確認記録](stages/google64/evidence-C/audit/test-site-info-validation.json)
+- [現在のGoogle AIプラン](https://one.google.com/about/google-ai-plans/)
+- [予約スケジュール](https://support.google.com/calendar/answer/10729749?hl=ja)
+- [CSVの読み込み](https://support.google.com/calendar/answer/37118?hl=ja)
+- [カレンダーの共有権限](https://support.google.com/calendar/answer/37082?hl=ja)
+- [サイレント モード](https://support.google.com/calendar/answer/11190973?hl=ja)
+- [カレンダーでタスクを作成](https://support.google.com/calendar/answer/9901136?co=GENIE.Platform%3DDesktop&hl=ja)
+- [Meetの記録とメモ](https://support.google.com/meet/answer/16909639?hl=ja)
+- [コンパニオン モード](https://support.google.com/meet/answer/11295507?hl=ja)
+- [ノイズ キャンセル](https://support.google.com/meet/answer/9919960?hl=ja)
+- [会議チャット](https://support.google.com/meet/answer/9308979?hl=ja)

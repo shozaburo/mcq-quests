@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-11-12",
+  "nonCAreaDataUnchanged": true,
+  "rows": [
+    {
+      "id": "C1",
+      "title": "予約スケジュールで日程調整の往復を減らす",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C2",
+      "title": "GeminiでCSVを作り、予定をまとめて登録する",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C3",
+      "title": "サイレント モードとタスクで作業時間を守る",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C4",
+      "title": "カレンダーの色分け・共有・通知を整える",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C5",
+      "title": "Meetの記録から決定事項・担当・期限を整理する",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C6",
+      "title": "コンパニオン モードと画面共有を使い分ける",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C7",
+      "title": "翻訳字幕・背景生成・ノイズ キャンセルを使う",
+      "quizCount": 5,
+      "valid": true
+    },
+    {
+      "id": "C8",
+      "title": "会議記録をGemini Notebookで確かめ、報告・保存する",
+      "quizCount": 5,
+      "valid": true
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "quest": "C1",
+    "sampleIntervalSeconds": 6,
+    "frames": 58,
+    "maximumMeanPixelDifferenceFromNewSlides": 3.386,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C2",
+    "sampleIntervalSeconds": 6,
+    "frames": 61,
+    "maximumMeanPixelDifferenceFromNewSlides": 4.439,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C3",
+    "sampleIntervalSeconds": 6,
+    "frames": 63,
+    "maximumMeanPixelDifferenceFromNewSlides": 4.3,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C4",
+    "sampleIntervalSeconds": 6,
+    "frames": 62,
+    "maximumMeanPixelDifferenceFromNewSlides": 3.681,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C5",
+    "sampleIntervalSeconds": 6,
+    "frames": 58,
+    "maximumMeanPixelDifferenceFromNewSlides": 4.451,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C6",
+    "sampleIntervalSeconds": 6,
+    "frames": 56,
+    "maximumMeanPixelDifferenceFromNewSlides": 4.868,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C7",
+    "sampleIntervalSeconds": 6,
+    "frames": 57,
+    "maximumMeanPixelDifferenceFromNewSlides": 3.477,
+    "allFramesMatchNewSlides": true
+  },
+  {
+    "quest": "C8",
+    "sampleIntervalSeconds": 6,
+    "frames": 59,
+    "maximumMeanPixelDifferenceFromNewSlides": 3.845,
+    "allFramesMatchNewSlides": true
+  }
+]
