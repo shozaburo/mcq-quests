@@ -86,3 +86,11 @@ Cの街とC1〜C8をローカルで開きました。375pxで横はみ出しな�
 - [Meetのチャット](https://support.google.com/meet/answer/9308979?hl=ja)
 
 メール・Chatの送信、本番re-gi.jpへのアップロードは行っていません。
+
+## テスト公開後の確認
+
+mainへpush済み。修正前の点検は0790965、本文・報告は8b023cd、図解は768133a、動画は8e415c9と583de3dに分けて保存しました。
+
+公開先でもC1〜C8を375pxで開き、8本すべて新動画の読み込み完了（約70〜86秒）を確認しました。図解8枚も開き、1536×2752の実画像が表示されました。全16ファイルのHTTP応答は200です。
+
+[公開先の動画確認記録](stages/google64/evidence-C/audit/test-site-validation.json) ／ [公開先の図解確認記録](stages/google64/evidence-C/audit/test-site-info-validation.json)

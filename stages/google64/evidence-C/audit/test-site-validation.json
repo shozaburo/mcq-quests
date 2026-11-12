@@ -1,0 +1,106 @@
+[
+  {
+    "id": "C1",
+    "scrollWidth": 375,
+    "title": "予約スケジュールで日程調整の往復を減らす",
+    "video": [
+      {
+        "duration": 71.51746,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C1-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C2",
+    "scrollWidth": 375,
+    "title": "GeminiでCSVを作り、予定をまとめて登録する",
+    "video": [
+      {
+        "duration": 75.139773,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C2-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C3",
+    "scrollWidth": 375,
+    "title": "サイレント モードとタスクで作業時間を守る",
+    "video": [
+      {
+        "duration": 69.938503,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C3-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C4",
+    "scrollWidth": 375,
+    "title": "カレンダーの色分け・共有・通知を整える",
+    "video": [
+      {
+        "duration": 76.277551,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C4-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C5",
+    "scrollWidth": 375,
+    "title": "Meetの記録から決定事項・担当・期限を整理する",
+    "video": [
+      {
+        "duration": 85.635193,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C5-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C6",
+    "scrollWidth": 375,
+    "title": "コンパニオン モードと画面共有を使い分ける",
+    "video": [
+      {
+        "duration": 78.576327,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C6-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C7",
+    "scrollWidth": 375,
+    "title": "翻訳字幕・背景生成・ノイズ キャンセルを使う",
+    "video": [
+      {
+        "duration": 79.923084,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C7-20261112.mp4"
+      }
+    ],
+    "width": 375
+  },
+  {
+    "id": "C8",
+    "scrollWidth": 375,
+    "title": "会議記録をGemini Notebookで確かめ、報告・保存する",
+    "video": [
+      {
+        "duration": 74.141315,
+        "ready": 4,
+        "src": "https://shozaburo.github.io/mcq-quests/stages/google64/video/C8-20261112.mp4"
+      }
+    ],
+    "width": 375
+  }
+]
