@@ -7,7 +7,7 @@
  function connect(){
   if(ready)return ready;
   ready=new Promise((resolve,reject)=>{
-   const url=g.MANDALA_CONFIG?.apiUrl;if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(url||'')){ready=null;reject(Error('接続先の設定を確認してください。'));return;}
+   const url=g.MANDALA_CONFIG?.apiUrl;if(!/^https:\/\/script\.google\.com\/(?:macros|a\/macros\/ai-jissen\.com)\/s\/[\w-]+\/exec$/.test(url||'')){ready=null;reject(Error('接続先の設定を確認してください。'));return;}
    const nonce=Array.from(crypto.getRandomValues(new Uint8Array(16)),n=>n.toString(16).padStart(2,'0')).join('');
    bridge=document.createElement('iframe');bridge.hidden=true;bridge.title='達成記録の接続';bridge.referrerPolicy='no-referrer';bridge.src=url+'?view=bridge&nonce='+nonce+'&origin='+encodeURIComponent(location.origin);
    const timer=setTimeout(()=>{removeEventListener('message',receive);bridge.remove();bridge=null;ready=null;reject(Error('接続に時間がかかっています。もう一度お試しください。'));},45000);
