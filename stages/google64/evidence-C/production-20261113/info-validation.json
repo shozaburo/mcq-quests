@@ -1,0 +1,101 @@
+{
+  "checkedDate": "2026-11-13",
+  "rows": [
+    {
+      "id": "C1",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C1-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C2",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C2-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C3",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C3-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C4",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C4-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C5",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C5-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C6",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C6-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C7",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C7-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    },
+    {
+      "id": "C8",
+      "images": [
+        {
+          "file": "/mcq-site/stages/google64/info/C8-20261112.png",
+          "height": 2752,
+          "loaded": true,
+          "width": 1536
+        }
+      ],
+      "memberGateShown": false
+    }
+  ]
+}

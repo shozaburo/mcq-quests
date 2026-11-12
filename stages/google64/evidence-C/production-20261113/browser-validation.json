@@ -1,0 +1,150 @@
+{
+  "checkedDate": "2026-11-13",
+  "authenticatedUsingNormalMemberPage": true,
+  "rows": [
+    {
+      "id": "C1",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "予約スケジュールで日程調整の往復を減らす",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C1-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 345.606009
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C1-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C2",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "GeminiでCSVを作り、予定をまとめて登録する",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C2-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 364
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C2-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C3",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "サイレント モードとタスクで作業時間を守る",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C3-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 377
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C3-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C4",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "カレンダーの色分け・共有・通知を整える",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C4-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 375
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C4-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C5",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "Meetの記録から決定事項・担当・期限を整理する",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C5-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 349
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C5-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C6",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "コンパニオン モードと画面共有を使い分ける",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C6-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 334.916667
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C6-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C7",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "翻訳字幕・背景生成・ノイズ キャンセルを使う",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C7-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 344.211995
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C7-20261112-v2.pdf",
+        "scroll": 375
+      }
+    },
+    {
+      "id": "C8",
+      "scroll": 375,
+      "supplementPresent": false,
+      "title": "会議記録をGemini Notebookで確かめ、報告・保存する",
+      "video": [
+        {
+          "file": "/mcq-site/stages/google64/video/C8-20261112-long.mp4",
+          "ready": 4,
+          "seconds": 355.858005
+        }
+      ],
+      "width": 375,
+      "slide": {
+        "file": "/mcq-site/stages/google64/slide/C8-20261112-v2.pdf",
+        "scroll": 375
+      }
+    }
+  ]
+}
