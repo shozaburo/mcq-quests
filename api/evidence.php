@@ -18,7 +18,7 @@ $qid=strtoupper((string)(isset($input['qid'])?$input['qid']:''));
 if ($qid !== 'A8' && !preg_match('/^B[1-8]$/D', $qid)) ev_error('この課題は対象外です。',400);
 $executionMode='';
 if (preg_match('/^B[1-8]$/D', $qid)) {
-  $allowedModes=array('個人：Task実操作','個人：Canvas実操作','個人：Gemini Notebook実操作','個人：Skills実操作','Workspace：Canvas実操作','Workspace：Gemini Notebook実操作','Workspace：Skills実操作','通常チャット代替・計画版（対象機能未実施）');
+  $allowedModes=array('個人：Task実操作','個人：タスク実操作','個人：Canvas実操作','個人：Gemini Notebook実操作','個人：Skills実操作','Workspace：Canvas実操作','Workspace：Gemini Notebook実操作','Workspace：Skills実操作','通常チャット代替・計画版（対象機能未実施）');
   $executionMode=isset($input['executionMode'])?(string)$input['executionMode']:'';
   if (!in_array($executionMode,$allowedModes,true)) ev_error('今回実施した機能を選んでください。',400);
 }
