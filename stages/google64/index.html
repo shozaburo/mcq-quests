@@ -271,14 +271,34 @@
 <script src="data/progress.js"></script>
 <script src="data/urls.js?v=48"></script>
 <script src="data/quests/A.js"></script>
-<script src="data/quests/B.js?v=T0022c-2"></script>
+<script src="data/quests/B.js?v=T0029b"></script>
 <script src="data/quests/C.js?v=20260827"></script>
 <script src="data/quests/D.js"></script>
 <script src="data/quests/E.js"></script>
 <script src="data/quests/F.js"></script>
 <script src="data/quests/G.js"></script>
 <script src="data/quests/H.js"></script>
-<script src="data/b-area-20261118.js?v=T0022c-2"></script>
+<!-- Preserve existing B1-B8 media URLs while applying the B-area quest revision. -->
+<script>
+(function(){
+  var media=window.MCQ_B_MEDIA_URLS_T0029b={};
+  for(var n=1;n<=8;n++){
+    var id='B'+n;
+    if(window.MCQ_URLS[id]) media[id]=window.MCQ_URLS[id];
+  }
+})();
+</script>
+<script src="data/b-area-20261118.js?v=T0029b"></script>
+<script>
+(function(){
+  var media=window.MCQ_B_MEDIA_URLS_T0029b;
+  for(var n=1;n<=8;n++){
+    var id='B'+n;
+    if(media[id]) window.MCQ_URLS[id]=media[id];
+  }
+  delete window.MCQ_B_MEDIA_URLS_T0029b;
+})();
+</script>
 <script>
 (function(){
   function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
