@@ -427,7 +427,7 @@ window.MCQ_QUESTS = Object.assign(window.MCQ_QUESTS||{}, {
     ]
   },
   "B8": {
-    "name": "SkillsとTaskを使い分ける",
+    "name": "Skillsとタスクを使い分ける",
     "videoUrl": "",
     "quiz": [
       {
@@ -442,7 +442,7 @@ window.MCQ_QUESTS = Object.assign(window.MCQ_QUESTS||{}, {
         "explain": "再利用する指示と実行を区別します。"
       },
       {
-        "q": "Taskの役割は？",
+        "q": "タスクの役割は？",
         "choices": [
           "目標に沿う複数段階の実行",
           "原文の正しさの保証",
@@ -464,18 +464,18 @@ window.MCQ_QUESTS = Object.assign(window.MCQ_QUESTS||{}, {
         "explain": "個人向けの移行日です。"
       },
       {
-        "q": "個人向けGemsが削除される日は？",
+        "q": "個人向けGemsのサポート終了と移行は？",
         "choices": [
-          "2026年12月17日",
+          "11月でサポート終了し、自動でスキルへ移行",
           "2027年6月1日",
           "未定",
           "2026年11月1日"
         ],
         "answer": 0,
-        "explain": "必要なファイルは期限前に保存します。"
+        "explain": "個人アカウントは11月でサポート終了し、自動でスキルへ移行します。"
       },
       {
-        "q": "WorkspaceのTask未提供時は？",
+        "q": "Workspaceのタスク未提供時は？",
         "choices": [
           "実行済みと申告",
           "通常チャットで計画・検証し未実施と明記",
