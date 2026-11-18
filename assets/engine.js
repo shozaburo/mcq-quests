@@ -798,8 +798,8 @@
       setStep(1);
       say('目的を決め、AIに任せ、人が確かめよう。');
       render('<h2>' + esc(QUEST.name) + '</h2><p>' + esc(PRACTICE.goal) + '</p>'
-        + '<p>Taskは個人Googleアカウント・18歳以上・履歴オンが条件。日本は無料対象です。無料の定期実行は1日1回まで・大まかな時間帯指定。今回は単発だけで学びます。1時間ごとの実行やメール・ニュース監視は課題にしません。</p>'
-        + '<p>gemini.google.comの「チャット / Task」切り替えから開始。WorkspaceではTask未提供のため通常チャットで計画・検証し、実操作とは区別します。機能未表示の場合も代替で続けられます。</p>'
+        + '<p>タスクは個人Googleアカウント・18歳以上・履歴オンが条件。日本は無料対象です。無料の定期実行は1日1回まで・大まかな時間帯指定。今回は単発だけで学びます。1時間ごとの実行やメール・ニュース監視は課題にしません。</p>'
+        + '<p>gemini.google.comの［チャット］→［タスク］の切り替えから開始。Workspaceではタスク未提供のため通常チャットで計画・検証し、実操作とは区別します。機能未表示の場合も代替で続けられます。</p>'
         + '<button class="btn btn-primary" id="bLearn">課題とコピペ用プロンプトを開く</button>'
         + '<button class="btn btn-ghost" id="bQuiz">5問クイズ</button>'
         + '<button class="btn btn-ghost" id="bSkip">クイズを飛ばして実践へ（125%）</button>');
@@ -1107,7 +1107,7 @@
   function bPromptHtml(){
     var d=window.MCQ_B_LESSONS[QID], h='<section style="text-align:left;line-height:1.8"><h2>実行するプロンプト</h2>';
     h+='<p><b>個人：</b>'+esc(d.personal)+'</p><p><b>Workspace：</b>'+esc(d.workspace)+'</p>';
-    h+='<p><a href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiを開く（チャット / Task）</a> ／ <a href="https://notebook.google.com/" target="_blank" rel="noopener">Gemini Notebookを開く</a></p>';
+    h+='<p><a href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiを開く（チャット / タスク）</a> ／ <a href="https://notebook.google.com/" target="_blank" rel="noopener">Gemini Notebookを開く</a></p>';
     d.prompts.forEach(function(p,i){ h+='<h3>'+esc(p[0])+'</h3><textarea id="bPrompt'+i+'" readonly rows="7" style="box-sizing:border-box;width:100%;max-width:100%;font-size:16px">'+esc(p[1])+'</textarea><button class="btn btn-ghost b-copy" data-i="'+i+'">プロンプトをコピー</button>'; });
     if(QID==='B8') h+='<p>'+esc(window.MCQ_B_GEMS)+'</p><p><a href="https://support.google.com/gemini/answer/18560919?hl=en" target="_blank" rel="noopener">GemsからSkillsへの移行（公式）</a></p>';
     h+='<p><b>保存と提出：</b>人が下の確認項目を照合してからスクリーンショットを撮ります。名前・メール・他の会話は切り取り、本文は読める大きさに。800×450以上・4MB以下、1回1枚。複数枚は同じIDへ別提出。B4は編集1後Aと編集2後Bの2件。</p><p>受講者用リンクでログインし「実践を報告する（125%）」→証拠画像→プレビュー→提出。既存の非公開経路で受け付け、講師確認待ちになります。受付で合格点は付きません。</p></section>';
@@ -1493,7 +1493,7 @@
         + '<div style="margin-top:7px"><b>提出状態：</b>画像選択前は未提出。送信後も自動合格せず、判定機能が接続されるまでは未判定のままです。</div></div>';
     }
     var UP = !!(CFG.evidenceUpload && API);   // v10: 画像添付が使えるステージか
-    if(IS_GOOGLE64_B_AREA) html += '<label for="bExecution">今回実施した機能（講師確認用）</label><select id="bExecution" style="width:100%;padding:10px"><option value="">選んでください</option><option>個人：Task実操作</option><option>個人：Canvas実操作</option><option>個人：Gemini Notebook実操作</option><option>個人：Skills実操作</option><option>Workspace：Canvas実操作</option><option>Workspace：Gemini Notebook実操作</option><option>Workspace：Skills実操作</option><option>通常チャット代替・計画版（対象機能未実施）</option></select><p>複数機能は証跡画像に記載。代替はTask等の実操作の達成とは別に講師が確認します。</p>';
+    if(IS_GOOGLE64_B_AREA) html += '<label for="bExecution">今回実施した機能（講師確認用）</label><select id="bExecution" style="width:100%;padding:10px"><option value="">選んでください</option><option>個人：タスク実操作</option><option>個人：Canvas実操作</option><option>個人：Gemini Notebook実操作</option><option>個人：Skills実操作</option><option>Workspace：Canvas実操作</option><option>Workspace：Gemini Notebook実操作</option><option>Workspace：Skills実操作</option><option>通常チャット代替・計画版（対象機能未実施）</option></select><p>複数機能は証跡画像に記載。代替はタスク等の実操作の達成とは別に講師が確認します。</p>';
     html += '<div class="field-label">' + (IS_GOOGLE64_B_AREA ? '確認メモ（保存されません。確認結果は証跡画像に記載）' : reviewedEvidence ? '実践したこと（活動記録に保存）' : '実践したこと・感想（チャットにも共有されます）') + '</div>'
       + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
       + '<div class="field-label">' + (reviewedEvidence ? '証拠（スクリーンショット画像）' : ('証拠（スクショ' + (UP ? 'の画像添付 or ' : (FORM ? 'の写真 or ' : '・')) + 'URL）')) + '<span id="evReq" style="color:#c62828"></span></div>';

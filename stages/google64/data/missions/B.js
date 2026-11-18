@@ -1,6 +1,6 @@
 window.MCQ_MISSIONS = Object.assign(window.MCQ_MISSIONS||{}, {
   "B1": {
-    "m125": "自然な依頼、見本、確認質問、具体的修正、人の確認を経て、通常チャットとTaskの役割を比較する。",
+    "m125": "自然な依頼、見本、確認質問、具体的修正、人の確認を経て、通常チャットとタスクの役割を比較する。",
     "evidence": "依頼、確認質問への回答、修正後、比較表。",
     "social": false
   },
@@ -35,8 +35,8 @@ window.MCQ_MISSIONS = Object.assign(window.MCQ_MISSIONS||{}, {
     "social": false
   },
   "B8": {
-    "m125": "Skillsの再利用指示とTaskの実行を区別し、現行のGems移行条件を確認する。",
-    "evidence": "再利用指示、2回の確認結果、Skills／Task／人の関係表。",
+    "m125": "Skillsの再利用指示とタスクの実行を区別し、現行のGems移行条件を確認する。",
+    "evidence": "再利用指示、2回の確認結果、Skills／タスク／人の関係表。",
     "social": false
   }
 });
