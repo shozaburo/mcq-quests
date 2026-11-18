@@ -1103,8 +1103,7 @@
   }
   function bPromptHtml(){
     var d=window.MCQ_B_LESSONS[QID];
-    var h='<section style="text-align:left;line-height:1.8"><h2>演習</h2>'
-      + '<p>'+esc(d.goal)+'</p>';
+    var h='<section style="text-align:left;line-height:1.8"><h2>演習</h2>';
     if(QID==='B4') h+='<p>Googleドキュメント右側のGeminiで作成。構成→初稿→文章を選択→Refineで言い換え・短縮→Acceptで反映。</p>';
     h+='<textarea id="bPrompt0" aria-label="演習プロンプト" readonly rows="7" style="box-sizing:border-box;width:100%;max-width:100%;font-size:16px">'+esc(d.prompts.map(function(p){return p[0]+'\n'+p[1];}).join('\n\n'))+'</textarea>'
       + '<button class="btn btn-ghost b-copy" data-i="0">プロンプトをコピー</button>'
@@ -1463,7 +1462,7 @@
   function sceneReportPractice(fromSkip){
     setStep(5);
     showStage(true); stageHero(false);
-    say(L.ladder);
+    say(IS_GOOGLE64_B_AREA ? '完成した画面を1枚提出しよう。' : L.ladder);
     var reviewedEvidence = IS_GOOGLE64_REVIEWED_EVIDENCE;
     var levels = [];
     // 実践ラダー（この画面は125%以上だけ。すべて証拠が要る）
