@@ -453,8 +453,7 @@
       body: JSON.stringify({
         action:'saveEvidence', token: MEMBER.token || '', goalId: CFG.goalId || '',
         qid: QID, memberName: MEMBER.name || '', filename: filename || 'evidence.jpg',
-        imageBase64: dataUrl,
-        executionMode: IS_GOOGLE64_B_AREA && $('bExecution') ? $('bExecution').value : ''
+        imageBase64: dataUrl
       })
     }).then(function(r){ return r.json(); });
   }
@@ -798,16 +797,10 @@
       setStep(1);
       say('目的を決め、AIに任せ、人が確かめよう。');
       render('<h2>' + esc(QUEST.name) + '</h2><p>' + esc(PRACTICE.goal) + '</p>'
-        + '<p>タスクは個人Googleアカウント・18歳以上・履歴オンが条件。日本は無料対象です。無料の定期実行は1日1回まで・大まかな時間帯指定。今回は単発だけで学びます。1時間ごとの実行やメール・ニュース監視は課題にしません。</p>'
-        + '<p>gemini.google.comの［チャット］→［タスク］の切り替えから開始。Workspaceではタスク未提供のため通常チャットで計画・検証し、実操作とは区別します。機能未表示の場合も代替で続けられます。</p>'
         + '<button class="btn btn-primary" id="bVideo">🎬 動画で学ぶ</button>'
-        + '<button class="btn btn-primary" id="bLearn">課題とコピペ用プロンプトを開く</button>'
-        + '<button class="btn btn-ghost" id="bQuiz">5問クイズ</button>'
-        + '<button class="btn btn-ghost" id="bSkip">クイズを飛ばして実践へ（125%）</button>');
+        + '<button class="btn btn-ghost" id="bLearn">演習へ</button>');
       $('bVideo').onclick = sceneVideo;
       $('bLearn').onclick = scenePractice;
-      $('bSkip').onclick = scenePractice;
-      $('bQuiz').onclick = function(){ answered=0; ORDER=null; MISSED=[]; sceneQuiz(0); };
       return;
     }
 
@@ -1083,13 +1076,12 @@
       + arc
       + deep
       + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → '
-      + (IS_GOOGLE64_B_AREA ? '課題へ' : '5問クイズへ') + '</button>'
+      + '5問クイズへ' + '</button>'
       + '<button class="btn btn-ghost" id="aSkip">'
       + (PRACTICE ? '🔥 クイズを飛ばして実践へ（125%）' : 'クイズは飛ばして報告する') + '</button>'
       + (IS_GOOGLE64_B_AREA ? '<button class="btn btn-ghost" id="slideBack">動画へ戻る</button>' : ''));
     $('aWatched').onclick = function(){
       bump(50);
-      if(IS_GOOGLE64_B_AREA){ scenePractice(); return; }
       answered = 0; ORDER = null; MISSED = []; sceneQuiz(0);
     };
     $('aSkip').onclick = function(){ bump(50); PRACTICE ? scenePractice() : sceneReport(false); };
@@ -1110,12 +1102,23 @@
       + items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</' + tag + '>';
   }
   function bPromptHtml(){
-    var d=window.MCQ_B_LESSONS[QID], h='<section style="text-align:left;line-height:1.8"><h2>実行するプロンプト</h2>';
-    h+='<p><b>個人：</b>'+esc(d.personal)+'</p><p><b>Workspace：</b>'+esc(d.workspace)+'</p>';
-    h+='<p><a href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiを開く（チャット / タスク）</a> ／ <a href="https://notebook.google.com/" target="_blank" rel="noopener">Gemini Notebookを開く</a></p>';
-    d.prompts.forEach(function(p,i){ h+='<h3>'+esc(p[0])+'</h3><textarea id="bPrompt'+i+'" readonly rows="7" style="box-sizing:border-box;width:100%;max-width:100%;font-size:16px">'+esc(p[1])+'</textarea><button class="btn btn-ghost b-copy" data-i="'+i+'">プロンプトをコピー</button>'; });
-    if(QID==='B8') h+='<p>'+esc(window.MCQ_B_GEMS)+'</p><p><a href="https://support.google.com/gemini/answer/18560919?hl=en" target="_blank" rel="noopener">GemsからSkillsへの移行（公式）</a></p>';
-    h+='<p><b>保存と提出：</b>人が下の確認項目を照合してからスクリーンショットを撮ります。名前・メール・他の会話は切り取り、本文は読める大きさに。800×450以上・4MB以下、1回1枚。複数枚は同じIDへ別提出。B4は編集1後Aと編集2後Bの2件。</p><p>受講者用リンクでログインし「実践を報告する（125%）」→証拠画像→プレビュー→提出。既存の非公開経路で受け付け、講師確認待ちになります。受付で合格点は付きません。</p></section>';
+    var d=window.MCQ_B_LESSONS[QID];
+    var h='<section style="text-align:left;line-height:1.8"><h2>演習</h2>'
+      + '<p>'+esc(d.goal)+'</p>';
+    if(QID==='B4') h+='<p>Googleドキュメント右側のGeminiで作成。構成→初稿→文章を選択→Refineで言い換え・短縮→Acceptで反映。</p>';
+    h+='<textarea id="bPrompt0" aria-label="演習プロンプト" readonly rows="7" style="box-sizing:border-box;width:100%;max-width:100%;font-size:16px">'+esc(d.prompts.map(function(p){return p[0]+'\n'+p[1];}).join('\n\n'))+'</textarea>'
+      + '<button class="btn btn-ghost b-copy" data-i="0">プロンプトをコピー</button>'
+      + '<details><summary>手順・利用条件・完成の確認</summary>';
+    if(QID==='B4') h+='<p>有料プラン：Workspace Business Standard以上 または Google AI Pro/Ultra。</p><p>無料アカウントは gemini.google.com の Canvas で同じ手順。</p>';
+    h+='<p>'+esc(d.personal)+'</p>';
+    if(QID!=='B4') h+='<p>'+esc(d.workspace)+'</p>';
+    if(QID==='B1'||QID==='B2'||QID==='B3'||QID==='B8') h+='<p>タスクの利用条件は個人Googleアカウント・18歳以上・履歴オン。利用可能な範囲で単発実行し、未実施の部分は計画として画像に記載します。Workspaceでは通常チャットで代替します。</p>';
+    h+=listHtml(d.checks,false)+'<p>完成見本：'+esc(d.evidence)+'</p>';
+    if(QID==='B8') h+='<p>'+esc(window.MCQ_B_GEMS)+'</p>';
+    h+='<p>個人情報を隠し、文字が読める800×450以上・4MB以下の画像1枚を提出。非公開で保存し、講師承認後に125%。</p>';
+    h+='<a href="'+(QID==='B4'?'https://docs.google.com/document/':QID==='B5'||QID==='B6'||QID==='B7'?'https://notebook.google.com/':'https://gemini.google.com/')+'" target="_blank" rel="noopener">演習に使う画面を開く</a>';
+    if(QID==='B4') h+='<p><a href="https://support.google.com/docs/answer/13447609" target="_blank" rel="noopener">Google公式手順</a></p>';
+    h+='</details></section>';
     return h;
   }
   function wireBPrompts(){
@@ -1132,7 +1135,16 @@
     showStage(true); stageHero(false);
     say('ここからは操作練習だ。完成見本を先に見て、同じ状態まで手を動かそう。');
     var p = PRACTICE || {}, files = p.files || [], h = '';
-    if(IS_GOOGLE64_B_AREA) h += bPromptHtml();
+    if(IS_GOOGLE64_B_AREA){
+      say('プロンプトをコピーして演習し、完成した画面を1枚提出しよう。');
+      render(bPromptHtml()
+        + '<button class="btn btn-primary" id="practiceReport">写真を提出する</button>'
+        + '<button class="btn btn-ghost" id="practiceBack">スライドへ戻る</button>');
+      wireBPrompts();
+      $('practiceReport').onclick=function(){ sceneReportPractice(true); };
+      $('practiceBack').onclick=sceneSlide;
+      return;
+    }
     h += '<div style="text-align:left;border:1.5px solid var(--gold,#ffd54f);border-radius:12px;padding:13px;background:rgba(255,255,255,.06)">'
       + '<b>🎯 学習目標</b><div style="line-height:1.8;margin:5px 0 12px">' + esc(p.goal || '') + '</div>'
       + '<b>✅ 完成見本</b><div style="line-height:1.8;margin:5px 0 12px">' + esc(p.sample || '') + '</div>'
@@ -1374,7 +1386,7 @@
     }
 
     if(quizPct > 0){
-      html += '<button class="btn btn-primary" id="toReport">🚀 報告へ進む →</button>';
+      html += '<button class="btn btn-primary" id="toReport">' + (IS_GOOGLE64_B_AREA ? '演習へ進む →' : '🚀 報告へ進む →') + '</button>';
       if(MISSED.length) html += '<button class="btn btn-ghost" id="retryWeak">🎯 まちがえた' + MISSED.length + '問だけ解き直す（100%を狙う）</button>';
       html += '<button class="btn btn-ghost" id="retry">はじめから全問やり直す</button>';
     } else {
@@ -1385,7 +1397,7 @@
     render(html);
     if(quizPct === 100) celebrate();   // 🎉 全問正解でファンファーレ＋紙吹雪
     // v30: 報告の前に「まとめカード獲得」を挟む（素材が無いマスは自動で素通り）
-    if($('toReport')) $('toReport').onclick = function(){ stageHero(false); sceneLoot(); };
+    if($('toReport')) $('toReport').onclick = function(){ stageHero(false); if(IS_GOOGLE64_B_AREA) scenePractice(); else sceneLoot(); };
     // ミス数・タイムは持ち越し（ボーナス狙いの引き直し防止）
     if($('retry')) $('retry').onclick = function(){ stageHero(false); answered = 0; ORDER = null; MISSED = []; sceneQuiz(0); };
     // v26: にがてだけ解き直す（MISSED は正解できたぶんだけ自動で減る）
@@ -1498,8 +1510,7 @@
         + '<div style="margin-top:7px"><b>提出状態：</b>画像選択前は未提出。送信後も自動合格せず、判定機能が接続されるまでは未判定のままです。</div></div>';
     }
     var UP = !!(CFG.evidenceUpload && API);   // v10: 画像添付が使えるステージか
-    if(IS_GOOGLE64_B_AREA) html += '<label for="bExecution">今回実施した機能（講師確認用）</label><select id="bExecution" style="width:100%;padding:10px"><option value="">選んでください</option><option>個人：タスク実操作</option><option>個人：Canvas実操作</option><option>個人：Gemini Notebook実操作</option><option>個人：Skills実操作</option><option>Workspace：Canvas実操作</option><option>Workspace：Gemini Notebook実操作</option><option>Workspace：Skills実操作</option><option>通常チャット代替・計画版（対象機能未実施）</option></select><p>複数機能は証跡画像に記載。代替はタスク等の実操作の達成とは別に講師が確認します。</p>';
-    html += '<div class="field-label">' + (IS_GOOGLE64_B_AREA ? '確認メモ（保存されません。確認結果は証跡画像に記載）' : reviewedEvidence ? '実践したこと（活動記録に保存）' : '実践したこと・感想（チャットにも共有されます）') + '</div>'
+    html += '<div class="field-label">' + (reviewedEvidence ? '実践したこと（活動記録に保存）' : '実践したこと・感想（チャットにも共有されます）') + '</div>'
       + '<textarea id="rP" rows="2" placeholder="例：自社の資料で実際に試して、こう活かせた"></textarea>'
       + '<div class="field-label">' + (reviewedEvidence ? '証拠（スクリーンショット画像）' : ('証拠（スクショ' + (UP ? 'の画像添付 or ' : (FORM ? 'の写真 or ' : '・')) + 'URL）')) + '<span id="evReq" style="color:#c62828"></span></div>';
     if(MIS && MIS.evidence){
@@ -1545,8 +1556,21 @@
     html += '<button class="btn btn-green" id="submit">' + (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') + '</button>'
           + '<button class="btn btn-ghost" id="backBasic">'
           +   (SOFT ? '← まなびの報告にもどる' : '← 学習の報告にもどる') + '</button>';
+    if(IS_GOOGLE64_B_AREA){
+      if(!MEMBER.token){
+        render('<h2>写真を提出する</h2><p>受講者用リンクからログインして提出してください。</p><button class="btn btn-ghost" id="backPractice">演習へ戻る</button>');
+        $('backPractice').onclick=scenePractice;
+        return;
+      }
+      var imageStart=html.indexOf('<div id="rDrop"');
+      var imageEnd=html.indexOf('<button class="btn btn-green" id="submit">');
+      html='<h2>写真を提出する</h2><p>個人情報を隠した操作画面を1枚。非公開で保存し、講師承認後に125%になります。</p>'
+        + html.slice(imageStart,imageEnd)
+        + '<span id="evReq" hidden></span><button class="btn btn-primary" id="submit">送信</button>'
+        + '<button class="btn btn-ghost" id="backBasic">演習へ戻る</button>';
+    }
     render(html);
-    if($('backBasic')) $('backBasic').onclick = function(){ sceneReport(false); };
+    if($('backBasic')) $('backBasic').onclick = function(){ if(IS_GOOGLE64_B_AREA) scenePractice(); else sceneReport(false); };
 
     /* v28: 画像の入り口を3つ用意する（選ぶ／貼り付ける／落とす）。
        どれも同じ takeFile() に集約し、端末側で縮小してから保持する（送信は報告時）。 */
@@ -1646,11 +1670,7 @@
       var need = sel && sel.getAttribute('data-need') === '1';
       var lv = root.querySelector('input[name="lv"]:checked');
       var pct = lv ? lv.value : '125';
-      var practice = $('rP').value.trim();
-      if(IS_GOOGLE64_B_AREA){
-        if(!$('bExecution').value){ $('rImgInfo').textContent='今回実施した機能を選んでください。'; return; }
-        practice = '[' + $('bExecution').value + '] ' + practice;
-      }
+      var practice = $('rP') ? $('rP').value.trim() : '';
       var evidence = $('rE') ? $('rE').value.trim() : '';
       if((IS_GOOGLE64_B1 || IS_GOOGLE64_B_AREA) && !MEMBER.token){
         if($('rImgInfo')) $('rImgInfo').textContent = '⚠ この課題の証跡は受講者用リンクからログインした状態で提出してください。現在は未提出です。';
@@ -1676,7 +1696,7 @@
         return;
       }
       submitReport({ pct: pct, practice: practice, evidence: evidence, img: pendingImg,
-                     btn: $('submit'), label: (SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') });
+                     btn: $('submit'), label: (IS_GOOGLE64_B_AREA ? '送信' : SOFT ? '💛 この内容で報告する' : '🚀 この内容で報告する') });
     };
   }
 
