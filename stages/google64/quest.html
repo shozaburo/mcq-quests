@@ -35,12 +35,13 @@
 (function(){
   var a=((window.PAGE&&window.PAGE.questId)||'A1').charAt(0);
   if('ABCDEFGH'.indexOf(a)<0)a='A';
-  var v=a==='C'?'20260827':'20260825';
+  var v=a==='B'?'T0022c-1':(a==='C'?'20260827':'20260825');
   document.write('<script src="data/quests/'+a+'.js?v='+v+'"><\/script>');
   document.write('<script src="data/missions/'+a+'.js?v='+v+'"><\/script>');
 })();
 </script>
 <script src="data/revision-20261015.js?v=20261001b"></script>
-<script src="../../assets/engine.js?v=48"></script>
+<script src="data/b-area-20261118.js?v=T0022c-1"></script>
+<script src="../../assets/engine.js?v=T0022c-1"></script>
 </body>
 </html>

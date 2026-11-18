@@ -17,6 +17,11 @@ on:
         description: 'true と書くと、実際には送らず「何が変わるか」だけ出す'
         required: false
         default: 'false'
+      scope:
+        description: '公開範囲（通常はall、Bエリア改訂はb-area）'
+        type: choice
+        options: [all, b-area]
+        default: all
 
 concurrency:
   group: xserver-deploy
@@ -65,7 +70,16 @@ jobs:
           set -e
           DRY=""
           if [ "${{ github.event.inputs.dryrun }}" = "true" ]; then DRY="--dry-run"; echo "※ためし実行（送りません）"; fi
-          rsync -rlvz $DRY \
+          SCOPE=""
+          if [ "${{ github.event.inputs.scope }}" = "b-area" ]; then
+            git ls-files -- assets/engine.js api/evidence.php \
+              stages/google64/quest.html stages/google64/index.html stages/google64/town.html \
+              stages/google64/data/quests/B.js stages/google64/data/missions/B.js \
+              stages/google64/data/b-area-20261118.js > /tmp/mcq-deploy-files.txt
+            test -s /tmp/mcq-deploy-files.txt
+            SCOPE="--files-from=/tmp/mcq-deploy-files.txt"
+          fi
+          rsync -rlvz $DRY $SCOPE \
             --exclude '.git/' --exclude '.github/' --exclude '.gitignore' \
             --exclude 'tools/' --exclude '**/__pycache__/' \
             --exclude '*.mp4' --exclude '*.md' \
