@@ -254,8 +254,8 @@
        以前は STEP1 に インフォグラ＋動画＋スライド が同居していて、まとめ（インフォグラ）が
        動画より上にある状態だった。順序を 動画→スライド→クイズ→まとめ獲得 に直し、
        インフォグラフィックは「読む素材」から「クリアで手に入る報酬」に格上げした。 */
-    +   '<div class="dot" data-step="1" title="' + (IS_GOOGLE64_B_AREA ? '課題の入口' : '動画25%') + '"></div>'
-    +   '<div class="dot" data-step="2" title="' + (IS_GOOGLE64_B_AREA ? '課題・プロンプトと実践' : 'スライド50%') + '"></div>'
+    +   '<div class="dot" data-step="1" title="動画25%"></div>'
+    +   '<div class="dot" data-step="2" title="スライド50%"></div>'
     +   '<div class="dot" data-step="3" title="クイズ75/100%"></div>'
     +   '<div class="dot" data-step="4" title="まとめを獲得"></div>'
     +   '<div class="dot" data-step="5" title="実践報告"></div>'
@@ -800,9 +800,11 @@
       render('<h2>' + esc(QUEST.name) + '</h2><p>' + esc(PRACTICE.goal) + '</p>'
         + '<p>タスクは個人Googleアカウント・18歳以上・履歴オンが条件。日本は無料対象です。無料の定期実行は1日1回まで・大まかな時間帯指定。今回は単発だけで学びます。1時間ごとの実行やメール・ニュース監視は課題にしません。</p>'
         + '<p>gemini.google.comの［チャット］→［タスク］の切り替えから開始。Workspaceではタスク未提供のため通常チャットで計画・検証し、実操作とは区別します。機能未表示の場合も代替で続けられます。</p>'
+        + '<button class="btn btn-primary" id="bVideo">🎬 動画で学ぶ</button>'
         + '<button class="btn btn-primary" id="bLearn">課題とコピペ用プロンプトを開く</button>'
         + '<button class="btn btn-ghost" id="bQuiz">5問クイズ</button>'
         + '<button class="btn btn-ghost" id="bSkip">クイズを飛ばして実践へ（125%）</button>');
+      $('bVideo').onclick = sceneVideo;
       $('bLearn').onclick = scenePractice;
       $('bSkip').onclick = scenePractice;
       $('bQuiz').onclick = function(){ answered=0; ORDER=null; MISSED=[]; sceneQuiz(0); };
@@ -927,7 +929,6 @@
   }
 
   function sceneVideo(){
-    if(IS_GOOGLE64_B_AREA) return scenePractice();
     setStep(1);
     showStage(true); stageHero(false);
     say(L.video);
@@ -1001,7 +1002,6 @@
      動画の次はスライドだけを1画面で。配布資料・元ノートは
      「もっと深掘りしたい人向け」として、スライドの下にたたんで置く。 */
   function sceneSlide(){
-    if(IS_GOOGLE64_B_AREA) return scenePractice();
     setStep(2);
     /* 口調はキャラごとに違う（チャッピーの「ワン」を全員に喋らせない）。
        characters.js に slide 用のセリフがあればそれを最優先で使う。 */
@@ -1082,13 +1082,18 @@
       + summary
       + arc
       + deep
-      + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → 5問クイズへ</button>'
+      + '<button class="btn btn-primary" id="aWatched">見た！ <span class="pct pct-50">50%</span> → '
+      + (IS_GOOGLE64_B_AREA ? '課題へ' : '5問クイズへ') + '</button>'
       + '<button class="btn btn-ghost" id="aSkip">'
-      + (PRACTICE ? '🔥 クイズを飛ばして実践へ（125%）' : 'クイズは飛ばして報告する') + '</button>');
+      + (PRACTICE ? '🔥 クイズを飛ばして実践へ（125%）' : 'クイズは飛ばして報告する') + '</button>'
+      + (IS_GOOGLE64_B_AREA ? '<button class="btn btn-ghost" id="slideBack">動画へ戻る</button>' : ''));
     $('aWatched').onclick = function(){
-      bump(50); answered = 0; ORDER = null; MISSED = []; sceneQuiz(0);
+      bump(50);
+      if(IS_GOOGLE64_B_AREA){ scenePractice(); return; }
+      answered = 0; ORDER = null; MISSED = []; sceneQuiz(0);
     };
     $('aSkip').onclick = function(){ bump(50); PRACTICE ? scenePractice() : sceneReport(false); };
+    if(IS_GOOGLE64_B_AREA) $('slideBack').onclick = sceneVideo;
   }
   /* 旧名。他所から呼ばれても動くように残す */
   function sceneArchive(){ return sceneSlide(); }
@@ -1149,7 +1154,7 @@
     if(IS_GOOGLE64_B1 || IS_GOOGLE64_B_AREA){
       h += '<button class="btn btn-primary" id="practiceReport">🔥 実践を報告する（125%）→</button>'
         + '<button class="btn btn-ghost" id="practiceNext">5問クイズにも挑戦する</button>'
-        + '<button class="btn btn-ghost" id="practiceBack">' + (IS_GOOGLE64_B_AREA ? '課題の入口へ戻る' : 'スライドへ戻る') + '</button>';
+        + '<button class="btn btn-ghost" id="practiceBack">スライドへ戻る</button>';
     } else {
       h += '<label class="opt' + (practiceDone() ? ' sel' : '') + '" id="practiceDoneLabel" style="margin-top:12px">'
         + '<input type="checkbox" id="practiceDone"' + (practiceDone() ? ' checked' : '') + '>'
@@ -1166,7 +1171,7 @@
       };
     $('practiceReport').onclick = function(){ sceneReportPractice(true); };
     $('practiceNext').onclick = function(){ answered = 0; ORDER = null; MISSED = []; sceneQuiz(0); };
-    $('practiceBack').onclick = IS_GOOGLE64_B_AREA ? sceneIntro : sceneSlide;
+    $('practiceBack').onclick = sceneSlide;
     if(IS_GOOGLE64_B_AREA) wireBPrompts();
   }
 
