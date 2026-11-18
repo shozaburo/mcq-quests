@@ -15,7 +15,13 @@ if ($action === 'status') {
 if ($action !== 'saveEvidence') ev_error('操作を確認してください。',400);
 if ((string)(isset($input['goalId'])?$input['goalId']:'') !== 'β') ev_error('Google編専用の提出先です。',400);
 $qid=strtoupper((string)(isset($input['qid'])?$input['qid']:''));
-if ($qid !== 'B1' && $qid !== 'A8') ev_error('この課題は対象外です。',400);
+if ($qid !== 'A8' && !preg_match('/^B[1-8]$/D', $qid)) ev_error('この課題は対象外です。',400);
+$executionMode='';
+if (preg_match('/^B[1-8]$/D', $qid)) {
+  $allowedModes=array('個人：Task実操作','個人：Canvas実操作','個人：Gemini Notebook実操作','個人：Skills実操作','Workspace：Canvas実操作','Workspace：Gemini Notebook実操作','Workspace：Skills実操作','通常チャット代替・計画版（対象機能未実施）');
+  $executionMode=isset($input['executionMode'])?(string)$input['executionMode']:'';
+  if (!in_array($executionMode,$allowedModes,true)) ev_error('今回実施した機能を選んでください。',400);
+}
 $data=(string)(isset($input['imageBase64'])?$input['imageBase64']:'');
 if (!preg_match('#^data:image/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$#D',$data,$parts)) ev_error('JPEG・PNG・WebP画像を選んでください。',400);
 $raw=base64_decode($parts[2],true);
@@ -35,9 +41,10 @@ $record=array('submissionId'=>$id,'createdAt'=>gmdate('c'),'memberId'=>(string)$
   'tokenCipher'=>ev_encrypt_token($token),'goalId'=>'β','qid'=>$qid,'imageFile'=>$imageFile,
   'width'=>$info[0],'height'=>$info[1],'status'=>'lecturer_review',
   'reason'=>'画像を非公開で受け付けました。内容を講師が確認します。');
+if ($executionMode !== '') $record['executionMode']=$executionMode;
 ev_save($record);
 $logged=ev_quest_request(array('action'=>'report','token'=>$token,'goalId'=>'β','qid'=>$qid,
-  'pct'=>'0','step'=>'evidence_pending','note'=>'スクリーンショット提出・講師確認待ち',
+  'pct'=>'0','step'=>'evidence_pending','note'=>'スクリーンショット提出・講師確認待ち'.($executionMode!==''?' ['.$executionMode.']':''),
   'evidenceUrl'=>'private:'.$id));
 if (!$logged || empty($logged['ok'])) {
   $record['status']='submission_error';
