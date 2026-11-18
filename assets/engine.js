@@ -1106,7 +1106,7 @@
     var h='<section style="text-align:left;line-height:1.8"><h2>演習</h2>';
     if(QID==='B4') h+='<p>Googleドキュメント右側のGeminiで作成。構成→初稿→文章を選択→Refineで言い換え・短縮→Acceptで反映。</p>';
     h+='<textarea id="bPrompt0" aria-label="演習プロンプト" readonly rows="7" style="box-sizing:border-box;width:100%;max-width:100%;font-size:16px">'+esc(d.prompts.map(function(p){return p[0]+'\n'+p[1];}).join('\n\n'))+'</textarea>'
-      + '<button class="btn btn-ghost b-copy" data-i="0">プロンプトをコピー</button>'
+      + '<button class="btn btn-ghost b-copy" data-i="0" style="color:#17365d;background:#dbeafe;border-color:#1e40af;opacity:1">プロンプトをコピー</button>'
       + '<details><summary>手順・利用条件・完成の確認</summary>';
     if(QID==='B4') h+='<p>有料プラン：Workspace Business Standard以上 または Google AI Pro/Ultra。</p><p>無料アカウントは gemini.google.com の Canvas で同じ手順。</p>';
     h+='<p>'+esc(d.personal)+'</p>';
