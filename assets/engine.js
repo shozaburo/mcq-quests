@@ -254,8 +254,8 @@
        以前は STEP1 に インフォグラ＋動画＋スライド が同居していて、まとめ（インフォグラ）が
        動画より上にある状態だった。順序を 動画→スライド→クイズ→まとめ獲得 に直し、
        インフォグラフィックは「読む素材」から「クリアで手に入る報酬」に格上げした。 */
-    +   '<div class="dot" data-step="1" title="動画25%"></div>'
-    +   '<div class="dot" data-step="2" title="スライド50%"></div>'
+    +   '<div class="dot" data-step="1" title="' + (IS_GOOGLE64_B_AREA ? '課題の入口' : '動画25%') + '"></div>'
+    +   '<div class="dot" data-step="2" title="' + (IS_GOOGLE64_B_AREA ? '課題・プロンプトと実践' : 'スライド50%') + '"></div>'
     +   '<div class="dot" data-step="3" title="クイズ75/100%"></div>'
     +   '<div class="dot" data-step="4" title="まとめを獲得"></div>'
     +   '<div class="dot" data-step="5" title="実践報告"></div>'
@@ -884,31 +884,6 @@
      相対パスは本番の同じパスへフォールバックする（PDFは重くGitHubに置けないため）。 */
   function slideHtml(){
     if(!slideId) return '';
-    if(IS_GOOGLE64_B1){
-      var pages = '';
-      for(var pi=1; pi<=12; pi++){
-        var pn = ('0' + pi).slice(-2);
-        pages += '<img src="slide/B1-pages/page-' + pn + '.jpg" alt="B1改訂NotebookLMスライド ' + pi + 'ページ" loading="lazy" '
-          + 'style="width:100%;display:block;border-radius:10px;border:1px solid rgba(128,128,128,.28);margin:8px 0;background:#fff">';
-      }
-      return '<section style="text-align:left;border:2px solid #4d83c2;border-radius:14px;padding:14px;background:rgba(77,131,194,.08);margin-bottom:12px">'
-        + '<div style="font-size:.75rem;font-weight:900;color:#2f659f;margin-bottom:4px">2026-10-15 改訂要点</div>'
-        + '<h2 style="font-size:1.05rem;margin:0 0 10px">AIに仕事を頼み、会話で仕上げる</h2>'
-        + '<ol style="line-height:1.9;margin:0;padding-left:1.5em">'
-        + '<li><b>自然な一文で目的を伝える</b>―最初から型を埋め切らなくてよい</li>'
-        + '<li><b>実際の見本を渡す</b>―個人情報・機密情報は伏せる</li>'
-        + '<li><b>不足情報を先に質問させる</b>―推測で埋めさせない</li>'
-        + '<li><b>具体的に修正する</b>―長さ、調子、構成を会話で整える</li>'
-        + '<li><b>人が最終確認する</b>―相手名、日時、数字、約束、事実にない追加</li>'
-        + '</ol></section>'
-        + '<details open style="text-align:left;margin:10px 0">'
-        + '<summary style="cursor:pointer;font-weight:900;padding:10px;border-radius:10px;background:rgba(77,131,194,.13)">📚 B1改訂NotebookLMスライド（最新版・12ページ）</summary>'
-        + '<div style="font-size:.8rem;line-height:1.7;color:var(--muted);padding:10px 2px 2px">'
-        + '講座で順番に解説できる企業共通版です。自然な依頼、見本の共有、確認質問、対話での修正、人による送信前確認を、架空商事の日程変更メールで練習します。'
-        + '</div>' + pages
-        + '<a class="btn btn-ghost" href="slide/B1.pdf" target="_blank" rel="noopener">最新版PDFを別画面で開く</a>'
-        + '</details>';
-    }
     var isPdf = /\.pdf(\?.*)?$/i.test(slideId);
     var src = !isPdf ? ('https://drive.google.com/file/d/' + slideId + '/preview')
       : /^https?:/i.test(slideId) ? slideId
@@ -969,11 +944,7 @@
     }
     /* v30: この画面は動画だけ。スライドは次の画面（sceneSlide）、
        インフォグラフィックは最後の報酬（sceneLoot）に移した。 */
-    var videoNotice = IS_GOOGLE64_B1
-      ? '<div style="text-align:left;background:#fff8e1;border:1.5px solid #f0c36d;border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:.8rem;line-height:1.7;color:#6d5310">'
-        + '<b>B1企業共通版</b><br>このNotebookLM動画は、特定の受講企業名を含めない共通教材です。自然な依頼、見本の共有、AIからの確認質問、対話での修正、人による送信前確認の5段階を学びます。'
-        + '</div>' : '';
-    render(videoNotice +
+    render(
       '<video id="qVideo" controls playsinline preload="metadata" '
       +   'style="display:none;width:100%;aspect-ratio:16/9;max-height:62vh;height:auto;border-radius:12px;background:#000;margin-bottom:4px"></video>'
       + '<div id="extWrap">' + extHtml + '</div>'
@@ -1178,7 +1149,7 @@
     if(IS_GOOGLE64_B1 || IS_GOOGLE64_B_AREA){
       h += '<button class="btn btn-primary" id="practiceReport">🔥 実践を報告する（125%）→</button>'
         + '<button class="btn btn-ghost" id="practiceNext">5問クイズにも挑戦する</button>'
-        + '<button class="btn btn-ghost" id="practiceBack">スライドへ戻る</button>';
+        + '<button class="btn btn-ghost" id="practiceBack">' + (IS_GOOGLE64_B_AREA ? '課題の入口へ戻る' : 'スライドへ戻る') + '</button>';
     } else {
       h += '<label class="opt' + (practiceDone() ? ' sel' : '') + '" id="practiceDoneLabel" style="margin-top:12px">'
         + '<input type="checkbox" id="practiceDone"' + (practiceDone() ? ' checked' : '') + '>'

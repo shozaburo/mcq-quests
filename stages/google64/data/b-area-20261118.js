@@ -58,7 +58,7 @@
   },
   "B4": {
     "goal": "Canvasで構成→初稿→編集2回→本人確認を行う。",
-    "personal": "gemini.google.comの通常チャットからCanvasを選び①②③を順に実行。②の後に画像A、③の後に画像Bを保存。Canvas編集のためTaskでは通常チャットを使う。",
+    "personal": "gemini.google.comの通常チャットからCanvasを選び①②③を順に実行。②の後に画像A、③の後に画像Bを保存。Canvas編集のため、Taskではなく通常チャットを使う。",
     "workspace": "組織アカウントで通常チャットのCanvasから①②③。Canvasが使えない場合は通常チャットで同じ文書改善を行い「Canvas未実施・通常チャット代替」と記録。",
     "prompts": [
       [
